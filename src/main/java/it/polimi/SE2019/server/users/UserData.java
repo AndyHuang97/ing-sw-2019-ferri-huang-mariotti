@@ -6,7 +6,6 @@ package it.polimi.SE2019.server.users;
 public class UserData {
 
 	private String nickname;
-	private String imageUrl;
 
 	/**
 	 * Default constructor
@@ -28,20 +27,4 @@ public class UserData {
 	public void setNickname(String value) {
 		// TODO implement here
 	}
-
-	/**
-	 * @return
-	 */
-	public String getImageUrl() {
-		// TODO implement here
-		return "";
-	}
-
-	/**
-	 * @param value
-	 */
-	public void setImageUrl(String value) {
-		// TODO implement here
-	}
-
 }
