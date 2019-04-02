@@ -1,23 +1,15 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class AmmoCrate {
+
+	private ArrayList<Entity> powerAmmoList;
 
 	/**
 	 * Default constructor
 	 */
 	public AmmoCrate() {
 	}
-
-	/**
-	 * 
-	 */
-	private ArrayList<Entity> powerAmmoList;
-
-
 
 	/**
 	 * @return

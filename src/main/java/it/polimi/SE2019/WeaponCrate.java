@@ -6,18 +6,13 @@ import java.util.*;
  */
 public class WeaponCrate {
 
+	private ArrayList<Weapon> weaponList;
+
 	/**
 	 * Default constructor
 	 */
 	public WeaponCrate() {
 	}
-
-	/**
-	 * 
-	 */
-	private ArrayList<Weapon> weaponList;
-
-
 
 	/**
 	 * @return

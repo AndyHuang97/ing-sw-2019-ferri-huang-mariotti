@@ -6,26 +6,15 @@ import java.util.*;
  */
 public class Link {
 
+	private int roomId1;
+	private int roomId2;
+	private String type;
+
 	/**
 	 * Default constructor
 	 */
 	public Link() {
 	}
-
-	/**
-	 * 
-	 */
-	private int roomId1;
-
-	/**
-	 * 
-	 */
-	private int roomId2;
-
-	/**
-	 * 
-	 */
-	private String type;
 
 
 	/**

@@ -1,34 +1,17 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class Player {
+
+	private boolean active;
+	private UserData userData;
+	private CharacterState characterState;
 
 	/**
 	 * Default constructor
 	 */
 	public Player() {
 	}
-
-	/**
-	 * 
-	 */
-	private boolean active;
-
-	/**
-	 * 
-	 */
-	private UserData userData;
-
-	/**
-	 * 
-	 */
-	private CharacterState characterState;
-
-
-
 
 	/**
 	 * @return

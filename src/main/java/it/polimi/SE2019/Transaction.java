@@ -1,22 +1,15 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class Transaction {
+
+    private ArrayList<Action> actionList;
 
 	/**
 	 * Default constructor
 	 */
 	public Transaction() {
 	}
-
-	/**
-	 * 
-	 */
-	private ArrayList<Actino> actionList;
-
 
 	/**
 	 * 

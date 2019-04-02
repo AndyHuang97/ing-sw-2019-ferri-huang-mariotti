@@ -1,43 +1,19 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class Room {
+
+	private String color;
+	private void hasSpawn;
+	private WeaponCrate weapon;
+	private AmmoCrate ammo;
+	private int id;
 
 	/**
 	 * Default constructor
 	 */
 	public Room() {
 	}
-
-	/**
-	 * 
-	 */
-	private String color;
-
-	/**
-	 * 
-	 */
-	private void hasSpawn;
-
-	/**
-	 * 
-	 */
-	private WeaponCrate weapon;
-
-	/**
-	 * 
-	 */
-	private AmmoCrate ammo;
-
-	/**
-	 * 
-	 */
-	private int id;
-
-
 
 
 	/**

@@ -1,23 +1,15 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public abstract class Entity {
+
+	private ArrayList<Action> action;
 
 	/**
 	 * Default constructor
 	 */
 	public Entity() {
 	}
-
-	/**
-	 * 
-	 */
-	private ArrayList<Action> action;
-
-
 
 	/**
 	 * @return

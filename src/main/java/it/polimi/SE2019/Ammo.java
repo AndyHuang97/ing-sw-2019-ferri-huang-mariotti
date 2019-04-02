@@ -1,21 +1,15 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class Ammo extends Entity {
+
+	private String color;
 
 	/**
 	 * Default constructor
 	 */
 	public Ammo() {
 	}
-
-	/**
-	 * 
-	 */
-	private String color;
 
 	/**
 	 * @return

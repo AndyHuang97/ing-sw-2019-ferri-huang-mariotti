@@ -6,17 +6,13 @@ import java.util.*;
  */
 public class ActiveGames {
 
+	private ArrayList<Game> gameList;
+
 	/**
 	 * Default constructor
 	 */
 	public ActiveGames() {
 	}
-
-	/**
-	 * 
-	 */
-	private ArrayList<Game> gameList;
-
 
 	/**
 	 * @return

@@ -6,38 +6,18 @@ import java.util.*;
  */
 public class Game {
 
+	private void currentPlayer;
+	private String id;
+	private Date startDate;
+	private ArrayList<Player> playerList;
+	private Board board;
+
+
 	/**
 	 * Default constructor
 	 */
 	public Game() {
 	}
-
-	/**
-	 * 
-	 */
-	private void currentPlayer;
-
-	/**
-	 * 
-	 */
-	private String id;
-
-	/**
-	 * 
-	 */
-	private Date startDate;
-
-	/**
-	 * 
-	 */
-	private ArrayList<Player> playerList;
-
-	/**
-	 * 
-	 */
-	private Board board;
-
-
 
 
 	/**

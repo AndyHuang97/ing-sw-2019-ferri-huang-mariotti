@@ -1,29 +1,16 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class Board {
+
+	private ArrayList<Room> roomList;
+	private ArrayList<Link> links;
 
 	/**
 	 * Default constructor
 	 */
 	public Board() {
 	}
-
-	/**
-	 * 
-	 */
-	private ArrayList<Room> roomList;
-
-	/**
-	 * 
-	 */
-	private ArrayList<Link> links;
-
-
-
 
 	/**
 	 * @param int id1 

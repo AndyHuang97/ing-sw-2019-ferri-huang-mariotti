@@ -6,21 +6,16 @@ import java.util.*;
  */
 public class GameData {
 
+	private String id;
+	private Date startDate;
+
+
 	/**
 	 * Default constructor
 	 */
 	public GameData() {
 	}
 
-	/**
-	 * 
-	 */
-	private String id;
-
-	/**
-	 * 
-	 */
-	private Date startDate;
 
 	/**
 	 * 

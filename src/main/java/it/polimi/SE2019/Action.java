@@ -5,40 +5,18 @@ import java.util.*;
  * 
  */
 public class Action {
+	
+	private boolean limited;
+	private String name;
+	private String description;
+	private ArrayList<Effect> effectList;
+	private ArrayList<Condition> conditionList;
 
 	/**
 	 * Default constructor
 	 */
 	public Action() {
 	}
-
-	/**
-	 * 
-	 */
-	private boolean limited;
-
-	/**
-	 * 
-	 */
-	private String name;
-
-	/**
-	 * 
-	 */
-	private String description;
-
-	/**
-	 * 
-	 */
-	private ArrayList<Effect> effectList;
-
-	/**
-	 * 
-	 */
-	private ArrayList<Condition> conditionList;
-
-
-
 
 
 	/**

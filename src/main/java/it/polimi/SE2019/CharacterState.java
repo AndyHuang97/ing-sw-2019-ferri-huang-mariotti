@@ -1,43 +1,21 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class CharacterState {
+
+	private ArrayList<Color> damageBar;
+	private Integer deathCount;
+	private ArrayList<Color> markerBar;
+	private ArrayList<Ammo> ammo;
+	private int roomId;
+
+
 
 	/**
 	 * Default constructor
 	 */
 	public CharacterState() {
 	}
-
-	/**
-	 * 
-	 */
-	private ArrayList<Color> damageBar;
-
-	/**
-	 * 
-	 */
-	private Integer deathCount;
-
-	/**
-	 * 
-	 */
-	private ArrayList<Color> markerBar;
-
-	/**
-	 * 
-	 */
-	private ArrayList<Ammo> ammo;
-
-	/**
-	 * 
-	 */
-	private int roomId;
-
-
 
 	/**
 	 * @return

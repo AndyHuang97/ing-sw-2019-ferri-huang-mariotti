@@ -1,27 +1,16 @@
-
-import java.util.*;
-
 /**
  * 
  */
 public class UserData {
+
+	private String nickname;
+	private String imageUrl;
 
 	/**
 	 * Default constructor
 	 */
 	public UserData() {
 	}
-
-	/**
-	 * 
-	 */
-	private String nickname;
-
-	/**
-	 * 
-	 */
-	private String imageUrl;
-
 
 	/**
 	 * @return
