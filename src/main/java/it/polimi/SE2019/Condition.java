@@ -4,21 +4,10 @@ import java.util.*;
 /**
  * 
  */
-public class Condition {
-
-	/**
-	 * Default constructor
-	 */
-	public Condition() {
-	}
-
-
+public interface Condition {
 	/**
 	 * @return
 	 */
-	public boolean check() {
-		// TODO implement here
-		return false;
-	}
+	public boolean check();
 
 }
