@@ -1,4 +1,4 @@
-package it.polimi.SE2019.server.entities.actions.effects;
+package it.polimi.SE2019.server.actions.effects;
 
 /**
  * 

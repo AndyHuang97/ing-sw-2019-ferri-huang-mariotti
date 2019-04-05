@@ -1,6 +1,6 @@
 package it.polimi.SE2019.server.games.board;
 
-import it.polimi.SE2019.server.entities.Entity;
+import it.polimi.SE2019.server.cards.Card;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class AmmoCrate {
 
-	private ArrayList<Entity> powerAmmoList;
+	private ArrayList<Card> powerAmmoList;
 
 	/**
 	 * Default constructor
@@ -20,7 +20,7 @@ public class AmmoCrate {
 	/**
 	 * @return
 	 */
-	public ArrayList<Entity> getPowerAmmoList() {
+	public ArrayList<Card> getPowerAmmoList() {
 		// TODO implement here
 		return null;
 	}
@@ -28,7 +28,7 @@ public class AmmoCrate {
 	/**
 	 * @param value
 	 */
-	public void setPowerAmmoList(ArrayList<Entity> value) {
+	public void setPowerAmmoList(ArrayList<Card> value) {
 		// TODO implement here
 	}
 

@@ -1,6 +1,6 @@
 package it.polimi.SE2019.server;
 
-import it.polimi.SE2019.server.entities.actions.Action;
+import it.polimi.SE2019.server.actions.ActionUnit;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Transaction {
 
-    private ArrayList<Action> actionList;
+    private ArrayList<ActionUnit> actionList;
 
 	/**
 	 * Default constructor

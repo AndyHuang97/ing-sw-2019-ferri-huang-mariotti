@@ -1,6 +1,6 @@
 package it.polimi.SE2019.server.games.board;
 
-import it.polimi.SE2019.server.entities.weapons.Weapon;
+import it.polimi.SE2019.server.cards.weapons.Weapon;
 
 import java.util.*;
 

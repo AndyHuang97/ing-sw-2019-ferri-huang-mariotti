@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Board {
 
-	private ArrayList<Room> roomList;
+	private ArrayList<Tile> tileList;
 	private ArrayList<Link> links;
 
 	/**
@@ -29,7 +29,7 @@ public class Board {
 	/**
 	 * @return
 	 */
-	public ArrayList<Room> getRoomList() {
+	public ArrayList<Tile> getTileList() {
 		// TODO implement here
 		return null;
 	}
@@ -37,7 +37,7 @@ public class Board {
 	/**
 	 * @param value
 	 */
-	public void setRoomList(ArrayList<Room> value) {
+	public void setTileList(ArrayList<Tile> value) {
 		// TODO implement here
 	}
 

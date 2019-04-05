@@ -1,15 +1,15 @@
-package it.polimi.SE2019.server.entities.actions;
+package it.polimi.SE2019.server.actions;
 
 import it.polimi.SE2019.server.Transaction;
-import it.polimi.SE2019.server.entities.actions.conditions.Condition;
-import it.polimi.SE2019.server.entities.actions.effects.Effect;
+import it.polimi.SE2019.server.actions.conditions.Condition;
+import it.polimi.SE2019.server.actions.effects.Effect;
 
 import java.util.*;
 
 /**
  * 
  */
-public class Action {
+public class ActionUnit {
 
 	private boolean limited;
 	private String name;
@@ -20,7 +20,7 @@ public class Action {
 	/**
 	 * Default constructor
 	 */
-	public Action() {
+	public ActionUnit() {
 	}
 
 

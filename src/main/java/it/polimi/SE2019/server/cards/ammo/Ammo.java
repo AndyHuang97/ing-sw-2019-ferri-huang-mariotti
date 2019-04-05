@@ -1,11 +1,11 @@
-package it.polimi.SE2019.server.entities.ammo;
+package it.polimi.SE2019.server.cards.ammo;
 
-import it.polimi.SE2019.server.entities.Entity;
+import it.polimi.SE2019.server.cards.Card;
 
 /**
  * 
  */
-public class Ammo extends Entity {
+public class Ammo extends Card {
 
 	private String color;
 

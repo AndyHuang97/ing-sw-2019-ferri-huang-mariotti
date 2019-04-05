@@ -1,15 +1,13 @@
 package it.polimi.SE2019.server.games.board;
 
-import java.util.*;
-
 /**
  * 
  */
 public class Link {
 
-	private int roomId1;
-	private int roomId2;
-	private String type;
+	private Tile tileA;
+	private Tile tileB;
+	private LinkType type;
 
 	/**
 	 * Default constructor

@@ -1,6 +1,7 @@
 package it.polimi.SE2019.server.games.player;
 
-import it.polimi.SE2019.server.entities.ammo.Ammo;
+import it.polimi.SE2019.server.cards.ammo.Ammo;
+import it.polimi.SE2019.server.games.board.Tile;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ public class CharacterState {
 	private Integer deathCount;
 	private ArrayList<Color> markerBar;
 	private ArrayList<Ammo> ammo;
-	private int roomId;
+	private Tile tile;
 
 
 
