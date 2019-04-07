@@ -13,15 +13,21 @@ public class Player {
 
 	/**
 	 * Default constructor
+	 * @param active
+	 * @param userData
+	 * @param characterState
 	 */
-	public Player() {
+	public Player(boolean active, UserData userData, CharacterState characterState) {
+		this.active = active;
+		this.userData = userData;
+		this.characterState = characterState;
 	}
 
 	/**
 	 * @return
 	 */
 	public boolean getActive() {
-		// TODO implement here
+
 		return false;
 	}
 
@@ -29,14 +35,14 @@ public class Player {
 	 * @param value
 	 */
 	public void setActive(boolean value) {
-		// TODO implement here
+
 	}
 
 	/**
 	 * @return
 	 */
 	public UserData getUserData() {
-		// TODO implement here
+
 		return null;
 	}
 
@@ -44,14 +50,14 @@ public class Player {
 	 * @param value
 	 */
 	public void setUserData(UserData value) {
-		// TODO implement here
+
 	}
 
 	/**
 	 * @return
 	 */
 	public CharacterState getCharacterState() {
-		// TODO implement here
+
 		return null;
 	}
 
@@ -59,7 +65,7 @@ public class Player {
 	 * @param value
 	 */
 	public void setCharacterState(CharacterState value) {
-		// TODO implement here
+
 	}
 
 }

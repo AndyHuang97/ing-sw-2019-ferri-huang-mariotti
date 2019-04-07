@@ -13,8 +13,10 @@ public class AmmoCrate {
 
 	/**
 	 * Default constructor
+	 * @param powerAmmoList
 	 */
-	public AmmoCrate() {
+	public AmmoCrate(ArrayList<Card> powerAmmoList) {
+		this.powerAmmoList = powerAmmoList;
 	}
 
 	/**

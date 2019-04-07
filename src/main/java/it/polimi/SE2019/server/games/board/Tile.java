@@ -7,14 +7,24 @@ public class Tile {
 
 	private String color;
 	private boolean hasSpawn;
-	private WeaponCrate weapon;
-	private AmmoCrate ammo;
+	private WeaponCrate weaponCrate;
+	private AmmoCrate ammoCrate;
 	private int position;
 
 	/**
 	 * Default constructor
+	 * @param color
+	 * @param hasSpawn
+	 * @param weaponCrate
+	 * @param ammoCrate
+	 * @param position
 	 */
-	public Tile() {
+	public Tile(String color, boolean hasSpawn, WeaponCrate weaponCrate, AmmoCrate ammoCrate, int position) {
+		this.color = color;
+		this.hasSpawn = hasSpawn;
+		this.weaponCrate = weaponCrate;
+		this.ammoCrate = getAmmoCrate();
+		this.position = position;
 	}
 
 
@@ -66,7 +76,7 @@ public class Tile {
 	/**
 	 * @return
 	 */
-	public WeaponCrate getWeapon() {
+	public WeaponCrate getWeaponCrate() {
 		// TODO implement here
 		return null;
 	}
@@ -74,14 +84,14 @@ public class Tile {
 	/**
 	 * @param value
 	 */
-	public void setWeapon(WeaponCrate value) {
+	public void setWeaponCrate(WeaponCrate value) {
 		// TODO implement here
 	}
 
 	/**
 	 * @return
 	 */
-	public AmmoCrate getAmmo() {
+	public AmmoCrate getAmmoCrate() {
 		// TODO implement here
 		return null;
 	}
@@ -89,7 +99,7 @@ public class Tile {
 	/**
 	 * @param value
 	 */
-	public void setAmmo(AmmoCrate value) {
+	public void setAmmoCrate(AmmoCrate value) {
 		// TODO implement here
 	}
 

@@ -12,16 +12,20 @@ public class Board {
 
 	/**
 	 * Default constructor
+	 * @param tileList
+	 * @param links
 	 */
-	public Board() {
+	public Board(ArrayList<Tile> tileList, ArrayList<Link> links) {
+		this.tileList = tileList;
+		this.links = links;
 	}
 
 	/**
-	 * @param id1
-	 * @param id2
+	 * @param tileA
+	 * @param tileB
 	 * @return
 	 */
-	public String getLinkType(int id1, int id2) {
+	public String getLinkType(Tile tileA, Tile tileB) {
 		// TODO implement here
 		return "";
 	}

@@ -11,22 +11,25 @@ public class ActiveGames {
 
 	/**
 	 * Default constructor
+	 * @param gameList
 	 */
-	public ActiveGames() {
+	public ActiveGames(ArrayList<Game> gameList) {
+
+		this.gameList = gameList;
 	}
 
 	/**
 	 * @return
 	 */
 	public void addGame() {
-		// TODO implement here
+
 	}
 
 	/**
 	 * @return
 	 */
 	public Game retrieveGame() {
-		// TODO implement here
+
 		return null;
 	}
 
@@ -34,7 +37,7 @@ public class ActiveGames {
 	 * @return
 	 */
 	public ArrayList<Game> getGameList() {
-		// TODO implement here
+
 		return null;
 	}
 
@@ -42,7 +45,7 @@ public class ActiveGames {
 	 * @param value
 	 */
 	public void setGameList(ArrayList<Game> value) {
-		// TODO implement here
+
 	}
 
 }

@@ -19,8 +19,18 @@ public class ActionUnit {
 
 	/**
 	 * Default constructor
+	 * @param limited
+	 * @param name
+	 * @param description
+	 * @param effectList
+	 * @param conditionList
 	 */
-	public ActionUnit() {
+	public ActionUnit(boolean limited, String name, String description, ArrayList<Effect> effectList, ArrayList<Condition> conditionList) {
+		this.limited = limited;
+		this.name = name;
+		this.description = description;
+		this.effectList = effectList;
+		this.conditionList = conditionList;
 	}
 
 

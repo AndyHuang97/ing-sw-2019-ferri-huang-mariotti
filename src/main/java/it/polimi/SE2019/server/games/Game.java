@@ -20,45 +20,48 @@ public class Game {
 
 	/**
 	 * Default constructor
+	 * @param currentPlayer
+	 * @param id
+	 * @param startDate
+	 * @param playerList
+	 * @param board
 	 */
-	public Game() {
+	public Game(Color currentPlayer, String id, Date startDate, ArrayList<Player> playerList, Board board) {
+		this.currentPlayer = currentPlayer;
+		this.id = id;
+		this.startDate = startDate;
+		this.playerList = playerList;
+		this.board = board;
 	}
 
 
 	/**
 	 * 
 	 */
-	public void generateGameData() {
-		// TODO implement here
-	}
-
-	/**
-	 * @return
-	 */
-	public ArrayList<Color> getPlayersByRoomId() {
-		// TODO implement here
+	public GameData generateGameData() {
 		return null;
 	}
 
-	/**
-	 * @return
-	 */
 	public void getCurrentPlayer() {
-		// TODO implement here
+
+	}
+
+	public void updateTurn() {
+
 	}
 
 	/**
 	 * @param value
 	 */
 	public void setCurrentPlayer(Color value) {
-		// TODO implement here
+
 	}
 
 	/**
 	 * @return
 	 */
 	public String getId() {
-		// TODO implement here
+
 		return "";
 	}
 
@@ -66,14 +69,14 @@ public class Game {
 	 * @param value
 	 */
 	public void setId(String value) {
-		// TODO implement here
+
 	}
 
 	/**
 	 * @return
 	 */
 	public Date getStartDate() {
-		// TODO implement here
+
 		return null;
 	}
 
@@ -81,14 +84,14 @@ public class Game {
 	 * @param value
 	 */
 	public void setStartDate(Date value) {
-		// TODO implement here
+
 	}
 
 	/**
 	 * @return
 	 */
 	public ArrayList<Player> getPlayerList() {
-		// TODO implement here
+
 		return null;
 	}
 
@@ -96,14 +99,14 @@ public class Game {
 	 * @param value
 	 */
 	public void setPlayerList(ArrayList<Player> value) {
-		// TODO implement here
+
 	}
 
 	/**
 	 * @return
 	 */
 	public Board getBoard() {
-		// TODO implement here
+
 		return null;
 	}
 
@@ -111,7 +114,7 @@ public class Game {
 	 * @param value
 	 */
 	public void setBoard(Board value) {
-		// TODO implement here
+
 	}
 
 }

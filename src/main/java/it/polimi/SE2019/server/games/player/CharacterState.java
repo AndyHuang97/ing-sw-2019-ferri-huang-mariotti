@@ -20,8 +20,18 @@ public class CharacterState {
 
 	/**
 	 * Default constructor
+	 * @param damageBar
+	 * @param deathCount
+	 * @param markerBar
+	 * @param ammo
+	 * @param tile
 	 */
-	public CharacterState() {
+	public CharacterState(ArrayList<Color> damageBar, Integer deathCount, ArrayList<Color> markerBar, ArrayList<Ammo> ammo, Tile tile) {
+		this.damageBar = damageBar;
+		this.deathCount = deathCount;
+		this.markerBar = markerBar;
+		this.ammo = ammo;
+		this.tile = tile;
 	}
 
 	/**

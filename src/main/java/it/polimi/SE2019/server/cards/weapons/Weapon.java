@@ -11,6 +11,7 @@ public class Weapon extends Card {
 	 * Default constructor
 	 */
 	public Weapon() {
+
 	}
 
 

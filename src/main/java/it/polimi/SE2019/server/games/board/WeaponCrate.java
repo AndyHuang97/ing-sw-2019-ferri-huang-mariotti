@@ -13,8 +13,10 @@ public class WeaponCrate {
 
 	/**
 	 * Default constructor
+	 * @param weaponList
 	 */
-	public WeaponCrate() {
+	public WeaponCrate(ArrayList<Weapon> weaponList) {
+		this.weaponList = weaponList;
 	}
 
 	/**

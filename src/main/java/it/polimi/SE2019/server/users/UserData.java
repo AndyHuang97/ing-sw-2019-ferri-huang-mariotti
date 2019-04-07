@@ -9,8 +9,10 @@ public class UserData {
 
 	/**
 	 * Default constructor
+	 * @param nickname
 	 */
-	public UserData() {
+	public UserData(String nickname) {
+		this.nickname = nickname;
 	}
 
 	/**

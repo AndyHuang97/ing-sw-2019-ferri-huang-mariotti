@@ -13,8 +13,12 @@ public class GameData {
 
 	/**
 	 * Default constructor
+	 * @param id
+	 * @param startDate
 	 */
-	public GameData() {
+	public GameData(String id, Date startDate) {
+		this.id = id;
+		this.startDate = startDate;
 	}
 
 
@@ -22,14 +26,12 @@ public class GameData {
 	 * 
 	 */
 	public void serialize() {
-		// TODO implement here
 	}
 
 	/**
 	 * @return
 	 */
 	public String getId() {
-		// TODO implement here
 		return "";
 	}
 
@@ -37,14 +39,12 @@ public class GameData {
 	 * @param value
 	 */
 	public void setId(String value) {
-		// TODO implement here
 	}
 
 	/**
 	 * @return
 	 */
 	public Date getStartDate() {
-		// TODO implement here
 		return null;
 	}
 
@@ -52,7 +52,6 @@ public class GameData {
 	 * @param value
 	 */
 	public void setStartDate(Date value) {
-		// TODO implement here
 	}
 
 }

@@ -11,8 +11,10 @@ public class Ammo extends Card {
 
 	/**
 	 * Default constructor
+	 * @param color
 	 */
-	public Ammo() {
+	public Ammo(String color) {
+		this.color = color;
 	}
 
 	/**

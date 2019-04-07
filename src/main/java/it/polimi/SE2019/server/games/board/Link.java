@@ -7,58 +7,42 @@ public class Link {
 
 	private Tile tileA;
 	private Tile tileB;
-	private LinkType type;
+	private LinkType linkType;
 
 	/**
 	 * Default constructor
+	 * @param tileA
+	 * @param tileB
+	 * @param linkType
 	 */
-	public Link() {
+	public Link(Tile tileA, Tile tileB, LinkType linkType) {
+		this.tileA = tileA;
+		this.tileB = tileB;
+		this.linkType = linkType;
 	}
 
 
-	/**
-	 * @return
-	 */
-	public int getRoomId1() {
-		// TODO implement here
-		return 0;
+	public Tile getTileA() {
+		return tileA;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setRoomId1(int value) {
-		// TODO implement here
+	public void setTileA(Tile tileA) {
+		this.tileA = tileA;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getRoomId2() {
-		// TODO implement here
-		return 0;
+	public Tile getTileB() {
+		return tileB;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setRoomId2(int value) {
-		// TODO implement here
+	public void setTileB(Tile tileB) {
+		this.tileB = tileB;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getType() {
-		// TODO implement here
-		return "";
+	public LinkType getLinkType() {
+		return linkType;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setType(String value) {
-		// TODO implement here
+	public void setLinkType(LinkType linkType) {
+		this.linkType = linkType;
 	}
-
 }

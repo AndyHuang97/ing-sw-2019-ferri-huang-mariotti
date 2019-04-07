@@ -11,6 +11,7 @@ public class PowerUp extends Card {
 	 * Default constructor
 	 */
 	public PowerUp() {
+
 	}
 
 }
