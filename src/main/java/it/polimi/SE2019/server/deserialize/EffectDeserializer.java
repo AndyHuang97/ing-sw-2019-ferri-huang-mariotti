@@ -2,16 +2,18 @@ package it.polimi.SE2019.server.deserialize;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import it.polimi.SE2019.server.actions.conditions.Condition;
+import it.polimi.SE2019.server.actions.effects.Effect;
 
-public class ConditionDeserializer implements RandomDeserializer<Condition> {
+public class EffectDeserializer implements RandomDeserializer<Effect> {
     @Override
-    public Condition deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
+    public Effect deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
         String name = json.get("name").getAsString();
         String className = json.get("class_name").getAsString();
+        System.out.println(className);
         String params = json.get("params").getAsString();
+        System.out.println(params);
 
         /*
         TODO: avoid reflection
@@ -19,13 +21,13 @@ public class ConditionDeserializer implements RandomDeserializer<Condition> {
         Class classType = null;
 
         try {
-            classType = Class.forName(className);
+        classType = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            throw e;
+        throw e;
         }
 
         Gson gson = new Gson();
-        return (Condition) gson.fromJson(params, classType);
+        return (Effect) gson.fromJson(params, classType);
 
-    }
+        }
 }

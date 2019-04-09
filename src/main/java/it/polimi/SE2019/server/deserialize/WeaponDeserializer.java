@@ -6,21 +6,23 @@ import it.polimi.SE2019.server.cards.weapons.Weapon;
 
 import java.util.ArrayList;
 
+/*
+TODO refactor WeaponDeserializer as EntityDeserializer?
+ */
 public class WeaponDeserializer implements RandomDeserializer<Weapon> {
     @Override
-    public Weapon deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws JsonParseException {
+    public Weapon deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
         String name = json.get("name").getAsString();
-        // actions contains a valid json
-        JsonObject actionsJson = json.get("actions").getAsJsonObject();
-        // deserialize actions json
         ActionsDeserializer actionDeserializer = (ActionsDeserializer) deserializerFactory.getDeserializer("actions");
-        ArrayList<ActionUnit> actions = actionDeserializer.deserialize(actionsJson, deserializerFactory);
-
+        ArrayList<ActionUnit> actions = null;
+        try {
+            actions = actionDeserializer.deserialize(json, deserializerFactory);
+        } catch (ClassNotFoundException e) {
+            throw e;
+        }
 
         return new Weapon(name, actions);
     }
 }
-
-// { "name" : "gun", "actions" : [ "name"

@@ -9,21 +9,24 @@ import java.util.ArrayList;
 
 public class ActionsDeserializer  implements RandomDeserializer<ArrayList<ActionUnit>> {
     @Override
-    public ArrayList<ActionUnit> deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) {
+    public ArrayList<ActionUnit> deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
-        JsonArray jsonActionsArray = json.getAsJsonArray("actions");
+        JsonArray jsonActionsArray = json.getAsJsonArray("action_units");
 
         ArrayList<ActionUnit> actionUnitArrayList = new ArrayList<ActionUnit>();
         ActionUnitDeserializer actionUnitDeserializer = (ActionUnitDeserializer) deserializerFactory.getDeserializer("actionunit");
 
         for (JsonElement action : jsonActionsArray) {
-            JsonObject jsonAction = action.getAsJsonObject();
+            JsonObject jsonActionUnit = action.getAsJsonObject();
 
-            String name = jsonAction.get("name").getAsString();
-            JsonObject jsonActionUnit = jsonAction.getAsJsonObject();
+            ActionUnit actionUnit = null;
 
-            ActionUnit actionUnit = actionUnitDeserializer.deserialize(jsonActionUnit, deserializerFactory);
+            try {
+                actionUnit = actionUnitDeserializer.deserialize(jsonActionUnit, deserializerFactory);
+            } catch (ClassNotFoundException e) {
+                throw e;
+            }
 
             actionUnitArrayList.add(actionUnit);
         }

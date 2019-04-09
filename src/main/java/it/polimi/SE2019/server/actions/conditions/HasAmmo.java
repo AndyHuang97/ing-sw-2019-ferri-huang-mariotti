@@ -14,9 +14,11 @@ public class HasAmmo implements Condition {
     }
 
     @Override
-    public boolean check(Transaction transaction) {
-        Player player = transaction.getCurrentPlayer();
+    public boolean check() {
+    /*    Player player = transaction.getCurrentPlayer();
 
         if Player
+        */
+    return false;
     }
 }
