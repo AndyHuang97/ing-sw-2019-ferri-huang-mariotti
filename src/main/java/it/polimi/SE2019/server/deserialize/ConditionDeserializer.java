@@ -11,7 +11,7 @@ public class ConditionDeserializer implements RandomDeserializer<Condition> {
 
         String name = json.get("name").getAsString();
         String className = json.get("class_name").getAsString();
-        String params = json.get("params").getAsString();
+        String params = json.get("params").toString();
 
         /*
         TODO: avoid reflection

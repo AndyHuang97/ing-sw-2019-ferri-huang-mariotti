@@ -11,9 +11,7 @@ public class EffectDeserializer implements RandomDeserializer<Effect> {
 
         String name = json.get("name").getAsString();
         String className = json.get("class_name").getAsString();
-        System.out.println(className);
-        String params = json.get("params").getAsString();
-        System.out.println(params);
+        String params = json.get("params").toString();
 
         /*
         TODO: avoid reflection

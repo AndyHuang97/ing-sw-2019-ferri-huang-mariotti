@@ -6,11 +6,11 @@ import it.polimi.SE2019.server.games.player.Player;
 
 public class HasAmmo implements Condition {
     Color color;
-    int count;
+    int amount;
 
-    public HasAmmo(Color color, int count) {
+    public HasAmmo(Color color, int amount) {
         this.color = color;
-        this.count = count;
+        this.amount = amount;
     }
 
     @Override

@@ -2,6 +2,7 @@ package it.polimi.SE2019.server.deserialize;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.polimi.SE2019.server.cards.weapons.Weapon;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -27,7 +28,7 @@ public class App {
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
-            weaponDeserializer.deserialize(json, factory);
+            Weapon weapon = weaponDeserializer.deserialize(json, factory);
 
         } catch (FileNotFoundException e) {
             System.out.println("dadasda");
