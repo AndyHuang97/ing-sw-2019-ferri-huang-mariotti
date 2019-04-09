@@ -1,0 +1,102 @@
+{
+  "action_units": [
+    {
+      "name": "Whisper Damage",
+      "effects": [
+        "Damage Target x3",
+        "Empty Weapon"
+      ],
+      "conditions": [
+        "Weapon Loaded",
+        "Target Visible",
+        "Distance to Target"
+      ],
+      "image": ""
+    },
+    {
+      "name": "Whisper Reload",
+      "effects": [
+        "BBY Reload"
+      ],
+      "conditions": [
+        "Has BBY ammo"
+      ],
+      "image": ""
+    }
+  ],
+  "effects": [
+    {
+      "name": "Damage Target x3",
+      "class_name": "damageTarget",
+      "params": {
+        "amount": 3
+      },
+      "image": ""
+    },
+    {
+      "name": "Mark Target",
+      "class_name": "markTarget",
+      "params": {
+        "amount": 1
+      },
+      "image": ""
+    },
+    {
+      "name": "Empty Weapon",
+      "class_name": "emptyWeapon",
+      "params": {},
+      "image": ""
+    },
+    {
+      "name": "BBY Reload",
+      "class_name": "reload",
+      "params": {
+        "blueAmount": 2,
+        "yellowAmout": 1
+      },
+      "image": ""
+    }
+  ],
+  "conditions": [
+    {
+      "name": "Weapon Loaded",
+      "class_name": "isWeaponLoaded",
+      "params": {},
+      "image": ""
+    },
+    {
+      "name": "Target Visible",
+      "class_name": "isTargetVisible",
+      "params": {},
+      "image": ""
+    },
+    {
+      "name": "Has BBY ammo",
+      "class_name": "hasAmmo",
+      "params": {
+        "blueAmount": 2,
+        "yellowAmout": 1
+      },
+      "image": ""
+    },
+    {
+      "name": "Distance to Target",
+      "class_name": "distanceToTarget",
+      "params": {
+        "minimumAmount": 2
+      },
+      "image": ""
+    }
+  ],
+  "cards": [
+    {
+      "type": "weapon",
+      "name": "Whisper",
+      "image": "",
+      "action_units": [
+        "Whisper Damage",
+        "Whisper Reload"
+      ]
+    }
+  ]
+}
