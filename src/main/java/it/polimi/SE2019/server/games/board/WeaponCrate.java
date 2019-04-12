@@ -19,19 +19,12 @@ public class WeaponCrate {
 		this.weaponList = weaponList;
 	}
 
-	/**
-	 * @return
-	 */
+
 	public ArrayList<Weapon> getWeaponList() {
-		// TODO implement here
-		return null;
+		return weaponList;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setWeaponList(ArrayList<Weapon> value) {
-		// TODO implement here
+	public void setWeaponList(ArrayList<Weapon> weaponList) {
+		this.weaponList = weaponList;
 	}
-
 }

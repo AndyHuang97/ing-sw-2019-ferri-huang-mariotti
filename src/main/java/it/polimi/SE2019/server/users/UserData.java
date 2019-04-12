@@ -16,17 +16,18 @@ public class UserData {
 	}
 
 	/**
-	 * @return
+	 *
+	 * @return nickname
 	 */
 	public String getNickname() {
-		// TODO implement here
-		return "";
+		return nickname;
 	}
 
 	/**
-	 * @param value
+	 *
+	 * @param nickname
 	 */
-	public void setNickname(String value) {
-		// TODO implement here
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 }

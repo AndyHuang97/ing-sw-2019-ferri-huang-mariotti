@@ -26,32 +26,35 @@ public class GameData {
 	 * 
 	 */
 	public void serialize() {
+
 	}
 
 	/**
-	 * @return
+	 * @return id
 	 */
 	public String getId() {
-		return "";
+		return id;
 	}
 
 	/**
-	 * @param value
+	 * @param id
 	 */
-	public void setId(String value) {
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**
-	 * @return
+	 * @return startDate
 	 */
 	public Date getStartDate() {
-		return null;
+		return startDate;
 	}
 
 	/**
-	 * @param value
+	 * @param startDate
 	 */
-	public void setStartDate(Date value) {
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
 }

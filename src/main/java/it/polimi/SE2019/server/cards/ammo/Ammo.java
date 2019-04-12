@@ -17,19 +17,12 @@ public class Ammo extends Card {
 		this.color = color;
 	}
 
-	/**
-	 * @return
-	 */
+
 	public String getColor() {
-		// TODO implement here
-		return "";
+		return color;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setColor(String value) {
-		// TODO implement here
+	public void setColor(String color) {
+		this.color = color;
 	}
-
 }

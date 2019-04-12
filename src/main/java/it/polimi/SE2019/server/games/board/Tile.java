@@ -9,113 +9,83 @@ public class Tile {
 	private boolean hasSpawn;
 	private WeaponCrate weaponCrate;
 	private AmmoCrate ammoCrate;
-	private int position;
+	private LinkType northLink;
+	private LinkType southLink;
+	private LinkType eastLink;
+	private LinkType westLink;
 
-	/**
-	 * Default constructor
-	 * @param color
-	 * @param hasSpawn
-	 * @param weaponCrate
-	 * @param ammoCrate
-	 * @param position
-	 */
-	public Tile(String color, boolean hasSpawn, WeaponCrate weaponCrate, AmmoCrate ammoCrate, int position) {
+	public Tile(String color, boolean hasSpawn, WeaponCrate weaponCrate, AmmoCrate ammoCrate, LinkType northLink, LinkType southLink, LinkType eastLink, LinkType westLink) {
 		this.color = color;
 		this.hasSpawn = hasSpawn;
 		this.weaponCrate = weaponCrate;
-		this.ammoCrate = getAmmoCrate();
-		this.position = position;
+		this.ammoCrate = ammoCrate;
+		this.northLink = northLink;
+		this.southLink = southLink;
+		this.eastLink = eastLink;
+		this.westLink = westLink;
 	}
 
-
-	/**
-	 * @return
-	 */
-	public WeaponCrate getAvailableWeapons() {
-		// TODO implement here
-		return null;
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isWeaponAvailable() {
-		// TODO implement here
-		return false;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getColor() {
-		// TODO implement here
-		return "";
+		return color;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setColor(String value) {
-		// TODO implement here
+	public void setColor(String color) {
+		this.color = color;
 	}
 
-	/**
-	 * @return
-	 */
-	public void getHasSpawn() {
-		// TODO implement here
+	public boolean isHasSpawn() {
+		return hasSpawn;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setHasSpawn(boolean value) {
-		// TODO implement here
+	public void setHasSpawn(boolean hasSpawn) {
+		this.hasSpawn = hasSpawn;
 	}
 
-	/**
-	 * @return
-	 */
 	public WeaponCrate getWeaponCrate() {
-		// TODO implement here
-		return null;
+		return weaponCrate;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setWeaponCrate(WeaponCrate value) {
-		// TODO implement here
+	public void setWeaponCrate(WeaponCrate weaponCrate) {
+		this.weaponCrate = weaponCrate;
 	}
 
-	/**
-	 * @return
-	 */
 	public AmmoCrate getAmmoCrate() {
-		// TODO implement here
-		return null;
+		return ammoCrate;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setAmmoCrate(AmmoCrate value) {
-		// TODO implement here
+	public void setAmmoCrate(AmmoCrate ammoCrate) {
+		this.ammoCrate = ammoCrate;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getPosition() {
-		// TODO implement here
-		return 0;
+	public LinkType getNorthLink() {
+		return northLink;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setPosition(int value) {
-		// TODO implement here
+	public void setNorthLink(LinkType northLink) {
+		this.northLink = northLink;
 	}
 
+	public LinkType getSouthLink() {
+		return southLink;
+	}
+
+	public void setSouthLink(LinkType southLink) {
+		this.southLink = southLink;
+	}
+
+	public LinkType getEastLink() {
+		return eastLink;
+	}
+
+	public void setEastLink(LinkType eastLink) {
+		this.eastLink = eastLink;
+	}
+
+	public LinkType getWestLink() {
+		return westLink;
+	}
+
+	public void setWestLink(LinkType westLink) {
+		this.westLink = westLink;
+	}
 }

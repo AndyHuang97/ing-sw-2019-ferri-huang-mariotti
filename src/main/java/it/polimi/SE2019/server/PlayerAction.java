@@ -5,6 +5,7 @@ import it.polimi.SE2019.server.games.Game;
 import it.polimi.SE2019.server.games.player.Player;
 
 public class PlayerAction {
+
     private Game game;
     private Player player;
     private Action action;

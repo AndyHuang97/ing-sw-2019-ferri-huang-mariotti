@@ -35,78 +35,73 @@ public class CharacterState {
 	}
 
 	/**
-	 * @return
+	 * @return damageBar
 	 */
 	public ArrayList<Color> getDamageBar() {
-		// TODO implement here
-		return null;
+		return damageBar;
 	}
 
 	/**
-	 * @param value
+	 * @param damageBar
 	 */
-	public void setDamageBar(ArrayList<Color> value) {
-		// TODO implement here
+	public void setDamageBar(ArrayList<Color> damageBar) {
+		this.damageBar = damageBar;
 	}
 
 	/**
-	 * @return
+	 * @return deathCount
 	 */
 	public Integer getDeathCount() {
-		// TODO implement here
-		return null;
+		return deathCount;
 	}
 
 	/**
-	 * @param value
+	 * @param deathCount
 	 */
-	public void setDeathCount(Integer value) {
-		// TODO implement here
+	public void setDeathCount(Integer deathCount) {
+		this.deathCount = deathCount;
 	}
 
 	/**
-	 * @return
+	 * @return markerBar
 	 */
 	public ArrayList<Color> getMarkerBar() {
-		// TODO implement here
-		return null;
+		return markerBar;
 	}
 
 	/**
-	 * @param value
+	 * @param markerBar
 	 */
-	public void setMarkerBar(ArrayList<Color> value) {
-		// TODO implement here
+	public void setMarkerBar(ArrayList<Color> markerBar) {
+		this.markerBar = markerBar;
 	}
 
 	/**
-	 * @return
+	 * @return ammo
 	 */
 	public ArrayList<Ammo> getAmmo() {
-		// TODO implement here
-		return null;
+		return ammo;
 	}
 
 	/**
-	 * @param value
+	 * @param ammo
 	 */
-	public void setAmmo(ArrayList<Ammo> value) {
-		// TODO implement here
+	public void setAmmo(ArrayList<Ammo> ammo) {
+		this.ammo = ammo;
 	}
 
 	/**
-	 * @return
+	 * @return tile
 	 */
-	public int getRoomId() {
-		// TODO implement here
-		return 0;
+	public Tile getTile() {
+		return tile;
 	}
 
 	/**
-	 * @param value
+	 *
+	 * @param tile
 	 */
-	public void setRoomId(int value) {
-		// TODO implement here
+	public void setTile(Tile tile) {
+		this.tile = tile;
 	}
-
 }

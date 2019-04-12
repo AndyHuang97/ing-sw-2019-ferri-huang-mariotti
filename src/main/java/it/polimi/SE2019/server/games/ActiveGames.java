@@ -14,38 +14,35 @@ public class ActiveGames {
 	 * @param gameList
 	 */
 	public ActiveGames(ArrayList<Game> gameList) {
-
 		this.gameList = gameList;
 	}
 
 	/**
-	 * @return
+	 * @param game
 	 */
-	public void addGame() {
-
+	public void addGame(Game game) {
+		gameList.add(game);
 	}
 
 	/**
-	 * @return
+	 * @return null
 	 */
 	public Game retrieveGame() {
-
 		return null;
 	}
 
 	/**
-	 * @return
+	 * @return gameList
 	 */
 	public ArrayList<Game> getGameList() {
-
-		return null;
+		return gameList;
 	}
 
 	/**
 	 * @param value
 	 */
 	public void setGameList(ArrayList<Game> value) {
-
+		this.gameList = gameList;
 	}
 
 }

@@ -19,19 +19,12 @@ public class AmmoCrate {
 		this.powerAmmoList = powerAmmoList;
 	}
 
-	/**
-	 * @return
-	 */
+
 	public ArrayList<Card> getPowerAmmoList() {
-		// TODO implement here
-		return null;
+		return powerAmmoList;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setPowerAmmoList(ArrayList<Card> value) {
-		// TODO implement here
+	public void setPowerAmmoList(ArrayList<Card> powerAmmoList) {
+		this.powerAmmoList = powerAmmoList;
 	}
-
 }

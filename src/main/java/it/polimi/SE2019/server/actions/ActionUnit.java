@@ -33,96 +33,51 @@ public class ActionUnit {
 		this.conditionList = conditionList;
 	}
 
-
-	/**
-	 * @param transaction
-	 * @return
-	 */
 	public boolean check(Transaction transaction) {
-		// TODO implement here
 		return false;
 	}
 
-	/**
-	 * @return
-	 */
 	public void run() {
-		// TODO implement here
+
 	}
 
-	/**
-	 * @return
-	 */
-	public boolean getLimited() {
-		// TODO implement here
-		return false;
+	public boolean isLimited() {
+		return limited;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setLimited(boolean value) {
-		// TODO implement here
+	public void setLimited(boolean limited) {
+		this.limited = limited;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getName() {
-		// TODO implement here
-		return "";
+		return name;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setName(String value) {
-		// TODO implement here
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	/**
-	 * @return
-	 */
 	public String getDescription() {
-		// TODO implement here
-		return "";
+		return description;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setDescription(String value) {
-		// TODO implement here
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	/**
-	 * @return
-	 */
 	public ArrayList<Effect> getEffectList() {
-		// TODO implement here
-		return null;
+		return effectList;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setEffectList(ArrayList<Effect> value) {
-		// TODO implement here
+	public void setEffectList(ArrayList<Effect> effectList) {
+		this.effectList = effectList;
 	}
 
-	/**
-	 * @return
-	 */
 	public ArrayList<Condition> getConditionList() {
-		// TODO implement here
-		return null;
+		return conditionList;
 	}
 
-	/**
-	 * @param value
-	 */
-	public void setConditionList(ArrayList<Condition> value) {
-		// TODO implement here
+	public void setConditionList(ArrayList<Condition> conditionList) {
+		this.conditionList = conditionList;
 	}
-
 }

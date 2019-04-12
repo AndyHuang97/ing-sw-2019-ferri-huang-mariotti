@@ -27,45 +27,42 @@ public class Player {
 	 * @return
 	 */
 	public boolean getActive() {
-
-		return false;
+		return active;
 	}
 
 	/**
-	 * @param value
+	 * @param active
 	 */
-	public void setActive(boolean value) {
-
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	/**
 	 * @return
 	 */
 	public UserData getUserData() {
-
-		return null;
+		return userData;
 	}
 
 	/**
-	 * @param value
+	 * @param userData
 	 */
-	public void setUserData(UserData value) {
-
+	public void setUserData(UserData userData) {
+		this.userData = userData;
 	}
 
 	/**
-	 * @return
+	 * @return characterState
 	 */
 	public CharacterState getCharacterState() {
-
-		return null;
+		return characterState;
 	}
 
 	/**
-	 * @param value
+	 * @param characterState
 	 */
-	public void setCharacterState(CharacterState value) {
-
+	public void setCharacterState(CharacterState characterState) {
+		this.characterState = characterState;
 	}
 
 }
