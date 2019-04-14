@@ -1,10 +1,10 @@
 {
   "type": "weapon",
   "name": "Whisper",
-  "action_units": [
+  "actionUnits": [
     {
       "name": "Whisper Damage",
-      "effects": [
+      "effectList": [
         {
           "name": "Damage Target x3",
           "class_name": "it.polimi.SE2019.server.actions.effects.DamageTarget",
@@ -14,7 +14,7 @@
           "image": ""
         }
       ],
-      "conditions": [
+      "conditionList": [
         {
           "name": "Weapon Loaded",
           "class_name": "it.polimi.SE2019.server.actions.conditions.HasAmmo",

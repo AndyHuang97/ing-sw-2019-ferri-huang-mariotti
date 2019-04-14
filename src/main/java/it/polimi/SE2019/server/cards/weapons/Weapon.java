@@ -11,15 +11,15 @@ import java.util.ArrayList;
 public class Weapon extends Card {
 
     String name;
-    private ArrayList<ActionUnit> actions;
+    private ArrayList<ActionUnit> actionUnits;
 
 	/**
 	 * Default constructor
 	 */
 
-	public Weapon(String name, ArrayList<ActionUnit> actions) {
+	public Weapon(String name, ArrayList<ActionUnit> actionUnits) {
 	    this.name = name;
-	    this.actions = actions;
+	    this.actionUnits = actionUnits;
 	}
 
 

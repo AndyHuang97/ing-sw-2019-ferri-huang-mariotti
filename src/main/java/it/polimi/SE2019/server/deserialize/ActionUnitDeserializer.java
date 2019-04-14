@@ -15,8 +15,8 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
         if (json.isJsonNull()) return null;
 
         String name = json.get("name").getAsString();
-        JsonArray jsonEffectArray = json.get("effects").getAsJsonArray();
-        JsonArray jsonConditionArray = json.get("conditions").getAsJsonArray();
+        JsonArray jsonEffectArray = json.get("effectList").getAsJsonArray();
+        JsonArray jsonConditionArray = json.get("conditionList").getAsJsonArray();
 
         ConditionDeserializer conditionDeserializer = (ConditionDeserializer) deserializerFactory.getDeserializer("conditions");
         EffectDeserializer effectDeserializer = (EffectDeserializer) deserializerFactory.getDeserializer("effects");
