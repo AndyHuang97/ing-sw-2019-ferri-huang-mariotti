@@ -3,20 +3,21 @@ package it.polimi.SE2019.server.games;
 import it.polimi.SE2019.server.cards.powerup.PowerUp;
 import it.polimi.SE2019.server.cards.weapons.Weapon;
 import it.polimi.SE2019.server.games.board.Board;
-import it.polimi.SE2019.server.games.player.Color;
 import it.polimi.SE2019.server.games.player.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Observable;
 
 /**
  * 
  */
 public class Game extends Observable {
 
-	private Color currentPlayer;
 	private String id;
 	private Date startDate;
 	private ArrayList<Player> playerList;
+	private Player currentPlayer;
 	private Board board;
 	private Integer killshotTrack;
 	private Integer deaths;
@@ -24,11 +25,11 @@ public class Game extends Observable {
 	private ArrayList<PowerUp> powerupDeck;
 
 
-	public Game(Color currentPlayer, String id, Date startDate, ArrayList<Player> playerList, Board board, Integer killshotTrack, Integer deaths, ArrayList<Weapon> weaponDeck, ArrayList<PowerUp> powerupDeck) {
-		this.currentPlayer = currentPlayer;
+	public Game(String id, Date startDate, ArrayList<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, Integer deaths, ArrayList<Weapon> weaponDeck, ArrayList<PowerUp> powerupDeck) {
 		this.id = id;
 		this.startDate = startDate;
 		this.playerList = playerList;
+		this.currentPlayer = currentPlayer;
 		this.board = board;
 		this.killshotTrack = killshotTrack;
 		this.deaths = deaths;
@@ -44,11 +45,11 @@ public class Game extends Observable {
 
 	}
 
-	public Color getCurrentPlayer() {
+	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
 
-	public void setCurrentPlayer(Color currentPlayer) {
+	public void setCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
 
