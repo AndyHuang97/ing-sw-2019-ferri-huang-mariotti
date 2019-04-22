@@ -3,9 +3,9 @@ package it.polimi.se2019.server.games;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.board.Board;
-import it.polimi.se2019.server.games.board.WeaponCrate;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Assert;
@@ -15,8 +15,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-
-import static org.junit.Assert.*;
 
 public class GameTest {
 
@@ -48,7 +46,7 @@ public class GameTest {
     @Test
     public void testSetCurrentPlayer_NotActivePlayer() {
 
-        Player nextPlayer = new Player(false, new UserData("Nick"), new CharacterState());
+        Player nextPlayer = new Player(false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
         Player currPlayer = game.getCurrentPlayer();
 
         game.setCurrentPlayer(nextPlayer);
@@ -59,7 +57,7 @@ public class GameTest {
     @Test
     public void testSetCurrentPlayer_ActivePlayer() {
 
-        Player nextPlayer = new Player(true, new UserData("Nick"), new CharacterState());
+        Player nextPlayer = new Player(true, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
 
         game.setCurrentPlayer(nextPlayer);
 
@@ -88,8 +86,8 @@ public class GameTest {
     @Test
     public void testSetPlayerList() {
 
-        Player p1 = new Player(false, new UserData("Nick1"), new CharacterState());
-        Player p2 = new Player(true, new UserData("Nick2"), new CharacterState());
+        Player p1 = new Player(false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
+        Player p2 = new Player(true, new UserData("Nick2"), new CharacterState(), PlayerColor.GREEN);
         ArrayList<Player> playerList = new ArrayList<>(Arrays.asList(p1, p2));
 
         game.setPlayerList(playerList);
@@ -115,16 +113,6 @@ public class GameTest {
         game.setKillshotTrack(killshots);
 
         Assert.assertEquals(killshots, game.getKillshotTrack());
-    }
-
-    @Test
-    public void testSetDeaths() {
-
-        Integer deaths = 3;
-
-        game.setDeaths(deaths);
-
-        Assert.assertEquals(deaths, game.getDeaths());
     }
 
     @Test

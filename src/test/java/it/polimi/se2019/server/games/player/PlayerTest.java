@@ -12,7 +12,7 @@ public class PlayerTest {
 
     @Before
     public void setUp() {
-        player = new Player(false, new UserData("Nick1"), new CharacterState());
+        player = new Player(false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
     }
 
     @After

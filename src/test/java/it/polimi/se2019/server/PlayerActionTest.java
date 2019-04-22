@@ -4,13 +4,12 @@ import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class PlayerActionTest {
 
@@ -18,7 +17,7 @@ public class PlayerActionTest {
 
     @Before
     public void setUp() {
-        Player player= new Player(false, null, null);
+        Player player= new Player(false, null, null, PlayerColor.BLUE);
         playerAction = new PlayerAction(new Game(), player, Action.MMM);
     }
 
@@ -38,7 +37,7 @@ public class PlayerActionTest {
 
     @Test
     public void testSetPlayer() {
-        Player newPlayer = new Player(true, new UserData("Nick1"), new CharacterState());
+        Player newPlayer = new Player(true, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
 
         playerAction.setPlayer(newPlayer);
 
