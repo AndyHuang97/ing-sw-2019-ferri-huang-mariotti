@@ -4,7 +4,7 @@ import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.util.Observer;
 
 
-public class Score implements Observer<PlayerDeath> {
+public class Score {
 
     private Integer amount;
     private Player player;
@@ -22,11 +22,6 @@ public class Score implements Observer<PlayerDeath> {
     public void getNewScore(PlayerDeath message) {
 
 
-
     }
 
-    @Override
-    public void update(PlayerDeath message) {
-        getNewScore(message);
-    }
 }

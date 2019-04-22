@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.games.player.CharacterValue;
 import it.polimi.se2019.server.games.player.PlayerColor;
 
 import java.util.*;
@@ -12,20 +13,20 @@ public class PlayerDeath {
     private PlayerColor deadPlayer;
     private List<PlayerColor> attackers;
     private PlayerColor firstAttacker;
-    private Integer deathCount;
+    private CharacterValue characterValue;
 
     /**
      * Constructs the main object to notify every player to update their score.
      * @param deadPlayer is the player that got killed.
      * @param damageBar is an ordered list of the attacks that deadPlayer  received.
      * @param firstAttacker is the first attacker of the dead player, needed to keep track of bonus point.
-     * @param deathCount is the number of deaths of the dead player.
+     * @param characterValue is the value of the dead player.
      */
-    public PlayerDeath(PlayerColor deadPlayer, List<PlayerColor> damageBar, PlayerColor firstAttacker, Integer deathCount) {
+    public PlayerDeath(PlayerColor deadPlayer, List<PlayerColor> damageBar, PlayerColor firstAttacker, CharacterValue characterValue) {
         this.deadPlayer = deadPlayer;
         this.attackers = rankAttackers(damageBar);
         this.firstAttacker = firstAttacker;
-        this.deathCount = deathCount;
+        this.characterValue = characterValue;
     }
 
     /**
@@ -77,19 +78,19 @@ public class PlayerDeath {
         this.firstAttacker = firstAttacker;
     }
 
-    public Integer getDeathCount() {
-        return deathCount;
-    }
-
-    public void setDeathCount(Integer deathCount) {
-        this.deathCount = deathCount;
-    }
-
     public PlayerColor getDeadPlayer() {
         return deadPlayer;
     }
 
     public void setDeadPlayer(PlayerColor deadPlayer) {
         this.deadPlayer = deadPlayer;
+    }
+
+    public CharacterValue getCharacterValue() {
+        return characterValue;
+    }
+
+    public void setCharacterValue(CharacterValue characterValue) {
+        this.characterValue = characterValue;
     }
 }

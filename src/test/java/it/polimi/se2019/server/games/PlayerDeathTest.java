@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.games.player.CharacterValue;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import org.junit.After;
@@ -23,7 +24,7 @@ public class PlayerDeathTest {
         p2 = PlayerColor.PURPLE;
         p3 = PlayerColor.YELLOW;
         damageBar = new ArrayList<>(Arrays.asList(p3,p3,p3,p2,p2,p3,p3,p2,p2,p3,p1));
-        pd = new PlayerDeath(PlayerColor.BLUE, damageBar, PlayerColor.YELLOW, 0);
+        pd = new PlayerDeath(PlayerColor.BLUE, damageBar, PlayerColor.YELLOW, CharacterValue.ZERODEATHS);
 
     }
 
@@ -63,10 +64,10 @@ public class PlayerDeathTest {
     }
 
     @Test
-    public void testSetDeathCount() {
-        pd.setDeathCount(3);
+    public void testSetCharacterValue() {
+        pd.setCharacterValue(CharacterValue.FOURDEATHS);
 
-        Assert.assertEquals(new Integer(3), pd.getDeathCount());
+        Assert.assertEquals(CharacterValue.FOURDEATHS, pd.getCharacterValue());
     }
 
     @Test

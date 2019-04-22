@@ -80,6 +80,6 @@ public class Player implements Observer<PlayerDeath> {
 
 	@Override
 	public void update(PlayerDeath message) {
-
+		characterState.updateScore(message, color);
 	}
 }
