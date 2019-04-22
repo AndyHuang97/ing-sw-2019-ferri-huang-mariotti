@@ -16,6 +16,7 @@ public class CharacterState {
 	private List<PlayerColor> markerBar;
 	private List<Ammo> ammo;
 	private Tile tile;
+	private Score score;
 
 	/**
 	 * Default constructor
@@ -28,6 +29,7 @@ public class CharacterState {
 		this.markerBar = new ArrayList<>();
 		this.ammo = new ArrayList<>();
 		this.tile = null;
+		this.score = new Score();
 	}
 
 	/**
@@ -38,12 +40,13 @@ public class CharacterState {
 	 * @param ammo
 	 * @param tile
 	 */
-	public CharacterState(List<PlayerColor> damageBar, Integer deathCount, List<PlayerColor> markerBar, List<Ammo> ammo, Tile tile) {
+	public CharacterState(List<PlayerColor> damageBar, Integer deathCount, List<PlayerColor> markerBar, List<Ammo> ammo, Tile tile, Score score) {
 		this.damageBar = damageBar;
 		this.deathCount = deathCount;
 		this.markerBar = markerBar;
 		this.ammo = ammo;
 		this.tile = tile;
+		this.score = score;
 	}
 
 
@@ -60,6 +63,10 @@ public class CharacterState {
 	 */
 	public void setDamageBar(List<PlayerColor> damageBar) {
 		this.damageBar = damageBar;
+	}
+
+	public void resetDamageBar() {
+		damageBar.clear();
 	}
 
 	/**
@@ -117,5 +124,13 @@ public class CharacterState {
 	 */
 	public void setTile(Tile tile) {
 		this.tile = tile;
+	}
+
+	public Score getScore() {
+		return score;
+	}
+
+	public void setScore(Score score) {
+		this.score = score;
 	}
 }

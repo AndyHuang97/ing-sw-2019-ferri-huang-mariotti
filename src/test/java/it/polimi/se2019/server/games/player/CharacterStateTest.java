@@ -49,7 +49,7 @@ public class CharacterStateTest {
     @Test
     public void testSetMarkerBar() {
         PlayerColor marker1 = PlayerColor.BLUE;
-        PlayerColor marker2 = PlayerColor.GREY;
+        PlayerColor marker2 = PlayerColor.PURPLE;
         ArrayList<PlayerColor> markerBar = new ArrayList<>(Arrays.asList(marker1, marker2));
 
         characterState.setMarkerBar(markerBar);

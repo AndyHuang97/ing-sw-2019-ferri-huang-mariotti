@@ -1,17 +1,12 @@
 package it.polimi.se2019.server.games.board;
 
-import it.polimi.se2019.server.cards.ammo.Ammo;
-import it.polimi.se2019.server.cards.ammo.AmmoColor;
-import it.polimi.se2019.server.cards.weapons.Weapon;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sun.awt.image.ImageWatched;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
 
 public class TileTest {
 
