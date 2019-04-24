@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.games.player;
 
 import it.polimi.se2019.server.games.PlayerDeath;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.Observer;
 
@@ -14,6 +15,13 @@ public class Player implements Observer<PlayerDeath> {
 	private CharacterState characterState;
 	private PlayerColor color;
 
+	// ----------------------------------------------------
+	// The following class variable is not present in UML.
+	private Tile tile;
+	public Player(String name) {
+		this.userData = new UserData(name);
+	}
+	// ----------------------------------------------------
 	/**
 	 * Default constructor
 	 * @param active
@@ -78,8 +86,36 @@ public class Player implements Observer<PlayerDeath> {
 		this.color = color;
 	}
 
+
+	// ------------------- Player actions ------------------
+	public void moveTo(Tile tile) {
+		System.out.println("[Player " + userData.getNickname() + "] moves to " +
+				"(" + tile.getX() + ", " + tile.getY() + ")");
+	}
+
+	public void grab(String card) {
+		System.out.println("[Player " + userData.getNickname() + "] grabs " + card);
+	}
+
+	public void shoot(Player targetPlayer) {
+		System.out.println("[Player " + userData.getNickname() + "] shoots " + targetPlayer);
+	}
+
+	public Tile getTile() {
+		return tile;
+	}
+
+	public void setTile(Tile tile) {
+		this.tile = tile;
+	}
+
+	// ------------------------------------------------------
+
+
 	@Override
 	public void update(PlayerDeath message) {
 		characterState.updateScore(message, color);
 	}
+
+
 }

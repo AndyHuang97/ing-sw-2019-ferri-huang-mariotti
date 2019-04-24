@@ -1,5 +1,9 @@
 package it.polimi.se2019.server.games.board;
 
+import it.polimi.se2019.server.games.player.Player;
+
+import java.util.List;
+
 /**
  * 
  */
@@ -11,6 +15,18 @@ public class Tile {
 	private AmmoCrate ammoCrate;
 	private LinkType[] links;
 
+	// ------------------------------------------------------
+	// The following class variables are not present in UML.
+	// They are used for testing inputs and commands from player.
+	private List<Player> players;
+	private Integer x,y;
+
+	public Tile(List<Player> players, Integer x, Integer y) {
+		this.players = players;
+		this.x = x;
+		this.y = y;
+	}
+	// ------------------------------------------------------
 	/**
 	 *
 	 * @param color
@@ -91,4 +107,33 @@ public class Tile {
 	public void setWestLink(LinkType westLink) {
 		links[3] = westLink;
 	}
+
+	// ------------------------------------------------------
+	// The following methods are not present in UML
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+
+	public Integer getX() {
+		return x;
+	}
+
+	public void setX(Integer x) {
+		this.x = x;
+	}
+
+	public Integer getY() {
+		return y;
+	}
+
+	public void setY(Integer y) {
+		this.y = y;
+	}
+
+	public void setXY(Integer x, Integer y) {this.x = x; this.y = y; }
+	// ------------------------------------------------------
 }
