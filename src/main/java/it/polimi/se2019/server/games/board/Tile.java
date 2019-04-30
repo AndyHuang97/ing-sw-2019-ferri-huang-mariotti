@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games.board;
 
+import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 
@@ -110,26 +111,43 @@ git
 
 	public List<Tile> getVisibleTiles(Board board) {
 		List<Tile> visibleTiles = new ArrayList<>();
+		int[] pos;
 		Tile tile;
 
 		visibleTiles.addAll(getRoom(board));
-		for(int i = 0; i < 4; i++) {
-			if(links[i] == LinkType.DOOR) {
-				switch (i) {
-					case 0:
-						tile = board.getTileMap()[0][0];
-						break;
-					case 1:
-						break;
-					case 2:
-						break;
-					case 3:
-						break;
-					default:
-						break;
-				}
-			}
-		}
+
+		try {
+            pos = board.getTilePosition(this);
+
+            for(int i = 0; i < 4; i++) {
+                if(links[i] == LinkType.DOOR) {
+                    switch (i) {
+                        case 0:
+                            tile = board.getTile(pos[0], pos[1]-1);
+                            break;
+                        case 1:
+                            tile = board.getTile(pos[0]+1, pos[1]);
+                            break;
+                        case 2:
+                            tile = board.getTile(pos[0], pos[1]+1);
+                            break;
+                        case 3:
+                            tile = board.getTile(pos[0]-1, pos[1]);
+                            break;
+                        default:
+                            tile = null;
+                            break;
+                    }
+
+                    visibleTiles.addAll(tile.getRoom(board));
+                }
+            }
+
+        } catch(TileNotFoundException e) {
+
+        }
+
+
 
 		return visibleTiles;
 	}
