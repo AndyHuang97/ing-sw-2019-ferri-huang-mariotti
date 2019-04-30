@@ -1,14 +1,15 @@
 package it.polimi.se2019.server.graphs;
 
 public class AppTest {
-    public static void main() {
+    // TODO: to test
+    public static void main(String[] args) {
         Graph<String> graph = new Graph<String>();
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
         graph.addEdge("A", "B");
-        graph.addEdge("B", "C");
-        graph.addEdge("A", "C");
+        //graph.addEdge("B", "C");
+        //graph.addEdge("A", "C");
 
         boolean a = graph.isReachable("A", "B");
         boolean b = graph.isReachable("B", "C");
