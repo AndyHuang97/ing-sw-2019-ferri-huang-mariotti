@@ -87,7 +87,7 @@ public abstract class Tile {
 	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}
-
+git
 	public Integer getX() {
 		return x;
 	}
@@ -117,7 +117,7 @@ public abstract class Tile {
 			if(links[i] == LinkType.DOOR) {
 				switch (i) {
 					case 0:
-						tile = board.getTileList()[0][0];
+						tile = board.getTileMap()[0][0];
 						break;
 					case 1:
 						break;
@@ -149,8 +149,8 @@ public abstract class Tile {
 
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; i < 4; j++) {
-				if(board.getTileList()[j][i].color == color) {
-					tiles.add(board.getTileList()[j][i]);
+				if(board.getTileMap()[j][i].color == color) {
+					tiles.add(board.getTileMap()[j][i]);
 				}
 			}
 		}
