@@ -1,18 +1,18 @@
 package it.polimi.se2019.server.games.board;
 
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 
  */
-public class Tile {
+public abstract class Tile {
 
 	private String color;
-	private boolean spawnTile;
-	private WeaponCrate weaponCrate;
-	private AmmoCrate ammoCrate;
 	private LinkType[] links;
 
 	// ------------------------------------------------------
@@ -30,17 +30,11 @@ public class Tile {
 	/**
 	 *
 	 * @param color
-	 * @param spawnTile
-	 * @param weaponCrate
-	 * @param ammoCrate
 	 * @param links is an array with 4 cells: 0 - north, 1 - south, 2 - east, 3 - west.
 	 */
 
-	public Tile(String color, boolean spawnTile, WeaponCrate weaponCrate, AmmoCrate ammoCrate, LinkType[] links) {
+	public Tile(String color, LinkType[] links) {
 		this.color = color;
-		this.spawnTile = spawnTile;
-		this.weaponCrate = weaponCrate;
-		this.ammoCrate = ammoCrate;
 		this.links = links;
 	}
 
@@ -50,30 +44,6 @@ public class Tile {
 
 	public void setColor(String color) {
 		this.color = color;
-	}
-
-	public boolean isSpawnTile() {
-		return spawnTile;
-	}
-
-	public void setHasSpawn(boolean spawnTile) {
-		this.spawnTile = spawnTile;
-	}
-
-	public WeaponCrate getWeaponCrate() {
-		return weaponCrate;
-	}
-
-	public void setWeaponCrate(WeaponCrate weaponCrate) {
-		this.weaponCrate = weaponCrate;
-	}
-
-	public AmmoCrate getAmmoCrate() {
-		return ammoCrate;
-	}
-
-	public void setAmmoCrate(AmmoCrate ammoCrate) {
-		this.ammoCrate = ammoCrate;
 	}
 
 	public LinkType getNorthLink() {
@@ -110,7 +80,7 @@ public class Tile {
 
 	// ------------------------------------------------------
 	// The following methods are not present in UML
-	public List<Player> getPlayers() {
+	/*public List<Player> getPlayers() {
 		return players;
 	}
 
@@ -135,5 +105,24 @@ public class Tile {
 	}
 
 	public void setXY(Integer x, Integer y) {this.x = x; this.y = y; }
+	 */
 	// ------------------------------------------------------
+
+	public List<Tile> getVisibleTiles(Board board) {
+
+		board.getTileList();
+
+		return null;
+	}
+
+	public List<Player> getPlayers(Game game) {
+		List<Player> players;
+
+		players = game.getPlayerList().stream()
+									  .filter(p -> p.getTile() == this)
+									  .collect(Collectors.toList());
+
+		return players;
+	}
+
 }
