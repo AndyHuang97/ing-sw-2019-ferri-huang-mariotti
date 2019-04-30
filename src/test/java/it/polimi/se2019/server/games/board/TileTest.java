@@ -14,7 +14,7 @@ public class TileTest {
 
     @Before
     public void setUp() {
-        tile = new Tile("RED", true, null, null, new LinkType[4]);
+        tile = new NormalTile("RED", true, null, null, new LinkType[4]);
     }
 
     @After

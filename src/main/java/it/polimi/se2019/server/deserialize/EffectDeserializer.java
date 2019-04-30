@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import it.polimi.se2019.server.actions.effects.Effect;
 
 public class EffectDeserializer implements RandomDeserializer<Effect> {
+    // TODO: merge EffectDeserializer and ConditionDeserializer in LeafDeserializer
     @Override
     public Effect deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;

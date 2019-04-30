@@ -12,6 +12,6 @@ public class ShootCommand implements Command {
 
     @Override
     public void execute(Player player){
-        player.shoot(targetPlayer);
+        //player.shoot(targetPlayer);
     }
 }

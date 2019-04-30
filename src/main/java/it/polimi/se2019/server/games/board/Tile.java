@@ -110,7 +110,7 @@ public abstract class Tile {
 
 	public List<Tile> getVisibleTiles(Board board) {
 
-		board.getTileList();
+		board.getTileMap();
 
 		return null;
 	}
@@ -119,7 +119,7 @@ public abstract class Tile {
 		List<Player> players;
 
 		players = game.getPlayerList().stream()
-									  .filter(p -> p.getTile() == this)
+									  .filter(p -> p.getCharacterState().getTile() == this)
 									  .collect(Collectors.toList());
 
 		return players;

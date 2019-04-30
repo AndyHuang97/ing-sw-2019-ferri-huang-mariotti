@@ -87,7 +87,7 @@ public class Player implements Observer<PlayerDeath> {
 	}
 
 
-	// ------------------- Player actions ------------------
+	/* ------------------- Player actions ------------------
 	public void moveTo(Tile tile) {
 		System.out.println("[Player " + userData.getNickname() + "] moves to " +
 				"(" + tile.getX() + ", " + tile.getY() + ")");
@@ -110,7 +110,7 @@ public class Player implements Observer<PlayerDeath> {
 	}
 
 	// ------------------------------------------------------
-
+	*/
 
 	@Override
 	public void update(PlayerDeath message) {
