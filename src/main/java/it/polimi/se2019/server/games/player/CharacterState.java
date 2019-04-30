@@ -128,10 +128,15 @@ public class CharacterState {
 	/**
 	 * Updates the ammoColor's value in the ammoBag.
 	 * @param ammoColor is the ammo type to be updated.
-	 * @param amount is a either +1 or -1.
+	 * @param amount is a either negative or positive.
 	 */
 	public void updateAmmoBag(AmmoColor ammoColor, Integer amount) {
-		ammoBag.put(ammoColor, ammoBag.get(ammoColor) + amount);
+
+		if(ammoBag.get(ammoColor) + amount > 3) {
+			ammoBag.put(ammoColor, 3);
+		} else {
+			ammoBag.put(ammoColor, ammoBag.get(ammoColor) + amount);
+		}
 	}
 	/**
 	 * @return tile

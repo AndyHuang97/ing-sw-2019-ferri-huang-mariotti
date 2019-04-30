@@ -1,0 +1,202 @@
+[
+  {
+    "type": "Powerup",
+    "name": "Targeting Scope",
+    "amount": 1,
+    "action_units": [
+      {
+        "name": "Main Effect",
+        "effects": [
+          {
+            "name": "Damage Target x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+            "params": {
+              "targetPlayer": {},
+              "attackerColor": {},
+              "amount": 1
+            }
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Target is in target list",
+            "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDamageTargetList",
+            "params": {
+              "targetColor": {},
+              "damageTargetList": []
+            }
+          },
+          {
+            "name": "Has ammo",
+            "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+            "params": {
+              "amount": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "Secondary Effect",
+        "effects": [
+          {
+            "name": "Replace Ammo",
+            "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+            "params": {
+              "ammoColor": {}
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "Powerup",
+    "name": "Newton",
+    "amount": 1,
+    "action_units": [
+      {
+        "name": "Main Effect",
+        "effects": [
+          {
+            "name": "Move target (",
+            "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+            "params": {
+              "player": {},
+              "tile": {}
+            }
+          }
+        ],
+        "conditions": [
+          {
+            "name": "One direction movement",
+            "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+            "params": {
+              "initialPos": {},
+              "finalPos": {}
+            }
+          },
+          {
+            "name": "Max distance x2",
+            "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+            "params": {
+              "initialPos": {},
+              "finalPos": {},
+              "maxDistance": 2
+            }
+          },
+          {
+            "name": "Not respawn phase",
+            "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
+            "params": {
+              "playerPhase": {}
+            }
+          }
+        ]
+      },
+      {
+        "name": "Secondary Effect",
+        "effects": [
+          {
+            "name": "Replace Ammo",
+            "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+            "params": {
+              "ammoColor": {}
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "Powerup",
+    "name": "Tagback Grenade",
+    "amount": 1,
+    "action_units": [
+      {
+        "name": "Main Effect",
+        "effects": [
+          {
+            "name": "Mark target",
+            "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+            "params": {
+              "targetPlayer": {},
+              "attackerColor": {},
+              "amount": 1
+            }
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Target visible",
+            "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+            "params": {
+              "tile": {},
+              "target": {}
+            }
+          }
+        ]
+      },
+      {
+        "name": "Secondary Effect",
+        "effects": [
+          {
+            "name": "Replace Ammo",
+            "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+            "params": {
+              "ammoColor": {}
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "Powerup",
+    "name": "Teleporter",
+    "amount": 1,
+    "action_units": [
+      {
+        "name": "Main Effect",
+        "effects": [
+          {
+            "name": "Move target",
+            "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+            "params": {
+              "tile": {},
+              "player": {}
+            }
+          }
+        ],
+        "conditions": [
+          {
+            "name": "Not respawn phase",
+            "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
+            "params": {
+              "playerPhase": {}
+            }
+          }
+        ]
+      },
+      {
+        "name": "Secondary Effect",
+        "effects": [
+          {
+            "name": "Replace Ammo",
+            "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+            "params": {
+              "ammoColor": {}
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  }
+]

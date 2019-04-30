@@ -138,8 +138,9 @@ git
                             tile = null;
                             break;
                     }
-
-                    visibleTiles.addAll(tile.getRoom(board));
+					if(tile != null) {
+						visibleTiles.addAll(tile.getRoom(board));
+					}
                 }
             }
 

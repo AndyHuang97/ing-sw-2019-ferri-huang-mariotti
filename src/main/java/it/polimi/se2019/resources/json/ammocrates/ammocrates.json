@@ -1,0 +1,401 @@
+[
+  {
+    "type": "AmmoCrate",
+    "name": "1 yellow, 2 blue ammocrate",
+    "amount": 3,
+    "action_units": [
+      {
+        "name": "Add 1 yellow, 2 blue ammo",
+        "effects": [
+          {
+            "name": "Add yellow ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "amount": 1,
+              "ammoColor": "Yellow",
+              "player": {}
+            }
+          },
+          {
+            "name": "Add blue ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Blue",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 yellow, 2 red ammocrate",
+    "amount": 3,
+    "action_units": [
+      {
+        "name": "Add 1 yellow, 2 red ammo",
+        "effects": [
+          {
+            "name": "Add yellow ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Yellow",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add red ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Red",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 red, 2 blue ammocrate",
+    "amount": 3,
+    "action_units": [
+      {
+        "name": "Add 1 red, 2 blue ammo",
+        "effects": [
+          {
+            "name": "Add red ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Red",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add blue ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Blue",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 red, 2 yellow ammocrate",
+    "amount": 3,
+    "action_units": [
+      {
+        "name": "Add 1 red, 2 yellow ammo",
+        "effects": [
+          {
+            "name": "Add red ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Red",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add yellow ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Yellow",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 blue, 2 yellow ammocrate",
+    "amount": 3,
+    "action_units": [
+      {
+        "name": "Add 1 blue, 2 yellow ammo",
+        "effects": [
+          {
+            "name": "Add blue ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Blue",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add yellow ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Yellow",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 blue, 2 red ammocrate",
+    "amount": 3,
+    "action_units": [
+      {
+        "name": "Add 1 blue, 2 red ammo",
+        "effects": [
+          {
+            "name": "Add blue ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Blue",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add red ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Red",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 powerup, 2 yellow ammocrate",
+    "amount": 2,
+    "action_units": [
+      {
+        "name": "Add 1 powerup, 2 yellow ammo",
+        "effects": [
+          {
+            "name": "Add powerup",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddPowerUp",
+            "params": {
+              "player": {}
+            }
+          },
+          {
+            "name": "Add yellow ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Yellow",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 powerup, 2 red ammocrate",
+    "amount": 2,
+    "action_units": [
+      {
+        "name": "Add 1 powerup, 2 red ammo",
+        "effects": [
+          {
+            "name": "Add powerup",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddPowerUp",
+            "params": {
+              "player": {}
+            }
+          },
+          {
+            "name": "Add red ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Red",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 powerup, 2 blue ammocrate",
+    "amount": 2,
+    "action_units": [
+      {
+        "name": "Add 1 powerup, 2 blue ammo",
+        "effects": [
+          {
+            "name": "Add powerup",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddPowerUp",
+            "params": {
+              "player": {}
+            }
+          },
+          {
+            "name": "Add blue ammo x2",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Blue",
+              "player": {},
+              "amount": 2
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 powerup, 1 yellow, 1 red ammocrate",
+    "amount": 4,
+    "action_units": [
+      {
+        "name": "Add 1 powerup, 1 yellow, 1 red ammo",
+        "effects": [
+          {
+            "name": "Add powerup",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddPowerUp",
+            "params": {
+              "player": {}
+            }
+          },
+          {
+            "name": "Add yellow ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Yellow",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add red ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Red",
+              "player": {},
+              "amount": 1
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 powerup, 1 yellow, 1 blue ammocrate",
+    "amount": 4,
+    "action_units": [
+      {
+        "name": "Add 1 powerup, 1 yellow, 1 blue ammo",
+        "effects": [
+          {
+            "name": "Add powerup",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddPowerUp",
+            "params": {
+              "player": {}
+            }
+          },
+          {
+            "name": "Add yellow ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Yellow",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add blue ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Blue",
+              "player": {},
+              "amount": 1
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  },
+  {
+    "type": "AmmoCrate",
+    "name": "1 powerup, 1 red, 1 blue ammocrate",
+    "amount": 4,
+    "action_units": [
+      {
+        "name": "Add 1 powerup, 1 red, 1 blue ammo",
+        "effects": [
+          {
+            "name": "Add powerup",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddPowerUp",
+            "params": {
+              "player": {}
+            }
+          },
+          {
+            "name": "Add red ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Red",
+              "player": {},
+              "amount": 1
+            }
+          },
+          {
+            "name": "Add blue ammo x1",
+            "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
+            "params": {
+              "ammoColor": "Blue",
+              "player": {},
+              "amount": 1
+            }
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "image": ""
+  }
+]

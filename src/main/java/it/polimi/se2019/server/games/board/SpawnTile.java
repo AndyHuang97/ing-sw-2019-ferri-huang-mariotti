@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SpawnTile extends Tile {
 
-    public List<Weapon> weaponCrate;
+    private List<Weapon> weaponCrate;
 
     public SpawnTile(String color, LinkType[] links, List<Weapon> weaponCrate) {
         super(color, links);
