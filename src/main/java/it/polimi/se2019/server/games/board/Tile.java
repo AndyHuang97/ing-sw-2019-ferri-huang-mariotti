@@ -54,20 +54,20 @@ public abstract class Tile {
 		links[0] = northLink;
 	}
 
-	public LinkType getSouthLink() {
+	public LinkType getEastLink() {
 		return links[1];
 	}
 
-	public void setSouthLink(LinkType southLink) {
-		links[1] = southLink;
+	public void setEastLink(LinkType eastLink) {
+		links[1] = eastLink;
 	}
 
-	public LinkType getEastLink() {
+	public LinkType getSouthLink() {
 		return links[2];
 	}
 
-	public void setEastLink(LinkType eastLink) {
-		links[2] = eastLink;
+	public void setSouthLink(LinkType southLink) {
+		links[2] = southLink;
 	}
 
 	public LinkType getWestLink() {
@@ -109,20 +109,53 @@ public abstract class Tile {
 	// ------------------------------------------------------
 
 	public List<Tile> getVisibleTiles(Board board) {
+		List<Tile> visibleTiles = new ArrayList<>();
+		Tile tile;
 
-		board.getTileList();
+		visibleTiles.addAll(getRoom(board));
+		for(int i = 0; i < 4; i++) {
+			if(links[i] == LinkType.DOOR) {
+				switch (i) {
+					case 0:
+						tile = board.getTileList()[0][0];
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					default:
+						break;
+				}
+			}
+		}
 
-		return null;
+		return visibleTiles;
 	}
 
 	public List<Player> getPlayers(Game game) {
 		List<Player> players;
 
 		players = game.getPlayerList().stream()
-									  .filter(p -> p.getTile() == this)
+									  .filter(p -> p.getCharacterState().getTile() == this)
 									  .collect(Collectors.toList());
 
 		return players;
+	}
+
+	public List<Tile> getRoom(Board board) {
+		List<Tile> tiles = new ArrayList<>();
+
+		for(int i = 0; i < 3; i++) {
+			for(int j = 0; i < 4; j++) {
+				if(board.getTileList()[j][i].color == color) {
+					tiles.add(board.getTileList()[j][i]);
+				}
+			}
+		}
+
+		return tiles;
 	}
 
 }

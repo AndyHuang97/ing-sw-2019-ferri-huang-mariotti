@@ -1,10 +1,11 @@
 package it.polimi.se2019.server.games.player;
 
-import it.polimi.se2019.server.cards.ammo.Ammo;
+import it.polimi.se2019.server.cards.ammo.AmmoColor;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ public class CharacterState {
 
 	private List<PlayerColor> damageBar;
 	private CharacterValue characterValue;
-	private List<PlayerColor> markerBar;
-	private List<Ammo> ammo;
+	private EnumMap<PlayerColor, Integer> markerBar;
+	private EnumMap<AmmoColor, Integer> ammoBag;
 	private Tile tile;
 	private Integer score;
 
@@ -27,8 +28,8 @@ public class CharacterState {
 	public CharacterState() {
 		this.characterValue = CharacterValue.ZERODEATHS;
 		this.damageBar = new ArrayList<>();
-		this.markerBar = new ArrayList<>();
-		this.ammo = new ArrayList<>();
+		this.markerBar = new EnumMap<>(PlayerColor.class);
+		this.ammoBag = new EnumMap<>(AmmoColor.class);
 		this.tile = null;
 		this.score = 0;
 	}
@@ -37,15 +38,17 @@ public class CharacterState {
 	 *  @param damageBar
 	 * @param characterValue
 	 * @param markerBar
-	 * @param ammo
+	 * @param ammoBag
 	 * @param tile
 	 * @param score
 	 */
-	public CharacterState(List<PlayerColor> damageBar, CharacterValue characterValue, List<PlayerColor> markerBar, List<Ammo> ammo, Tile tile, Integer score) {
+	public CharacterState(List<PlayerColor> damageBar, CharacterValue characterValue,
+						  EnumMap<PlayerColor, Integer> markerBar, EnumMap<AmmoColor, Integer> ammoBag,
+						  Tile tile, Integer score) {
 		this.damageBar = damageBar;
 		this.characterValue = characterValue;
 		this.markerBar = markerBar;
-		this.ammo = ammo;
+		this.ammoBag = ammoBag;
 		this.tile = tile;
 		this.score = score;
 	}
@@ -67,7 +70,9 @@ public class CharacterState {
 	public void addDamage(PlayerColor playerColor, Integer amount) {
 		//TODO need to limit the damgeBar length to 12 as maximum.
 		for(int i = 0; i < amount; i++) {
-			damageBar.add(playerColor);
+			if(damageBar.size() < 12) {
+				damageBar.add(playerColor);
+			}
 		}
 	}
 
@@ -86,21 +91,24 @@ public class CharacterState {
 	/**
 	 * @return markerBar
 	 */
-	public List<PlayerColor> getMarkerBar() {
+	public EnumMap<PlayerColor, Integer> getMarkerBar() {
 		return markerBar;
 	}
 
 	/**
 	 * @param markerBar
 	 */
-	public void setMarkerBar(List<PlayerColor> markerBar) {
+	public void setMarkerBar(EnumMap<PlayerColor, Integer> markerBar) {
 		this.markerBar = markerBar;
 	}
 
 	public void addMarker(PlayerColor playerColor, Integer amount) {
-		//TODO need to add a control so that the number of marker from each player is at most 3.
-		for(int i = 0; i < amount; i++) {
-			markerBar.add(playerColor);
+
+		if(markerBar.get(playerColor) + amount > 3) {
+			markerBar.put(playerColor, 3);
+		}
+		else {
+			markerBar.put(playerColor, markerBar.get(playerColor) + amount);
 		}
 	}
 
@@ -108,20 +116,23 @@ public class CharacterState {
 		markerBar.clear();
 	}
 
-	/**
-	 * @return ammo
-	 */
-	public List<Ammo> getAmmo() {
-		return ammo;
+	public EnumMap<AmmoColor, Integer> getAmmoBag() {
+		return ammoBag;
 	}
 
-	/**
-	 * @param ammo
-	 */
-	public void setAmmo(List<Ammo> ammo) {
-		this.ammo = ammo;
+	public void setAmmoBag(EnumMap<AmmoColor, Integer> ammoBag) {
+		this.ammoBag = ammoBag;
 	}
 
+
+	/**
+	 * Updates the ammoColor's value in the ammoBag.
+	 * @param ammoColor is the ammo type to be updated.
+	 * @param amount is a either +1 or -1.
+	 */
+	public void updateAmmoBag(AmmoColor ammoColor, Integer amount) {
+		ammoBag.put(ammoColor, ammoBag.get(ammoColor) + amount);
+	}
 	/**
 	 * @return tile
 	 */
@@ -153,9 +164,8 @@ public class CharacterState {
 				score += 1;
 			}
 
-			score += characterValue.getValue(message.getAttackers().indexOf(playerColor));
+			score += message.getCharacterValue().getValue(message.getAttackers().indexOf(playerColor));
 		}
 	}
-
 
 }

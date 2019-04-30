@@ -14,7 +14,7 @@ public class TileTest {
 
     @Before
     public void setUp() {
-        tile = new Tile("RED", true, null, null, new LinkType[4]);
+        tile = new NormalTile("RED", new LinkType[4], null);
     }
 
     @After
@@ -30,33 +30,7 @@ public class TileTest {
         Assert.assertEquals("BLUE", tile.getColor());
     }
 
-    @Test
-    public void testSetHasSpawn() {
 
-        tile.setHasSpawn(false);
-
-        Assert.assertEquals(false, tile.isSpawnTile());
-    }
-
-    @Test
-    public void testSetWeaponCrate() {
-
-        WeaponCrate weaponCrate = new WeaponCrate(new ArrayList<>());
-
-        tile.setWeaponCrate(weaponCrate);
-
-        Assert.assertEquals(weaponCrate, tile.getWeaponCrate());
-    }
-
-    @Test
-    public void testSetAmmoCrate() {
-
-        AmmoCrate ammoCrate = new AmmoCrate(new ArrayList<>());
-
-        tile.setAmmoCrate(ammoCrate);
-
-        Assert.assertEquals(ammoCrate, tile.getAmmoCrate());
-    }
 
     @Test
     public void testSetNorthLink() {

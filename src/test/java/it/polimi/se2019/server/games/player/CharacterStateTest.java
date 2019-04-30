@@ -4,6 +4,7 @@ import it.polimi.se2019.server.cards.ammo.Ammo;
 import it.polimi.se2019.server.cards.ammo.AmmoColor;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.LinkType;
+import it.polimi.se2019.server.games.board.NormalTile;
 import it.polimi.se2019.server.games.board.Tile;
 import org.junit.After;
 import org.junit.Assert;
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
 
 public class CharacterStateTest {
@@ -21,6 +23,11 @@ public class CharacterStateTest {
     @Before
     public void setUp() {
         characterState = new CharacterState();
+        characterState.getMarkerBar().put(PlayerColor.BLUE, 0);
+        characterState.getMarkerBar().put(PlayerColor.GREEN, 0);
+        characterState.getMarkerBar().put(PlayerColor.YELLOW, 0);
+        characterState.getMarkerBar().put(PlayerColor.GREY, 0);
+        characterState.getMarkerBar().put(PlayerColor.PURPLE, 0);
     }
 
     @After
@@ -44,7 +51,7 @@ public class CharacterStateTest {
     public void testSetMarkerBar() {
         PlayerColor marker1 = PlayerColor.BLUE;
         PlayerColor marker2 = PlayerColor.PURPLE;
-        ArrayList<PlayerColor> markerBar = new ArrayList<>(Arrays.asList(marker1, marker2));
+        EnumMap<PlayerColor, Integer> markerBar = new EnumMap<>(PlayerColor.class);
 
         characterState.setMarkerBar(markerBar);
 
@@ -55,16 +62,16 @@ public class CharacterStateTest {
     public void testSetAmmo() {
         Ammo ammo1 = new Ammo(AmmoColor.BLUE);
         Ammo ammo2 = new Ammo(AmmoColor.RED);
-        ArrayList<Ammo> ammoList = new ArrayList<>(Arrays.asList(ammo1, ammo2));
+        EnumMap<AmmoColor, Integer> ammoList = new EnumMap<>(AmmoColor.class);
 
-        characterState.setAmmo(ammoList);
+        characterState.setAmmoBag(ammoList);
 
-        Assert.assertEquals(ammoList, characterState.getAmmo());
+        Assert.assertEquals(ammoList, characterState.getAmmoBag());
     }
 
     @Test
     public void testSetTile() {
-        Tile newTile = new Tile("RED", true, null, null, new LinkType[4]);
+        Tile newTile = new NormalTile("RED", new LinkType[4], null);
 
         characterState.setTile(newTile);
 
@@ -102,9 +109,7 @@ public class CharacterStateTest {
 
         characterState.addMarker(PlayerColor.YELLOW, 2);
 
-        Assert.assertEquals(oldSize+2, characterState.getMarkerBar().size());
-        Assert.assertEquals(PlayerColor.YELLOW, characterState.getMarkerBar().get(oldSize));
-        Assert.assertEquals(PlayerColor.YELLOW, characterState.getMarkerBar().get(oldSize+1));
+        Assert.assertEquals(2, characterState.getMarkerBar().get(PlayerColor.YELLOW).intValue());
     }
 
     @Test

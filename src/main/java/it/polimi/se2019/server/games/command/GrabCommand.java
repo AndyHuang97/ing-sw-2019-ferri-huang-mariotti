@@ -12,6 +12,6 @@ public class GrabCommand implements Command {
 
     @Override
     public void execute(Player player){
-        player.grab(card);
+        //player.grab(card);
     }
 }
