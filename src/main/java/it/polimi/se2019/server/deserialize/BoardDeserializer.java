@@ -7,6 +7,6 @@ public class BoardDeserializer implements RandomDeserializer {
     @Override
     public Board deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
-
+        return null;
     }
 }

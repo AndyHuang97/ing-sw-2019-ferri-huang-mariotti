@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.cards.ammo;
+package it.polimi.se2019.server.games.player;
 
 public enum AmmoColor {
     BLUE,

@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.actions.effects;
 
-import it.polimi.se2019.server.cards.ammo.AmmoColor;
+import it.polimi.se2019.server.games.player.AmmoColor;
 
 public class ReplaceAmmo implements Effect {
 
