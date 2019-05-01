@@ -18,7 +18,7 @@
         {
           "name": "Weapon Loaded",
           "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
-          "params": {color: BLUE, amount: 1},
+          "params": {color: "BLUE", amount: 1},
           "image": ""
         }
       ],
