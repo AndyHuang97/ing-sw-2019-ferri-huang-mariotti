@@ -8,7 +8,7 @@ public class TileDeserializer implements RandomDeserializer {
     public Tile deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
-        
+        return null;
 
 
     }

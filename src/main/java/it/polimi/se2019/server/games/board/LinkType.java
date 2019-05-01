@@ -1,7 +1,9 @@
 package it.polimi.se2019.server.games.board;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum LinkType {
-    DOOR,
-    OPEN,
-    WALL;
+    @SerializedName("DOOR") DOOR,
+    @SerializedName("OPEN") OPEN,
+    @SerializedName("WALL") WALL
 }
