@@ -1,15 +1,18 @@
 package it.polimi.se2019.server.actions.conditions;
 
-import it.polimi.se2019.server.cards.ammo.AmmoColor;
+import it.polimi.se2019.server.games.player.AmmoColor;
+import it.polimi.se2019.server.games.player.Player;
 
 public class HasAmmo implements Condition {
 
-    AmmoColor color;
-    int amount;
+    private AmmoColor ammoColor;
+    private int amount;
+    private Player player;
 
-    public HasAmmo(AmmoColor color, int amount) {
-        this.color = color;
+    public HasAmmo(AmmoColor ammoColor, int amount, Player player) {
+        this.ammoColor = ammoColor;
         this.amount = amount;
+        this.player = player;
     }
 
     @Override

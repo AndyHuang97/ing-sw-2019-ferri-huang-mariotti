@@ -3,16 +3,17 @@ package it.polimi.se2019.server.actions.conditions;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 
-public class IsTargetVisible implements Condition {
+import java.util.List;
+
+public class IsTargetListVisible implements Condition {
 
     private Tile tile;
-    private Player target;
+    private List<Player> targetList;
 
-    public IsTargetVisible(Tile tile, Player target) {
+    public IsTargetListVisible(Tile tile, List<Player> targetList) {
         this.tile = tile;
-        this.target = target;
+        this.targetList = targetList;
     }
-
 
     @Override
     public boolean check() {

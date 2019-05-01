@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.games.player;
 
-import it.polimi.se2019.server.cards.ammo.AmmoColor;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
 
