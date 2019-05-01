@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.cards.powerup;
 
-import it.polimi.se2019.server.cards.ammo.Card;
+import it.polimi.se2019.server.cards.Card;
 
 /**
  * 
