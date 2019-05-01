@@ -8,7 +8,6 @@ public class Board {
     private Graph<Tile> tileTree;
 
     public Board() {
-
     }
 
     public Board (Tile[][] tileMap) {
@@ -63,6 +62,7 @@ public class Board {
                 }
             }
         }
+
         return graph;
     }
 }

@@ -1,10 +1,8 @@
 package it.polimi.se2019.server.games.board;
 
-import it.polimi.se2019.server.cards.AmmoCrate;
+public class NormalTile extends Tile {
 
-public class NormalTile extends  Tile {
-
-    private AmmoCrate ammoCrate;
+    public AmmoCrate ammoCrate;
 
     public NormalTile(String color, LinkType[] links, AmmoCrate ammoCrate) {
         super(color, links);
