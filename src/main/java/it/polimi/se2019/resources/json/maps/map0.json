@@ -1,80 +1,168 @@
-[
-  {
-    "type": "NormalTile",
-    "pos": [0, 0],
-    "color": "Blue",
-    "LinkType": ["WALL", "OPEN", "DOOR", "WALL"],
-    "AmmoCrate": []
-  },
-  {
-    "type": "NormalTile",
-    "pos": [1, 0],
-    "color": "Blue",
-    "LinkType": ["WALL", "OPEN", "WALL", "OPEN"],
-    "AmmoCrate": []
-  },
-  {
-    "type": "SpawnTile",
-    "pos": [2, 0],
-    "color": "Blue",
-    "LinkType": ["WALL", "WALL", "DOOR", "OPEN"],
-    "WeaponCrate": []
-  },
-  {
-    "type": "NoTile",
-    "pos": [3, 0]
-  },
-  {
-    "type": "SpawnTile",
-    "pos": [0, 1],
-    "color": "Red",
-    "LinkType": ["DOOR", "OPEN", "WALL", "WALL"],
-    "WeaponCrate": []
-  },
-  {
-    "type": "NormalTile",
-    "pos": [1, 1],
-    "color": "Red",
-    "LinkType": ["WALL", "OPEN", "DOOR", "OPEN"],
-    "AmmoCrate": []
-  },
-  {
-    "type": "NormalTile",
-    "pos": [2, 1],
-    "color": "Red",
-    "LinkType": ["DOOR", "DOOR", "WALL", "OPEN"],
-    "AmmoCrate": []
-  },
-  {
-    "type": "NormalTile",
-    "pos": [3, 1],
-    "color": "Yellow",
-    "LinkType": ["WALL", "WALL", "OPEN", "DOOR"],
-    "AmmoCrate": []
-  },
-  {
-    "type": "NoTile",
-    "pos": [0, 2]
-  },
-  {
-    "type": "NormalTile",
-    "pos": [1, 2],
-    "color": "White",
-    "LinkType": ["DOOR", "OPEN", "WALL", "WALL"],
-    "AmmoCrate": []
-  },
-  {
-    "type": "NormalTile",
-    "pos": [2, 2],
-    "color": "White",
-    "LinkType": ["WALL", "DOOR", "WALL", "OPEN"],
-    "AmmoCrate": []
-  },
-  {
-    "type": "SpawnTile",
-    "pos": [3, 2],
-    "color": "Yellow",
-    "LinkType": ["OPEN", "WALL", "WALL", "DOOR"],
-    "WeaponCrate": []
-  }
-]
+{
+  "tiles": [
+    {
+      "type": "NormalTile",
+      "pos": [
+        0,
+        0
+      ],
+      "color": "Blue",
+      "LinkType": [
+        "WALL",
+        "OPEN",
+        "DOOR",
+        "WALL"
+      ],
+      "AmmoCrate": []
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        1,
+        0
+      ],
+      "color": "Blue",
+      "LinkType": [
+        "WALL",
+        "OPEN",
+        "WALL",
+        "OPEN"
+      ],
+      "AmmoCrate": []
+    },
+    {
+      "type": "SpawnTile",
+      "pos": [
+        2,
+        0
+      ],
+      "color": "Blue",
+      "LinkType": [
+        "WALL",
+        "WALL",
+        "DOOR",
+        "OPEN"
+      ],
+      "WeaponCrate": []
+    },
+    {
+      "type": "NoTile",
+      "pos": [
+        3,
+        0
+      ]
+    },
+    {
+      "type": "SpawnTile",
+      "pos": [
+        0,
+        1
+      ],
+      "color": "Red",
+      "LinkType": [
+        "DOOR",
+        "OPEN",
+        "WALL",
+        "WALL"
+      ],
+      "WeaponCrate": []
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        1,
+        1
+      ],
+      "color": "Red",
+      "LinkType": [
+        "WALL",
+        "OPEN",
+        "DOOR",
+        "OPEN"
+      ],
+      "AmmoCrate": []
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        2,
+        1
+      ],
+      "color": "Red",
+      "LinkType": [
+        "DOOR",
+        "DOOR",
+        "WALL",
+        "OPEN"
+      ],
+      "AmmoCrate": []
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        3,
+        1
+      ],
+      "color": "Yellow",
+      "LinkType": [
+        "WALL",
+        "WALL",
+        "OPEN",
+        "DOOR"
+      ],
+      "AmmoCrate": []
+    },
+    {
+      "type": "NoTile",
+      "pos": [
+        0,
+        2
+      ]
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        1,
+        2
+      ],
+      "color": "White",
+      "LinkType": [
+        "DOOR",
+        "OPEN",
+        "WALL",
+        "WALL"
+      ],
+      "AmmoCrate": []
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        2,
+        2
+      ],
+      "color": "White",
+      "LinkType": [
+        "WALL",
+        "DOOR",
+        "WALL",
+        "OPEN"
+      ],
+      "AmmoCrate": []
+    },
+    {
+      "type": "SpawnTile",
+      "pos": [
+        3,
+        2
+      ],
+      "color": "Yellow",
+      "LinkType": [
+        "OPEN",
+        "WALL",
+        "WALL",
+        "DOOR"
+      ],
+      "WeaponCrate": []
+    }
+  ]
+}
