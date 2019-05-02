@@ -10,13 +10,11 @@ public class GraphTest {
 
     @Before
     public void setUp() {
-        Graph<String> graph = new Graph<String>();
-
+        graph = new Graph<>();
     }
 
     @After
     public void tearDown() {
-        graph = null;
     }
 
     @Test
