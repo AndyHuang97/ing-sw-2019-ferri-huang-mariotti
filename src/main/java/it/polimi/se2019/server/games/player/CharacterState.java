@@ -126,7 +126,7 @@ public class CharacterState {
 
 	/**
 	 * Updates the ammoColor's value in the ammoBag.
-	 * @param ammoColor is the ammo type to be updated.
+	 * @param ammoColor is the ammocrate type to be updated.
 	 * @param amount is a either negative or positive.
 	 */
 	public void updateAmmoBag(AmmoColor ammoColor, Integer amount) {

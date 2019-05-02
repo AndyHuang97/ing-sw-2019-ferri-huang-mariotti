@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.cards.ammo;
+package it.polimi.se2019.server.cards;
 
 import it.polimi.se2019.server.actions.ActionUnit;
 
