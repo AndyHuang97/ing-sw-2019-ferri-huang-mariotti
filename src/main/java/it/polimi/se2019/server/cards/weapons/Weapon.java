@@ -17,8 +17,9 @@ public class Weapon extends Card {
 	 * Default constructor
 	 */
 
-	public Weapon(String name, List<ActionUnit> actionUnits) {
-	    this.name = name;
+	public Weapon(String name, List<ActionUnit> actionUnitList) {
+		super(actionUnitList);
+		this.name = name;
 	    this.actionUnits = actionUnits;
 	}
 
