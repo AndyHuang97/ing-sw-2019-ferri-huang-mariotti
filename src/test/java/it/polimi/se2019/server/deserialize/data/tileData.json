@@ -1,0 +1,17 @@
+{
+  "type": "NormalTile",
+  "pos": [
+    2,
+    2
+  ],
+  "params":
+  {
+    "color": "White",
+    "LinkType": [
+      "WALL",
+      "DOOR",
+      "WALL",
+      "OPEN"
+    ]
+  }
+}

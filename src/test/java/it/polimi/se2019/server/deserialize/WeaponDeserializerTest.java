@@ -23,6 +23,7 @@ public class WeaponDeserializerTest {
     public void tearDown() throws Exception {
     }
 
+    // TODO: Bad test, needs complete refactoring
     @Test
     public void testDeserialize() {
         DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
@@ -35,7 +36,7 @@ public class WeaponDeserializerTest {
 
         WeaponDeserializer weaponDeserializer = (WeaponDeserializer) factory.getDeserializer("weapon");
 
-        String path = "src/main/java/it/polimi/se2019/server/deserialize/data//cards.json";
+        String path = "src/main/java/it/polimi/se2019/server/resources/json/cards.json";
         BufferedReader bufferedReader;
         Weapon weapon = null;
         try {
@@ -51,7 +52,7 @@ public class WeaponDeserializerTest {
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
-        } catch (ClassNotFoundException f) {
+        } catch (ClassNotFoundException e) {
             System.out.println("Class not found.");
         }
 

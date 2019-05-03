@@ -16,6 +16,7 @@ public class WeaponDeserializer implements RandomDeserializer<Weapon> {
 
         String name = json.get("name").getAsString();
         ActionsDeserializer actionDeserializer = (ActionsDeserializer) deserializerFactory.getDeserializer("actions");
+
         ArrayList<ActionUnit> actions = null;
         try {
             actions = actionDeserializer.deserialize(json, deserializerFactory);

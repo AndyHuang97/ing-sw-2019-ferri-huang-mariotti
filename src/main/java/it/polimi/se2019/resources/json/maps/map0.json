@@ -140,14 +140,16 @@
         2,
         2
       ],
-      "color": "White",
-      "LinkType": [
-        "WALL",
-        "DOOR",
-        "WALL",
-        "OPEN"
-      ],
-      "AmmoCrate": []
+      "params":
+      {
+        "color": "White",
+        "LinkType": [
+          "WALL",
+          "DOOR",
+          "WALL",
+          "OPEN"
+        ]
+      }
     },
     {
       "type": "SpawnTile",
