@@ -1,13 +1,25 @@
 package it.polimi.se2019.server.config;
 
 public class Config implements DeserializerConfig {
-    String actionsDeserializerName;
-    String actionUnitDeserializerName;
+    private static Config instance = null;
+
+    private String actionsDeserializerName;
+    private String actionUnitDeserializerName;
     String boardDeserializerName;
     String conditionDeserializerName;
     String effectDeserializerName;
     String tileDeserializerName;
     String weaponDeserializerName;
+
+    private Config() {}
+
+    public static synchronized Config getInstance() {
+        if (instance == null) {
+            instance = new Config();
+        }
+
+        return instance;
+    }
 
     public void read(String filename) {
         // TODO: read configuration from file
