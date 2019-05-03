@@ -10,7 +10,7 @@ public class BoardDeserializer implements RandomDeserializer {
     @Override
     public Board deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
-        
+
         JsonArray jsonTileArray = json.getAsJsonArray("tiles");
 
         // TODO: hardcoded array size

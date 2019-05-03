@@ -22,5 +22,7 @@ public class Weapon extends Card {
 	    this.actionUnits = actionUnits;
 	}
 
-
+	public String getName() {
+		return name;
+	}
 }
