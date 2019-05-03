@@ -2,6 +2,7 @@ package it.polimi.se2019.server.actions.conditions;
 
 import it.polimi.se2019.server.games.player.Player;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class DifferentTargetsInList implements Condition {
@@ -14,6 +15,6 @@ public class DifferentTargetsInList implements Condition {
 
     @Override
     public boolean check() {
-        return false;
+        return !targetList.stream().allMatch(new HashSet<>()::add);
     }
 }
