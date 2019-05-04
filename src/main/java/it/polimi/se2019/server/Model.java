@@ -1,15 +1,15 @@
 package it.polimi.se2019.server;
 
 
-import it.polimi.se2019.server.games.ActiveGames;
+import it.polimi.se2019.server.games.GameManager;
 
 import java.util.Observable;
 
 public class Model extends Observable {
-    private ActiveGames activeGames;
+    private GameManager gameManager;
 
-    public Model(ActiveGames activeGames) {
-        this.activeGames = activeGames;
+    public Model(GameManager activeGames) {
+        this.gameManager = activeGames;
     }
 
     public void getStatus() {
@@ -28,7 +28,7 @@ public class Model extends Observable {
 
     }
 
-    public ActiveGames getActiveGames() {
+    public GameManager getGameManager() {
         return null;
     }
 }

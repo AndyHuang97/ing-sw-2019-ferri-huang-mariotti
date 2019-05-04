@@ -4,7 +4,7 @@ import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 
 public class NormalTile extends Tile {
 
-    public AmmoCrate ammoCrate;
+    private AmmoCrate ammoCrate;
 
     public NormalTile(String color, LinkType[] links, AmmoCrate ammoCrate) {
         super(color, links);

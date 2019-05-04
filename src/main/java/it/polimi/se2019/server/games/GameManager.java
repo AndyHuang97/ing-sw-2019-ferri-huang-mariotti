@@ -2,17 +2,14 @@ package it.polimi.se2019.server.games;
 
 import java.util.*;
 
-/**
- * 
- */
-public class ActiveGames {
+public class GameManager {
 
 	private List<Game> gameList;
 
 	/**
 	 * Default constructor.
 	 */
-	public ActiveGames() {
+	public GameManager() {
 		gameList = new ArrayList<>();
 	}
 
@@ -20,7 +17,7 @@ public class ActiveGames {
 	 * Constructor for an already existing server with some active games.
 	 * @param gameList
 	 */
-	public ActiveGames(List<Game> gameList) {
+	public GameManager(List<Game> gameList) {
 		this.gameList = gameList;
 	}
 

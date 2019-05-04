@@ -11,13 +11,10 @@ import java.util.List;
 import java.util.Date;
 import java.util.Observable;
 
-/**
- * 
- */
 public class Game extends Observable {
-
 	private String id;
 	private Date startDate;
+	private TurnPhase turnPhase;
 	private List<Player> playerList;
 	private Player currentPlayer;
 	private Board board;
@@ -25,12 +22,10 @@ public class Game extends Observable {
 	private List<Weapon> weaponDeck;
 	private List<PowerUp> powerupDeck;
 
-	/**
-	 * Default constructor
-	 */
 	public Game() {
 		this.id = "";
 		this.startDate = new Date();
+		this.turnPhase = TurnPhase.RESPAWN;
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
 		this.board = new Board();
@@ -39,9 +34,10 @@ public class Game extends Observable {
 		this.powerupDeck = new ArrayList<>();
 	}
 
-	public Game(String id, Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
+	public Game(String id, Date startDate, TurnPhase turnPhase, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
 		this.id = id;
 		this.startDate = startDate;
+		this.turnPhase = turnPhase;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
 		this.board = board;
@@ -55,7 +51,6 @@ public class Game extends Observable {
 	}
 
 	public void updateTurn() {
-
 	}
 
 	public Player getCurrentPlayer() {
@@ -63,8 +58,7 @@ public class Game extends Observable {
 	}
 
 	public void setCurrentPlayer(Player currentPlayer) {
-		if(currentPlayer.getActive())
-		 this.currentPlayer = currentPlayer;
+		if(currentPlayer.getActive()) this.currentPlayer = currentPlayer;
 	}
 
 	public String getId() {

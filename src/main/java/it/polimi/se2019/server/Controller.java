@@ -2,15 +2,15 @@ package it.polimi.se2019.server;
 
 
 import it.polimi.se2019.client.View;
-import it.polimi.se2019.server.games.ActiveGames;
+import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.util.Observer;
 
 public class Controller implements Observer<PlayerAction> {
-    private ActiveGames activeGames;
+    private GameManager gameManager;
     private View view;
 
-    public Controller(ActiveGames activeGames, View view) {
-        this.activeGames = activeGames;
+    public Controller(GameManager activeGames, View view) {
+        this.gameManager = activeGames;
         this.view = view;
     }
 
@@ -31,11 +31,11 @@ public class Controller implements Observer<PlayerAction> {
         this.view = view;
     }
 
-    public ActiveGames getActiveGames() {
-        return activeGames;
+    public GameManager getGameManager() {
+        return gameManager;
     }
 
-    public void setActiveGames(ActiveGames activeGames) {
-        this.activeGames = activeGames;
+    public void setGameManager(GameManager gameManager) {
+        this.gameManager = gameManager;
     }
 }

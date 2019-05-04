@@ -9,6 +9,7 @@ import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Deck;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,20 +65,12 @@ public class CardDeserializerTest {
             try {
                 acbufferedReader.close();
             }catch (IOException e) {
-                System.out.println("Buffered reader could not close correctly.");
+                Assert.fail("Buffered reader could not close correctly.");
             }
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
+            Assert.fail("File not found.");
         } catch (ClassNotFoundException f) {
-            System.out.println("Class not found.");
+            Assert.fail("Class not found.");
         }
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(ammoCrateDeck);
-        //System.out.println(json);
-        json = gson.toJson(powerUpDeck);
-        System.out.println(json);
-
-
     }
 }

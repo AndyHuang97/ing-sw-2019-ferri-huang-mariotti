@@ -1,7 +1,7 @@
 {
   "type": "weapon",
   "name": "Whisper",
-  "actionUnits": [
+  "actions": [
     {
       "name": "Whisper Damage",
       "effectList": [

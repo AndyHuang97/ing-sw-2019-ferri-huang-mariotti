@@ -13,7 +13,8 @@ public class ActionsDeserializer  implements RandomDeserializer<ArrayList<Action
         if (json.isJsonNull()) return null;
 
         JsonArray jsonActionsArray = json.getAsJsonArray("actions");
-        ArrayList<ActionUnit> actionUnitArrayList = new ArrayList<ActionUnit>();
+
+        ArrayList<ActionUnit> actionUnitArrayList = new ArrayList<>();
         ActionUnitDeserializer actionUnitDeserializer = (ActionUnitDeserializer) deserializerFactory.getDeserializer("actionunit");
 
         for (JsonElement action : jsonActionsArray) {

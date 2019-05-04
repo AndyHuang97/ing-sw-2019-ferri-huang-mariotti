@@ -12587,7 +12587,7 @@
 											"top": 414,
 											"width": 206,
 											"height": 13,
-											"text": "-activeGames: ActiveGames",
+											"text": "-gameManager: ActiveGames",
 											"horizontalAlignment": 0
 										}
 									],
@@ -19047,7 +19047,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
 							},
-							"name": "activeGames",
+							"name": "gameManager",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpybyC7+PRyRw="

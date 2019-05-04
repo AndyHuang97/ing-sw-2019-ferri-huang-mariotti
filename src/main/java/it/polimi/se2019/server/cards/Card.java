@@ -16,7 +16,6 @@ public abstract class Card {
 	 * @param actionUnitList
 	 */
 	public Card(List<ActionUnit> actionUnitList) {
-
 		this.actionUnitList = actionUnitList;
 	}
 

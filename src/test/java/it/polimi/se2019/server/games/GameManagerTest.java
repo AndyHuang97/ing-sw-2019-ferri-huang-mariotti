@@ -8,13 +8,13 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ActiveGamesTest {
+public class GameManagerTest {
 
-    ActiveGames activeGames;
+    GameManager activeGames;
 
     @Before
     public void setUp() {
-        activeGames = new ActiveGames();
+        activeGames = new GameManager();
     }
 
     @After
