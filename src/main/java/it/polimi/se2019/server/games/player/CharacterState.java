@@ -52,6 +52,7 @@ public class CharacterState {
 		this.score = score;
 	}
 
+
 	/**
 	 * @return damageBar
 	 */
