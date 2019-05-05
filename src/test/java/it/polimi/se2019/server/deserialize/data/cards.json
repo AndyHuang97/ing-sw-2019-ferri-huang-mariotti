@@ -1,29 +1,45 @@
 {
   "type": "weapon",
   "name": "Whisper",
+  "pickUpCost": ["BLUE", "YELLOW"],
+  "reloadCost": ["BLUE", "BLUE", "YELLOW"],
   "actions": [
     {
-      "name": "Whisper Damage",
+      "name": "Basic Mode",
+      "available": true,
       "effectList": [
         {
           "name": "Damage Target x3",
           "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
           "params": {
-            "amount": 3
-          },
-          "image": ""
+            "amount": 2
+          }
+        },
+        {
+          "name": "Mark Target x1",
+          "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+          "params": {
+          }
         }
       ],
       "conditionList": [
         {
-          "name": "Weapon Loaded",
-          "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
-          "params": {color: "BLUE", amount: 1},
-          "image": ""
+          "name": "Target Visible",
+          "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+          "params": {
+          }
+        },
+        {
+          "name": "Distance x2",
+          "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+          "params": {
+            "amount": 2
+          }
         }
-      ],
-      "image": ""
+      ]
     }
+  ],
+  "optionalEffectList": [
   ],
   "image": ""
 }

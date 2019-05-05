@@ -6,6 +6,7 @@
       "actions": [
         {
           "name": "Add 1 yellow, 2 blue ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add yellow ammo x1",
@@ -35,6 +36,7 @@
       "actions": [
         {
           "name": "Add 1 yellow, 2 red ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add yellow ammo x1",
@@ -64,6 +66,7 @@
       "actions": [
         {
           "name": "Add 1 red, 2 blue ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add red ammo x1",
@@ -93,6 +96,7 @@
       "actions": [
         {
           "name": "Add 1 red, 2 yellow ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add red ammo x1",
@@ -122,6 +126,7 @@
       "actions": [
         {
           "name": "Add 1 blue, 2 yellow ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add blue ammo x1",
@@ -151,6 +156,7 @@
       "actions": [
         {
           "name": "Add 1 blue, 2 red ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add blue ammo x1",
@@ -180,6 +186,7 @@
       "actions": [
         {
           "name": "Add 1 powerup, 2 yellow ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add powerup",
@@ -207,6 +214,7 @@
       "actions": [
         {
           "name": "Add 1 powerup, 2 red ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add powerup",
@@ -234,6 +242,7 @@
       "actions": [
         {
           "name": "Add 1 powerup, 2 blue ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add powerup",
@@ -261,6 +270,7 @@
       "actions": [
         {
           "name": "Add 1 powerup, 1 yellow, 1 red ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add powerup",
@@ -296,6 +306,7 @@
       "actions": [
         {
           "name": "Add 1 powerup, 1 yellow, 1 blue ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add powerup",
@@ -331,6 +342,7 @@
       "actions": [
         {
           "name": "Add 1 powerup, 1 red, 1 blue ammo",
+          "available": true,
           "effectList": [
             {
               "name": "Add powerup",

@@ -6,6 +6,7 @@
       "actions": [
         {
           "name": "Main Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Damage Target x1",
@@ -33,6 +34,7 @@
         },
         {
           "name": "Secondary Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Replace Ammo",
@@ -52,6 +54,7 @@
       "actions": [
         {
           "name": "Main Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Move target (",
@@ -84,6 +87,7 @@
         },
         {
           "name": "Secondary Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Replace Ammo",
@@ -103,6 +107,7 @@
       "actions": [
         {
           "name": "Main Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Mark target",
@@ -123,6 +128,7 @@
         },
         {
           "name": "Secondary Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Replace Ammo",
@@ -142,6 +148,7 @@
       "actions": [
         {
           "name": "Main Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Move target",
@@ -161,6 +168,7 @@
         },
         {
           "name": "Secondary Effect",
+          "available": true,
           "effectList": [
             {
               "name": "Replace Ammo",

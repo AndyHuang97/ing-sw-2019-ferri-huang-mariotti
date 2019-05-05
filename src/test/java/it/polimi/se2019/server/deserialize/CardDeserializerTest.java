@@ -29,7 +29,10 @@ public class CardDeserializerTest {
 
         factory.registerDeserializer("ammmocratedeck", new AmmoCrateDeserializerSupplier());
         factory.registerDeserializer("powerupdeck", new PowerUpDeserializerSupplier());
+        factory.registerDeserializer("weapondeck", new WeaponDeckDeserializerSuppier());
+        factory.registerDeserializer("weapon", new WeaponDeserializerSupplier());
         factory.registerDeserializer("actions", new ActionsDeserializerSupplier());
+        factory.registerDeserializer("optionaleffects", new OptionalEffectDeserializerSupplier());
         factory.registerDeserializer("actionunit", new ActionUnitDeserializerSupplier());
         factory.registerDeserializer("effects", new EffectDeserializerSupplier());
         factory.registerDeserializer("conditions", new ConditionDeserializerSupplier());
@@ -44,23 +47,31 @@ public class CardDeserializerTest {
     public void testDeserialize() {
         AmmoCrateDeserializer ammoCrateDeserializer = (AmmoCrateDeserializer) factory.getDeserializer("ammmocratedeck");
         PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer("powerupdeck");
+        WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer("weapondeck");
 
         String ammoCratePath = "src/main/java/it/polimi/se2019/resources/json/ammocrates/ammocrates.json";
         String powerUpPath = "src/main/java/it/polimi/se2019/resources/json/powerups/powerups.json";
+        String weaponPath = "src/main/java/it/polimi/se2019/resources/json/weapons/weapons.json";
 
-        BufferedReader acbufferedReader, pubufferedReader;
+        BufferedReader acbufferedReader, pubufferedReader, wbufferedReader;
         Deck<AmmoCrate> ammoCrateDeck = null;
         Deck<PowerUp> powerUpDeck = null;
+        Deck<Weapon> weaponDeck = null;
 
         try {
             acbufferedReader = new BufferedReader(new FileReader(ammoCratePath));
             pubufferedReader = new BufferedReader(new FileReader(powerUpPath));
+            wbufferedReader = new BufferedReader(new FileReader(weaponPath));
+
             JsonParser parser = new JsonParser();
             JsonObject acjson = parser.parse(acbufferedReader).getAsJsonObject();
             JsonObject pujson = parser.parse(pubufferedReader).getAsJsonObject();
+            JsonObject wjson = parser.parse(wbufferedReader).getAsJsonObject();
 
             ammoCrateDeck = ammoCrateDeserializer.deserialize(acjson, factory);
-            powerUpDeck = powerUpDeserializer.deserialize(pujson,factory);
+            powerUpDeck = powerUpDeserializer.deserialize(pujson, factory);
+            weaponDeck = weaponDeckDeserializer.deserialize(wjson, factory);
+
 
             try {
                 acbufferedReader.close();

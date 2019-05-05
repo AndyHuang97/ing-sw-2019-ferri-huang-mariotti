@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.deserialize;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2019.server.cards.weapons.Weapon;
@@ -21,6 +22,7 @@ public class WeaponDeserializerTest {
     @Before
     public void setUp() throws Exception {
         factory.registerDeserializer("actions", new ActionsDeserializerSupplier());
+        factory.registerDeserializer("optionaleffects", new OptionalEffectDeserializerSupplier());
         factory.registerDeserializer("actionunit", new ActionUnitDeserializerSupplier());
         factory.registerDeserializer("effects", new EffectDeserializerSupplier());
         factory.registerDeserializer("conditions", new ConditionDeserializerSupplier());
@@ -51,6 +53,11 @@ public class WeaponDeserializerTest {
         } catch (ClassNotFoundException e) {
             Assert.fail("Class not found.");
         }
+        /*
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(weapon);
+        System.out.println(json);
+         */
 
         Assert.assertEquals(weapon.getName(), "Whisper");
     }

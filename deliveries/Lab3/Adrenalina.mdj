@@ -4191,7 +4191,7 @@
 											"top": 1494,
 											"width": 238.341796875,
 											"height": 13,
-											"text": "-limited: boolean",
+											"text": "-available: boolean",
 											"horizontalAlignment": 0
 										},
 										{
@@ -17910,7 +17910,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "limited",
+							"name": "available",
 							"visibility": "private",
 							"type": "boolean"
 						},

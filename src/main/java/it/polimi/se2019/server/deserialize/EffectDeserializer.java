@@ -20,6 +20,7 @@ public class EffectDeserializer implements RandomDeserializer<Effect> {
         try {
         classType = Class.forName(className);
         } catch (ClassNotFoundException e) {
+            System.out.println("Exception: " + className);
         throw e;
         }
 

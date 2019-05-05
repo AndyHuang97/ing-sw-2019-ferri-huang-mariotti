@@ -19,4 +19,11 @@ public abstract class Card {
 		this.actionUnitList = actionUnitList;
 	}
 
+	public List<ActionUnit> getActionUnitList() {
+		return actionUnitList;
+	}
+
+	public void setActionUnitList(List<ActionUnit> actionUnitList) {
+		this.actionUnitList = actionUnitList;
+	}
 }

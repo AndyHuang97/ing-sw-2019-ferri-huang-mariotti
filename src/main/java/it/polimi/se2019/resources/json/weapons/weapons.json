@@ -3,9 +3,9 @@
     {
       "type": "weapon",
       "name": "Lock Rifle",
-      "pickUpCost": ["Blue"],
-      "reloadCost": ["Blue", "Blue"],
-      "modeList": [
+      "pickUpCost": ["BLUE"],
+      "reloadCost": ["BLUE", "BLUE"],
+      "actions": [
         {
           "name": "Basic Effect",
           "available": true,
@@ -84,8 +84,8 @@
       "type": "weapon",
       "name": "Machine Gun",
       "pickUpCost": ["RED"],
-      "reloadCost": ["Blue", "RED"],
-      "modeList": [
+      "reloadCost": ["BLUE", "RED"],
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -193,7 +193,7 @@
       "name": "T.H.O.R",
       "pickUpCost": ["RED"],
       "reloadCost": ["BLUE", "RED"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -301,7 +301,7 @@
       "name": "Plasma Gun",
       "pickUpCost": ["YELLOW"],
       "reloadCost": ["BLUE", "YELLOW"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -389,7 +389,7 @@
       "name": "Whisper",
       "pickUpCost": ["BLUE", "YELLOW"],
       "reloadCost": ["BLUE", "BLUE", "YELLOW"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -434,7 +434,7 @@
       "name": "Electroscythe",
       "pickUpCost": [],
       "reloadCost": ["BLUE"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -502,7 +502,7 @@
       "name": "Tractor Beam",
       "pickUpCost": [],
       "reloadCost": ["BLUE"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -516,7 +516,7 @@
             },
             {
               "name": "Move Target",
-              "class_name": "it.polimi.se2019.server.actions.effects.Movetarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
               }
             }
@@ -550,7 +550,7 @@
             },
             {
               "name": "Move Target",
-              "class_name": "it.polimi.se2019.server.actions.effects.Movetarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
               }
             }
@@ -596,7 +596,7 @@
       "name": "Vortex Cannon",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["RED", "BLUE"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -610,7 +610,7 @@
             },
             {
               "name": "Move Target",
-              "class_name": "it.polimi.se2019.server.actions.effects.Movetarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
               }
             }
@@ -696,7 +696,7 @@
       "name": "Furnace",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["RED", "BLUE"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -763,7 +763,7 @@
       "name": "Heatseeker",
       "pickUpCost": ["RED", "YELLOW"],
       "reloadCost": ["RED", "RED", "YELLOW"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -795,7 +795,7 @@
       "name": "Hellion",
       "pickUpCost": ["YELLOW"],
       "reloadCost": ["RED", "YELLOW"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -872,7 +872,7 @@
       "name": "Flamethrower",
       "pickUpCost": [],
       "reloadCost": ["RED"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -954,7 +954,7 @@
       "name": "Grenade Launcher",
       "pickUpCost": [],
       "reloadCost": ["RED"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1022,7 +1022,7 @@
       "name": "Rocket Launcher",
       "pickUpCost": ["RED"],
       "reloadCost": ["RED", "RED"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1119,7 +1119,7 @@
       "name": "Railgun",
       "pickUpCost": ["YELLOW", "BLUE"],
       "reloadCost": ["YELLOW", "YELLOW", "BLUE"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1173,7 +1173,7 @@
       "name": "Cyberblade",
       "pickUpCost": ["RED"],
       "reloadCost": ["YELLOW", "RED"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1255,7 +1255,7 @@
       "name": "ZX-2",
       "pickUpCost": ["RED"],
       "reloadCost": ["YELLOW", "RED"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1315,7 +1315,7 @@
       "name": "Shotgun",
       "pickUpCost": ["YELLOW"],
       "reloadCost": ["YELLOW", "YELLOW"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1376,7 +1376,7 @@
       "name": "Power Glove",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["YELLOW", "BLUE"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1445,7 +1445,7 @@
       "name": "Shockwave",
       "pickUpCost": [],
       "reloadCost": ["YELLOW"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,
@@ -1521,7 +1521,7 @@
       "name": "Sledgehammer",
       "pickUpCost": [],
       "reloadCost": ["YELLOW"],
-      "modeList": [
+      "actions": [
         {
           "name": "Basic Mode",
           "available": true,

@@ -1,4 +1,8 @@
 package it.polimi.se2019.server.actions.conditions;
 
-public class IsUnidirectional {
+public class IsUnidirectional implements Condition {
+    @Override
+    public boolean check() {
+        return false;
+    }
 }

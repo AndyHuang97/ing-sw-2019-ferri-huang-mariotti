@@ -19,6 +19,7 @@ public class ConditionDeserializer implements RandomDeserializer<Condition> {
         try {
             classType = Class.forName(className);
         } catch (ClassNotFoundException e) {
+            System.out.println("Exception: " + className);
             throw e;
         }
 
