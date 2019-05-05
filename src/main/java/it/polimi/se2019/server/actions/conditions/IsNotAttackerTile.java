@@ -15,6 +15,6 @@ public class IsNotAttackerTile implements Condition {
 
     @Override
     public boolean check() {
-        return false;
+        return tile != attacker.getCharacterState().getTile();
     }
 }
