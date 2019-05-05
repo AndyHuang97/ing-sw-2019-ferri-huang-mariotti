@@ -1,9 +1,9 @@
-package it.polimi.se2019.server.entities.weapons;
+package it.polimi.se2019.server.cards.actions.effects;
 
 import org.junit.After;
 import org.junit.Before;
 
-public class WeaponTest {
+public class EffectTest {
 
     @Before
     public void setUp() throws Exception {

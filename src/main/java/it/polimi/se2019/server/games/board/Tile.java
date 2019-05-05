@@ -76,7 +76,6 @@ public abstract class Tile {
 
 		try {
             pos = board.getTilePosition(this);
-
             for(int i = 0; i < 4; i++) {
                 if(links[i] == LinkType.DOOR) {
                     switch (i) {
@@ -91,6 +90,7 @@ public abstract class Tile {
                             break;
                         case 3:
                             tile = board.getTile(pos[0]-1, pos[1]);
+
                             break;
                         default:
                             tile = null;
@@ -122,8 +122,8 @@ public abstract class Tile {
 	public List<Tile> getRoom(Board board) {
 		List<Tile> tiles = new ArrayList<>();
 
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; i < 4; j++) {
+		for(int i = 0; i < board.getTileMap()[0].length; i++) {
+			for(int j = 0; j < board.getTileMap().length; j++) {
 				if(board.getTileMap()[j][i].color == color) {
 					tiles.add(board.getTileMap()[j][i]);
 				}
@@ -133,4 +133,8 @@ public abstract class Tile {
 		return tiles;
 	}
 
+	@Override
+	public String toString() {
+		return color.substring(0,1).toUpperCase();
+	}
 }

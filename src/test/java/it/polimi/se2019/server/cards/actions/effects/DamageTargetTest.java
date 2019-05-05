@@ -1,9 +1,10 @@
-package it.polimi.se2019.server.entities.powerup;
+package it.polimi.se2019.server.cards.actions.effects;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
-public class PowerUpTest {
+public class DamageTargetTest {
 
     @Before
     public void setUp() throws Exception {
@@ -11,5 +12,9 @@ public class PowerUpTest {
 
     @After
     public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void run() {
     }
 }

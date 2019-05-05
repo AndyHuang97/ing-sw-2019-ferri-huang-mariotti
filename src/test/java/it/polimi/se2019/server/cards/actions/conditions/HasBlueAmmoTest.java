@@ -1,10 +1,10 @@
-package it.polimi.se2019.server.entities.actions.conditions;
+package it.polimi.se2019.server.cards.actions.conditions;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HasYellowAmmoTest {
+public class HasBlueAmmoTest {
 
     @Before
     public void setUp() throws Exception {

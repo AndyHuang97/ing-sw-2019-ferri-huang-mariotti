@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.entities.actions;
+package it.polimi.se2019.server.cards.actions;
 
 import org.junit.After;
 import org.junit.Before;

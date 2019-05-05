@@ -1,10 +1,10 @@
-package it.polimi.se2019.server.entities.actions.conditions;
+package it.polimi.se2019.server.cards;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HasRedAmmoTest {
+public class EntityTest {
 
     @Before
     public void setUp() throws Exception {
@@ -15,6 +15,10 @@ public class HasRedAmmoTest {
     }
 
     @Test
-    public void check() {
+    public void getAction() {
+    }
+
+    @Test
+    public void setAction() {
     }
 }

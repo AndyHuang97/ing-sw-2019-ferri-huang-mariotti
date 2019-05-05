@@ -1,9 +1,9 @@
-package it.polimi.se2019.server.entities.actions.effects;
+package it.polimi.se2019.server.cards.actions.conditions;
 
 import org.junit.After;
 import org.junit.Before;
 
-public class EffectTest {
+public class ConditionTest {
 
     @Before
     public void setUp() throws Exception {

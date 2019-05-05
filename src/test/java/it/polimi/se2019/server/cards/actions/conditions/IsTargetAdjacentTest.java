@@ -1,10 +1,10 @@
-package it.polimi.se2019.server.entities;
+package it.polimi.se2019.server.cards.actions.conditions;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EntityTest {
+public class IsTargetAdjacentTest {
 
     @Before
     public void setUp() throws Exception {
@@ -15,10 +15,6 @@ public class EntityTest {
     }
 
     @Test
-    public void getAction() {
-    }
-
-    @Test
-    public void setAction() {
+    public void check() {
     }
 }

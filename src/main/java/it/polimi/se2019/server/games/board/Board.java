@@ -26,21 +26,19 @@ public class Board {
         return tileMap[xCoord][yCoord];
     }
 
-    public int[] getTilePosition(Tile T) throws TileNotFoundException {
+    public int[] getTilePosition(Tile t) throws TileNotFoundException {
         int[] result = new int[2];
 
         for (int xCoord = 0; xCoord < tileMap[0].length; xCoord++) {
             for (int yCoord = 0; yCoord < tileMap.length; yCoord++) {
-                if (tileMap[xCoord][yCoord] == T) {
+                if (tileMap[xCoord][yCoord] == t) {
                     result[0] = xCoord;
                     result[1] = yCoord;
-                } else {
-                    throw new TileNotFoundException();
+                    return result;
                 }
             }
         }
-
-        return result;
+        throw new TileNotFoundException();
     }
 
     public Graph<Tile> generateGraph() {
@@ -64,5 +62,17 @@ public class Board {
         }
 
         return graph;
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for(Tile[] row : tileMap) {
+            for(Tile t : row) {
+                str = str + t.toString();
+            }
+            str = str + "\n";
+        }
+        return str;
     }
 }
