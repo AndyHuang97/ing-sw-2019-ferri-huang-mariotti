@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class ActionUnit {
 
-	private boolean limited;
+	private boolean available;
 	private String name;
 	private String description;
 	private List<Effect> effectList;
@@ -19,15 +19,16 @@ public class ActionUnit {
 
 	/**
 	 * Default constructor
+	 * @param available
 	 * @param name
 	 * @param effectList
 	 * @param conditionList
 	 */
-	public ActionUnit(String name, List<Effect> effectList, List<Condition> conditionList) {
+	public ActionUnit(boolean available, String name, List<Effect> effectList, List<Condition> conditionList) {
 		/*
-		TODO: remove and limited or justify them!
+		TODO: remove and available or justify them!
 		 */
-		//this.limited = limited;
+		this.available = available;
 		this.name = name;
 		//this.description = description;
 		this.effectList = effectList;
@@ -42,12 +43,12 @@ public class ActionUnit {
 
 	}
 
-	public boolean isLimited() {
-		return limited;
+	public boolean isAvailable() {
+		return available;
 	}
 
-	public void setLimited(boolean limited) {
-		this.limited = limited;
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 
 	public String getName() {

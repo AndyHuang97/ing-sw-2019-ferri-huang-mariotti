@@ -1,0 +1,196 @@
+{
+  "tiles": [
+    {
+      "type": "NormalTile",
+      "pos": [
+        0,
+        0
+      ],
+      "params": {
+        "color": "Red",
+        "LinkType": [
+          "WALL",
+          "DOOR",
+          "OPEN",
+          "WALL"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        1,
+        0
+      ],
+      "params": {
+        "color": "Blue",
+        "LinkType": [
+          "WALL",
+          "OPEN",
+          "DOOR",
+          "DOOR"
+        ]
+      }
+    },
+    {
+      "type": "SpawnTile",
+      "pos": [
+        2,
+        0
+      ],
+      "params": {
+        "color": "Blue",
+        "LinkType": [
+          "WALL",
+          "DOOR",
+          "DOOR",
+          "OPEN"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        3,
+        0
+      ],
+      "params": {
+        "color": "Green",
+        "LinkType": [
+          "WALL",
+          "WALL",
+          "DOOR",
+          "DOOR"
+        ]
+      }
+    },
+    {
+      "type": "SpawnTile",
+      "pos": [
+        0,
+        1
+      ],
+      "params": {
+        "color": "Red",
+        "LinkType": [
+          "OPEN",
+          "WALL",
+          "DOOR",
+          "WALL"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        1,
+        1
+      ],
+      "params": {
+        "color": "Purple",
+        "LinkType": [
+          "DOOR",
+          "WALL",
+          "DOOR",
+          "WALL"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        2,
+        1
+      ],
+      "params": {
+        "color": "Yellow",
+        "LinkType": [
+          "DOOR",
+          "OPEN",
+          "OPEN",
+          "WALL"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        3,
+        1
+      ],
+      "params": {
+        "color": "Yellow",
+        "LinkType": [
+          "DOOR",
+          "WALL",
+          "OPEN",
+          "OPEN"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        0,
+        2
+      ],
+      "params": {
+        "color": "White",
+        "LinkType": [
+          "DOOR",
+          "OPEN",
+          "WALL",
+          "WALL"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        1,
+        2
+      ],
+      "params": {
+        "color": "White",
+        "LinkType": [
+          "DOOR",
+          "DOOR",
+          "WALL",
+          "OPEN"
+        ]
+      }
+    },
+    {
+      "type": "NormalTile",
+      "pos": [
+        2,
+        2
+      ],
+      "params": {
+        "color": "Yellow",
+        "LinkType": [
+          "OPEN",
+          "OPEN",
+          "WALL",
+          "DOOR"
+        ]
+      }
+    },
+    {
+      "type": "SpawnTile",
+      "pos": [
+        3,
+        2
+      ],
+      "params": {
+        "color": "Yellow",
+        "LinkType": [
+          "OPEN",
+          "WALL",
+          "WALL",
+          "OPEN"
+        ]
+      }
+    }
+  ]
+}

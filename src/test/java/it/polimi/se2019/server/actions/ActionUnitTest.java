@@ -9,15 +9,13 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 public class ActionUnitTest {
 
     ActionUnit actionUnit;
 
     @Before
     public void setUp() {
-        actionUnit = new ActionUnit("action", null, null);
+        actionUnit = new ActionUnit(false, "action", null, null);
     }
 
     @After
@@ -36,9 +34,9 @@ public class ActionUnitTest {
     @Test
     public void testSetLimited() {
 
-        actionUnit.setLimited(true);
+        actionUnit.setAvailable(true);
 
-        Assert.assertEquals(true, actionUnit.isLimited());
+        Assert.assertEquals(true, actionUnit.isAvailable());
     }
 
     @Test

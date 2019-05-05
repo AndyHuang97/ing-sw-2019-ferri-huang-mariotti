@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import it.polimi.se2019.server.actions.effects.Effect;
 
 public class EffectDeserializer implements RandomDeserializer<Effect> {
+    // TODO: merge EffectDeserializer and ConditionDeserializer in LeafDeserializer
     @Override
     public Effect deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
@@ -13,14 +14,13 @@ public class EffectDeserializer implements RandomDeserializer<Effect> {
         String className = json.get("class_name").getAsString();
         String params = json.get("params").toString();
 
-        /*
-        TODO: avoid reflection
-         */
+        // TODO: avoid reflection
         Class classType = null;
 
         try {
         classType = Class.forName(className);
         } catch (ClassNotFoundException e) {
+            System.out.println("Exception: " + className);
         throw e;
         }
 

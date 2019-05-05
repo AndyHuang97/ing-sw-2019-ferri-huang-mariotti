@@ -1,0 +1,1593 @@
+{
+  "weaponDeck": [
+    {
+      "type": "weapon",
+      "name": "Lock Rifle",
+      "pickUpCost": ["BLUE"],
+      "reloadCost": ["BLUE", "BLUE"],
+      "actions": [
+        {
+          "name": "Basic Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Mark Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Activate actionUnit",
+              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionalEffectList": [
+        {
+          "name": "Second Lock Effect",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Mark Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "RED",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Machine Gun",
+      "pickUpCost": ["RED"],
+      "reloadCost": ["BLUE", "RED"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Activate actionUnit",
+              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionalEffectList": [
+        {
+          "name": "Focus Shot Effect",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Activate actionUnit",
+              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target is in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDamageTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "YELLOW",
+                "ampunt": 1
+              }
+            }
+          ]
+        },
+        {
+          "name": "Turret Tripod Effect",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInDamageTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Target visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "BLUE",
+                "ampunt": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "T.H.O.R",
+      "pickUpCost": ["RED"],
+      "reloadCost": ["BLUE", "RED"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Activate actionUnit",
+              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionalEffectList": [
+        {
+          "name": "Chain Reaction Effect",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Activate actionUnit",
+              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "BLUE",
+                "ampunt": 1
+              }
+            }
+          ]
+        },
+        {
+          "name": "High Voltage Effect",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInDamageTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Target visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "BLUE",
+                "ampunt": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Plasma Gun",
+      "pickUpCost": ["YELLOW"],
+      "reloadCost": ["BLUE", "YELLOW"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Activate actionUnit",
+              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionalEffectList": [
+        {
+          "name": "Phase Glide Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Move Target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Max Distance x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "amount": 2
+              }
+            }
+          ]
+        },
+        {
+          "name": "Charge Shot Effect",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target is in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDamageTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "BLUE",
+                "ampunt": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Whisper",
+      "pickUpCost": ["BLUE", "YELLOW"],
+      "reloadCost": ["BLUE", "BLUE", "YELLOW"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Mark Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Distance x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 2
+              }
+            }
+          ]
+        }
+      ],
+      "optionalEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Electroscythe",
+      "pickUpCost": [],
+      "reloadCost": ["BLUE"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Tile x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Player in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reaper Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Tile x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Player in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "BLUE",
+                "amount": 1
+              }
+            },
+            {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "RED",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Tractor Beam",
+      "pickUpCost": [],
+      "reloadCost": ["BLUE"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Move Target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Tile visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "MaxDistance",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "amount": 2
+              }
+            }
+          ]
+        },
+        {
+          "name": "Punisher Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 3
+              }
+            },
+            {
+              "name": "Move Target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "params": {
+              }
+            },
+            {
+              "name": "MaxDistance",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "RED",
+                "amount": 1
+              }
+            },
+            {
+              "name": "Has 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "YELLOW",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Vortex Cannon",
+      "pickUpCost": ["BLUE"],
+      "reloadCost": ["RED", "BLUE"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Move Target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Tile Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Not Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotAttackerTile",
+              "params": {
+              }
+            },
+            {
+              "name": "MaxDistance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+        {
+          "name": "Black Hole",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Move Target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Max Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxTargetList",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "MaxDistance",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Different Targets In List",
+              "class_name": "it.polimi.se2019.server.actions.conditions.DifferentTargetsInList",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "RED",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Furnace",
+      "pickUpCost": ["BLUE"],
+      "reloadCost": ["RED", "BLUE"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Room x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageRoom",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Player Not In Room",
+              "class_name": "it.polimi.se2019.server.actions.conditions.PlayerNotInRoom",
+              "params": {
+              }
+            },
+            {
+              "name": "Room Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsRoomVisible",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cozy Fire Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Tile x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Mark Tile x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTile",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Heatseeker",
+      "pickUpCost": ["RED", "YELLOW"],
+      "reloadCost": ["RED", "RED", "YELLOW"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 3
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Not Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerNotVisible",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Hellion",
+      "pickUpCost": ["YELLOW"],
+      "reloadCost": ["RED", "YELLOW"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Mark Tile x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTile",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Min Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
+              "params": {
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nano-Tracer Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Mark Tile x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTile",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Min Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "RED",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Flamethrower",
+      "pickUpCost": [],
+      "reloadCost": ["RED"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Barbecue Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Tile x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Damage Tile x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 2 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "YELLOW",
+                "amount": 2
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Grenade Launcher",
+      "pickUpCost": [],
+      "reloadCost": ["RED"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Move Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+        {
+          "name": "Extra Grenade Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Tile  x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Tile Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "RED",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Rocket Launcher",
+      "pickUpCost": ["RED"],
+      "reloadCost": ["RED", "RED"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Move Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Not Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotAttackerTile",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+        {
+          "name": "Rocket Jump Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Move Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Activate actionUnit",
+              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Has 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "BLUE",
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "name": "Fragmenting Warhead Effect",
+          "available": false,
+          "effectList": [
+            {
+              "name": "Damage Target List  x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Has 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "YELLOW",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Railgun",
+      "pickUpCost": ["YELLOW", "BLUE"],
+      "reloadCost": ["YELLOW", "YELLOW", "BLUE"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 3
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target In Direction",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDirection",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Piercing Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target List In Direction",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListInDirection",
+              "params": {
+                "listSize": 2
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Cyberblade",
+      "pickUpCost": ["RED"],
+      "reloadCost": ["YELLOW", "RED"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+        {
+          "name": "Shadowstep Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Move Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+          ]
+        },
+        {
+          "name": "Slice and Dice Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "params": {
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Has 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "YELLOW",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "ZX-2",
+      "pickUpCost": ["RED"],
+      "reloadCost": ["YELLOW", "RED"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Mark Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Scanner Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Mark Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Shotgun",
+      "pickUpCost": ["YELLOW"],
+      "reloadCost": ["YELLOW", "YELLOW"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 3
+              }
+            },
+            {
+              "name": "Move Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Long Barrel Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Power Glove",
+      "pickUpCost": ["BLUE"],
+      "reloadCost": ["YELLOW", "BLUE"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Mark Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Move Target x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 1
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rocket Fist Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Shockwave",
+      "pickUpCost": [],
+      "reloadCost": ["YELLOW"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target List Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListDistance",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Target List Size x3",
+              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListSize",
+              "params": {
+                "amount": 3
+              }
+            },
+            {
+              "name": "Target List On Different Tiles",
+              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListOnDifferentTiles",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Tsunami Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Tile List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTileList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target List Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListDistance",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoColor": "RED",
+                "amount": 1
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    },
+    {
+      "type": "weapon",
+      "name": "Sledgehammer",
+      "pickUpCost": [],
+      "reloadCost": ["YELLOW"],
+      "actions": [
+        {
+          "name": "Basic Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "params": {
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pulverize Mode",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "params": {
+                "amount": 3
+              }
+            },
+            {
+              "name": "Move Target x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+                "amount": 2
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "params": {
+              }
+            },
+            {
+              "name": "Distance x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "params": {
+                "amount": 2
+              }
+            },
+            {
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "params": {
+              }
+            }
+          ]
+        }
+      ],
+      "optionEffectList": [
+      ],
+      "image": ""
+    }
+  ]
+}

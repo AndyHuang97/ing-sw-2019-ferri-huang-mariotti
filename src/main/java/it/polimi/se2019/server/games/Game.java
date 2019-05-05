@@ -4,50 +4,44 @@ import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.games.player.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.Observable;
 
-/**
- * 
- */
 public class Game extends Observable {
-
 	private String id;
 	private Date startDate;
+	private TurnPhase turnPhase;
 	private List<Player> playerList;
 	private Player currentPlayer;
 	private Board board;
 	private Integer killshotTrack;
-	private Integer deaths;
 	private List<Weapon> weaponDeck;
 	private List<PowerUp> powerupDeck;
 
-	/**
-	 * Default constructor
-	 */
 	public Game() {
 		this.id = "";
 		this.startDate = new Date();
+		this.turnPhase = TurnPhase.RESPAWN;
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
 		this.board = new Board();
 		this.killshotTrack = 0;
-		this.deaths = 0;
 		this.weaponDeck = new ArrayList<>();
 		this.powerupDeck = new ArrayList<>();
 	}
 
-	public Game(String id, Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, Integer deaths, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
+	public Game(String id, Date startDate, TurnPhase turnPhase, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
 		this.id = id;
 		this.startDate = startDate;
+		this.turnPhase = turnPhase;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
 		this.board = board;
 		this.killshotTrack = killshotTrack;
-		this.deaths = deaths;
 		this.weaponDeck = weaponDeck;
 		this.powerupDeck = powerupDeck;
 	}
@@ -57,7 +51,6 @@ public class Game extends Observable {
 	}
 
 	public void updateTurn() {
-
 	}
 
 	public Player getCurrentPlayer() {
@@ -65,8 +58,7 @@ public class Game extends Observable {
 	}
 
 	public void setCurrentPlayer(Player currentPlayer) {
-		if(currentPlayer.getActive())
-		 this.currentPlayer = currentPlayer;
+		if(currentPlayer.getActive()) this.currentPlayer = currentPlayer;
 	}
 
 	public String getId() {
@@ -93,6 +85,21 @@ public class Game extends Observable {
 		this.playerList = playerList;
 	}
 
+	/**
+	 * TODO may add a PlayerNotFoundException instead of returning null
+	 * @param color
+	 * @return
+	 */
+	public Player getPlayerByColor(PlayerColor color) {
+		List<Player> players = getPlayerList();
+
+		for(Player p : players) {
+			if(p.getColor() == color)
+				return p;
+		}
+		return null;
+	}
+
 	public Board getBoard() {
 		return board;
 	}
@@ -107,14 +114,6 @@ public class Game extends Observable {
 
 	public void setKillshotTrack(Integer killshotTrack) {
 		this.killshotTrack = killshotTrack;
-	}
-
-	public Integer getDeaths() {
-		return deaths;
-	}
-
-	public void setDeaths(Integer deaths) {
-		this.deaths = deaths;
 	}
 
 	public List<Weapon> getWeaponDeck() {

@@ -13,14 +13,13 @@ public class ConditionDeserializer implements RandomDeserializer<Condition> {
         String className = json.get("class_name").getAsString();
         String params = json.get("params").toString();
 
-        /*
-        TODO: avoid reflection
-         */
+        // TODO: avoid reflection
         Class classType = null;
 
         try {
             classType = Class.forName(className);
         } catch (ClassNotFoundException e) {
+            System.out.println("Exception: " + className);
             throw e;
         }
 
