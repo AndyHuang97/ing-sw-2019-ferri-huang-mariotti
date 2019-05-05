@@ -32,9 +32,9 @@ public class IsNotAttackerTileTest {
 
     @Test
     public void testAttackerTile() {
-        IsAttackerTile testCheck1 = new IsAttackerTile(tile1, player);
+        IsNotAttackerTile testCheck1 = new IsNotAttackerTile(tile1, player);
         Assert.assertEquals(testCheck1.check(), false);
-        IsAttackerTile testCheck2 = new IsAttackerTile(tile2, player);
+        IsNotAttackerTile testCheck2 = new IsNotAttackerTile(tile2, player);
         Assert.assertEquals(testCheck2.check(), true);
     }
 }

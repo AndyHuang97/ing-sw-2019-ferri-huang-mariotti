@@ -15,6 +15,6 @@ public class DifferentTargetsInList implements Condition {
 
     @Override
     public boolean check() {
-        return !targetList.stream().allMatch(new HashSet<>()::add);
+        return targetList.stream().allMatch(new HashSet<>()::add);
     }
 }
