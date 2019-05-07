@@ -1,70 +1,33 @@
 package it.polimi.se2019.server.net.rmi;
 
+import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.NetMsg;
+import it.polimi.se2019.util.Request;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RmiServer extends UnicastRemoteObject implements RmiInterface {
+public class RmiServer {
 
-    private RmiInterface client;
-
-    public static void main(String[] args) {
-
+    public void start(String host, int port) {
         try {
-
-            // create the object to be exposed
-            RmiInterface server = new RmiServer();
             // bind the object
-            Naming.rebind("//localhost:1099/rmi", server);
-            System.out.println("[System] Remote Server Object is ready");
-
-            // keep waiting new messages from shell
-            while(true) {
-                // read a message (and wait)
-                NetMsg response = null;
-
-                // if there is no server skip
-                if(((RmiServer)server).getClient() != null) {
-
-                    // when a client calls the remote instance of the server it registers the client
-                    RmiInterface client = ((RmiServer)server).getClient();
-                    // setup the message
-                    client.send(response, "");
-                }
-            }
-
-        }catch(Exception e) {
-            System.out.println("[System] Server failed: " + e);
+            System.setProperty("java.rmi.server.hostname", host);
+            Naming.rebind(String.format("rmi://localhost:%d/rmi", port), new RmiServerWorker());
+        }catch (Exception e) {
+            // catch it
         }
     }
 
-    public RmiServer() throws RemoteException {
-        this.client = null;
-    }
+    public class RmiServerWorker extends UnicastRemoteObject implements RmiInterface {
 
-    public RmiServer(RmiInterface client) throws RemoteException {
-        this.client = client;
-    }
+        public RmiServerWorker() throws RemoteException {
+        }
 
-
-    /**
-     *
-     * @param msg is Request object sent from client to server
-     * @param nickname
-     * @throws RemoteException
-     */
-    @Override
-    public void send(NetMsg msg, String nickname) throws RemoteException {
-
-    }
-
-    public RmiInterface getClient() {
-        return client;
-    }
-
-    public void setClient(RmiInterface client) {
-        this.client = client;
+        @Override
+        public NetMsg send(NetMsg request) throws RemoteException {
+            return new CommandHandler().handle((Request) request);
+        }
     }
 }
