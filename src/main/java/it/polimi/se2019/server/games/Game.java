@@ -6,12 +6,13 @@ import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.Observable;
 
-public class Game extends Observable {
+public class Game extends Observable implements Serializable {
 	private String id;
 	private Date startDate;
 	private TurnPhase turnPhase;

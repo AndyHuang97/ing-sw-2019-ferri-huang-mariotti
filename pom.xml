@@ -8,7 +8,7 @@
     <artifactId>adrenalina</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>adrenalina</name>
+    <nickname>adrenalina</nickname>
     <url>http://www.example.com</url>
 
     <properties>

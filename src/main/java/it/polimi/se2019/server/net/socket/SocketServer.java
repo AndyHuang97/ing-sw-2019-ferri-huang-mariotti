@@ -14,11 +14,11 @@ import java.util.Map;
  * To send a message to a client the server needs to know the client's color.
  * This class should be used from the VirtualView (server-side) to contact the View (client-side).
  */
-public class Server {
+public class SocketServer {
     private ServerSocket serverSocket;
     private Map<PlayerColor, Socket> clientSocketMap;
 
-    public Server() throws IOException {
+    public SocketServer() throws IOException {
         serverSocket = new ServerSocket(666);
         clientSocketMap = new HashMap<>();
     }

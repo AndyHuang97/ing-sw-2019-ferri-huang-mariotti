@@ -1,7 +1,7 @@
 {
 	"_type": "Project",
 	"_id": "AAAAAAFF+h6SjaM2Hec=",
-	"name": "Untitled",
+	"nickname": "Untitled",
 	"ownedElements": [
 		{
 			"_type": "UMLModel",
@@ -9,7 +9,7 @@
 			"_parent": {
 				"$ref": "AAAAAAFF+h6SjaM2Hec="
 			},
-			"name": "Model",
+			"nickname": "Model",
 			"ownedElements": [
 				{
 					"_type": "UMLClassDiagram",
@@ -17,7 +17,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Main",
+					"nickname": "Main",
 					"defaultDiagram": true,
 					"ownedViews": [
 						{
@@ -4208,7 +4208,7 @@
 											"top": 1509,
 											"width": 238.341796875,
 											"height": 13,
-											"text": "-name: String",
+											"text": "-nickname: String",
 											"horizontalAlignment": 0
 										},
 										{
@@ -16964,7 +16964,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Player",
+					"nickname": "Player",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17031,7 +17031,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpunQg9yAz1/Q="
 							},
-							"name": "active",
+							"nickname": "active",
 							"visibility": "private",
 							"type": "boolean"
 						},
@@ -17041,7 +17041,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpunQg9yAz1/Q="
 							},
-							"name": "userData",
+							"nickname": "userData",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpupcEe/R4Da8="
@@ -17053,7 +17053,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpunQg9yAz1/Q="
 							},
-							"name": "characterState",
+							"nickname": "characterState",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpupQrCvRCYOI="
@@ -17067,7 +17067,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "CharacterState",
+					"nickname": "CharacterState",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17106,7 +17106,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupQrCvRCYOI="
 							},
-							"name": "damageBar",
+							"nickname": "damageBar",
 							"visibility": "private",
 							"type": "ArrayList<Color>"
 						},
@@ -17116,7 +17116,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupQrCvRCYOI="
 							},
-							"name": "deathCount",
+							"nickname": "deathCount",
 							"visibility": "private",
 							"type": "Integer"
 						},
@@ -17126,7 +17126,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupQrCvRCYOI="
 							},
-							"name": "markerBar",
+							"nickname": "markerBar",
 							"visibility": "private",
 							"type": "ArrayList<Color>"
 						},
@@ -17136,7 +17136,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupQrCvRCYOI="
 							},
-							"name": "ammo",
+							"nickname": "ammo",
 							"visibility": "private",
 							"type": "ArrayList<Ammo>"
 						},
@@ -17146,7 +17146,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupQrCvRCYOI="
 							},
-							"name": "tile",
+							"nickname": "tile",
 							"visibility": "private",
 							"type": "Tile"
 						}
@@ -17158,7 +17158,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "UserData",
+					"nickname": "UserData",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17197,7 +17197,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupcEe/R4Da8="
 							},
-							"name": "nickname",
+							"nickname": "nickname",
 							"visibility": "private",
 							"type": "String"
 						}
@@ -17209,7 +17209,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Board",
+					"nickname": "Board",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17248,7 +17248,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupydkfTCdVg="
 							},
-							"name": "roomList",
+							"nickname": "roomList",
 							"visibility": "private",
 							"type": "ArrayList<Room>"
 						},
@@ -17258,7 +17258,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupydkfTCdVg="
 							},
-							"name": "links",
+							"nickname": "links",
 							"visibility": "private",
 							"type": "ArrayList<Link>"
 						},
@@ -17268,7 +17268,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupydkfTCdVg="
 							},
-							"name": "tileList",
+							"nickname": "tileList",
 							"visibility": "private",
 							"type": "ArrayList<Tile>"
 						}
@@ -17280,7 +17280,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpupydkfTCdVg="
 							},
-							"name": "getLinkType",
+							"nickname": "getLinkType",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -17288,7 +17288,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFpydvTXCMD1Rk="
 									},
-									"name": "tileA",
+									"nickname": "tileA",
 									"type": {
 										"$ref": "AAAAAAFpuqalG/UyIeM="
 									}
@@ -17299,7 +17299,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFpydvTXCMD1Rk="
 									},
-									"name": "tileB",
+									"nickname": "tileB",
 									"type": {
 										"$ref": "AAAAAAFpuqalG/UyIeM="
 									}
@@ -17325,7 +17325,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Tile",
+					"nickname": "Tile",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17394,7 +17394,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"name": "color",
+							"nickname": "color",
 							"visibility": "private",
 							"type": "String"
 						},
@@ -17404,7 +17404,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"name": "hasSpawn",
+							"nickname": "hasSpawn",
 							"visibility": "private",
 							"type": ""
 						},
@@ -17414,7 +17414,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"name": "weaponCrate WeaponCrate",
+							"nickname": "weaponCrate WeaponCrate",
 							"visibility": "private"
 						},
 						{
@@ -17423,7 +17423,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"name": "ammoCrate",
+							"nickname": "ammoCrate",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpvx5Z0zZte58="
@@ -17437,7 +17437,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"name": "getAvailableWeapons",
+							"nickname": "getAvailableWeapons",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -17458,7 +17458,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"name": "isWeaponAvailable",
+							"nickname": "isWeaponAvailable",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -17477,7 +17477,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"name": "getPlayers",
+							"nickname": "getPlayers",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -17498,7 +17498,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Link",
+					"nickname": "Link",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17539,7 +17539,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpusEe1PW7LB8="
 							},
-							"name": "tileA",
+							"nickname": "tileA",
 							"visibility": "private",
 							"type": "Tile"
 						},
@@ -17549,7 +17549,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpusEe1PW7LB8="
 							},
-							"name": "tileB",
+							"nickname": "tileB",
 							"visibility": "private",
 							"type": "Tile"
 						},
@@ -17559,7 +17559,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpusEe1PW7LB8="
 							},
-							"name": "linkType",
+							"nickname": "linkType",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFp57abzKwPN3g="
@@ -17573,7 +17573,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Ammo",
+					"nickname": "Ammo",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -17596,7 +17596,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFput0EFfZQRF8="
 							},
-							"name": "color",
+							"nickname": "color",
 							"visibility": "private",
 							"type": "String"
 						}
@@ -17608,7 +17608,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "PowerUp",
+					"nickname": "PowerUp",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -17631,7 +17631,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "WeaponCrate",
+					"nickname": "WeaponCrate",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17669,7 +17669,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvx4s7TXXjJw="
 							},
-							"name": "weaponList",
+							"nickname": "weaponList",
 							"visibility": "private",
 							"type": "ArrayList<Weapon>"
 						}
@@ -17681,7 +17681,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "AmmoCrate",
+					"nickname": "AmmoCrate",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17721,7 +17721,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvx5Z0zZte58="
 							},
-							"name": "powerAmmoList",
+							"nickname": "powerAmmoList",
 							"visibility": "private",
 							"type": "ArrayList<Entity>"
 						}
@@ -17733,7 +17733,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Weapon",
+					"nickname": "Weapon",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -17787,7 +17787,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "ActionUnit",
+					"nickname": "ActionUnit",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -17910,7 +17910,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "available",
+							"nickname": "available",
 							"visibility": "private",
 							"type": "boolean"
 						},
@@ -17920,7 +17920,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "name",
+							"nickname": "nickname",
 							"visibility": "private",
 							"type": "String"
 						},
@@ -17930,7 +17930,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "description",
+							"nickname": "description",
 							"visibility": "private",
 							"type": "String"
 						},
@@ -17940,7 +17940,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "effectList",
+							"nickname": "effectList",
 							"visibility": "private",
 							"type": "ArrayList<Effect>"
 						},
@@ -17950,7 +17950,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "conditionList",
+							"nickname": "conditionList",
 							"visibility": "private",
 							"type": "ArrayList<Condition>"
 						}
@@ -17962,7 +17962,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "check",
+							"nickname": "check",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -17979,7 +17979,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFpvyUHwVDSC+k="
 									},
-									"name": "Transaction transaction",
+									"nickname": "Transaction transaction",
 									"type": ""
 								}
 							]
@@ -17990,7 +17990,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpvySuik7gLxw="
 							},
-							"name": "run",
+							"nickname": "run",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18011,7 +18011,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Entity",
+					"nickname": "Entity",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18052,7 +18052,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpv1WQemxAH7k="
 							},
-							"name": "action",
+							"nickname": "action",
 							"visibility": "private",
 							"type": "ArrayList<ActionUnit>"
 						}
@@ -18065,7 +18065,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Transaction",
+					"nickname": "Transaction",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -18073,7 +18073,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpya5acc00988="
 							},
-							"name": "actionList",
+							"nickname": "actionList",
 							"visibility": "private",
 							"type": "ArrayList<ActionUnit>"
 						}
@@ -18085,7 +18085,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpya5acc00988="
 							},
-							"name": "checkTransaction"
+							"nickname": "checkTransaction"
 						}
 					]
 				},
@@ -18095,7 +18095,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Game",
+					"nickname": "Game",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18162,7 +18162,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "currentPlayer",
+							"nickname": "currentPlayer",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpunQg9yAz1/Q="
@@ -18174,7 +18174,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "id",
+							"nickname": "id",
 							"visibility": "private",
 							"type": "String"
 						},
@@ -18184,7 +18184,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "startDate",
+							"nickname": "startDate",
 							"visibility": "private",
 							"type": "Date"
 						},
@@ -18194,7 +18194,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "playerList",
+							"nickname": "playerList",
 							"visibility": "private",
 							"type": "ArrayList<Player>"
 						},
@@ -18204,7 +18204,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "board",
+							"nickname": "board",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpupydkfTCdVg="
@@ -18218,7 +18218,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "generateGameData",
+							"nickname": "generateGameData",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18239,7 +18239,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "getCurrentPlayer",
+							"nickname": "getCurrentPlayer",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18260,7 +18260,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
 							},
-							"name": "updateTurn",
+							"nickname": "updateTurn",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18281,7 +18281,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "ActiveGames",
+					"nickname": "ActiveGames",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18319,7 +18319,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybyC7+PRyRw="
 							},
-							"name": "gameList",
+							"nickname": "gameList",
 							"visibility": "private",
 							"type": "ArrayList<Game>"
 						}
@@ -18331,7 +18331,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybyC7+PRyRw="
 							},
-							"name": "addGame",
+							"nickname": "addGame",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18350,7 +18350,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpybyC7+PRyRw="
 							},
-							"name": "retrieveGame",
+							"nickname": "retrieveGame",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18373,7 +18373,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "GameData",
+					"nickname": "GameData",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -18381,7 +18381,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpydX7v3NW/7Q="
 							},
-							"name": "id",
+							"nickname": "id",
 							"visibility": "private",
 							"type": "String"
 						},
@@ -18391,7 +18391,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpydX7v3NW/7Q="
 							},
-							"name": "startDate",
+							"nickname": "startDate",
 							"visibility": "private",
 							"type": "Date"
 						}
@@ -18403,7 +18403,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpydX7v3NW/7Q="
 							},
-							"name": "serialize"
+							"nickname": "serialize"
 						}
 					]
 				},
@@ -18413,7 +18413,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Condition",
+					"nickname": "Condition",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18452,7 +18452,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpyeOJpIQdZVk="
 							},
-							"name": "check",
+							"nickname": "check",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18473,7 +18473,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Effect",
+					"nickname": "Effect",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18512,7 +18512,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpyfKaB1bBj0E="
 							},
-							"name": "run",
+							"nickname": "run",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18533,7 +18533,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "HasRedAmmo",
+					"nickname": "HasRedAmmo",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18556,7 +18556,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "HasBlueAmmo",
+					"nickname": "HasBlueAmmo",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18579,7 +18579,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "HasYellowAmmo",
+					"nickname": "HasYellowAmmo",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18602,7 +18602,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "IsTargetAdjacent",
+					"nickname": "IsTargetAdjacent",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18625,7 +18625,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "IsTargetInRoom",
+					"nickname": "IsTargetInRoom",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18648,7 +18648,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "DamageTarget",
+					"nickname": "DamageTarget",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18671,7 +18671,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "MarkTarget",
+					"nickname": "MarkTarget",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -18694,7 +18694,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Color",
+					"nickname": "Color",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18733,7 +18733,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpznOJ6yOEPpg="
 							},
-							"name": "BLUE"
+							"nickname": "BLUE"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18741,7 +18741,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpznOJ6yOEPpg="
 							},
-							"name": "GREEN"
+							"nickname": "GREEN"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18749,7 +18749,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpznOJ6yOEPpg="
 							},
-							"name": "GREY"
+							"nickname": "GREY"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18757,7 +18757,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpznOJ6yOEPpg="
 							},
-							"name": "PURPLE"
+							"nickname": "PURPLE"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18765,7 +18765,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpznOJ6yOEPpg="
 							},
-							"name": "YELLOW"
+							"nickname": "YELLOW"
 						}
 					]
 				},
@@ -18775,7 +18775,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "LinkType",
+					"nickname": "LinkType",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18813,7 +18813,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp57abzKwPN3g="
 							},
-							"name": "DOOR"
+							"nickname": "DOOR"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18821,7 +18821,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp57abzKwPN3g="
 							},
-							"name": "OPEN"
+							"nickname": "OPEN"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18829,7 +18829,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp57abzKwPN3g="
 							},
-							"name": "NONE"
+							"nickname": "NONE"
 						}
 					]
 				},
@@ -18839,7 +18839,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Room",
+					"nickname": "Room",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -18847,7 +18847,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp571cQKmiqFM="
 							},
-							"name": "tileList",
+							"nickname": "tileList",
 							"visibility": "private",
 							"type": "ArrayList<Tile>"
 						}
@@ -18859,7 +18859,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp571cQKmiqFM="
 							},
-							"name": "getPlayers",
+							"nickname": "getPlayers",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -18880,7 +18880,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Action"
+					"nickname": "Action"
 				},
 				{
 					"_type": "UMLEnumeration",
@@ -18888,7 +18888,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Action",
+					"nickname": "Action",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -18954,7 +18954,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp58JBdEWVYxY="
 							},
-							"name": "MMM"
+							"nickname": "MMM"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18962,7 +18962,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp58JBdEWVYxY="
 							},
-							"name": "MG"
+							"nickname": "MG"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18970,7 +18970,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp58JBdEWVYxY="
 							},
-							"name": "S"
+							"nickname": "S"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18978,7 +18978,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp58JBdEWVYxY="
 							},
-							"name": "MMG"
+							"nickname": "MMG"
 						},
 						{
 							"_type": "UMLEnumerationLiteral",
@@ -18986,7 +18986,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp58JBdEWVYxY="
 							},
-							"name": "MS"
+							"nickname": "MS"
 						}
 					]
 				},
@@ -18996,7 +18996,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Model",
+					"nickname": "Model",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -19047,7 +19047,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
 							},
-							"name": "gameManager",
+							"nickname": "gameManager",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpybyC7+PRyRw="
@@ -19061,7 +19061,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
 							},
-							"name": "getStatus",
+							"nickname": "getStatus",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19080,7 +19080,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
 							},
-							"name": "isActionValid",
+							"nickname": "isActionValid",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19099,7 +19099,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
 							},
-							"name": "runAction",
+							"nickname": "runAction",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19118,7 +19118,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
 							},
-							"name": "updateModel",
+							"nickname": "updateModel",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19137,7 +19137,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
 							},
-							"name": "getActiveGames",
+							"nickname": "getActiveGames",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19160,7 +19160,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Observable<T>",
+					"nickname": "Observable<T>",
 					"stereotype": "abstract",
 					"attributes": [
 						{
@@ -19169,7 +19169,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+DAg9mMnpM="
 							},
-							"name": "observers",
+							"nickname": "observers",
 							"visibility": "private",
 							"type": "List<Observer<T>>"
 						}
@@ -19181,7 +19181,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+DAg9mMnpM="
 							},
-							"name": "register",
+							"nickname": "register",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19189,7 +19189,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp5+F7p/eV5H0="
 									},
-									"name": "observer",
+									"nickname": "observer",
 									"type": "Observer<T>"
 								},
 								{
@@ -19209,7 +19209,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+DAg9mMnpM="
 							},
-							"name": "deregister",
+							"nickname": "deregister",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19217,7 +19217,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp5+LQyQBZC4Y="
 									},
-									"name": "observer",
+									"nickname": "observer",
 									"type": "Observer<T>"
 								},
 								{
@@ -19237,7 +19237,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+DAg9mMnpM="
 							},
-							"name": "notify",
+							"nickname": "notify",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19254,7 +19254,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp5+M1nQJlhxY="
 									},
-									"name": "message",
+									"nickname": "message",
 									"type": "T"
 								}
 							]
@@ -19267,7 +19267,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "View",
+					"nickname": "View",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -19332,7 +19332,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+SS6xfpirQ="
 							},
-							"name": "sendTransaction",
+							"nickname": "sendTransaction",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19340,7 +19340,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp7kICYJapeWQ="
 									},
-									"name": "transaction",
+									"nickname": "transaction",
 									"type": {
 										"$ref": "AAAAAAFpya5acc00988="
 									}
@@ -19362,7 +19362,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+SS6xfpirQ="
 							},
-							"name": "getPossibleAction",
+							"nickname": "getPossibleAction",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19381,7 +19381,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+SS6xfpirQ="
 							},
-							"name": "getPossibleAction",
+							"nickname": "getPossibleAction",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19389,7 +19389,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp7mZEf2LmdhM="
 									},
-									"name": "action ",
+									"nickname": "action ",
 									"type": {
 										"$ref": "AAAAAAFp58Gpejgtok8="
 									}
@@ -19411,7 +19411,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+SS6xfpirQ="
 							},
-							"name": "update",
+							"nickname": "update",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19432,7 +19432,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "CLIView",
+					"nickname": "CLIView",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -19455,7 +19455,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "GUIView",
+					"nickname": "GUIView",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -19478,7 +19478,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Controller",
+					"nickname": "Controller",
 					"ownedElements": [
 						{
 							"_type": "UMLGeneralization",
@@ -19501,7 +19501,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+uhLBvUsdk="
 							},
-							"name": "view",
+							"nickname": "view",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFp5+SS6xfpirQ="
@@ -19513,7 +19513,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+uhLBvUsdk="
 							},
-							"name": "model",
+							"nickname": "model",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFp5+BGOtIAsuM="
@@ -19527,7 +19527,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+uhLBvUsdk="
 							},
-							"name": "applyAction",
+							"nickname": "applyAction",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19544,7 +19544,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp873oyWKn+fA="
 									},
-									"name": "action",
+									"nickname": "action",
 									"type": {
 										"$ref": "AAAAAAFp9/NbsmHvsWs="
 									}
@@ -19557,7 +19557,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+uhLBvUsdk="
 							},
-							"name": "update",
+							"nickname": "update",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19578,7 +19578,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Observer<T>",
+					"nickname": "Observer<T>",
 					"stereotype": "interface",
 					"operations": [
 						{
@@ -19587,7 +19587,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5/fhkw4tYhc="
 							},
-							"name": "update",
+							"nickname": "update",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -19595,7 +19595,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp8822POSB64A="
 									},
-									"name": "message",
+									"nickname": "message",
 									"type": "T"
 								},
 								{
@@ -19617,7 +19617,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "PlayerAction",
+					"nickname": "PlayerAction",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -19625,7 +19625,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp9/NbsmHvsWs="
 							},
-							"name": "game",
+							"nickname": "game",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpybN3FFlzfAI="
@@ -19637,7 +19637,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp9/NbsmHvsWs="
 							},
-							"name": "player",
+							"nickname": "player",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFpunQg9yAz1/Q="
@@ -19649,7 +19649,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp9/NbsmHvsWs="
 							},
-							"name": "action",
+							"nickname": "action",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFp58Gpejgtok8="
