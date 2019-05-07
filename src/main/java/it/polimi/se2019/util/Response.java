@@ -10,13 +10,11 @@ public class Response implements Serializable, NetMsg {
     private Game game;
     private boolean success;
     private String message;
-    private String nickname;
 
-    public Response(Game game, boolean success, String message, String nickname) {
+    public Response(Game game, boolean success, String message) {
         this.game = game;
         this.success = success;
         this.message = message;
-        this.nickname = nickname;
     }
 
     public Game getGame() {
@@ -31,9 +29,6 @@ public class Response implements Serializable, NetMsg {
         return this.message;
     }
 
-    public String getNickname() {
-        return this.nickname;
-    }
 
     @Override
     public String serialize() {
