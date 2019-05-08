@@ -25,21 +25,38 @@ public class Graph<T> {
         return adjacentVertices.get(new Vertex(content));
     }
 
-    public Boolean isReachable(T start, T end) {
-        Set<T> visited = new LinkedHashSet<T>();
-        Stack<T> stack = new Stack<T>();
-        stack.push(start);
-        while (!stack.isEmpty()) {
-            T vertexContent = stack.pop();
+    /**
+     * This method employs breadth-first search limited to a certain depth(distance).
+     * @param start start is the root node.
+     * @param end end is the final node we are looking for.
+     * @param distance distance is the maximum depth the method will loof for the end node.
+     * @return
+     */
+    public Boolean isReachable(T start, T end, int distance) {
+
+        int i = 0;
+        List<T> visited = new ArrayList<>();
+        Queue<T> queue = new LinkedList<>();
+        T lastInLevel = null;
+
+        queue.add(start);
+        visited.add(start);
+        while (!queue.isEmpty() && i <= distance) {
+            T vertexContent = queue.poll();
             if (vertexContent == end) {
                 return true;
             }
-            else if (!visited.contains(vertexContent)) {
-                visited.add(vertexContent);
-
+            else {
                 for (Vertex<T> vertex : this.getAdjacentVertices(vertexContent)) {
-                    stack.push(vertex.getContent());
+                    if (!visited.contains(vertex.getContent())) {
+                        visited.add(vertex.getContent());
+                        queue.add(vertex.getContent());
+                    }
                 }
+            }
+            if(lastInLevel == vertexContent || lastInLevel == null) {
+                lastInLevel = visited.get(visited.size()-1);
+                i++;
             }
         }
 

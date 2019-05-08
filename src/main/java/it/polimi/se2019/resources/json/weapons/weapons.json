@@ -449,8 +449,8 @@
           ],
           "conditionList": [
             {
-              "name": "Player in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "name": "Attacker in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
               }
             }
@@ -470,8 +470,8 @@
           ],
           "conditionList": [
             {
-              "name": "Player in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "name": "Attacker in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
               }
             },
@@ -779,7 +779,7 @@
           "conditionList": [
             {
               "name": "Target Not Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerNotVisible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotVisible",
               "params": {
               }
             }

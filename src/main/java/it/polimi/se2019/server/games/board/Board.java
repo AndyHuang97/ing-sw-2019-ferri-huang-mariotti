@@ -3,6 +3,9 @@ package it.polimi.se2019.server.games.board;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.graphs.Graph;
 
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 public class Board {
     private Tile[][] tileMap;
     private Graph<Tile> tileTree;
@@ -44,18 +47,24 @@ public class Board {
     public Graph<Tile> generateGraph() {
         // TODO: manage exceptions out of bond
         Graph<Tile> graph = new Graph<>();
-        for (int xCoord = 0; xCoord < tileMap[0].length; xCoord++) {
-            for (int yCoord = 0; yCoord < tileMap.length; yCoord++) {
+
+
+        IntStream.range(0, tileMap[0].length)
+                .forEach(y -> {
+                    IntStream.range(0, tileMap.length)
+                            .forEach(x -> graph.addVertex(tileMap[x][y]));
+                });
+
+        for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
+            for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
                 Tile actualTile = tileMap[xCoord][yCoord];
 
-                graph.addVertex(actualTile);
-
                 if (actualTile.getSouthLink() == LinkType.OPEN || actualTile.getSouthLink() == LinkType.DOOR) {
-                    Tile linkedTile = tileMap[xCoord+1][yCoord];
+                    Tile linkedTile = tileMap[xCoord][yCoord+1];
                     graph.addEdge(actualTile, linkedTile);
                 }
                 if (actualTile.getEastLink() == LinkType.OPEN || actualTile.getEastLink() == LinkType.DOOR) {
-                    Tile linkedTile = tileMap[xCoord][yCoord+1];
+                    Tile linkedTile = tileMap[xCoord+1][yCoord];
                     graph.addEdge(actualTile, linkedTile);
                 }
             }
@@ -69,7 +78,7 @@ public class Board {
         String str = "";
         for(Tile[] row : tileMap) {
             for(Tile t : row) {
-                str = str + t.toString();
+                str = str + t.toString()+" ";
             }
             str = str + "\n";
         }

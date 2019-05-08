@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Observable;
 
 public class Game extends Observable implements Serializable {
+
 	private String id;
 	private Date startDate;
 	private TurnPhase turnPhase;

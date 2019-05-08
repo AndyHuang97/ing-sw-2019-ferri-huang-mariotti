@@ -8,22 +8,15 @@ import it.polimi.se2019.server.games.player.Player;
 import java.util.List;
 import java.util.Map;
 
-public class IsTargetVisible implements Condition {
+public class IsTargetNotVisible implements Condition {
 
-    private Tile tile;
-    private Player target;
-
-    public IsTargetVisible(Tile tile, Player target) {
-        this.tile = tile;
-        this.target = target;
-    }
-
+    private Player target, attacker;
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Player targetPlayer = (Player) targets.get("targetList").get(0);
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
 
-        return attackerTile.getVisibleTargets(game).contains(targetPlayer);
+        return !attackerTile.getVisibleTargets(game).contains(targetPlayer);
     }
 }

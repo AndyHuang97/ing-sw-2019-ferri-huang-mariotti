@@ -1,7 +1,8 @@
-package it.polimi.se2019.server.games.board;
+package it.polimi.se2019.server.actions.conditions;
 
-import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.Targetable;
+import it.polimi.se2019.server.games.board.*;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -11,18 +12,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-
-public class TileTest {
+public class AttackerTileTest {
 
     Tile tile;
     Tile[][] tileMap;
     Board board;
     Game game;
     Player p1, p2, p3, p4;
+    Map<String, List<Targetable>> targets = new HashMap<>();
+    List<Targetable> list;
 
     @Before
     public void setUp() {
@@ -50,82 +50,40 @@ public class TileTest {
         p4.getCharacterState().setTile(tileMap[1][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
-        tile = tileMap[1][1];
+        list = new ArrayList<>();
+        list.add(tileMap[1][1]);
+        targets.put("tile", list);
     }
 
     @After
     public void tearDown() {
         tile = null;
+        tileMap = null;
+        board = null;
         game = null;
         p1 = null;
         p2 = null;
-        p3 = null;
+        p3 =null;
         p4 = null;
-        board = null;
+        targets = null;
+        list = null;
     }
 
     @Test
-    public void testSetColor() {
-
-        tile.setColor(RoomColor.BLUE);
-
-        Assert.assertEquals(RoomColor.BLUE, tile.getColor());
-    }
-
-
-
-    @Test
-    public void testSetNorthLink() {
-
-        tile.setNorthLink(LinkType.DOOR);
-
-        Assert.assertEquals(LinkType.DOOR, tile.getNorthLink());
+    public void testAttackerTile() {
+        Condition condition = new IsAttackerTile();
+        game.setCurrentPlayer(p4);
+        Assert.assertEquals(true, condition.check(game, targets));
+        game.setCurrentPlayer(p3);
+        Assert.assertEquals(false, condition.check(game, targets));
     }
 
     @Test
-    public void testSetSouthLink() {
-
-        tile.setSouthLink(LinkType.OPEN);
-
-        Assert.assertEquals(LinkType.OPEN, tile.getSouthLink());
-    }
-
-    @Test
-    public void testSetEastLink() {
-
-        tile.setEastLink(LinkType.WALL);
-
-        Assert.assertEquals(LinkType.WALL, tile.getEastLink());
-    }
-
-    @Test
-    public void testSetWestLink() {
-
-        tile.setWestLink(LinkType.WALL);
-
-        Assert.assertEquals(LinkType.WALL, tile.getWestLink());
-    }
-
-    @Test
-    public void testGetPlayers() {
-
-        List<Player> playerList = new ArrayList<>(Arrays.asList(p4));
-
-        Assert.assertEquals(playerList, tile.getPlayers(game));
-    }
-
-    @Test
-    public void testGetVisibleTiles() {
-
-        List<Tile> visibleTiles = new ArrayList<>(Arrays.asList(tileMap[1][0], tileMap[1][1], tileMap[0][1]));
-
-        Assert.assertEquals(visibleTiles, tile.getVisibleTiles(board));
-    }
-
-    @Test
-    public void testGetVisibleTargets() {
-        List<Player> expectedList = Arrays.asList(p2, p3);
-
-        Assert.assertEquals(expectedList, tile.getVisibleTargets(game));
+    public void testNotAttackerTile() {
+        Condition condition = new IsNotAttackerTile();
+        game.setCurrentPlayer(p3);
+        Assert.assertEquals(true, condition.check(game, targets));
+        game.setCurrentPlayer(p4);
+        Assert.assertEquals(false, condition.check(game, targets));
     }
 }

@@ -1,9 +1,12 @@
 package it.polimi.se2019.server.actions.conditions;
 
+import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 
 import java.util.List;
+import java.util.Map;
 
 public class IsTargetListVisible implements Condition {
 
@@ -16,7 +19,7 @@ public class IsTargetListVisible implements Condition {
     }
 
     @Override
-    public boolean check() {
+    public boolean check(Game game, Map<String, List<Targetable>> targets) {
         return false;
     }
 }

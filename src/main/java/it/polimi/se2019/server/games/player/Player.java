@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.games.player;
 
 import it.polimi.se2019.server.games.PlayerDeath;
+import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.Observer;
@@ -8,7 +9,7 @@ import it.polimi.se2019.util.Observer;
 /**
  * 
  */
-public class Player implements Observer<PlayerDeath> {
+public class Player implements Observer<PlayerDeath>, Targetable {
 
 	private boolean active;
 	private UserData userData;

@@ -1,7 +1,11 @@
 package it.polimi.se2019.server.actions.effects;
 
+import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
+
+import java.util.Map;
 
 public class AddAmmo implements Effect {
 
@@ -16,7 +20,7 @@ public class AddAmmo implements Effect {
     }
 
     @Override
-    public void run() {
+    public void run(Game game, Map<String, Map<Targetable, Integer>> targets) {
         player.getCharacterState().updateAmmoBag(ammoColor, amount);
     }
 }
