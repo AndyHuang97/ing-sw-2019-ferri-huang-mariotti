@@ -13,4 +13,9 @@ public class Message {
     public String getMessageType() {
         return messageType;
     }
+
+    @Override
+    public String toString() {
+        return messageType + params.toString();
+    }
 }

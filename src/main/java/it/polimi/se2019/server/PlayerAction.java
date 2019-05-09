@@ -14,8 +14,16 @@ public abstract class PlayerAction {
 
     private Game game;
     private Player player;
-    // TODO: remove action
+
+    @Deprecated
     private Action action;
+
+    @Deprecated
+    public PlayerAction(Game game, Player player, Action action) {
+        this.game = game;
+        this.player = player;
+        this.action = action;
+    }
 
     public PlayerAction(Game game, Player player) {
         this.game = game;
