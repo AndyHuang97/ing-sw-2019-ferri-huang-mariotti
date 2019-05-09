@@ -2,10 +2,8 @@ package it.polimi.se2019.server.actions.conditions;
 
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.player.Player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +16,7 @@ public class IsTargetListInDirection implements Condition {
         boolean result = true;
 
         for(Targetable target : targetList) {
-            players.removeAll(players);
+            players.clear();
             players.add(target);
             targets.put("target", players);
             if(!condition.check(game, targets)) {

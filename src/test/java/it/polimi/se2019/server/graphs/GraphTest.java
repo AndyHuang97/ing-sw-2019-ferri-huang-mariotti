@@ -11,6 +11,18 @@ public class GraphTest {
     @Before
     public void setUp() {
         graph = new Graph<>();
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
+        graph.addVertex("F");
+        graph.addVertex("Z");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
+        graph.addEdge("C", "D");
+        graph.addEdge("C", "E");
+        graph.addEdge("D", "F");
     }
 
     @After
@@ -18,35 +30,7 @@ public class GraphTest {
     }
 
     @Test
-    public void testIsReachable() {
-        graph.addVertex("A");
-        graph.addVertex("B");
-        graph.addVertex("C");
-        graph.addEdge("A", "B");
-        graph.addEdge("B", "C");
-        graph.addEdge("A", "C");
-        boolean a = graph.isReachable("A", "B",10);
-        boolean b = graph.isReachable("B", "C",10);
-        boolean c = graph.isReachable("A", "C",10);
-
-        Assert.assertTrue(a);
-        Assert.assertTrue(b);
-        Assert.assertTrue(c);
-    }
-
-    @Test
     public void testIsReachableParam() {
-        graph.addVertex("A");
-        graph.addVertex("B");
-        graph.addVertex("C");
-        graph.addVertex("D");
-        graph.addVertex("E");
-        graph.addVertex("F");
-        graph.addEdge("A", "B");
-        graph.addEdge("B", "C");
-        graph.addEdge("C", "D");
-        graph.addEdge("C", "E");
-        graph.addEdge("D", "F");
 
         boolean a = graph.isReachable("A", "E",10);
         Assert.assertTrue(a);
@@ -56,5 +40,18 @@ public class GraphTest {
         Assert.assertTrue(c);
         boolean d = graph.isReachable("A", "F",4);
         Assert.assertTrue(d);
+        boolean f = graph.isReachable("A", "Z",10);
+        Assert.assertFalse(f);
+    }
+
+    @Test
+    public void testDistance() {
+        Assert.assertEquals(-1, graph.distance("A", "Z").intValue());
+        Assert.assertEquals(1, graph.distance("A", "B").intValue());
+        Assert.assertEquals(2, graph.distance("A", "C").intValue());
+        Assert.assertEquals(3, graph.distance("A", "D").intValue());
+        Assert.assertEquals(3, graph.distance("A", "E").intValue());
+        Assert.assertEquals(4, graph.distance("A", "F").intValue());
+        Assert.assertEquals(2, graph.distance("D", "E").intValue());
     }
 }

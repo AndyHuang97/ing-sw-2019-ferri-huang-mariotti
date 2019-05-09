@@ -74,6 +74,12 @@
                 "ammoColor": "RED",
                 "amount": 1
               }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+              }
             }
           ]
         }

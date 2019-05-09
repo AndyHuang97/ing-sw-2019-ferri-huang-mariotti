@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.users;
 
-import it.polimi.se2019.server.PlayerAction;
+import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;

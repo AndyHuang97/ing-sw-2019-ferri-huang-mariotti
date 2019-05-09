@@ -19,12 +19,18 @@ public class TargetListDistance implements Condition {
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
-
+        Tile targetTile = null;
+        Integer distance = null;
         List<Targetable> targetList = targets.get("targetList");
         boolean result = true;
 
-        targetList.stream()
-                .forEach(t -> ((Player)t).getCharacterState().getTile());
+        for (Targetable t : targetList) {
+            targetTile = ((Player) t).getCharacterState().getTile();
+            distance = game.getBoard().generateGraph().distance(attackerTile, targetTile);
+            if(distance == -1 || distance > amount) {
+                result = false;
+            }
+        }
         return result;
     }
 }

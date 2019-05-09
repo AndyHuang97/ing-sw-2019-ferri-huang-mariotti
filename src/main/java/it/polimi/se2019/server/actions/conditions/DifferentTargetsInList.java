@@ -2,7 +2,6 @@ package it.polimi.se2019.server.actions.conditions;
 
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.player.Player;
 
 import java.util.HashSet;
 import java.util.List;

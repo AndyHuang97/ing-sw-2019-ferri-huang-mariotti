@@ -7,9 +7,9 @@ import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class PlayerNotInRoom implements Condition {
 
@@ -23,15 +23,10 @@ public class PlayerNotInRoom implements Condition {
         List<Tile> room = new ArrayList<>();
         Tile[][] tileMap = game.getBoard().getTileMap();
 
-        IntStream.range(0, tileMap[0].length)
-                .forEach(y -> {
-                    IntStream.range(0, tileMap.length)
-                            .forEach(x -> {
-                                if (tileMap[x][y].getColor() == roomColor) {
-                                    room.add(tileMap[x][y]);
-                                }
-                            });
-                });
-        return !room.contains(attacker);
+        return Arrays.stream(tileMap)
+                .allMatch(row -> Arrays.stream(row)
+                        .filter(t -> t.getColor() == roomColor)
+                        .map(t -> t.getPlayers(game))
+                        .allMatch(lst -> !lst.contains(attacker)));
     }
 }

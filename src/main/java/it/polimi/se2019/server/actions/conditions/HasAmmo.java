@@ -26,10 +26,11 @@ public class HasAmmo implements Condition {
 
         return Arrays.asList(AmmoColor.values()).stream()
                 .allMatch(color -> {
+                    boolean result = true;
                     if(ammoBag.get(color) - ammoNeeded.get(color) < 0) {
-                        return false;
+                        result = false;
                     }
-                    return true;
+                    return result;
                 });
 
     }

@@ -17,6 +17,6 @@ public class IsNotAttackerTile implements Condition {
         List<Targetable> tileList = targets.get("tile");
         Tile targetTile = (Tile) tileList.get(0);
 
-        return !(targetTile == game.getCurrentPlayer().getCharacterState().getTile());
+        return targetTile != game.getCurrentPlayer().getCharacterState().getTile();
     }
 }

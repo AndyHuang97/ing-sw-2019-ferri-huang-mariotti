@@ -3,7 +3,6 @@ package it.polimi.se2019.server.games.board;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.graphs.Graph;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class Board {
@@ -50,10 +49,8 @@ public class Board {
 
 
         IntStream.range(0, tileMap[0].length)
-                .forEach(y -> {
-                    IntStream.range(0, tileMap.length)
-                            .forEach(x -> graph.addVertex(tileMap[x][y]));
-                });
+                .forEach(y -> IntStream.range(0, tileMap.length)
+                        .forEach(x -> graph.addVertex(tileMap[x][y])));
 
         for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
             for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
@@ -71,6 +68,14 @@ public class Board {
         }
 
         return graph;
+    }
+
+    public Graph<Tile> getTileTree() {
+        return tileTree;
+    }
+
+    public void setTileTree(Graph<Tile> tileTree) {
+        this.tileTree = tileTree;
     }
 
     @Override

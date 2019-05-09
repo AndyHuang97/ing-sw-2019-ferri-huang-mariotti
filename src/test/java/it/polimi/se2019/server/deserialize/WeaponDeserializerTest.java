@@ -67,8 +67,8 @@ public class WeaponDeserializerTest {
             expectedWeapon.setPickUpCost(Arrays.asList(AmmoColor.BLUE, AmmoColor.YELLOW));
             expectedWeapon.setReloadCost(Arrays.asList(AmmoColor.BLUE, AmmoColor.BLUE, AmmoColor.YELLOW));
             expectedWeapon.setOptionalEffectList(Arrays.asList());
-            List<Effect> effectList = Arrays.asList(new DamageTarget(null, null, 2),
-                    new MarkTarget(null,null,1));
+            List<Effect> effectList = Arrays.asList(new DamageTarget( 2),
+                    new MarkTarget(1));
             List<Condition> conditionList = Arrays.asList(new IsTargetVisible(null, null),
                     new Distance(2));
             expectedWeapon.setActionUnitList(Arrays.asList(

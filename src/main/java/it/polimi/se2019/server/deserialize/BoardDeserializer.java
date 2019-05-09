@@ -6,7 +6,12 @@ import com.google.gson.JsonObject;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
 
+import java.util.logging.Logger;
+
 public class BoardDeserializer implements RandomDeserializer {
+
+    private static final Logger logger = Logger.getLogger(BoardDeserializer.class.getName());
+
     @Override
     public Board deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
@@ -26,6 +31,7 @@ public class BoardDeserializer implements RandomDeserializer {
             try {
                 tile = tileDeserializer.deserialize(jsonTile, deserializerFactory);
             } catch (ClassNotFoundException e) {
+                logger.warning("Class not found.");
                 throw e;
             }
 
@@ -40,8 +46,6 @@ public class BoardDeserializer implements RandomDeserializer {
 
         // TODO: pad empty map spaces with void unlinked tiles, maybe flyweight pattern (?)
 
-        Board board = new Board(tileMap);
-
-        return board;
+        return new Board(tileMap);
     }
 }

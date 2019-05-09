@@ -7,11 +7,14 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.net.CommandHandler;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class IsTargetInDirection implements Condition {
+    private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
@@ -65,7 +68,7 @@ public class IsTargetInDirection implements Condition {
                     break;
             }
         } catch(TileNotFoundException e) {
-            System.out.println("Tile not found.");
+            logger.warning("Tile not found.");
         }
 
         return result;

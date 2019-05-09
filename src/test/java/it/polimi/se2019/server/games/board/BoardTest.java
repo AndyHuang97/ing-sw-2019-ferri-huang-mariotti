@@ -1,8 +1,6 @@
 package it.polimi.se2019.server.games.board;
 
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
-import it.polimi.se2019.server.games.Game;
-import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.graphs.Graph;
 import org.junit.After;
 import org.junit.Assert;

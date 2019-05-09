@@ -8,8 +8,12 @@ import it.polimi.se2019.server.games.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class WeaponDeckDeserializer implements RandomDeserializer {
+
+    private static final Logger logger = Logger.getLogger(WeaponDeckDeserializer.class.getName());
+
     @Override
     public Deck<Weapon> deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
@@ -27,14 +31,13 @@ public class WeaponDeckDeserializer implements RandomDeserializer {
             try {
                 weapon = weaponDeserializer.deserialize(jsonWeapon, deserializerFactory);
             } catch (ClassNotFoundException e) {
+                logger.warning("Class not found.");
                 throw e;
             }
 
             weaponList.add(weapon);
         }
 
-        Deck<Weapon> deck = new Deck(weaponList);
-
-        return deck;
+        return (Deck<Weapon>) new Deck(weaponList);
     }
 }

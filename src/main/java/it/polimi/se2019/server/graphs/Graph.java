@@ -37,13 +37,9 @@ public class Graph<T> {
         Integer distance = distance(start, end);
         boolean reachable = false;
 
-        if (distance == -1) {
-            reachable = false;
-        }
-        else
-            if (maxDistance >= distance){
+        if (maxDistance >= distance && distance != -1){
                 reachable = true;
-            }
+        }
 
         return reachable;
     }

@@ -29,7 +29,7 @@ public class OneDirectionMovement implements Condition {
             try {
                 int[] targetPos = game.getBoard().getTilePosition(targetTile);
                 int[] attackerPos = game.getBoard().getTilePosition(attackerTile);
-                if (!targetPos.equals(attackerPos) &&
+                if (!(targetPos[0] == attackerPos[0] && targetPos[1] == attackerPos[1]) &&
                         (attackerPos[0] - targetPos[0] == 0 || attackerPos[1] - targetPos[1] == 0)) {
                     result = true;
                 }

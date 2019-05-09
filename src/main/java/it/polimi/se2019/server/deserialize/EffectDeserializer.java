@@ -4,13 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.polimi.se2019.server.actions.effects.Effect;
 
+import java.util.logging.Logger;
+
 public class EffectDeserializer implements RandomDeserializer<Effect> {
+
+    private static final Logger logger = Logger.getLogger(EffectDeserializer.class.getName());
+
     // TODO: merge EffectDeserializer and ConditionDeserializer in LeafDeserializer
     @Override
     public Effect deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
-        String name = json.get("name").getAsString();
         String className = json.get("class_name").getAsString();
         String params = json.get("params").toString();
 
@@ -20,7 +24,7 @@ public class EffectDeserializer implements RandomDeserializer<Effect> {
         try {
         classType = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            System.out.println("Exception: " + className);
+            logger.warning("Exception: " + className);
         throw e;
         }
 

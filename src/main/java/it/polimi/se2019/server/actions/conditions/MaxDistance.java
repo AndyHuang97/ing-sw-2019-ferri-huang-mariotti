@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class MaxDistance implements Condition {
 
-    private Tile initialPos, finalPos;
+    private Tile initialPos;
+    private Tile finalPos;
     private Integer amount;
 
     public MaxDistance(Tile initialPos, Tile finalPos, Integer amount) {

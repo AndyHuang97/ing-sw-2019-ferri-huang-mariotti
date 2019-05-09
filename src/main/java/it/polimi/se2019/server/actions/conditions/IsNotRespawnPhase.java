@@ -9,6 +9,10 @@ import java.util.Map;
 public class IsNotRespawnPhase implements Condition {
 
     private String playerPhase;
+
+    public IsNotRespawnPhase(String playerPhase) {
+        this.playerPhase = playerPhase;
+    }
     //TODO may need to implement a playerPhase if playerPhase class is necessary to manage a player turn.
 
     @Override

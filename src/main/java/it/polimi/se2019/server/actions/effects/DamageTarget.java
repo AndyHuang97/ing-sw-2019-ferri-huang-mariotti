@@ -3,8 +3,8 @@ package it.polimi.se2019.server.actions.effects;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.server.games.player.PlayerColor;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,22 +12,20 @@ import java.util.Map;
  */
 public class DamageTarget implements Effect {
 
-	private Player targetPlayer;
-	private PlayerColor attackerColor;
-    private Integer amount;
+	private Integer amount;
 
 	/**
 	 * Default constructor
 	 */
-	public DamageTarget(Player targetPlayer, PlayerColor attackerColor, Integer amount) {
-		this.targetPlayer = targetPlayer;
-		this.attackerColor = attackerColor;
+	public DamageTarget(Integer amount) {
 		this.amount = amount;
 	}
 
 	@Override
-	public void run(Game game, Map<String, Map<Targetable, Integer>> targets) {
-		targetPlayer.getCharacterState().addDamage(attackerColor, amount);
+	public void run(Game game, Map<String, List<Targetable>> targets) {
+		Player target = (Player) targets.get("target").get(0);
+
+		target.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), amount);
 	}
 
 }
