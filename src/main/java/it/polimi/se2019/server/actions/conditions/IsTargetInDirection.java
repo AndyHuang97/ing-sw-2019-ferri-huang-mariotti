@@ -29,40 +29,16 @@ public class IsTargetInDirection implements Condition {
             int[] pos2 = board.getTilePosition(targetTile);
             switch (dir) {
                 case NORTH:
-                    if(pos1[0] - pos2[0] != 0) {
-                        result = false;
-                    }
-                    if(pos1[1] - pos2[1] < 0) {
-                        result = false;
-                    }
-                    result = true;
+                    result = !((pos1[0] - pos2[0] != 0) || (pos1[1] - pos2[1] < 0));
                     break;
                 case EAST:
-                    if(pos1[0] - pos2[0] > 0) {
-                        result = false;
-                    }
-                    if(pos1[1] - pos2[1] != 0) {
-                        result = false;
-                    }
-                    result = true;
+                    result = !((pos1[0] - pos2[0] > 0) || (pos1[1] - pos2[1] != 0));
                     break;
                 case SOUTH:
-                    if(pos1[0] - pos2[0] != 0) {
-                        result = false;
-                    }
-                    if(pos1[1] - pos2[1] > 0) {
-                        result = false;
-                    }
-                    result = true;
+                    result = !((pos1[0] - pos2[0] != 0) || (pos1[1] - pos2[1] > 0));
                     break;
                 case WEST:
-                    if(pos1[0] - pos2[0] < 0) {
-                        result = false;
-                    }
-                    if(pos1[1] - pos2[1] != 0) {
-                        result = false;
-                    }
-                    result = true;
+                    result = !((pos1[0] - pos2[0] < 0) || (pos1[1] - pos2[1] != 0));
                     break;
                 default:
                     break;

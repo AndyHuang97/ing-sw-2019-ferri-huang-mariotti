@@ -1,20 +1,21 @@
-package it.polimi.se2019.server;
+package it.polimi.se2019.server.controller;
 
 
-import it.polimi.se2019.client.View;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.virtualview.VirtualView;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Request;
 
 public class Controller implements Observer<PlayerAction> {
 
     private GameManager gameManager;
-    private View view;
+    private VirtualView virtualView;
+    private TurnHandler turnHandler;
 
-    public Controller(GameManager activeGames, View view) {
+    public Controller(GameManager activeGames, VirtualView virtualView) {
         this.gameManager = activeGames;
-        this.view = view;
+        this.virtualView = virtualView;
     }
 
     public void onNotify(Request request) {
@@ -25,7 +26,7 @@ public class Controller implements Observer<PlayerAction> {
 
     }
 
-    public void ApplyAction(PlayerAction action){
+    public void applyAction(PlayerAction action){
 
     }
 
@@ -34,12 +35,12 @@ public class Controller implements Observer<PlayerAction> {
 
     }
 
-    public View getView() {
-        return view;
+    public VirtualView getVirtualView() {
+        return virtualView;
     }
 
-    public void setView(View view) {
-        this.view = view;
+    public void setVirtualView(VirtualView virtualView) {
+        this.virtualView = virtualView;
     }
 
     public GameManager getGameManager() {

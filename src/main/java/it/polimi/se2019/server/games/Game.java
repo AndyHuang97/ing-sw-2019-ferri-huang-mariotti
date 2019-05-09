@@ -16,7 +16,6 @@ public class Game extends Observable implements Serializable {
 
 	private String id;
 	private Date startDate;
-	private TurnPhase turnPhase;
 	private List<Player> playerList;
 	private Player currentPlayer;
 	private Board board;
@@ -27,7 +26,6 @@ public class Game extends Observable implements Serializable {
 	public Game() {
 		this.id = "";
 		this.startDate = new Date();
-		this.turnPhase = TurnPhase.RESPAWN;
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
 		this.board = new Board();
@@ -36,10 +34,9 @@ public class Game extends Observable implements Serializable {
 		this.powerupDeck = new ArrayList<>();
 	}
 
-	public Game(String id, Date startDate, TurnPhase turnPhase, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
+	public Game(String id, Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
 		this.id = id;
 		this.startDate = startDate;
-		this.turnPhase = turnPhase;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
 		this.board = board;
