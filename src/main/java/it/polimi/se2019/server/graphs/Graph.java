@@ -26,25 +26,50 @@ public class Graph<T> {
     }
 
     /**
-     * This method employs breadth-first search limited to a certain depth(distance).
+     * This method determines if two nodes are reachable in a given amount of steps (maxDistance).
      * @param start start is the root node.
      * @param end end is the final node we are looking for.
-     * @param distance distance is the maximum depth the method will loof for the end node.
-     * @return
+     * @param maxDistance maxDistance is the maximum amount of steps the method will look for the end node.
+     * @return false if the end node is not reachable, true otherwise.
      */
-    public Boolean isReachable(T start, T end, int distance) {
+    public Boolean isReachable(T start, T end, int maxDistance) {
+
+        Integer distance = distance(start, end);
+        boolean reachable = false;
+
+        if (distance == -1) {
+            reachable = false;
+        }
+        else
+            if (maxDistance >= distance){
+                reachable = true;
+            }
+
+        return reachable;
+    }
+
+    /**
+     * This methods computes the distance between two nodes using a breadth-first search.
+     * It returns a positive value if the nodes are connected, a negative value (-1) otherwise.
+     * @param start is the starting node.
+     * @param end is the node we are calculating the distance from start node.
+     * @return the distance between the nodes, if they nodes are disconnected it returns -1.
+     */
+    public Integer distance(T start, T end) {
+        Integer distance = -1;
 
         int i = 0;
+        T vertexContent = null;
         List<T> visited = new ArrayList<>();
         Queue<T> queue = new LinkedList<>();
         T lastInLevel = null;
 
         queue.add(start);
         visited.add(start);
-        while (!queue.isEmpty() && i <= distance) {
-            T vertexContent = queue.poll();
+        while (!queue.isEmpty() && vertexContent != end) {
+            vertexContent = queue.poll();
             if (vertexContent == end) {
-                return true;
+                distance = i;
             }
             else {
                 for (Vertex<T> vertex : this.getAdjacentVertices(vertexContent)) {
@@ -60,6 +85,6 @@ public class Graph<T> {
             }
         }
 
-        return false;
+        return distance;
     }
 }

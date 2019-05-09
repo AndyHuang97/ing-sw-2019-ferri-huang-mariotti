@@ -10,8 +10,6 @@ import java.util.Map;
 
 public class IsTargetNotVisible implements Condition {
 
-    private Player target, attacker;
-
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Player targetPlayer = (Player) targets.get("targetList").get(0);

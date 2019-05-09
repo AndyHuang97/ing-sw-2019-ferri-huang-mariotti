@@ -8,16 +8,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This condition checks whether the target selected by the attacker are all different.
+ */
 public class DifferentTargetsInList implements Condition {
-
-    private List<Player> targetList;
-
-    public DifferentTargetsInList(List<Player> targetList) {
-        this.targetList = targetList;
-    }
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
+        List<Targetable> targetList = targets.get("targetList");
 
         return targetList.stream().allMatch(new HashSet<>()::add);
     }

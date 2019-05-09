@@ -19,6 +19,6 @@ public class MaxTargetList implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        return false;
+        return targets.get("targetList").size() < amount;
     }
 }

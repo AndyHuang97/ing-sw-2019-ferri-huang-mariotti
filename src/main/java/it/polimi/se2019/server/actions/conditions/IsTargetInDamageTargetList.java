@@ -12,7 +12,7 @@ public class IsTargetInDamageTargetList implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        Targetable targetPlayer = (Player) targets.get("target").get(0);
+        Targetable targetPlayer = targets.get("target").get(0);
         List<Targetable> damageTargetList = targets.get("damageTargetList");
         return damageTargetList.contains(targetPlayer);
     }

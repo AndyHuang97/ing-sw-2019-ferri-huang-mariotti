@@ -1577,8 +1577,8 @@
               }
             },
             {
-              "name": "Unidirectional",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "name": "One direction movement",
+              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
               "params": {
               }
             }

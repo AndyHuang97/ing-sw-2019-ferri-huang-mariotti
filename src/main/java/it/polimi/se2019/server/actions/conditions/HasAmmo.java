@@ -9,6 +9,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This condition checks whether the attacker has enough ammo.
+ */
 public class HasAmmo implements Condition {
 
     private EnumMap<AmmoColor, Integer> ammoNeeded;

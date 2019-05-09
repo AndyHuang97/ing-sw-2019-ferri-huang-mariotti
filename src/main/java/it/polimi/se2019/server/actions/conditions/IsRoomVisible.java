@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * This condition checks whether a room is visible from the current player's position.
+ */
 public class IsRoomVisible implements Condition {
 
     @Override

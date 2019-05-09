@@ -20,6 +20,16 @@ public class IsTargetListVisible implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        return false;
+        List<Targetable> targetList = targets.get("targetList");
+        Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
+        boolean result = true;
+
+        for (Targetable t : targetList) {
+            if(!attackerTile.getVisibleTargets(game).contains(t)) {
+                result = false;
+            }
+        }
+
+        return result;
     }
 }

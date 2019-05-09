@@ -20,6 +20,8 @@ public class IsTileVisible implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        return false;
+        Targetable targetTile = targets.get("tile").get(0);
+        Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
+        return attackerTile.getVisibleTiles(game.getBoard()).contains(targetTile);
     }
 }

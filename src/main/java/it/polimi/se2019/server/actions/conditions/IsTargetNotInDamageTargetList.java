@@ -19,6 +19,7 @@ public class IsTargetNotInDamageTargetList implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        return false;
+        Condition condition = new IsTargetInDamageTargetList();
+        return !condition.check(game, targets);
     }
 }

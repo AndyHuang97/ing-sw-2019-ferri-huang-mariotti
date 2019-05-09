@@ -18,6 +18,7 @@ public class IsTargetListInDirection implements Condition {
         boolean result = true;
 
         for(Targetable target : targetList) {
+            players.removeAll(players);
             players.add(target);
             targets.put("target", players);
             if(!condition.check(game, targets)) {
