@@ -5,6 +5,7 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.server.users.ConcreteAction;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;

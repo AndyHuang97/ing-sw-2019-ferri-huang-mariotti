@@ -1,7 +1,9 @@
-package it.polimi.se2019.server;
+package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.server.actions.Action;
+import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public abstract class PlayerAction {
         this.player = player;
     }
 
-    public abstract void unpack(List params);
+    public abstract void unpack(List<Targetable> params) throws UnpackingException;
 
     public abstract void run();
 
