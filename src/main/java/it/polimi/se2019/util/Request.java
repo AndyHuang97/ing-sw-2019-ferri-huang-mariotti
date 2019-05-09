@@ -4,17 +4,21 @@ import com.google.gson.Gson;
 
 import java.io.Serializable;
 
+/**
+ * Request objects are used by the View to send data to the Controller
+ */
+
 public class Request implements Serializable, NetMsg {
 
-    private String message;
+    private Message message;
     private String nickname;
 
-    public Request(String message, String nickname) {
+    public Request(Message message, String nickname) {
         this.message = message;
         this.nickname = nickname;
     }
 
-    public String getMessage() {
+    public Message getMessage() {
         return this.message;
     }
 
