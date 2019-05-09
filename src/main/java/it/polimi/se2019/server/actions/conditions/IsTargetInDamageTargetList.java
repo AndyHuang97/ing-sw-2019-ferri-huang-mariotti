@@ -1,21 +1,17 @@
 package it.polimi.se2019.server.actions.conditions;
 
-import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.Targetable;
 
 import java.util.List;
+import java.util.Map;
 
 public class IsTargetInDamageTargetList implements Condition {
 
-    private PlayerColor targetColor;
-    private List<PlayerColor> damageTargetList;
-
-    public IsTargetInDamageTargetList(PlayerColor targetColor, List<PlayerColor> damageTargetList) {
-        this.targetColor = targetColor;
-        this.damageTargetList = damageTargetList;
-    }
-
     @Override
-    public boolean check() {
-        return false;
+    public boolean check(Game game, Map<String, List<Targetable>> targets) {
+        Targetable targetPlayer = targets.get("target").get(0);
+        List<Targetable> damageTargetList = targets.get("damageTargetList");
+        return damageTargetList.contains(targetPlayer);
     }
 }

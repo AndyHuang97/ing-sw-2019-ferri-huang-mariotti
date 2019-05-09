@@ -74,6 +74,12 @@
                 "ammoColor": "RED",
                 "amount": 1
               }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+              }
             }
           ]
         }
@@ -449,8 +455,8 @@
           ],
           "conditionList": [
             {
-              "name": "Player in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "name": "Attacker in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
               }
             }
@@ -470,8 +476,8 @@
           ],
           "conditionList": [
             {
-              "name": "Player in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "name": "Attacker in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
               }
             },
@@ -779,7 +785,7 @@
           "conditionList": [
             {
               "name": "Target Not Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerNotVisible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotVisible",
               "params": {
               }
             }
@@ -1577,8 +1583,8 @@
               }
             },
             {
-              "name": "Unidirectional",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "name": "One direction movement",
+              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
               "params": {
               }
             }

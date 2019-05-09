@@ -8,5 +8,5 @@ public enum Action {
     MG,
     S,
     MMG,
-    MS;
+    MS
 }

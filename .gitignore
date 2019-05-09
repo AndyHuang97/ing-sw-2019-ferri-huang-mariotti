@@ -14,3 +14,6 @@
 # Maven
 log/
 target/
+
+# Game save
+dump.json

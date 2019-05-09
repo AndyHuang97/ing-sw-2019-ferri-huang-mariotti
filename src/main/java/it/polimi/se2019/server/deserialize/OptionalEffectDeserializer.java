@@ -6,15 +6,18 @@ import com.google.gson.JsonObject;
 import it.polimi.se2019.server.actions.ActionUnit;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class OptionalEffectDeserializer implements RandomDeserializer<ArrayList<ActionUnit>> {
+public class OptionalEffectDeserializer implements RandomDeserializer<List<ActionUnit>> {
+
     @Override
-    public ArrayList<ActionUnit> deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
-        if (json.isJsonNull()) return null;
+    public List<ActionUnit> deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
+        if (json.isJsonNull()) return Collections.emptyList();
 
         JsonArray jsonActionsArray = json.getAsJsonArray("optionalEffectList");
 
-        ArrayList<ActionUnit> actionUnitArrayList = new ArrayList<>();
+        List<ActionUnit> actionUnitArrayList = new ArrayList<>();
         ActionUnitDeserializer actionUnitDeserializer = (ActionUnitDeserializer) deserializerFactory.getDeserializer("actionunit");
 
         if(jsonActionsArray != null) {

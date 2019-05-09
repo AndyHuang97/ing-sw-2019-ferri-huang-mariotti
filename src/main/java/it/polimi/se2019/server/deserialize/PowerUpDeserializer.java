@@ -9,8 +9,12 @@ import it.polimi.se2019.server.games.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PowerUpDeserializer implements RandomDeserializer {
+
+    private static final Logger logger = Logger.getLogger(PowerUpDeserializer.class.getName());
+
     @Override
     public Deck deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
@@ -28,6 +32,7 @@ public class PowerUpDeserializer implements RandomDeserializer {
             try {
                 actions = actionDeserializer.deserialize(jsonPowerup, deserializerFactory);
             } catch (ClassNotFoundException e) {
+                logger.warning("Class not found.");
                 throw e;
             }
 
@@ -35,8 +40,6 @@ public class PowerUpDeserializer implements RandomDeserializer {
             powerUpList.add(powerUp);
         }
 
-        Deck deck = new Deck(powerUpList);
-
-        return deck;
+        return new Deck(powerUpList);
     }
 }

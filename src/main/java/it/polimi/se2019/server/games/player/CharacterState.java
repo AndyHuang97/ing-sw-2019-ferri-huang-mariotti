@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.games.player;
 
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
 
@@ -16,6 +18,8 @@ public class CharacterState {
 	private CharacterValue characterValue;
 	private EnumMap<PlayerColor, Integer> markerBar;
 	private EnumMap<AmmoColor, Integer> ammoBag;
+	private List<Weapon> weapoonBag;
+	private List<PowerUp> powerUpBag;
 	private Tile tile;
 	private Integer score;
 
@@ -29,25 +33,31 @@ public class CharacterState {
 		this.damageBar = new ArrayList<>();
 		this.markerBar = new EnumMap<>(PlayerColor.class);
 		this.ammoBag = new EnumMap<>(AmmoColor.class);
+		this.weapoonBag = new ArrayList<>();
+		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
 		this.score = 0;
 	}
 
 	/**
-	 *  @param damageBar
+	 * @param damageBar
 	 * @param characterValue
 	 * @param markerBar
 	 * @param ammoBag
+	 * @param weapoonBag
+	 * @param powerUpBag
 	 * @param tile
 	 * @param score
 	 */
 	public CharacterState(List<PlayerColor> damageBar, CharacterValue characterValue,
 						  EnumMap<PlayerColor, Integer> markerBar, EnumMap<AmmoColor, Integer> ammoBag,
-						  Tile tile, Integer score) {
+						  List<Weapon> weapoonBag, List<PowerUp> powerUpBag, Tile tile, Integer score) {
 		this.damageBar = damageBar;
 		this.characterValue = characterValue;
 		this.markerBar = markerBar;
 		this.ammoBag = ammoBag;
+		this.weapoonBag = weapoonBag;
+		this.powerUpBag = powerUpBag;
 		this.tile = tile;
 		this.score = score;
 	}
@@ -173,4 +183,26 @@ public class CharacterState {
 		}
 	}
 
+	public List<Weapon> getWeapoonBag() {
+		return weapoonBag;
+	}
+	public void addWeapon(Weapon weapon) {
+		weapoonBag.add(weapon);
+	}
+
+	public void setWeapoonBag(List<Weapon> weapoonBag) {
+		this.weapoonBag = weapoonBag;
+	}
+
+	public List<PowerUp> getPowerUpBag() {
+		return powerUpBag;
+	}
+
+	public void addPowerUp(PowerUp powerUp) {
+		powerUpBag.add(powerUp);
+	}
+
+	public void setPowerUpBag(List<PowerUp> powerUpBag) {
+		this.powerUpBag = powerUpBag;
+	}
 }

@@ -19,6 +19,7 @@
           "name": "Mark Target x1",
           "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
           "params": {
+            "amount": 1
           }
         }
       ],

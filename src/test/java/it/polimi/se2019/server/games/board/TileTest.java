@@ -22,32 +22,35 @@ public class TileTest {
     Tile[][] tileMap;
     Board board;
     Game game;
-    Player p1, p2;
+    Player p1, p2, p3, p4;
 
     @Before
     public void setUp() {
         game = new Game();
         tileMap = new Tile[2][2];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
-        tileMap[0][0] = new NormalTile("Red", links00, null);
+        tileMap[0][0] = new NormalTile(RoomColor.RED, links00, null);
         LinkType[] links01 = {LinkType.DOOR, LinkType.DOOR, LinkType.WALL, LinkType.WALL};
-        tileMap[0][1] = new NormalTile("Yellow", links01, null);
+        tileMap[0][1] = new NormalTile(RoomColor.YELLOW, links01, null);
         LinkType[] links10 = {LinkType.WALL, LinkType.WALL, LinkType.OPEN, LinkType.DOOR};
-        tileMap[1][0] = new NormalTile("Blue", links10, null);
+        tileMap[1][0] = new NormalTile(RoomColor.BLUE, links10, null);
         LinkType[] links11 = {LinkType.OPEN, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][1] = new NormalTile("Blue", links11, null);
+        tileMap[1][1] = new NormalTile(RoomColor.BLUE, links11, null);
         board = new Board(tileMap);
         game.setBoard(board);
 
-        tile = tileMap[1][1];
+
         p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
-        p1.getCharacterState().setTile(tile);
+        p1.getCharacterState().setTile(tileMap[0][0]);
         p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
-        p2.getCharacterState().setTile(tile);
-        game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2)));
+        p2.getCharacterState().setTile(tileMap[0][1]);
+        p3 = new Player(true, new UserData("C"), new CharacterState(), PlayerColor.YELLOW);
+        p3.getCharacterState().setTile(tileMap[1][0]);
+        p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
+        p4.getCharacterState().setTile(tileMap[1][1]);
+        game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
-
-
+        tile = tileMap[1][1];
     }
 
     @After
@@ -56,14 +59,17 @@ public class TileTest {
         game = null;
         p1 = null;
         p2 = null;
+        p3 = null;
+        p4 = null;
+        board = null;
     }
 
     @Test
     public void testSetColor() {
 
-        tile.setColor("BLUE");
+        tile.setColor(RoomColor.BLUE);
 
-        Assert.assertEquals("BLUE", tile.getColor());
+        Assert.assertEquals(RoomColor.BLUE, tile.getColor());
     }
 
 
@@ -103,7 +109,7 @@ public class TileTest {
     @Test
     public void testGetPlayers() {
 
-        List<Player> playerList = new ArrayList<>(Arrays.asList(p1,p2));
+        List<Player> playerList = new ArrayList<>(Arrays.asList(p4));
 
         Assert.assertEquals(playerList, tile.getPlayers(game));
     }
@@ -114,5 +120,12 @@ public class TileTest {
         List<Tile> visibleTiles = new ArrayList<>(Arrays.asList(tileMap[1][0], tileMap[1][1], tileMap[0][1]));
 
         Assert.assertEquals(visibleTiles, tile.getVisibleTiles(board));
+    }
+
+    @Test
+    public void testGetVisibleTargets() {
+        List<Player> expectedList = Arrays.asList(p2, p3);
+
+        Assert.assertEquals(expectedList, tile.getVisibleTargets(game));
     }
 }

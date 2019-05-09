@@ -6,7 +6,7 @@ public class NormalTile extends Tile {
 
     private AmmoCrate ammoCrate;
 
-    public NormalTile(String color, LinkType[] links, AmmoCrate ammoCrate) {
+    public NormalTile(RoomColor color, LinkType[] links, AmmoCrate ammoCrate) {
         super(color, links);
         this.ammoCrate = ammoCrate;
     }

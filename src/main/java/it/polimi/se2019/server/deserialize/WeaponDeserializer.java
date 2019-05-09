@@ -1,19 +1,23 @@
 package it.polimi.se2019.server.deserialize;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.player.AmmoColor;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /*
 TODO refactor WeaponDeserializer as EntityDeserializer?
  */
 public class WeaponDeserializer implements RandomDeserializer<Weapon> {
+
+    private static final Logger logger = Logger.getLogger(WeaponDeserializer.class.getName());
+
     @Override
     public Weapon deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
@@ -27,13 +31,14 @@ public class WeaponDeserializer implements RandomDeserializer<Weapon> {
         OptionalEffectDeserializer optionalEffectDeserializer =
                 (OptionalEffectDeserializer) deserializerFactory.getDeserializer("optionaleffects");
 
-        ArrayList<ActionUnit> modeList = null;
-        ArrayList<ActionUnit> optionalEffectList = null;
+        List<ActionUnit> modeList = null;
+        List<ActionUnit> optionalEffectList = null;
 
         try {
             modeList = actionDeserializer.deserialize(json, deserializerFactory);
             optionalEffectList = optionalEffectDeserializer.deserialize(json, deserializerFactory);
         } catch (ClassNotFoundException e) {
+            logger.warning("Class not found.");
             throw e;
         }
 
