@@ -10,11 +10,12 @@ import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+import static org.junit.Assert.*;
+
+public class IsTileVisibleTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -55,8 +56,7 @@ public class DifferentTargetsInListTest {
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
         list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
+
     }
 
     @After
@@ -74,15 +74,32 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void check() {
+        Condition condition = new IsTileVisible();
+        List<Targetable> tile = new ArrayList<>();
+        targets.put("tile", tile);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        game.setCurrentPlayer(p1);
+        tile.add(tileMap[0][0]);
+        assertTrue(condition.check(game, targets));
+        tile.clear();
+        // checking tile where the attacker is currently at.
+        tile.add(tileMap[1][0]);
+        assertTrue(condition.check(game, targets));
+        tile.clear();
+
+        tile.add(tileMap[1][2]);
+        assertFalse(condition.check(game, targets));
+        tile.clear();
+
+
+        game.setCurrentPlayer(p2);
+        tile.add(tileMap[0][2]);
+        assertTrue(condition.check(game, targets));
+        tile.clear();
+
+        tile.add(tileMap[0][0]);
+        assertFalse(condition.check(game, targets));
+        tile.clear();
     }
 }

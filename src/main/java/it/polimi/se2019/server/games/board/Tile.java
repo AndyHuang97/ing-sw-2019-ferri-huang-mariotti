@@ -7,12 +7,15 @@ import it.polimi.se2019.server.games.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * 
  */
 public abstract class Tile implements Targetable {
+
+	private static final Logger logger = Logger.getLogger(Tile.class.getName());
 
 	private RoomColor color;
 	private LinkType[] links;
@@ -102,7 +105,7 @@ public abstract class Tile implements Targetable {
             }
 
         } catch(TileNotFoundException e) {
-
+			logger.warning("Tile not found.");
         }
 
 		return visibleTiles;

@@ -10,11 +10,12 @@ import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+import static org.junit.Assert.*;
+
+public class IsTargetListVisibleTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -55,8 +56,6 @@ public class DifferentTargetsInListTest {
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
         list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
     }
 
     @After
@@ -74,15 +73,30 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void testIsTargetListVisible() {
+        Condition condition = new IsTargetListVisible();
+        List<Targetable> targetList = new ArrayList<>();
+        targets.put("targetList", targetList);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        game.setCurrentPlayer(p1);
+        targetList.addAll(Arrays.asList(p2,p4));
+        assertFalse(condition.check(game, targets));
+        targetList.clear();
+
+        game.setCurrentPlayer(p2);
+        targetList.addAll(Arrays.asList(p1,p4));
+        assertTrue(condition.check(game, targets));
+        targetList.clear();
+
+        game.setCurrentPlayer(p2);
+        targetList.addAll(Arrays.asList(p1,p3));
+        assertFalse(condition.check(game, targets));
+        targetList.clear();
+
+        game.setCurrentPlayer(p3);
+        targetList.addAll(Arrays.asList(p4));
+        assertTrue(condition.check(game, targets));
+        targetList.clear();
+
     }
 }

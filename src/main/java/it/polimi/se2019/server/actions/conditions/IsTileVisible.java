@@ -10,14 +10,6 @@ import java.util.Map;
 
 public class IsTileVisible implements Condition {
 
-    private Tile tile;
-    private Player attacker;
-
-    public IsTileVisible(Tile tile, Player attacker) {
-        this.tile = tile;
-        this.attacker = attacker;
-    }
-
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Targetable targetTile = targets.get("tile").get(0);

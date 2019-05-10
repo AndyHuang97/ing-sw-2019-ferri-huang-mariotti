@@ -56,6 +56,15 @@ public class BoardTest {
         }
         Assert.assertArrayEquals(expectedPos, pos);
 
+        expectedPos[0] = 1;
+        expectedPos[1] = 2;
+        try {
+            pos = board.getTilePosition(tileMap[1][2]);
+        } catch(TileNotFoundException e) {
+            Assert.fail("Tile not found.");
+        }
+        Assert.assertArrayEquals(expectedPos, pos);
+
     }
 
     @Test

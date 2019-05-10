@@ -4,7 +4,6 @@ import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
-import it.polimi.se2019.server.net.CommandHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -12,12 +11,12 @@ import java.util.logging.Logger;
 
 public class OneDirectionMovement implements Condition {
 
-    private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
-    private Tile initialPos, finalPos;
+    private static final Logger logger = Logger.getLogger(OneDirectionMovement.class.getName());
 
-    public OneDirectionMovement(Tile initialPos, Tile finalPos) {
-        this.initialPos = initialPos;
-        this.finalPos = finalPos;
+    private Integer amount;
+
+    public OneDirectionMovement(Integer amount) {
+        this.amount = amount;
     }
 
     @Override
@@ -25,7 +24,8 @@ public class OneDirectionMovement implements Condition {
         Tile targetTile = (Tile) targets.get("tile").get(0);
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
         boolean result = false;
-        if(game.getBoard().generateGraph().isReachable(attackerTile, targetTile, 2)) {
+
+        if(game.getBoard().generateGraph().isReachable(attackerTile,targetTile, amount)) {
             try {
                 int[] targetPos = game.getBoard().getTilePosition(targetTile);
                 int[] attackerPos = game.getBoard().getTilePosition(attackerTile);

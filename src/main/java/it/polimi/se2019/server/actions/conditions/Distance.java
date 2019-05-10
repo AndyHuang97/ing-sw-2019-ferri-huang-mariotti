@@ -24,7 +24,7 @@ public class Distance implements Condition {
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
         List<Targetable> tileList = targets.get("tileList");
         Tile targetTile = (Tile) tileList.get(0);
-        // TODO isRachable(...) method needs to be replaced by a method that computes the exact distance. It's more suitable for MaxDistance.
-        return game.getBoard().generateGraph().isReachable(attackerTile, targetTile, amount);
+
+        return amount.equals(game.getBoard().generateGraph().distance(attackerTile, targetTile));
     }
 }

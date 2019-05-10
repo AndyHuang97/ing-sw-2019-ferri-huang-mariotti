@@ -8,13 +8,13 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+public class MaxTargetListTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -55,8 +55,7 @@ public class DifferentTargetsInListTest {
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
         list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
+
     }
 
     @After
@@ -74,15 +73,22 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void testMaxTargetList() {
+        Condition condition = new MaxTargetList(3);
+        List<Targetable> targetList = new ArrayList<>();
+        targets.put("targetList", targetList);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        targetList.addAll(Arrays.asList(p2, p3, p4));
+        Assert.assertTrue(condition.check(game, targets));
+        targetList.clear();
+
+        targetList.addAll(Arrays.asList(p1, p2));
+        Assert.assertTrue(condition.check(game, targets));
+        targetList.clear();
+
+        condition = new MaxTargetList(2);
+        targetList.addAll(Arrays.asList(p1, p2, p3));
+        Assert.assertFalse(condition.check(game, targets));
+        targetList.clear();
     }
 }

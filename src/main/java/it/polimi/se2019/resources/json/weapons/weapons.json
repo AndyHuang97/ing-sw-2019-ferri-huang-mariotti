@@ -422,8 +422,8 @@
               }
             },
             {
-              "name": "Distance x2",
-              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "name": "Min Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
               "params": {
                 "amount": 2
               }
@@ -1164,7 +1164,6 @@
               "name": "Target List In Direction",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListInDirection",
               "params": {
-                "listSize": 2
               }
             }
           ]
@@ -1473,8 +1472,8 @@
               }
             },
             {
-              "name": "Target List Size x3",
-              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListSize",
+              "name": "Max List List x3",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxTargetList",
               "params": {
                 "amount": 3
               }
