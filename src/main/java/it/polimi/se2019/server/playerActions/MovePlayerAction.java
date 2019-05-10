@@ -36,9 +36,8 @@ public class MovePlayerAction extends PlayerAction {
 
     @Override
     public void run() {
-        /**
-         * Set new player position in game
-         */
+        Tile arrivalTile = moveList.get(-1);
+        getPlayer().getCharacterState().setTile(arrivalTile);
     }
 
     public Boolean check() {
