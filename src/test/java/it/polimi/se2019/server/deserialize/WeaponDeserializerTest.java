@@ -69,7 +69,7 @@ public class WeaponDeserializerTest {
             expectedWeapon.setOptionalEffectList(Arrays.asList());
             List<Effect> effectList = Arrays.asList(new DamageTarget( 2),
                     new MarkTarget(1));
-            List<Condition> conditionList = Arrays.asList(new IsTargetVisible(null, null),
+            List<Condition> conditionList = Arrays.asList(new IsTargetVisible(),
                     new Distance(2));
             expectedWeapon.setActionUnitList(Arrays.asList(
                     new ActionUnit(true, "Basic Mode", effectList,conditionList)));

@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.actions.conditions;
+package it.polimi.se2019.server.actions.effects;
 
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -10,22 +10,24 @@ import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+import static org.junit.Assert.*;
+
+public class DamageTargetTest {
 
     Tile tile;
     Tile[][] tileMap;
     Board board;
     Game game;
     Player p1, p2, p3, p4;
-    Map<String, List<Targetable>> targets = new HashMap<>();
+    Map<String, List<Targetable>> targets;
     List<Targetable> list;
 
     @Before
     public void setUp() {
+        targets = new HashMap<>();
         game = new Game();
         tileMap = new Tile[2][3];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
@@ -43,7 +45,6 @@ public class DifferentTargetsInListTest {
         board = new Board(tileMap);
         game.setBoard(board);
 
-
         p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
         p1.getCharacterState().setTile(tileMap[1][0]);
         p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
@@ -54,9 +55,6 @@ public class DifferentTargetsInListTest {
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
-        list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
     }
 
     @After
@@ -74,15 +72,19 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void testDamageTarget() {
+        Effect effect = new DamageTarget(2);
+        List<Targetable> target = new ArrayList<>();
+        targets.put("target", target);
+        game.setCurrentPlayer(p1);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        target.add(p2);
+        effect.run(game, targets);
+        assertEquals(0, p1.getCharacterState().getDamageBar().size());
+        assertEquals(2, p2.getCharacterState().getDamageBar().size());
+        assertEquals(0, p3.getCharacterState().getDamageBar().size());
+        assertEquals(0, p4.getCharacterState().getDamageBar().size());
+        p2.getCharacterState().getDamageBar().stream()
+                .forEach(pc -> assertEquals(PlayerColor.BLUE, pc));
     }
 }

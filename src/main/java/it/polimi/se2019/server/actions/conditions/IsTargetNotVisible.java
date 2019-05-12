@@ -12,7 +12,7 @@ public class IsTargetNotVisible implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        Player targetPlayer = (Player) targets.get("targetList").get(0);
+        Player targetPlayer = (Player) targets.get("target").get(0);
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
 
         return !attackerTile.getVisibleTargets(game).contains(targetPlayer);

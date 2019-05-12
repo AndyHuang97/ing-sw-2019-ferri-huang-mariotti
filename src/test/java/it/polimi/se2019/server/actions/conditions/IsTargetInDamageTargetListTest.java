@@ -8,13 +8,15 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+import static org.junit.Assert.*;
+
+public class IsTargetInDamageTargetListTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -53,10 +55,10 @@ public class DifferentTargetsInListTest {
         p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
+        game.setCurrentPlayer(p1);
 
         list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
+
     }
 
     @After
@@ -74,15 +76,36 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void testIsTargetInDamageTargetList() {
+        Condition condition = new IsTargetInDamageTargetList();
+        List<Targetable> damageTargetList = new ArrayList<>();
+        targets.put("damageTargetList", damageTargetList);
+        list.add(p2);
+        targets.put("target", list);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        damageTargetList.addAll(Arrays.asList(p2, p3,p4));
+        Assert.assertEquals(true, condition.check(game, targets));
+        damageTargetList.clear();
+
+        damageTargetList.addAll(Arrays.asList(p3,p4));
+        Assert.assertEquals(false, condition.check(game, targets));
+        damageTargetList.clear();
+    }
+
+    @Test
+    public void testIsTargetNotInDamageTargetList() {
+        Condition condition = new IsTargetNotInDamageTargetList();
+        List<Targetable> damageTargetList = new ArrayList<>();
+        targets.put("damageTargetList", damageTargetList);
+        list.add(p2);
+        targets.put("target", list);
+
+        damageTargetList.addAll(Arrays.asList(p2, p3,p4));
+        Assert.assertEquals(false, condition.check(game, targets));
+        damageTargetList.clear();
+
+        damageTargetList.addAll(Arrays.asList(p3,p4));
+        Assert.assertEquals(true, condition.check(game, targets));
+        damageTargetList.clear();
     }
 }

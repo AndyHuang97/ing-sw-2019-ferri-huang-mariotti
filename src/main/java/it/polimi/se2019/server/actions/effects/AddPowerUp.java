@@ -10,12 +10,6 @@ import java.util.Map;
 
 public class AddPowerUp implements Effect {
 
-    private Player player;
-
-    public AddPowerUp(Player player) {
-        this.player = player;
-    }
-
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
         Targetable powerUp = targets.get("powerUp").get(0);

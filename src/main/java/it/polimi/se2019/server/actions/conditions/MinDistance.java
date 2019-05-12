@@ -9,18 +9,16 @@ import java.util.Map;
 
 public class MinDistance implements Condition {
 
-    private Tile initialPos;
-    private  Tile finalPos;
     private Integer amount;
 
-    public MinDistance(Tile initialPos, Tile finalPos, Integer amount) {
-        this.initialPos = initialPos;
-        this.finalPos = finalPos;
+    public MinDistance(Integer amount) {
         this.amount = amount;
     }
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        return targets.get("targetList").size() > amount;
+        Tile initialTile = (Tile) targets.get("tileList").get(0);
+        Tile finalTile = (Tile) targets.get("tileList").get(1);
+        return game.getBoard().generateGraph().distance(initialTile, finalTile) >= amount;
     }
 }

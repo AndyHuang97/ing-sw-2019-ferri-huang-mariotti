@@ -31,8 +31,8 @@ public class Board {
     public int[] getTilePosition(Tile t) throws TileNotFoundException {
         int[] result = new int[2];
 
-        for (int xCoord = 0; xCoord < tileMap[0].length; xCoord++) {
-            for (int yCoord = 0; yCoord < tileMap.length; yCoord++) {
+        for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
+            for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
                 if (tileMap[xCoord][yCoord] == t) {
                     result[0] = xCoord;
                     result[1] = yCoord;
@@ -80,12 +80,13 @@ public class Board {
 
     @Override
     public String toString() {
+        StringBuilder bld = new StringBuilder();
         String str = "";
         for(Tile[] row : tileMap) {
             for(Tile t : row) {
-                str = str + t.toString()+" ";
+                bld.append(t.toString()+" ");
             }
-            str = str + "\n";
+            bld.append("\n");
         }
         return str;
     }

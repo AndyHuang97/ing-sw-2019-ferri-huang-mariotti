@@ -1,20 +1,24 @@
 package it.polimi.se2019.server.actions.conditions;
 
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+import static org.junit.Assert.*;
+
+public class HasAmmoTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -54,9 +58,6 @@ public class DifferentTargetsInListTest {
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
-        list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
     }
 
     @After
@@ -74,15 +75,26 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void testHasAmmo() {
+        Condition condition;
+        game.setCurrentPlayer(p1);
+        EnumMap<AmmoColor, Integer> ammoMap = new EnumMap<>(AmmoColor.class);
+        ammoMap.putIfAbsent(AmmoColor.BLUE, 3);
+        ammoMap.putIfAbsent(AmmoColor.RED, 3);
+        ammoMap.putIfAbsent(AmmoColor.YELLOW, 3);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        EnumMap<AmmoColor, Integer> ammoNeeded = new EnumMap<>(AmmoColor.class);
+        ammoNeeded.putIfAbsent(AmmoColor.BLUE, 1);
+        ammoNeeded.putIfAbsent(AmmoColor.RED, 1);
+        ammoNeeded.putIfAbsent(AmmoColor.YELLOW, 2);
+
+        p1.getCharacterState().setAmmoBag(ammoMap);
+        condition = new HasAmmo(ammoNeeded);
+        Assert.assertEquals(true, condition.check(game, targets));
+
+        p1.getCharacterState().setAmmoBag(ammoNeeded);
+        condition = new HasAmmo(ammoMap);
+        Assert.assertEquals(false, condition.check(game, targets));
+
     }
 }

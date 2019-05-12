@@ -8,16 +8,16 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddAmmo implements Effect {
+public class ConsumeAmmo implements Effect {
 
-    private EnumMap<AmmoColor, Integer> ammoToAdd;
+    private EnumMap<AmmoColor, Integer> ammoToConsume;
 
-    public AddAmmo(EnumMap<AmmoColor, Integer> ammoToAdd) {
-        this.ammoToAdd = ammoToAdd;
+    public ConsumeAmmo(EnumMap<AmmoColor, Integer> ammoToConsume) {
+        this.ammoToConsume = ammoToConsume;
     }
 
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
-        game.getCurrentPlayer().getCharacterState().addAmmo(ammoToAdd);
+        game.getCurrentPlayer().getCharacterState().consumeAmmo(ammoToConsume);
     }
 }

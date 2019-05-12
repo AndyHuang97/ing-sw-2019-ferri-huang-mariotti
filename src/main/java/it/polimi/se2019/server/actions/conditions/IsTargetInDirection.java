@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class IsTargetInDirection implements Condition {
-    private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
+    private static final Logger logger = Logger.getLogger(IsTargetInDirection.class.getName());
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();

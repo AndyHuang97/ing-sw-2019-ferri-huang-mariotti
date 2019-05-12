@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.actions.conditions;
 
+import it.polimi.se2019.server.actions.Direction;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
@@ -8,13 +9,13 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+public class IsTargetInDirectionTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -53,10 +54,9 @@ public class DifferentTargetsInListTest {
         p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
+        game.setCurrentPlayer(p1);
 
         list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
     }
 
     @After
@@ -74,15 +74,25 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void testIsTargetInDirection() {
+        Condition condition = new IsTargetInDirection();
+        List<Targetable> target = Arrays.asList(p2);
+        targets.put("target", target);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        List<Targetable> direction = Arrays.asList(Direction.SOUTH);
+        targets.put("direction", direction);
+        Assert.assertEquals(true, condition.check(game, targets));
+
+        direction = Arrays.asList(Direction.NORTH);
+        targets.put("direction", direction);
+        Assert.assertEquals(false, condition.check(game, targets));
+
+        direction = Arrays.asList(Direction.EAST);
+        targets.put("direction", direction);
+        Assert.assertEquals(false, condition.check(game, targets));
+
+        direction = Arrays.asList(Direction.WEST);
+        targets.put("direction", direction);
+        Assert.assertEquals(false, condition.check(game, targets));
     }
 }

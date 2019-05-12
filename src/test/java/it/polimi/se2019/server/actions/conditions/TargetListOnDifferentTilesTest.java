@@ -10,22 +10,23 @@ import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 import java.util.*;
 
-public class DifferentTargetsInListTest {
+import static org.junit.Assert.*;
 
+public class TargetListOnDifferentTilesTest {
     Tile tile;
     Tile[][] tileMap;
     Board board;
     Game game;
     Player p1, p2, p3, p4;
-    Map<String, List<Targetable>> targets = new HashMap<>();
+    Map<String, List<Targetable>> targets;
     List<Targetable> list;
 
     @Before
     public void setUp() {
+        targets = new HashMap<>();
         game = new Game();
         tileMap = new Tile[2][3];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
@@ -55,8 +56,7 @@ public class DifferentTargetsInListTest {
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
         list = new ArrayList<>();
-        list.add(tileMap[1][1]);
-        targets.put("tile", list);
+
     }
 
     @After
@@ -74,15 +74,30 @@ public class DifferentTargetsInListTest {
     }
 
     @Test
-    public void testDifferentTargets() {
-        List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put("targetList", testList1);
-        DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
-        Assert.assertEquals(true, testCheck1.check(game,targets));
+    public void testTargetListOnDifferentTiles() {
+        Condition condition = new TargetListOnDifferentTiles();
+        List<Targetable> targetList = new ArrayList<>();
+        targets.put("targetList", targetList);
 
-        List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put("targetList", testList2);
-        DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
-        Assert.assertEquals(false, testCheck2.check(game, targets));
+        targetList.addAll(Arrays.asList(p1));
+        assertTrue(condition.check(game, targets));
+        targetList.clear();
+
+        targetList.addAll(Arrays.asList(p1, p4));
+        assertTrue(condition.check(game, targets));
+        targetList.clear();
+
+        targetList.addAll(Arrays.asList(p1, p3, p4));
+        assertTrue(condition.check(game, targets));
+        targetList.clear();
+
+        p2.getCharacterState().setTile(tileMap[1][0]);
+        targetList.addAll(Arrays.asList(p1,p2));
+        assertFalse(condition.check(game, targets));
+        targetList.clear();
+
+        targetList.addAll(Arrays.asList(p1,p2, p3));
+        assertFalse(condition.check(game, targets));
+        targetList.clear();
     }
 }

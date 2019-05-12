@@ -9,18 +9,16 @@ import java.util.Map;
 
 public class MaxDistance implements Condition {
 
-    private Tile initialPos;
-    private Tile finalPos;
     private Integer amount;
 
-    public MaxDistance(Tile initialPos, Tile finalPos, Integer amount) {
-        this.initialPos = initialPos;
-        this.finalPos = finalPos;
+    public MaxDistance(Integer amount) {
         this.amount = amount;
     }
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        return false;
+        Tile initialTile = (Tile) targets.get("tileList").get(0);
+        Tile finalTile = (Tile) targets.get("tileList").get(1);
+        return game.getBoard().generateGraph().isReachable(initialTile, finalTile, amount);
     }
 }
