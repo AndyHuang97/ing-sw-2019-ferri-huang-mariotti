@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class HasAmmo implements Condition {
 
-    private EnumMap<AmmoColor, Integer> ammoNeeded;
+    private Map<AmmoColor, Integer> ammoNeeded;
 
     public HasAmmo(EnumMap<AmmoColor, Integer> ammoNeeded) {
         this.ammoNeeded = ammoNeeded;

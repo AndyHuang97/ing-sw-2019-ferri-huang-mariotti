@@ -1,8 +1,9 @@
-package it.polimi.se2019.server.actions.conditions;
+package it.polimi.se2019.server.actions.effects;
 
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -15,7 +16,8 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class TargetListOnDifferentTilesTest {
+public class AmmoTest {
+
     Tile tile;
     Tile[][] tileMap;
     Board board;
@@ -44,7 +46,6 @@ public class TargetListOnDifferentTilesTest {
         board = new Board(tileMap);
         game.setBoard(board);
 
-
         p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
         p1.getCharacterState().setTile(tileMap[1][0]);
         p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
@@ -54,8 +55,6 @@ public class TargetListOnDifferentTilesTest {
         p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
-
-        list = new ArrayList<>();
 
     }
 
@@ -74,30 +73,58 @@ public class TargetListOnDifferentTilesTest {
     }
 
     @Test
-    public void testTargetListOnDifferentTiles() {
-        Condition condition = new TargetListOnDifferentTiles();
-        List<Targetable> targetList = new ArrayList<>();
-        targets.put("targetList", targetList);
+    public void testAddAmmo() {
+        Effect effect;
+        game.setCurrentPlayer(p1);
+        EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
+        ammoBag.put(AmmoColor.BLUE, 0);
+        ammoBag.put(AmmoColor.RED, 0);
+        ammoBag.put(AmmoColor.YELLOW, 0);
+        p1.getCharacterState().setAmmoBag(ammoBag);
 
-        targetList.addAll(Arrays.asList(p1));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
+        EnumMap<AmmoColor, Integer> ammoToAdd = new EnumMap<>(AmmoColor.class);
+        ammoToAdd.put(AmmoColor.BLUE, 1);
+        ammoToAdd.put(AmmoColor.RED, 2);
+        ammoToAdd.put(AmmoColor.YELLOW, 3);
 
-        targetList.addAll(Arrays.asList(p1, p4));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
+        effect = new AddAmmo(ammoToAdd);
+        effect.run(game, null);
+        assertEquals(1, p1.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).intValue());
+        assertEquals(2, p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
+        assertEquals(3, p1.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).intValue());
 
-        targetList.addAll(Arrays.asList(p1, p3, p4));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
+        ammoToAdd.put(AmmoColor.BLUE, 4);
+        ammoToAdd.put(AmmoColor.RED, 4);
+        ammoToAdd.put(AmmoColor.YELLOW, 4);
 
-        p2.getCharacterState().setTile(tileMap[1][0]);
-        targetList.addAll(Arrays.asList(p1,p2));
-        assertFalse(condition.check(game, targets));
-        targetList.clear();
+        effect.run(game, null);
+        assertEquals(3, p1.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).intValue());
+        assertEquals(3, p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
+        assertEquals(3, p1.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).intValue());
 
-        targetList.addAll(Arrays.asList(p1,p2, p3));
-        assertFalse(condition.check(game, targets));
-        targetList.clear();
+    }
+
+    @Test
+    public void testConsumeAmmo() {
+        Effect effect;
+        game.setCurrentPlayer(p1);
+        EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
+        ammoBag.put(AmmoColor.BLUE, 3);
+        ammoBag.put(AmmoColor.RED, 3);
+        ammoBag.put(AmmoColor.YELLOW, 3);
+        p1.getCharacterState().setAmmoBag(ammoBag);
+
+        EnumMap<AmmoColor, Integer> ammoToConsume = new EnumMap<>(AmmoColor.class);
+        ammoToConsume.put(AmmoColor.BLUE, 1);
+        ammoToConsume.put(AmmoColor.RED, 2);
+        ammoToConsume.put(AmmoColor.YELLOW, 3);
+
+        effect = new ConsumeAmmo(ammoToConsume);
+        effect.run(game, null);
+        assertEquals(2, p1.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).intValue());
+        assertEquals(1, p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
+        assertEquals(0, p1.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).intValue());
+
+        // a consumption that makes an ammo color's valure negative is not possible for the conditions
     }
 }

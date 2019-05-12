@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.actions.conditions;
+package it.polimi.se2019.server.actions.effects;
 
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -15,7 +15,8 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class TargetListOnDifferentTilesTest {
+public class DamageRoomTest {
+
     Tile tile;
     Tile[][] tileMap;
     Board board;
@@ -44,7 +45,6 @@ public class TargetListOnDifferentTilesTest {
         board = new Board(tileMap);
         game.setBoard(board);
 
-
         p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
         p1.getCharacterState().setTile(tileMap[1][0]);
         p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
@@ -54,8 +54,6 @@ public class TargetListOnDifferentTilesTest {
         p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
-
-        list = new ArrayList<>();
 
     }
 
@@ -74,30 +72,31 @@ public class TargetListOnDifferentTilesTest {
     }
 
     @Test
-    public void testTargetListOnDifferentTiles() {
-        Condition condition = new TargetListOnDifferentTiles();
-        List<Targetable> targetList = new ArrayList<>();
-        targets.put("targetList", targetList);
+    public void testDamageRoom() {
+        Effect effect = new DamageRoom(1);
+        List<Targetable> tile = new ArrayList<>();
+        targets.put("tile", tile);
+        game.setCurrentPlayer(p4);
 
-        targetList.addAll(Arrays.asList(p1));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
+        tile.add(tileMap[1][0]);
+        effect.run(game, targets);
+        assertEquals(1, p1.getCharacterState().getDamageBar().size());
+        assertEquals(1, p2.getCharacterState().getDamageBar().size());
+        assertEquals(0, p3.getCharacterState().getDamageBar().size());
+        assertEquals(0, p4.getCharacterState().getDamageBar().size());
+        assertEquals(PlayerColor.GREY, p1.getCharacterState().getDamageBar().get(0));
+        assertEquals(PlayerColor.GREY, p2.getCharacterState().getDamageBar().get(0));
 
-        targetList.addAll(Arrays.asList(p1, p4));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
+        // player is inside the target room
+        game.setCurrentPlayer(p1);
+        p1.getCharacterState().resetDamageBar();
+        p2.getCharacterState().resetDamageBar();
+        effect.run(game, targets);
+        assertEquals(0, p1.getCharacterState().getDamageBar().size());
+        assertEquals(1, p2.getCharacterState().getDamageBar().size());
+        assertEquals(0, p3.getCharacterState().getDamageBar().size());
+        assertEquals(0, p4.getCharacterState().getDamageBar().size());
+        assertEquals(PlayerColor.BLUE, p2.getCharacterState().getDamageBar().get(0));
 
-        targetList.addAll(Arrays.asList(p1, p3, p4));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
-
-        p2.getCharacterState().setTile(tileMap[1][0]);
-        targetList.addAll(Arrays.asList(p1,p2));
-        assertFalse(condition.check(game, targets));
-        targetList.clear();
-
-        targetList.addAll(Arrays.asList(p1,p2, p3));
-        assertFalse(condition.check(game, targets));
-        targetList.clear();
     }
 }

@@ -1,5 +1,6 @@
-package it.polimi.se2019.server.actions.conditions;
+package it.polimi.se2019.server.actions.effects;
 
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
@@ -15,7 +16,8 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class TargetListOnDifferentTilesTest {
+public class AddPowerUpTest {
+
     Tile tile;
     Tile[][] tileMap;
     Board board;
@@ -44,7 +46,6 @@ public class TargetListOnDifferentTilesTest {
         board = new Board(tileMap);
         game.setBoard(board);
 
-
         p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
         p1.getCharacterState().setTile(tileMap[1][0]);
         p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
@@ -54,8 +55,6 @@ public class TargetListOnDifferentTilesTest {
         p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
-
-        list = new ArrayList<>();
 
     }
 
@@ -74,30 +73,18 @@ public class TargetListOnDifferentTilesTest {
     }
 
     @Test
-    public void testTargetListOnDifferentTiles() {
-        Condition condition = new TargetListOnDifferentTiles();
-        List<Targetable> targetList = new ArrayList<>();
-        targets.put("targetList", targetList);
+    public void testAddPowerUp() {
+        Effect effect = new AddPowerUp();
+        List<Targetable> powerUpList = new ArrayList<>();
+        targets.put("powerUp", powerUpList);
+        game.setCurrentPlayer(p1);
 
-        targetList.addAll(Arrays.asList(p1));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
+        PowerUp pu = new PowerUp(null);
+        powerUpList.add(pu);
 
-        targetList.addAll(Arrays.asList(p1, p4));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
-
-        targetList.addAll(Arrays.asList(p1, p3, p4));
-        assertTrue(condition.check(game, targets));
-        targetList.clear();
-
-        p2.getCharacterState().setTile(tileMap[1][0]);
-        targetList.addAll(Arrays.asList(p1,p2));
-        assertFalse(condition.check(game, targets));
-        targetList.clear();
-
-        targetList.addAll(Arrays.asList(p1,p2, p3));
-        assertFalse(condition.check(game, targets));
-        targetList.clear();
+        int oldSize = p1.getCharacterState().getPowerUpBag().size();
+        effect.run(game, targets);
+        assertTrue(p1.getCharacterState().getPowerUpBag().contains(pu));
+        assertEquals(oldSize+1, p1.getCharacterState().getPowerUpBag().size());
     }
 }

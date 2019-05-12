@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class CharacterState {
 
-	private List<PlayerColor> damageBar;
 	private CharacterValue characterValue;
+	private List<PlayerColor> damageBar;
 	private EnumMap<PlayerColor, Integer> markerBar;
 	private EnumMap<AmmoColor, Integer> ammoBag;
 	private List<Weapon> weapoonBag;
@@ -31,8 +31,8 @@ public class CharacterState {
 	public CharacterState() {
 		this.characterValue = CharacterValue.ZERODEATHS;
 		this.damageBar = new ArrayList<>();
-		this.markerBar = new EnumMap<>(PlayerColor.class);
-		this.ammoBag = new EnumMap<>(AmmoColor.class);
+		this.markerBar = initMarkerBar();
+		this.ammoBag = initAmmoBag();
 		this.weapoonBag = new ArrayList<>();
 		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
@@ -63,6 +63,14 @@ public class CharacterState {
 	}
 
 
+	public CharacterValue getCharacterValue() {
+		return characterValue;
+	}
+
+	public void setCharacterValue(CharacterValue characterValue) {
+		this.characterValue = characterValue;
+	}
+
 	/**
 	 * @return damageBar
 	 */
@@ -90,12 +98,15 @@ public class CharacterState {
 		damageBar.clear();
 	}
 
-	public CharacterValue getCharacterValue() {
-		return characterValue;
-	}
+	public EnumMap<PlayerColor, Integer> initMarkerBar() {
+		EnumMap<PlayerColor, Integer> markerBar = new EnumMap<>(PlayerColor.class);
+		markerBar.put(PlayerColor.BLUE, 0);
+		markerBar.put(PlayerColor.GREEN, 0);
+		markerBar.put(PlayerColor.GREY, 0);
+		markerBar.put(PlayerColor.PURPLE, 0);
+		markerBar.put(PlayerColor.YELLOW, 0);
 
-	public void setCharacterValue(CharacterValue characterValue) {
-		this.characterValue = characterValue;
+		return markerBar;
 	}
 
 	/**
@@ -114,11 +125,15 @@ public class CharacterState {
 
 	public void addMarker(PlayerColor playerColor, Integer amount) {
 
-		if(markerBar.get(playerColor) + amount > 3) {
-			markerBar.put(playerColor, 3);
+		if (!markerBar.containsKey(playerColor)){
+			markerBar.put(playerColor, amount);
 		}
 		else {
-			markerBar.put(playerColor, markerBar.get(playerColor) + amount);
+			if (markerBar.get(playerColor) + amount > 3) {
+				markerBar.put(playerColor, 3);
+			} else {
+				markerBar.put(playerColor, markerBar.get(playerColor) + amount);
+			}
 		}
 	}
 
@@ -126,28 +141,62 @@ public class CharacterState {
 		markerBar.clear();
 	}
 
+	/**
+	 * This method initializes the ammoBag by creating a new instance and setting the values of all keys to 0.
+	 * @return the newly created ammoBag.
+	 */
+	public EnumMap<AmmoColor, Integer> initAmmoBag() {
+		EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
+		ammoBag.put(AmmoColor.BLUE, 0);
+		ammoBag.put(AmmoColor.RED, 0);
+		ammoBag.put(AmmoColor.YELLOW, 0);
+
+		return ammoBag;
+	}
+
+	/**
+	 * This method returns the player's ammoBag.
+	 * @return player's ammoBag.
+	 */
 	public EnumMap<AmmoColor, Integer> getAmmoBag() {
 		return ammoBag;
 	}
 
+	/**
+	 * This method sets a new reference for the ammoBag.
+	 * @param ammoBag is the new ammoBag.
+	 */
 	public void setAmmoBag(EnumMap<AmmoColor, Integer> ammoBag) {
 		this.ammoBag = ammoBag;
 	}
 
+	/**
+	 * The addAmmo method adds a certain amount of new ammo to the ammoBag;
+	 * it keeps an ammo color's max value to 3.
+	 * @param ammoToAdd is a map containing the amount of each ammo color to add to the player's ammoBag.
+	 */
+	public void addAmmo(EnumMap<AmmoColor, Integer> ammoToAdd) {
+		ammoToAdd.keySet().stream()
+				.forEach(k -> {
+					if (ammoBag.get(k) + ammoToAdd.get(k) > 3) {
+						ammoBag.put(k, 3);
+					} else {
+						ammoBag.put(k, ammoBag.get(k) + ammoToAdd.get(k));
+					}
+				});
+	}
 
 	/**
-	 * Updates the ammoColor's value in the ammoBag.
-	 * @param ammoColor is the ammocrate type to be updated.
-	 * @param amount is a either negative or positive.
+	 * The consumeAmmo method consumes a certain amount of ammo from the ammoBag;
+	 * it keeps an ammo color's max value to 0.
+	 * @param ammoToConsume is a map containing the amount of each ammo color to consume from the player's ammoBag.
 	 */
-	public void updateAmmoBag(AmmoColor ammoColor, Integer amount) {
-
-		if(ammoBag.get(ammoColor) + amount > 3) {
-			ammoBag.put(ammoColor, 3);
-		} else {
-			ammoBag.put(ammoColor, ammoBag.get(ammoColor) + amount);
-		}
+	public void consumeAmmo(EnumMap<AmmoColor, Integer> ammoToConsume) {
+		ammoToConsume.keySet().stream()
+				.forEach(k -> ammoBag.put(k, ammoBag.get(k) - ammoToConsume.get(k)));
 	}
+
+
 	/**
 	 * @return tile
 	 */
@@ -186,6 +235,7 @@ public class CharacterState {
 	public List<Weapon> getWeapoonBag() {
 		return weapoonBag;
 	}
+
 	public void addWeapon(Weapon weapon) {
 		weapoonBag.add(weapon);
 	}

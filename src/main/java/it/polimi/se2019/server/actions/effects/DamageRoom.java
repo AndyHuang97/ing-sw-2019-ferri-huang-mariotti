@@ -14,6 +14,10 @@ public class DamageRoom implements Effect {
 
     private Integer amount;
 
+    public DamageRoom(Integer amount) {
+        this.amount = amount;
+    }
+
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
         Tile tile = (Tile) targets.get("tile").get(0);
