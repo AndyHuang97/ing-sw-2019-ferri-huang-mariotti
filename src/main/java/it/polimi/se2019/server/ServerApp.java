@@ -16,7 +16,7 @@ public class ServerApp {
     private static final Logger logger = Logger.getLogger(ServerApp.class.getName());
     private static SocketServer socketServer;
     private static RmiServer rmiServer;
-    public static final GameManager gameManager = new GameManager();
+    public static GameManager gameManager = new GameManager();
 
     public static void main(String[] args) throws IOException {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %5$s%6$s%n");
