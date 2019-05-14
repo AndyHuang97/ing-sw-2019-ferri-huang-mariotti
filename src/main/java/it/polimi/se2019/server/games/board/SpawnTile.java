@@ -20,8 +20,4 @@ public class SpawnTile extends Tile {
     public void setWeaponCrate(List<Weapon> weaponCrate) {
         this.weaponCrate = weaponCrate;
     }
-
-
-
-
 }

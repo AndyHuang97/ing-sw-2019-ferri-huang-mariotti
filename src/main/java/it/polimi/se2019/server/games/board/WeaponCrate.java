@@ -4,9 +4,7 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 
 import java.util.*;
 
-/**
- * 
- */
+@Deprecated
 public class WeaponCrate {
 
 	private List<Weapon> weaponList;
