@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.board.Board;
@@ -22,6 +23,7 @@ public class Game extends Observable implements Serializable {
 	private Integer killshotTrack;
 	private List<Weapon> weaponDeck;
 	private List<PowerUp> powerupDeck;
+	private List<ActionUnit> currentActionUnitsList;
 
 	public Game() {
 		this.id = "";
@@ -131,4 +133,11 @@ public class Game extends Observable implements Serializable {
 		this.powerupDeck = powerupDeck;
 	}
 
+	public List<ActionUnit> getCurrentActionUnitsList() {
+		return currentActionUnitsList;
+	}
+
+	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
+		this.currentActionUnitsList = currentActionUnitsList;
+	}
 }

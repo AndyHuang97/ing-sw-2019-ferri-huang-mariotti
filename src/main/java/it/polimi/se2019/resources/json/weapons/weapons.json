@@ -7,7 +7,7 @@
       "reloadCost": ["BLUE", "BLUE"],
       "actions": [
         {
-          "name": "Basic Effect",
+          "name": "Basic Mode",
           "available": true,
           "effectList": [
             {
@@ -22,12 +22,6 @@
               "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
               "params": {
                 "amount": 1
-              }
-            },
-            {
-              "name": "Activate actionUnit",
-              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
-              "params": {
               }
             }
           ],
@@ -80,6 +74,7 @@
               "name" : "Executed Action Units",
               "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
               "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ]
@@ -155,6 +150,13 @@
                   "YELLOW": 1
                 }
               }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
+              }
             }
           ]
         },
@@ -190,6 +192,13 @@
                 "ammoNeeded": {
                   "BLUE": 1
                 }
+              }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ]
@@ -265,6 +274,13 @@
                   "BLUE": 1
                 }
               }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode", "Chain Reaction Effect"]
+              }
             }
           ]
         },
@@ -300,6 +316,13 @@
                 "ammoNeeded": {
                   "BLUE": 1
                 }
+              }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ]
@@ -389,6 +412,13 @@
                 "ammoNeeded": {
                   "BLUE": 1
                 }
+              }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ]
@@ -685,6 +715,13 @@
                 "ammoNeeded": {
                   "RED": 1
                 }
+              }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ]
@@ -1114,6 +1151,13 @@
                   "YELLOW": 1
                 }
               }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
+              }
             }
           ]
         }
@@ -1249,6 +1293,13 @@
                 "ammoNeeded": {
                   "YELLOW": 1
                 }
+              }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ]
