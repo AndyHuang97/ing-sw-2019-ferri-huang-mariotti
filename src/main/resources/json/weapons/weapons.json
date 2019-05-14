@@ -98,12 +98,6 @@
               "params": {
                 "amount": 1
               }
-            },
-            {
-              "name": "Activate actionUnit",
-              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
-              "params": {
-              }
             }
           ],
           "conditionList": [
@@ -126,12 +120,6 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 1
-              }
-            },
-            {
-              "name": "Activate actionUnit",
-              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
-              "params": {
               }
             }
           ],
@@ -222,12 +210,6 @@
               "params": {
                 "amount": 2
               }
-            },
-            {
-              "name": "Activate actionUnit",
-              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
-              "params": {
-              }
             }
           ],
           "conditionList": [
@@ -250,12 +232,6 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 1
-              }
-            },
-            {
-              "name": "Activate actionUnit",
-              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
-              "params": {
               }
             }
           ],
@@ -345,12 +321,6 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 2
-              }
-            },
-            {
-              "name": "Activate actionUnit",
-              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
-              "params": {
               }
             }
           ],
@@ -1109,12 +1079,6 @@
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
                 "amount": 2
-              }
-            },
-            {
-              "name": "Activate actionUnit",
-              "class_name": "it.polimi.se2019.server.actions.effects.ActivateActionUnit",
-              "params": {
               }
             }
           ],

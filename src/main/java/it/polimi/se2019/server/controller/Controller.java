@@ -23,7 +23,6 @@ public class Controller implements Observer<PlayerAction> {
          * Create an Action object by parsing the messageType and params list from
          * the array, then run the action
          */
-
     }
 
     public void applyAction(PlayerAction action){

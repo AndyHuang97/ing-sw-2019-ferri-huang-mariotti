@@ -2,22 +2,25 @@ package it.polimi.se2019.util;
 
 import it.polimi.se2019.server.games.Targetable;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Message {
-    private String messageType;
-    private List<Targetable> params;
+    /**
+     * TODO: implement composition of PlayerActions
+     * String messageType, List<Targetable>
+     */
 
-    public List getParams() {
-        return params;
+    private Map<String, List<Targetable>> commands;
+    //private String messageType;
+    //private List<Targetable> params;
+
+    public List<Targetable> getCommandParams(String commandName) {
+        return commands.get(commandName);
     }
 
-    public String getMessageType() {
-        return messageType;
-    }
-
-    @Override
-    public String toString() {
-        return messageType + params.toString();
+    public Map<String, List<Targetable>> getCommands() {
+        return commands;
     }
 }
