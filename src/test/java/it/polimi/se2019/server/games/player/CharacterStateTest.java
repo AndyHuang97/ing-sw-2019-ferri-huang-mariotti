@@ -3,6 +3,7 @@ package it.polimi.se2019.server.games.player;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.LinkType;
 import it.polimi.se2019.server.games.board.NormalTile;
+import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
 import org.junit.After;
 import org.junit.Assert;
@@ -67,7 +68,7 @@ public class CharacterStateTest {
 
     @Test
     public void testSetTile() {
-        Tile newTile = new NormalTile("RED", new LinkType[4], null);
+        Tile newTile = new NormalTile(RoomColor.RED, new LinkType[4], null);
 
         characterState.setTile(newTile);
 

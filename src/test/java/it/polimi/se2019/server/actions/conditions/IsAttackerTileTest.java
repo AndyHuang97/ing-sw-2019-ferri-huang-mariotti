@@ -1,40 +1,98 @@
 package it.polimi.se2019.server.actions.conditions;
 
-import it.polimi.se2019.server.games.board.NormalTile;
-import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.Targetable;
+import it.polimi.se2019.server.games.board.*;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.*;
 
 public class IsAttackerTileTest {
 
-    Player player;
-    NormalTile tile1;
-    NormalTile tile2;
+    Tile tile;
+    Tile[][] tileMap;
+    Board board;
+    Game game;
+    Player p1, p2, p3, p4;
+    Map<String, List<Targetable>> targets = new HashMap<>();
+    List<Targetable> list;
 
     @Before
-    public void setUp() throws Exception {
-        tile1 = new NormalTile(null, null, null);
-        tile2 = new NormalTile(null, null, null);
-        CharacterState state = new CharacterState(null, null, null, null, tile1, null);
-        player = new Player(false, null, state, PlayerColor.BLUE);
+    public void setUp() {
+        game = new Game();
+        tileMap = new Tile[2][3];
+        LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
+        tileMap[0][0] = new NormalTile(RoomColor.RED, links00, null);
+        LinkType[] links01 = {LinkType.DOOR, LinkType.DOOR, LinkType.OPEN, LinkType.WALL};
+        tileMap[0][1] = new NormalTile(RoomColor.YELLOW, links01, null);
+        LinkType[] links10 = {LinkType.WALL, LinkType.WALL, LinkType.OPEN, LinkType.DOOR};
+        tileMap[1][0] = new NormalTile(RoomColor.BLUE, links10, null);
+        LinkType[] links11 = {LinkType.OPEN, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
+        tileMap[1][1] = new NormalTile(RoomColor.BLUE, links11, null);
+        LinkType[] links02 = {LinkType.OPEN, LinkType.DOOR, LinkType.WALL, LinkType.WALL};
+        tileMap[0][2] = new NormalTile(RoomColor.YELLOW, links02, null);
+        LinkType[] links12 = {LinkType.WALL, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
+        tileMap[1][2] = new NormalTile(RoomColor.WHITE, links12, null);
+        board = new Board(tileMap);
+        game.setBoard(board);
+
+
+        p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
+        p1.getCharacterState().setTile(tileMap[1][0]);
+        p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
+        p2.getCharacterState().setTile(tileMap[1][1]);
+        p3 = new Player(true, new UserData("C"), new CharacterState(), PlayerColor.YELLOW);
+        p3.getCharacterState().setTile(tileMap[1][2]);
+        p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
+        p4.getCharacterState().setTile(tileMap[0][1]);
+        game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
+
+        list = new ArrayList<>();
+
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
+        tile = null;
+        tileMap = null;
+        board = null;
+        game = null;
+        p1 = null;
+        p2 = null;
+        p3 =null;
+        p4 = null;
+        targets = null;
+        list = null;
     }
 
     @Test
     public void testAttackerTile() {
-        IsAttackerTile testCheck1 = new IsAttackerTile(tile1, player);
-        Assert.assertEquals(testCheck1.check(), true);
-        IsAttackerTile testCheck2 = new IsAttackerTile(tile2, player);
-        Assert.assertEquals(testCheck2.check(), false);
+        Condition condition = new IsAttackerTile();
+        list.add(tileMap[0][1]);
+        targets.put("tile", list);
+
+        game.setCurrentPlayer(p4);
+        Assert.assertEquals(true, condition.check(game, targets));
+        game.setCurrentPlayer(p3);
+        Assert.assertEquals(false, condition.check(game, targets));
+    }
+
+    @Test
+    public void testNotAttackerTile() {
+        Condition condition = new IsNotAttackerTile();
+        list.add(tileMap[0][1]);
+        targets.put("tile", list);
+
+        game.setCurrentPlayer(p3);
+        Assert.assertEquals(true, condition.check(game, targets));
+        game.setCurrentPlayer(p4);
+        Assert.assertEquals(false, condition.check(game, targets));
     }
 }

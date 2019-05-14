@@ -1,0 +1,8 @@
+La directory src/main/java/it/polimi/se2019/resources/json contiene i files json utilizzati per carcare i dati del gioco.
+
+ * ammocrates: Contiene i dati per inizializzare oggetti AmmoCrate. Si tratta di un array json, ogni elemento definisce una carta, all'interno della carta sono presenti tutti i parametri necessari alla deserializzazione dell'oggetto da file.
+ * maps: In maps sono contenuti i file json che definiscono la struttura delle quattro mappe possibili. Ogni mappa contiene una serie di tiles, che sono deseriallizzate e collegate tra loro da una apposita classe. Insieme vanno a formare un oggetto Board.
+ * powerups: In powerups sono contenuti i dati necessari per inizializzare oggetti PowerUp.
+ * weapons: Dati per caricare oggetti di tipo Weapon, in ogni weapon sono contenuti una serie di oggetti ActionUnit (rappresentano una coppia effetto/azione).
+
+La struttura dei vari json è piuttosto simile. Le informazioni fondamentali contenute nei files sono: il nome della classe (utilizzato per la reflection) ed i parametri per costruire l'oggetto)

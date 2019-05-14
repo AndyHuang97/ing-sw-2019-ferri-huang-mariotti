@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.graphs;
 
+import java.util.Objects;
+
 public class Vertex<T> {
     private T content;
 
@@ -17,18 +19,23 @@ public class Vertex<T> {
             return true;
         }
 
-        if (!(o instanceof Vertex)) {
+        if (o == null) {
+            return false;
+        }
+
+        if (getClass() != o.getClass()) {
             return false;
         }
 
         Vertex<T> objectToCompare = (Vertex<T>) o;
 
-        return objectToCompare.getContent() == this.getContent();
+        return Objects.equals(objectToCompare.getContent(), this.getContent())
+                && Objects.equals(this.getContent(), objectToCompare.getContent());
     }
 
     // TODO: implement hashCode :(
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(content);
     }
 }

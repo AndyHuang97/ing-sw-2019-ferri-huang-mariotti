@@ -1,13 +1,14 @@
 package it.polimi.se2019.server.cards;
 
 import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.games.Targetable;
 
 import java.util.List;
 
 /**
  * 
  */
-public abstract class Card {
+public abstract class Card implements Targetable {
 
 	private List<ActionUnit> actionUnitList;
 

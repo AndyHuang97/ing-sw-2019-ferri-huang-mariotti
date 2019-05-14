@@ -8,8 +8,13 @@ import it.polimi.se2019.server.actions.conditions.Condition;
 import it.polimi.se2019.server.actions.effects.Effect;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
+
+    private static final Logger logger = Logger.getLogger(ActionUnitDeserializer.class.getName());
+
     @Override
     public ActionUnit deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
@@ -22,8 +27,8 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
         ConditionDeserializer conditionDeserializer = (ConditionDeserializer) deserializerFactory.getDeserializer("conditions");
         EffectDeserializer effectDeserializer = (EffectDeserializer) deserializerFactory.getDeserializer("effects");
 
-        ArrayList<Effect> effectArrayList = new ArrayList<Effect>();
-        ArrayList<Condition> conditionArrayList = new ArrayList<Condition>();
+        List<Effect> effectArrayList = new ArrayList<>();
+        List<Condition> conditionArrayList = new ArrayList<>();
 
         for (JsonElement effect : jsonEffectArray) {
             JsonObject jsonEffect = effect.getAsJsonObject();
@@ -33,6 +38,7 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
             try {
                 effectObject = effectDeserializer.deserialize(jsonEffect, deserializerFactory);
             } catch (ClassNotFoundException e) {
+                logger.warning("Class not found.");
                 throw e;
             }
 
@@ -46,6 +52,7 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
             try {
                 conditionObject = conditionDeserializer.deserialize(jsonCondition, deserializerFactory);
             } catch (ClassNotFoundException e) {
+                logger.warning("Class not found.");
                 throw e;
             }
 

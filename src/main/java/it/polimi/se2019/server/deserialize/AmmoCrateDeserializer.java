@@ -9,8 +9,11 @@ import it.polimi.se2019.server.games.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class AmmoCrateDeserializer implements RandomDeserializer {
+
+    private static final Logger logger = Logger.getLogger(AmmoCrateDeserializer.class.getName());
 
     @Override
     public Deck deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
@@ -30,6 +33,7 @@ public class AmmoCrateDeserializer implements RandomDeserializer {
             try {
                 actions = actionDeserializer.deserialize(jsonAmmoCrate, deserializerFactory);
             } catch (ClassNotFoundException e) {
+                logger.warning("Class not found.");
                 throw e;
             }
 
@@ -37,8 +41,6 @@ public class AmmoCrateDeserializer implements RandomDeserializer {
             ammoCrateList.add(ammoCrate);
         }
 
-        Deck deck = new Deck(ammoCrateList);
-
-        return deck;
+        return new Deck(ammoCrateList);
     }
 }

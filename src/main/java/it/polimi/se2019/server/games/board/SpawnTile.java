@@ -8,7 +8,7 @@ public class SpawnTile extends Tile {
 
     private List<Weapon> weaponCrate;
 
-    public SpawnTile(String color, LinkType[] links, List<Weapon> weaponCrate) {
+    public SpawnTile(RoomColor color, LinkType[] links, List<Weapon> weaponCrate) {
         super(color, links);
         this.weaponCrate = weaponCrate;
     }
@@ -20,8 +20,4 @@ public class SpawnTile extends Tile {
     public void setWeaponCrate(List<Weapon> weaponCrate) {
         this.weaponCrate = weaponCrate;
     }
-
-
-
-
 }

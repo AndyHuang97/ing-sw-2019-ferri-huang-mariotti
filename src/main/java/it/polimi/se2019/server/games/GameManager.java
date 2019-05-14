@@ -18,11 +18,16 @@ public class GameManager {
 
 	public void init(String dumpName) {
 		this.dumpName = dumpName;
+
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(dumpName));
+			BufferedReader br  = new BufferedReader(new FileReader(dumpName));
 			//Read JSON file
-			Gson gson = new Gson();
-			this.gameList = Arrays.asList(gson.fromJson(br, Game[].class));
+			try {
+				Gson gson = new Gson();
+				this.gameList = Arrays.asList(gson.fromJson(br, Game[].class));
+			} finally {
+				br.close();
+			}
 		} catch (IOException e) {
 			logger.info("Error while loading gamefile, skip loading saved games!");
 		}
@@ -33,9 +38,13 @@ public class GameManager {
 		try {
 			FileWriter writer = new FileWriter(this.dumpName);
 			// Write file
-			Gson gson = new Gson();
-			writer.write(gson.toJson(gameList.toArray()));
-			writer.close();
+			try {
+				Gson gson = new Gson();
+				writer.write(gson.toJson(gameList.toArray()));
+			} finally {
+				writer.close();
+			}
+
 		} catch (IOException e) {
 			logger.info("Error while loading gamefile, skip loading saved games!");
 		}

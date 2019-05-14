@@ -3,13 +3,14 @@ package it.polimi.se2019.server.actions;
 import it.polimi.se2019.server.Transaction;
 import it.polimi.se2019.server.actions.conditions.Condition;
 import it.polimi.se2019.server.actions.effects.Effect;
+import it.polimi.se2019.server.games.Targetable;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 
  */
-public class ActionUnit {
+public class ActionUnit implements Targetable {
 
 	private boolean available;
 	private String name;

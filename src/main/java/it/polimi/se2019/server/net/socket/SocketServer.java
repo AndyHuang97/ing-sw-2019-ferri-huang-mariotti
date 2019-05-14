@@ -22,7 +22,7 @@ public class SocketServer {
 
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        while (true) {
+        while (!serverSocket.isClosed()) {
             new ClientHandler(serverSocket.accept()).start();
         }
     }

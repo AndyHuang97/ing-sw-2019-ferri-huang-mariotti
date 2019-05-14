@@ -14178,7 +14178,7 @@
 											"top": 454,
 											"width": 229.42333984375,
 											"height": 13,
-											"text": "-view: View",
+											"text": "-virtualView: View",
 											"horizontalAlignment": 0
 										},
 										{
@@ -19501,7 +19501,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp5+uhLBvUsdk="
 							},
-							"nickname": "view",
+							"nickname": "virtualView",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFp5+SS6xfpirQ="

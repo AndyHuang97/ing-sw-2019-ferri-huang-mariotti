@@ -2,18 +2,22 @@ package it.polimi.se2019.server.games.board;
 
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * 
  */
-public abstract class Tile {
+public abstract class Tile implements Targetable {
 
-	private String color;
+	private static final Logger logger = Logger.getLogger(Tile.class.getName());
+
+	private RoomColor color;
 	private LinkType[] links;
 
 	/**
@@ -22,16 +26,16 @@ public abstract class Tile {
 	 * @param links is an array with 4 cells: 0 - north, 1 - south, 2 - east, 3 - west.
 	 */
 
-	public Tile(String color, LinkType[] links) {
+	public Tile(RoomColor color, LinkType[] links) {
 		this.color = color;
 		this.links = links;
 	}
 
-	public String getColor() {
+	public RoomColor getColor() {
 		return color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(RoomColor color) {
 		this.color = color;
 	}
 
@@ -73,7 +77,6 @@ public abstract class Tile {
 		Tile tile;
 
 		visibleTiles.addAll(getRoom(board));
-
 		try {
             pos = board.getTilePosition(this);
             for(int i = 0; i < 4; i++) {
@@ -90,7 +93,6 @@ public abstract class Tile {
                             break;
                         case 3:
                             tile = board.getTile(pos[0]-1, pos[1]);
-
                             break;
                         default:
                             tile = null;
@@ -103,10 +105,21 @@ public abstract class Tile {
             }
 
         } catch(TileNotFoundException e) {
-
+			logger.warning("Tile not found.");
         }
 
 		return visibleTiles;
+	}
+
+	public List<Player> getVisibleTargets(Game game) {
+		List<Player> visibleTargets;
+		List<Tile> visibleTiles = getVisibleTiles(game.getBoard());
+
+		visibleTargets = game.getPlayerList().stream()
+				.filter(p -> visibleTiles.contains(p.getCharacterState().getTile())
+						&& p.getCharacterState().getTile() != this)
+				.collect(Collectors.toList());
+		return visibleTargets;
 	}
 
 	public List<Player> getPlayers(Game game) {
@@ -135,6 +148,6 @@ public abstract class Tile {
 
 	@Override
 	public String toString() {
-		return color.substring(0,1).toUpperCase();
+		return color.getColor();
 	}
 }

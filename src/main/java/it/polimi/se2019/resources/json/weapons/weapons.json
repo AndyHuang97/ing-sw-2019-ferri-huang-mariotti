@@ -71,8 +71,15 @@
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "RED",
-                "amount": 1
+                "ammoNeeded": {
+                  "RED": 1
+                }
+              }
+            },
+            {
+              "name" : "Executed Action Units",
+              "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
+              "params": {
               }
             }
           ]
@@ -144,8 +151,9 @@
               "name": "Has 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "YELLOW",
-                "ampunt": 1
+                "ammoNeeded": {
+                  "YELLOW": 1
+                }
               }
             }
           ]
@@ -179,8 +187,9 @@
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "BLUE",
-                "ampunt": 1
+                "ammoNeeded": {
+                  "BLUE": 1
+                }
               }
             }
           ]
@@ -252,8 +261,9 @@
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "BLUE",
-                "ampunt": 1
+                "ammoNeeded": {
+                  "BLUE": 1
+                }
               }
             }
           ]
@@ -287,8 +297,9 @@
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "BLUE",
-                "ampunt": 1
+                "ammoNeeded": {
+                  "BLUE": 1
+                }
               }
             }
           ]
@@ -375,8 +386,9 @@
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "BLUE",
-                "ampunt": 1
+                "ammoNeeded": {
+                  "BLUE": 1
+                }
               }
             }
           ]
@@ -416,8 +428,8 @@
               }
             },
             {
-              "name": "Distance x2",
-              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "name": "Min Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
               "params": {
                 "amount": 2
               }
@@ -449,8 +461,8 @@
           ],
           "conditionList": [
             {
-              "name": "Player in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "name": "Attacker in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
               }
             }
@@ -470,31 +482,25 @@
           ],
           "conditionList": [
             {
-              "name": "Player in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerInTile",
+              "name": "Attacker in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
               }
             },
             {
-              "name": "Has 1 Blue Ammo",
+              "name": "Has 1 Blue and 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "BLUE",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Has 1 Red Ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
-              "params": {
-                "ammoColor": "RED",
-                "amount": 1
+                "ammoNeeded": {
+                  "BLUE": 1,
+                  "RED": 1
+                }
               }
             }
           ]
         }
       ],
-      "optionEffectList": [],
+      "optionalEffectList": [],
       "image": ""
     },
     {
@@ -570,25 +576,19 @@
               }
             },
             {
-              "name": "Has 1 Red Ammo",
+              "name": "Has 1 Red and 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "RED",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Has 1 Yellow Ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
-              "params": {
-                "ammoColor": "YELLOW",
-                "amount": 1
+                "ammoNeeded": {
+                  "RED": 1,
+                  "YELLOW": 1
+                }
               }
             }
           ]
         }
       ],
-      "optionEffectList": [],
+      "optionalEffectList": [],
       "image": ""
     },
     {
@@ -638,7 +638,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
         {
           "name": "Black Hole",
           "available": false,
@@ -682,8 +682,9 @@
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "RED",
-                "amount": 1
+                "ammoNeeded": {
+                  "RED": 1
+                }
               }
             }
           ]
@@ -754,7 +755,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -779,14 +780,14 @@
           "conditionList": [
             {
               "name": "Target Not Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsPlayerNotVisible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotVisible",
               "params": {
               }
             }
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -856,14 +857,15 @@
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "RED",
-                "amount": 1
+                "ammoNeeded": {
+                  "RED": 1
+                }
               }
             }
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -938,14 +940,15 @@
               "name": "Has 2 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "YELLOW",
-                "amount": 2
+                "ammoNeeded": {
+                  "YELLOW": 2
+                }
               }
             }
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -984,7 +987,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
         {
           "name": "Extra Grenade Effect",
           "available": true,
@@ -1008,8 +1011,9 @@
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "RED",
-                "amount": 1
+                "ammoNeeded": {
+                  "RED": 1
+                }
               }
             }
           ]
@@ -1058,7 +1062,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
         {
           "name": "Rocket Jump Effect",
           "available": true,
@@ -1082,8 +1086,9 @@
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "BLUE",
-                "amount": 1
+                "ammoNeeded": {
+                  "BLUE": 1
+                }
               }
             }
           ]
@@ -1105,8 +1110,9 @@
               "name": "Has 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "YELLOW",
-                "amount": 1
+                "ammoNeeded": {
+                  "YELLOW": 1
+                }
               }
             }
           ]
@@ -1158,13 +1164,12 @@
               "name": "Target List In Direction",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListInDirection",
               "params": {
-                "listSize": 2
               }
             }
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -1196,7 +1201,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
         {
           "name": "Shadowstep Effect",
           "available": true,
@@ -1241,8 +1246,9 @@
               "name": "Has 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "YELLOW",
-                "amount": 1
+                "ammoNeeded": {
+                  "YELLOW": 1
+                }
               }
             }
           ]
@@ -1306,7 +1312,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -1367,7 +1373,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -1436,7 +1442,7 @@
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -1467,8 +1473,8 @@
               }
             },
             {
-              "name": "Target List Size x3",
-              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListSize",
+              "name": "Max List List x3",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxTargetList",
               "params": {
                 "amount": 3
               }
@@ -1505,14 +1511,15 @@
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
-                "ammoColor": "RED",
-                "amount": 1
+                "ammoNeeded": {
+                  "RED": 1
+                }
               }
             }
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     },
@@ -1577,15 +1584,15 @@
               }
             },
             {
-              "name": "Unidirectional",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "name": "One direction movement",
+              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
               "params": {
               }
             }
           ]
         }
       ],
-      "optionEffectList": [
+      "optionalEffectList": [
       ],
       "image": ""
     }
