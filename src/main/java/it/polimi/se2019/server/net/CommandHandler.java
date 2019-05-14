@@ -15,6 +15,7 @@ public class CommandHandler {
         String nickname = request.getNickname();
         logger.info(message.toString());
         logger.info(nickname);
+        // here it needs to parse the message!
         ServerApp.gameManager.dumpToFile();
         return new Response(new Game(), true, "ciao");
     }
