@@ -3,6 +3,7 @@ package it.polimi.se2019.server.games;
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -108,6 +109,16 @@ public class Game extends Observable implements Serializable {
 	public void setBoard(Board board) {
 		this.board = board;
 	}
+
+	public Player getPlayerByNickname(String nickname) throws PlayerNotFoundException {
+	    for (Player player : playerList) {
+	        if (player.getUserData().getNickname() == nickname) {
+	            return player;
+            }
+        }
+
+        throw new PlayerNotFoundException();
+    }
 
 	public Integer getKillshotTrack() {
 		return killshotTrack;
