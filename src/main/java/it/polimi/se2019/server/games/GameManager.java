@@ -66,18 +66,33 @@ public class GameManager {
 		gameList.add(game);
 	}
 
-	public Game retrieveGame(String nickname) {
+	public boolean isUserInWaitingList(String nickname) {
+		// used  to check if user is in waiting list (used by view)
+		return waitingList.stream().anyMatch(user -> user.getNickname().equals(nickname));
+	}
+
+	public boolean isUserInGameList(String nickname) {
+		// used  to check if user is in waiting list (used by view)
+		return gameList.stream().anyMatch(
+				game -> game.getPlayerList().stream().anyMatch(
+						player -> player.getUserData().getNickname().equals(nickname)
+				)
+		);
+	}
+
+	private class GameNotFoundException extends Exception {
+		private GameNotFoundException(String errorMessage) {
+			super(errorMessage);
+		}
+	}
+
+	public Game retrieveGame(String nickname) throws GameNotFoundException {
 		// used to check if user is in a game (used by view)
 		return gameList.stream().filter(
 				game -> game.getPlayerList().stream().anyMatch(
 						player -> player.getUserData().getNickname().equals(nickname)
 				)
-		).findAny().orElse(null);
-	}
-
-	public boolean isUserInWaitingList(String nickname) {
-		// used  to check if user is in waiting list (used by view)
-		return waitingList.stream().anyMatch(user -> user.getNickname().equals(nickname));
+		).findAny().orElseThrow(() -> new GameNotFoundException("Nickname " + nickname + " has no games available!"));
 	}
 
 	private class AlreadyPlayingException extends Exception {
@@ -88,13 +103,14 @@ public class GameManager {
 
 	public Game addUserToWaitingList(UserData newUser) throws AlreadyPlayingException {
 		// add user to waiting list / game (used by view)
-		if (retrieveGame(newUser.getNickname()) != null || isUserInWaitingList(newUser.getNickname())) {
+		if (isUserInGameList(newUser.getNickname()) || isUserInWaitingList(newUser.getNickname())) {
 			throw new AlreadyPlayingException("User " + newUser.getNickname() + "is already playing or waiting!");
 		}
 		waitingList.add(newUser);
 		if (waitingList.size() > waitingListMaxSize) {
-			Game newGame = new Game();
 			//create the new game and reset waiting list
+			Game newGame = new Game();
+			gameList.add(newGame);
 			waitingList = new ArrayList<>();
 			return newGame;
 		}
