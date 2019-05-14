@@ -7,12 +7,10 @@ import it.polimi.se2019.server.games.player.Player;
 import java.util.List;
 import java.util.Map;
 
-public class DamageTargetList implements Effect {
-
-    private Integer amount;
+public class DamageTargetList extends Damage {
 
     public DamageTargetList(Integer amount) {
-        this.amount = amount;
+        super(amount);
     }
 
     @Override
@@ -20,7 +18,7 @@ public class DamageTargetList implements Effect {
         List<Targetable> targetList = targets.get("targetList");
 
         targetList.stream()
-                .forEach(p -> ((Player) p).getCharacterState().addDamage(game.getCurrentPlayer().getColor(), amount));
+                .forEach(p -> ((Player) p).getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount));
 
     }
 }

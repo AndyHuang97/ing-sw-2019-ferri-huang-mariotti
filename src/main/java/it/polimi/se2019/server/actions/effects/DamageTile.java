@@ -8,12 +8,10 @@ import it.polimi.se2019.server.games.player.Player;
 import java.util.List;
 import java.util.Map;
 
-public class DamageTile implements Effect {
-
-    private Integer amount;
+public class DamageTile extends Damage {
 
     public DamageTile(Integer amount) {
-        this.amount = amount;
+        super(amount);
     }
 
     @Override
@@ -23,7 +21,7 @@ public class DamageTile implements Effect {
         List<Player> targetList = tile.getPlayers(game);
 
         targetList.stream()
-                .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), amount));
+                .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount));
 
     }
 }
