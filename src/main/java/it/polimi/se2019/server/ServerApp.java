@@ -3,11 +3,10 @@ import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.net.rmi.RmiServer;
 import it.polimi.se2019.server.net.socket.SocketServer;
 import java.util.logging.Logger;
+import java.util.Properties;
 import java.io.IOException;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
 
 /**
  * This class is used to run the server.
@@ -33,12 +32,9 @@ public class ServerApp {
          *  - Wait for players to reconnect (connect the players views with the virtual-views)
          */
         try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
-
             Properties prop = new Properties();
-
             // load a properties file
             prop.load(input);
-
             gameManager = new GameManager();
             gameManager.init(prop.getProperty("dump.filename"));
             rmiServer = new RmiServer();
@@ -50,7 +46,6 @@ public class ServerApp {
             int socketPort = Integer.parseInt(prop.getProperty("socket.port"));
             logger.info("Starting Socket Server on port " + socketPort);
             socketServer.start(socketPort);
-
         } catch (IOException ex) {
             logger.info(ex.toString());
         }
