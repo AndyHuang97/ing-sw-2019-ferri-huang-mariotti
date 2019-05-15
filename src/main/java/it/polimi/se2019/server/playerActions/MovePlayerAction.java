@@ -13,7 +13,8 @@ import java.util.List;
 
 public class MovePlayerAction extends PlayerAction {
 
-    List<Tile> moveList = new ArrayList<>();
+    private List<Tile> moveList = new ArrayList<>();
+    private final String errorMessage = "Move action failed";
 
     public MovePlayerAction(Game game, Player player) {
         super(game, player);
@@ -40,7 +41,8 @@ public class MovePlayerAction extends PlayerAction {
         getPlayer().getCharacterState().setTile(arrivalTile);
     }
 
-    public Boolean check() {
+    @Override
+    public boolean check() {
         Board board = getGame().getBoard();
         int steps = moveList.size();
 
@@ -50,5 +52,10 @@ public class MovePlayerAction extends PlayerAction {
         Graph<Tile> graph = board.generateGraph();
 
         return graph.isReachable(arrivalTile, startingTile, steps);
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
