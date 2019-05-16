@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.net;
-import it.polimi.se2019.server.ServerApp;
-import it.polimi.se2019.server.games.Game;
+
 import it.polimi.se2019.util.*;
 
 import java.util.logging.Logger;
@@ -14,6 +13,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
 
     public synchronized void handle(Request request) {
+        // log request
         Message message = request.getMessage();
         String nickname = request.getNickname();
         logger.info(message.toString());
