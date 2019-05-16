@@ -19,4 +19,6 @@ public class CommandHandler {
         ServerApp.gameManager.dumpToFile();
         return new Response(new Game(), true, "ciao");
     }
+
+
 }

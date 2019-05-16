@@ -27,6 +27,7 @@ public class PowerUpDeserializer implements RandomDeserializer {
 
         for(JsonElement ammoCrateElement : jsonPowerUpArray) {
             JsonObject jsonPowerup = ammoCrateElement.getAsJsonObject();
+            String name = jsonPowerup.get("name").getAsString();
             PowerUp powerUp = null;
 
             try {
@@ -36,7 +37,7 @@ public class PowerUpDeserializer implements RandomDeserializer {
                 throw e;
             }
 
-            powerUp = new PowerUp(actions);
+            powerUp = new PowerUp(actions, name);
             powerUpList.add(powerUp);
         }
 
