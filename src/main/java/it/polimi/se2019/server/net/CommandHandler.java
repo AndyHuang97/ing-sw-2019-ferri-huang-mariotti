@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class CommandHandler extends Observable<Request> implements Observer<Response> {
     private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
 
-    public synchronized void handle(Request request) {
+    public synchronized Response handle(Request request) {
         // log request
         Message message = request.getMessage();
         String nickname = request.getNickname();
@@ -23,6 +23,8 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         notify(request);
 
         // ServerApp.gameManager.dumpToFile();
+        // TODO decide how and where to manage the response message
+        return new Response(null, false,  "");
     }
 
     @Override
