@@ -80,7 +80,7 @@ public class GameManager {
 		);
 	}
 
-	private class GameNotFoundException extends Exception {
+	public class GameNotFoundException extends Exception {
 		private GameNotFoundException(String errorMessage) {
 			super(errorMessage);
 		}

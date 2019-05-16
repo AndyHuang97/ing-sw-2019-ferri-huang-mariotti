@@ -3,7 +3,7 @@ package it.polimi.se2019.util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Observable<T> {
+public abstract class Observable<T> {
 
     private final List<Observer<T>> observers = new ArrayList<>();
 

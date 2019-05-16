@@ -9,8 +9,10 @@ import it.polimi.se2019.server.games.player.Player;
 import java.util.List;
 
 public class ShootPlayerAction extends PlayerAction {
-    Player target;
-    Weapon choosenWeapon;
+
+    private final String errorMessage = "Shoot action failed";
+    private Player target;
+    private Weapon choosenWeapon;
 
     public ShootPlayerAction(Game game, Player player) { super(game, player); }
 
@@ -24,10 +26,17 @@ public class ShootPlayerAction extends PlayerAction {
 
     }
 
-    public void check() {
+    @Override
+    public boolean check() {
         /**
          * Check that target is in Player view
          * Check that Player is using a valid weapon (and has ammo)
          */
+        return true;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return null;
     }
 }
