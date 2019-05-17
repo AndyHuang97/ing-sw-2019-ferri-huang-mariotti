@@ -32,7 +32,7 @@ public class Request implements Serializable, NetMsg {
     public String serialize() {
 
         Gson gson = new Gson();
-        return gson.toJson(message);
+        return gson.toJson(this);
     }
 
     @Override

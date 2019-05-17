@@ -1,8 +1,11 @@
 package it.polimi.se2019.server.net.rmi;
 
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.server.net.socket.SocketServer;
 import it.polimi.se2019.util.NetMsg;
 import it.polimi.se2019.util.Request;
+import it.polimi.se2019.util.Response;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -27,7 +30,8 @@ public class RmiServer {
 
         @Override
         public NetMsg send(NetMsg request) throws RemoteException {
-            return new CommandHandler().handle((Request) request);
+            return  new Response(new Game(), true, "Hello from rmi.");
+            //return new CommandHandler().handle((Request) request);
         }
     }
 }

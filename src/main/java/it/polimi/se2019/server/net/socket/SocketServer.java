@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.net.socket;
 
+import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.Request;
 
@@ -9,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * This class contains is used from the server to talk to the clients.
@@ -18,6 +20,7 @@ import java.net.Socket;
  */
 
 public class SocketServer {
+    private static final Logger logger = Logger.getLogger(ServerApp.class.getName());
     private ServerSocket serverSocket;
 
     public void start(int port) throws IOException {
@@ -31,10 +34,11 @@ public class SocketServer {
         serverSocket.close();
     }
 
-    private static class ClientHandler extends Thread {
+    public static class ClientHandler extends Thread {
         private Socket clientSocket;
         private PrintWriter out;
         private BufferedReader in;
+        private CommandHandler commandHandler;
 
         private ClientHandler(Socket socket) {
             this.clientSocket = socket;
@@ -45,11 +49,16 @@ public class SocketServer {
             try {
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                commandHandler = new CommandHandler(this);
 
+                out.println("Copy and paste this input for test: {\"message\":{},\"nickname\":\"Jon Snow\"}");
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     Request request = (Request) new Request(null, null).deserialize(inputLine);
-                    out.println(new CommandHandler().handle(request).serialize());
+                    //out.println(new CommandHandler().handle(request).serialize());
+
+                    // handle(request)
+                    commandHandler.handle(request);
                 }
 
                 in.close();
@@ -58,6 +67,10 @@ public class SocketServer {
             } catch (IOException e) {
                 // do something if connection fails
             }
+        }
+
+        public void asyncSend(String message) {
+            out.println(message);
         }
     }
 }
