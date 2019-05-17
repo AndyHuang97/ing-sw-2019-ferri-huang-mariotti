@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.net;
 
+import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.net.socket.SocketServer;
 import it.polimi.se2019.util.*;
@@ -22,7 +23,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     }
 
 
-    public synchronized Response handle(Request request) {
+    public synchronized void handle(Request request) {
         // log request
         Message message = request.getMessage();
         String nickname = request.getNickname();
@@ -35,13 +36,10 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         // TODO update shouldn't be called from here, but from the model with its notify, and it should receive a Response
         update(new Response(new Game(), true, request.getNickname()));
 
-        // ServerApp.gameManager.dumpToFile();
-        // TODO decide how and where to manage the response message
-        return new Response(new Game(), false,  "Hello");
+        ServerApp.gameManager.dumpToFile();
 
     }
 
-    // TODO parameter should be Response
     @Override
     public void update(Response response) {
         /**

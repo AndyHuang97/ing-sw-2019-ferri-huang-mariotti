@@ -8,13 +8,14 @@ import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
-public class Game extends Observable<String> implements Serializable {
+public class Game extends Observable<Response> implements Serializable {
 
 	private String id;
 	private Date startDate;
@@ -154,7 +155,8 @@ public class Game extends Observable<String> implements Serializable {
 
 	public void performMove(String action) {
 
-		notify(action);
+		Response response = new Response(new Game(), true, "");
+		notify(response);
 
 	}
 }

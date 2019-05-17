@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 
 public class SocketServer {
-    private static final Logger logger = Logger.getLogger(ServerApp.class.getName());
+    private static final Logger logger = Logger.getLogger(SocketServer.class.getName());
     private ServerSocket serverSocket;
 
     public void start(int port) throws IOException {
