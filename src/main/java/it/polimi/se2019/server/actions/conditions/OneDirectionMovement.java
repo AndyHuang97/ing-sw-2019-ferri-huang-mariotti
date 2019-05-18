@@ -25,7 +25,7 @@ public class OneDirectionMovement implements Condition {
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
         boolean result = false;
 
-        if(game.getBoard().generateGraph().isReachable(attackerTile,targetTile, amount)) {
+        if(game.getBoard().getTileTree().isReachable(attackerTile,targetTile, amount)) {
             try {
                 int[] targetPos = game.getBoard().getTilePosition(targetTile);
                 int[] attackerPos = game.getBoard().getTilePosition(attackerTile);

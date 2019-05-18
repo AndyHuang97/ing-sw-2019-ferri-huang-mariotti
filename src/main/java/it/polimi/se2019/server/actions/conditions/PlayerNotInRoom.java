@@ -18,7 +18,7 @@ public class PlayerNotInRoom implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        Player attacker = game.getCurrentPlayer();
+        Player attacker = (Player) game.getCurrentPlayer();
         RoomColor roomColor = (RoomColor) targets.get("roomColor").get(0);
         List<Tile> room = new ArrayList<>();
         Tile[][] tileMap = game.getBoard().getTileMap();
@@ -27,6 +27,6 @@ public class PlayerNotInRoom implements Condition {
                 .allMatch(row -> Arrays.stream(row)
                         .filter(t -> t.getColor() == roomColor)
                         .map(t -> t.getPlayers(game))
-                        .allMatch(lst -> !lst.contains(attacker)));
+                        .noneMatch(lst -> lst.contains(attacker)));
     }
 }

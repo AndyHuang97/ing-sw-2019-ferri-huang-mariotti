@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games.board;
 
+import com.google.gson.Gson;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.graphs.Graph;
 
@@ -14,6 +15,7 @@ public class Board {
 
     public Board (Tile[][] tileMap) {
         this.tileMap = tileMap;
+        tileTree = generateGraph();
     }
 
     public Tile[][] getTileMap() {
@@ -46,7 +48,7 @@ public class Board {
     public Graph<Tile> generateGraph() {
         // TODO: manage exceptions out of bond
         Graph<Tile> graph = new Graph<>();
-
+        Gson gson = new Gson();
 
         IntStream.range(0, tileMap[0].length)
                 .forEach(y -> IntStream.range(0, tileMap.length)
@@ -56,13 +58,16 @@ public class Board {
             for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
                 Tile actualTile = tileMap[xCoord][yCoord];
 
-                if (actualTile.getSouthLink() == LinkType.OPEN || actualTile.getSouthLink() == LinkType.DOOR) {
-                    Tile linkedTile = tileMap[xCoord][yCoord+1];
-                    graph.addEdge(actualTile, linkedTile);
-                }
-                if (actualTile.getEastLink() == LinkType.OPEN || actualTile.getEastLink() == LinkType.DOOR) {
-                    Tile linkedTile = tileMap[xCoord+1][yCoord];
-                    graph.addEdge(actualTile, linkedTile);
+                // intercept the null tile
+                if (actualTile != null) {
+                    if (actualTile.getSouthLink() == LinkType.OPEN || actualTile.getSouthLink() == LinkType.DOOR) {
+                        Tile linkedTile = tileMap[xCoord][yCoord + 1];
+                        graph.addEdge(actualTile, linkedTile);
+                    }
+                    if (actualTile.getEastLink() == LinkType.OPEN || actualTile.getEastLink() == LinkType.DOOR) {
+                        Tile linkedTile = tileMap[xCoord + 1][yCoord];
+                        graph.addEdge(actualTile, linkedTile);
+                    }
                 }
             }
         }
@@ -81,13 +86,12 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder bld = new StringBuilder();
-        String str = "";
         for(Tile[] row : tileMap) {
             for(Tile t : row) {
                 bld.append(t.toString()+" ");
             }
             bld.append("\n");
         }
-        return str;
+        return bld.toString();
     }
 }
