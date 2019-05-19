@@ -49,9 +49,9 @@ public class CardDeserializerTest {
         PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer("powerupdeck");
         WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer("weapondeck");
 
-        String ammoCratePath = "src/main/java/it/polimi/se2019/resources/json/ammocrates/ammocrates.json";
-        String powerUpPath = "src/main/java/it/polimi/se2019/resources/json/powerups/powerups.json";
-        String weaponPath = "src/main/java/it/polimi/se2019/resources/json/weapons/weapons.json";
+        String ammoCratePath = "src/main/resources/json/ammocrates/ammocrates.json";
+        String powerUpPath = "src/main/resources/json/powerups/powerups.json";
+        String weaponPath = "src/main/resources/json/weapons/weapons.json";
 
         BufferedReader acbufferedReader, pubufferedReader, wbufferedReader;
         Deck<AmmoCrate> ammoCrateDeck = null;
@@ -75,6 +75,8 @@ public class CardDeserializerTest {
 
             try {
                 acbufferedReader.close();
+                pubufferedReader.close();
+                wbufferedReader.close();
             }catch (IOException e) {
                 Assert.fail("Buffered reader could not close correctly.");
             }

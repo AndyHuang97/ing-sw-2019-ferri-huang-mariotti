@@ -13,8 +13,8 @@ public class PowerUp extends Card {
 	/**
 	 * Default constructor
 	 */
-	public PowerUp(List<ActionUnit> actionUnitList) {
-        super(actionUnitList);
+	public PowerUp(List<ActionUnit> actionUnitList, String name) {
+        super(actionUnitList, name);
     }
 
 }

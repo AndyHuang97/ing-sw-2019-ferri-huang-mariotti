@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Weapon extends Card {
 
-	private String name;
 	private boolean loaded;
     private List<AmmoColor> pickUpCost;
 	private List<AmmoColor> reloadCost;
@@ -17,16 +16,11 @@ public class Weapon extends Card {
 
 	public Weapon(List<ActionUnit> actionUnitList, String name, List<AmmoColor> pickUpCost,
 				  List<AmmoColor> reloadCost, List<ActionUnit> optionalEffectList) {
-		super(actionUnitList);
-		this.name = name;
+		super(actionUnitList, name);
 		this.loaded = true;
 		this.pickUpCost = pickUpCost;
 		this.reloadCost = reloadCost;
 		this.optionalEffectList = optionalEffectList;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public boolean isLoaded() {

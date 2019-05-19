@@ -10,12 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DamageRoom implements Effect {
-
-    private Integer amount;
+public class DamageRoom extends Damage {
 
     public DamageRoom(Integer amount) {
-        this.amount = amount;
+        super(amount);
     }
 
     @Override
@@ -28,6 +26,6 @@ public class DamageRoom implements Effect {
                 .collect(Collectors.toList());
 
         targetList.stream()
-                .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), amount));
+                .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount));
     }
 }

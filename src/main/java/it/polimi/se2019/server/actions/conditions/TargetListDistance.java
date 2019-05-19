@@ -26,7 +26,7 @@ public class TargetListDistance implements Condition {
 
         for (Targetable t : targetList) {
             targetTile = ((Player) t).getCharacterState().getTile();
-            distance = game.getBoard().generateGraph().distance(attackerTile, targetTile);
+            distance = game.getBoard().getTileTree().distance(attackerTile, targetTile);
             if(distance == -1 || distance > amount) {
                 result = false;
             }

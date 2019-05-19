@@ -19,6 +19,6 @@ public class MaxDistance implements Condition {
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile initialTile = (Tile) targets.get("tileList").get(0);
         Tile finalTile = (Tile) targets.get("tileList").get(1);
-        return game.getBoard().generateGraph().isReachable(initialTile, finalTile, amount);
+        return game.getBoard().getTileTree().isReachable(initialTile, finalTile, amount);
     }
 }

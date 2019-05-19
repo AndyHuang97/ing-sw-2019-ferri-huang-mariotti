@@ -11,13 +11,16 @@ import java.util.List;
 public abstract class Card implements Targetable {
 
 	private List<ActionUnit> actionUnitList;
+	private String name;
 
 	/**
 	 * Default constructor
 	 * @param actionUnitList
+	 * @param name
 	 */
-	public Card(List<ActionUnit> actionUnitList) {
+	public Card(List<ActionUnit> actionUnitList, String name) {
 		this.actionUnitList = actionUnitList;
+		this.name = name;
 	}
 
 	public List<ActionUnit> getActionUnitList() {
@@ -26,5 +29,13 @@ public abstract class Card implements Targetable {
 
 	public void setActionUnitList(List<ActionUnit> actionUnitList) {
 		this.actionUnitList = actionUnitList;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
