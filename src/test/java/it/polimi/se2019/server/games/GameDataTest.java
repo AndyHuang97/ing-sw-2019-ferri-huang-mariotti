@@ -13,7 +13,7 @@ public class GameDataTest {
 
     @Before
     public void setUp(){
-        gameData = new GameData("abc", new Date());
+        gameData = new GameData(new Date());
     }
 
     @After
@@ -23,13 +23,6 @@ public class GameDataTest {
 
     @Test
     public void serialize() {
-    }
-
-    @Test
-    public void testSetId() {
-        gameData.setId("def");
-
-        Assert.assertEquals("def", gameData.getId());
     }
 
     @Test
