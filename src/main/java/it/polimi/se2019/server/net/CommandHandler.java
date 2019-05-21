@@ -16,6 +16,10 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     private SocketServer.ClientHandler clientHandler;
 
+    // just for tests
+    public CommandHandler() {
+    }
+
     public CommandHandler(SocketServer.ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
     }
