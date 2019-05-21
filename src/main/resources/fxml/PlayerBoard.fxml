@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="PlayerBoard" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.se2019.client.gui.PlayerBoardController">
+<AnchorPane fx:id="PlayerBoard" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.PlayerBoardController">
    <children>
       <ImageView fx:id="image" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0">
          <image>
@@ -22,19 +21,19 @@
                <children>
                   <Circle fill="DODGERBLUE" radius="20.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="26.0" />
                </children></AnchorPane>
-            <AnchorPane fx:id="dmg1" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg2" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg3" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg4" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg5" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg6" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg7" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg8" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg9" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg10" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="dmg11" prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
          </children></HBox>
       <Button layoutX="436.0" layoutY="23.0" mnemonicParsing="false" onAction="#handleDamage" text="Add damage" />
-      <TextField fx:id="playerColor" layoutX="573.0" layoutY="23.0" promptText="Color" />
+      <TextField fx:id="playerColor" layoutX="573.0" layoutY="23.0" promptText="Input player color" />
    </children>
 </AnchorPane>
