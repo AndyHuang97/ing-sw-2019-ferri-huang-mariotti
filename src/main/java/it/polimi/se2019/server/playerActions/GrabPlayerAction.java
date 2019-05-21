@@ -10,7 +10,8 @@ import it.polimi.se2019.server.games.player.Player;
 import java.util.List;
 
 public class GrabPlayerAction extends PlayerAction {
-    Weapon weaponToGrab;
+    private Weapon weaponToGrab;
+    private final String errorMessage = "Grab action failed";
 
     public GrabPlayerAction(Game game, Player player) { super(game, player); }
 
@@ -26,7 +27,8 @@ public class GrabPlayerAction extends PlayerAction {
     /**
      * Checks if the Weapon the player is trying to grab is in the weapon crate of the Tile the player is in.
      */
-    public Boolean check() {
+    @Override
+    public boolean check() {
         try {
             SpawnTile playerPosition = (SpawnTile) getPlayer().getCharacterState().getTile();
 
@@ -41,6 +43,11 @@ public class GrabPlayerAction extends PlayerAction {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     @Override

@@ -36,6 +36,10 @@ public abstract class PlayerAction {
 
     public abstract void run();
 
+    public abstract boolean check();
+
+    public abstract String getErrorMessage();
+
     public Game getGame() {
         return game;
     }

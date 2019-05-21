@@ -1,6 +1,7 @@
 package it.polimi.se2019.util;
 
 import com.google.gson.Gson;
+import it.polimi.se2019.server.net.CommandHandler;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ public class Request implements Serializable, NetMsg {
 
     private Message message;
     private String nickname;
+    private CommandHandler commandHandler;
 
     public Request(Message message, String nickname) {
         this.message = message;
@@ -38,5 +40,13 @@ public class Request implements Serializable, NetMsg {
 
         Gson gson = new Gson();
         return gson.fromJson(msg, Request.class);
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
+    }
+
+    public void setCommandHandler(CommandHandler commandHandler) {
+        this.commandHandler = commandHandler;
     }
 }

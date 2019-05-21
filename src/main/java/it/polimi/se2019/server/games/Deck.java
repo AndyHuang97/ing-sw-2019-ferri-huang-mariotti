@@ -9,7 +9,7 @@ public class Deck<T> {
 
     public Deck(List<T> deck) {
         this.deck = deck;
-        shuffle();
+        //shuffle();
     }
 
     public T drawCard()

@@ -21,4 +21,14 @@ public class ConcreteAction extends PlayerAction {
     public void run() {
 
     }
+
+    @Override
+    public boolean check() {
+        return false;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return null;
+    }
 }

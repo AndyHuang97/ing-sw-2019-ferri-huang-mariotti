@@ -75,6 +75,8 @@ public class CardDeserializerTest {
 
             try {
                 acbufferedReader.close();
+                pubufferedReader.close();
+                wbufferedReader.close();
             }catch (IOException e) {
                 Assert.fail("Buffered reader could not close correctly.");
             }
