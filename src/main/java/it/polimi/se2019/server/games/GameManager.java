@@ -3,10 +3,15 @@ package it.polimi.se2019.server.games;
 import java.io.*;
 
 import com.google.gson.Gson;
+import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.player.CharacterState;
+import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class GameManager {
 	private static final Logger logger = Logger.getLogger(GameManager.class.getName());
@@ -18,6 +23,9 @@ public class GameManager {
 	public GameManager() {
 		gameList = new ArrayList<>();
 		waitingList = new ArrayList<>();
+	}
+
+	public void init(String dumpName) {
 		try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
 			Properties prop = new Properties();
 			// load a properties file
@@ -26,11 +34,7 @@ public class GameManager {
 		} catch (IOException ex) {
 			logger.info(ex.toString());
 		}
-	}
-
-	public void init(String dumpName) {
 		this.dumpName = dumpName;
-
 		try {
 			BufferedReader br  = new BufferedReader(new FileReader(dumpName));
 			//Read JSON file
@@ -62,10 +66,6 @@ public class GameManager {
 		}
 	}
 
-	public void addGame(Game game) {
-		gameList.add(game);
-	}
-
 	public boolean isUserInWaitingList(String nickname) {
 		// used  to check if user is in waiting list (used by view)
 		return waitingList.stream().anyMatch(user -> user.getNickname().equals(nickname));
@@ -80,8 +80,8 @@ public class GameManager {
 		);
 	}
 
-	private class GameNotFoundException extends Exception {
-		private GameNotFoundException(String errorMessage) {
+	public class GameNotFoundException extends Exception {
+		public GameNotFoundException(String errorMessage) {
 			super(errorMessage);
 		}
 	}
@@ -95,26 +95,35 @@ public class GameManager {
 		).findAny().orElseThrow(() -> new GameNotFoundException("Nickname " + nickname + " has no games available!"));
 	}
 
-	private class AlreadyPlayingException extends Exception {
-		private AlreadyPlayingException(String errorMessage) {
+	public class AlreadyPlayingException extends Exception {
+		public AlreadyPlayingException(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 
-	public Game addUserToWaitingList(UserData newUser) throws AlreadyPlayingException {
+	public Game createGame(List<UserData> waitingList) throws IndexOutOfBoundsException {
+		//create the new game and reset waiting list, do not use it
+		List<Player> playerList = new ArrayList<>();
+		waitingList.forEach(userData -> {
+			PlayerColor color = Stream.of(PlayerColor.values()).filter(
+					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
+			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
+			playerList.add(new Player(true, userData, new CharacterState(), color));
+		});
+		return new Game(playerList);
+	}
+
+	public void addUserToWaitingList(UserData newUser) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		// add user to waiting list / game (used by view)
 		if (isUserInGameList(newUser.getNickname()) || isUserInWaitingList(newUser.getNickname())) {
 			throw new AlreadyPlayingException("User " + newUser.getNickname() + "is already playing or waiting!");
 		}
 		waitingList.add(newUser);
 		if (waitingList.size() > waitingListMaxSize) {
-			//create the new game and reset waiting list
-			Game newGame = new Game();
+			Game newGame = createGame(waitingList);
 			gameList.add(newGame);
 			waitingList = new ArrayList<>();
-			return newGame;
 		}
-		return null;
 	}
 
 	public List<UserData> getWaitingList() {
@@ -124,12 +133,4 @@ public class GameManager {
 	public List<Game> getGameList() {
 		return gameList;
 	}
-
-	/**
-	 * @param gameList
-	 */
-	public void setGameList(List<Game> gameList) {
-		this.gameList = gameList;
-	}
-
 }
