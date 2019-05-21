@@ -35,7 +35,7 @@ public class GrabPlayerAction extends PlayerAction {
             List<Weapon> weaponCrate = playerPosition.getWeaponCrate();
 
             for (Weapon weapon : weaponCrate) {
-                if(weapon ==weaponToGrab) {
+                if(weapon == weaponToGrab) {
                     return true;
                 }
             }

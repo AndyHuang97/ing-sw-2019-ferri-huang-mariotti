@@ -36,7 +36,7 @@ public class ActionUnit implements Targetable {
 		this.conditionList = conditionList;
 	}
 
-	public boolean check(Transaction transaction) {
+	public boolean check() {
 		return false;
 	}
 

@@ -30,6 +30,8 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         logger.info(message.toString());
         logger.info(nickname);
 
+        request.setCommandHandler(this);
+
         // here it needs to parse the message!
         notify(request);
 
