@@ -41,61 +41,9 @@ public class Controller implements Observer<Request> {
     // TODO: Maybe refactor the error message proagation with exceptions
     @Override
     public void update(Request request) {
+        Game game = new Game();
 
-        // Parse Request and build a List of PlayerAction
-        // String nickname = request.getNickname();
-        try {
-            /*
-            Game game = gameManager.retrieveGame(nickname);
-
-            Player player = game.getPlayerList().stream()
-                    .filter(p->p.getUserData().getNickname().equals(nickname))
-                    .collect(Collectors.toList()).get(0);
-
-            List<PlayerAction> playerActions = messageParser.parse(request.getMessage(), game, player);
-
-             */
-
-            RequestParser requestParser = new RequestParser();
-            requestParser.parse(request, gameManager);
-
-            List<PlayerAction> playerActions = requestParser.getPlayerActionList();
-            CommandHandler commandHandler = requestParser.getCommandHandler();
-
-
-            // Check actions in list
-            boolean canRun = true;
-            StringBuilder errorMessage = new StringBuilder();
-
-            for (PlayerAction pa : playerActions) {
-                if (!pa.check()) {
-                    canRun = false;
-                    errorMessage.append(pa.getErrorMessage());
-                }
-            }
-
-
-            // If actions are valid, run them
-            if (canRun) {
-                for (PlayerAction pa : playerActions) {
-                    pa.run();
-                }
-
-                // Return a success response
-
-            }
-
-            // Notify back the view with the result of the action
-            if (!canRun) {
-                ErrorResponse errorResponse = new ErrorResponse(errorMessage.toString());
-                // The List of PlayerActions is from the same player so I can retrieve the view from every PlayerAction
-                // in the list
-                commandHandler.reportError(errorResponse);
-            }
-
-        } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
-            e.printStackTrace();
-        }
+        game.performMove("Move");
     }
 
     public VirtualView getVirtualView() {

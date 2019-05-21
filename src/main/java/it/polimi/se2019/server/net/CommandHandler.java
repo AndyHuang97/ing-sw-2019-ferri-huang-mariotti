@@ -1,10 +1,8 @@
 package it.polimi.se2019.server.net;
 import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.games.Game;
-import it.polimi.se2019.util.Message;
-import it.polimi.se2019.util.Observer;
-import it.polimi.se2019.util.Request;
-import it.polimi.se2019.util.Response;
+import it.polimi.se2019.server.net.socket.SocketServer;
+import it.polimi.se2019.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -13,21 +11,33 @@ import java.util.logging.Logger;
  * and notifies the Controller.
  */
 public class CommandHandler extends Observable<Request> implements Observer<Response> {
+
     private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
 
-    public synchronized Response handle(Request request) {
+    private SocketServer.ClientHandler clientHandler;
+
+    public CommandHandler(SocketServer.ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
+    }
+
+
+    public synchronized void handle(Request request) {
         // log request
         Message message = request.getMessage();
         String nickname = request.getNickname();
         logger.info(message.toString());
         logger.info(nickname);
 
+        request.setCommandHandler(this);
+
         // here it needs to parse the message!
         notify(request);
 
-        // ServerApp.gameManager.dumpToFile();
-        // TODO decide how and where to manage the response message
-        return new Response(null, false,  "");
+        // TODO update shouldn't be called from here, but from the model with its notify, and it should receive a Response
+        update(new Response(new Game(), true, request.getNickname()));
+
+        ServerApp.gameManager.dumpToFile();
+
     }
 
     @Override
@@ -35,6 +45,12 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         /**
          * Response on move done
          */
+        showMessage(response.serialize());
+
+    }
+
+    public void showMessage(String message) {
+        clientHandler.asyncSend(message);
     }
 
     public void reportError(ErrorResponse errorResponse) {

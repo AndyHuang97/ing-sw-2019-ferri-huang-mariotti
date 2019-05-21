@@ -2,7 +2,6 @@ package it.polimi.se2019.util;
 
 import it.polimi.se2019.server.games.Targetable;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +14,10 @@ public class Message {
     private Map<String, List<Targetable>> commands;
     //private String messageType;
     //private List<Targetable> params;
+
+    public Message(Map<String, List<Targetable>> commands) {
+        this.commands = commands;
+    }
 
     public List<Targetable> getCommandParams(String commandName) {
         return commands.get(commandName);
