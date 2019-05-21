@@ -25,6 +25,6 @@ public class Distance implements Condition {
         List<Targetable> tileList = targets.get("tileList");
         Tile targetTile = (Tile) tileList.get(0);
 
-        return amount.equals(game.getBoard().generateGraph().distance(attackerTile, targetTile));
+        return amount.equals(game.getBoard().getTileTree().distance(attackerTile, targetTile));
     }
 }

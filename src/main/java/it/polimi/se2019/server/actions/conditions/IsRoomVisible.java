@@ -3,6 +3,7 @@ package it.polimi.se2019.server.actions.conditions;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.RoomColor;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 
 import java.util.List;
@@ -18,9 +19,9 @@ public class IsRoomVisible implements Condition {
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         List<Targetable> roomColor = targets.get("roomColor");
         RoomColor targetRoom = (RoomColor)roomColor.get(0);
-        Player attacker = game.getCurrentPlayer();
+        Player attacker = (Player) game.getCurrentPlayer();
         return attacker.getCharacterState().getTile().getVisibleTiles(game.getBoard()).stream()
-                    .map(t -> t.getColor())
+                    .map(Tile::getColor)
                     .collect(Collectors.toList()).contains(targetRoom);
     }
 }

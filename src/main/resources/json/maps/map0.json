@@ -7,8 +7,8 @@
         0
       ],
       "params": {
-        "color": "Blue",
-        "LinkType": [
+        "color": "BLUE",
+        "links": [
           "WALL",
           "OPEN",
           "DOOR",
@@ -23,8 +23,8 @@
         0
       ],
       "params": {
-        "color": "Blue",
-        "LinkType": [
+        "color": "BLUE",
+        "links": [
           "WALL",
           "OPEN",
           "WALL",
@@ -39,8 +39,8 @@
         0
       ],
       "params": {
-        "color": "Blue",
-        "LinkType": [
+        "color": "BLUE",
+        "links": [
           "WALL",
           "WALL",
           "DOOR",
@@ -62,8 +62,8 @@
         1
       ],
       "params": {
-        "color": "Red",
-        "LinkType": [
+        "color": "RED",
+        "links": [
           "DOOR",
           "OPEN",
           "WALL",
@@ -78,8 +78,8 @@
         1
       ],
       "params": {
-        "color": "Red",
-        "LinkType": [
+        "color": "RED",
+        "links": [
           "WALL",
           "OPEN",
           "DOOR",
@@ -94,8 +94,8 @@
         1
       ],
       "params": {
-        "color": "Red",
-        "LinkType": [
+        "color": "RED",
+        "links": [
           "DOOR",
           "DOOR",
           "WALL",
@@ -110,8 +110,8 @@
         1
       ],
       "params": {
-        "color": "Yellow",
-        "LinkType": [
+        "color": "YELLOW",
+        "links": [
           "WALL",
           "WALL",
           "OPEN",
@@ -133,8 +133,8 @@
         2
       ],
       "params": {
-        "color": "White",
-        "LinkType": [
+        "color": "WHITE",
+        "links": [
           "DOOR",
           "OPEN",
           "WALL",
@@ -150,8 +150,8 @@
       ],
       "params": {
         "params": {
-          "color": "White",
-          "LinkType": [
+          "color": "WHITE",
+          "links": [
             "WALL",
             "DOOR",
             "WALL",
@@ -167,8 +167,8 @@
         2
       ],
       "params": {
-        "color": "Yellow",
-        "LinkType": [
+        "color": "YELLOW",
+        "links": [
           "OPEN",
           "WALL",
           "WALL",

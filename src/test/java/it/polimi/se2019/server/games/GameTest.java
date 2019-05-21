@@ -35,7 +35,6 @@ public class GameTest {
 
         GameData gameData = game.generateGameData();
 
-        Assert.assertEquals(game.getId(), gameData.getId());
         Assert.assertEquals(game.getStartDate(), gameData.getStartDate());
     }
 
@@ -62,15 +61,6 @@ public class GameTest {
         game.setCurrentPlayer(nextPlayer);
 
         Assert.assertEquals(nextPlayer, game.getCurrentPlayer());
-    }
-
-
-    @Test
-    public void testSetId() {
-
-        game.setId("def");
-
-        Assert.assertEquals("def", game.getId());
     }
 
     @Test

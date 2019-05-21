@@ -24,7 +24,7 @@ public class HasAmmo implements Condition {
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         EnumMap<AmmoColor, Integer> ammoBag = game.getCurrentPlayer().getCharacterState().getAmmoBag();
 
-        return Arrays.asList(AmmoColor.values()).stream()
+        return Arrays.stream(AmmoColor.values())
                 .allMatch(color -> {
                     boolean result = true;
                     if(ammoBag.get(color) - ammoNeeded.get(color) < 0) {

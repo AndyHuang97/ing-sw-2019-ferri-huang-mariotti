@@ -1,10 +1,8 @@
 package it.polimi.se2019.server.net;
-
 import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.net.socket.SocketServer;
 import it.polimi.se2019.util.*;
-
 import java.util.logging.Logger;
 
 /**

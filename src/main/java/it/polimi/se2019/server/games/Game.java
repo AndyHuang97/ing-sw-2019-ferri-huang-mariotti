@@ -17,7 +17,6 @@ import java.util.Date;
 
 public class Game extends Observable<Response> implements Serializable {
 
-	private String id;
 	private Date startDate;
 	private List<Player> playerList;
 	private Player currentPlayer;
@@ -28,7 +27,7 @@ public class Game extends Observable<Response> implements Serializable {
 	private List<ActionUnit> currentActionUnitsList;
 
 	public Game() {
-		this.id = "";
+		// dont use this constructor
 		this.startDate = new Date();
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
@@ -38,8 +37,19 @@ public class Game extends Observable<Response> implements Serializable {
 		this.powerupDeck = new ArrayList<>();
 	}
 
-	public Game(String id, Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
-		this.id = id;
+	public Game(List<Player> playerList) {
+		// use this constructor to start a new game
+		this.startDate = new Date();
+		this.playerList = playerList;
+		this.currentPlayer = playerList.get(0);
+		this.board = new Board();
+		this.killshotTrack = 0;
+		this.weaponDeck = new ArrayList<>();
+		this.powerupDeck = new ArrayList<>();
+	}
+
+	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
+		// use this one to resume? a current one
 		this.startDate = startDate;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
@@ -50,10 +60,13 @@ public class Game extends Observable<Response> implements Serializable {
 	}
 
 	public GameData generateGameData() {
-		return new GameData(getId(), getStartDate());
+		return new GameData(getStartDate());
 	}
 
 	public void updateTurn() {
+		int newIndex = playerList.indexOf(currentPlayer) + 1;
+		if(newIndex >= playerList.size()) {newIndex = 0;}
+		currentPlayer = playerList.get(newIndex);
 	}
 
 	public Player getCurrentPlayer() {
@@ -62,14 +75,6 @@ public class Game extends Observable<Response> implements Serializable {
 
 	public void setCurrentPlayer(Player currentPlayer) {
 		if(currentPlayer.getActive()) this.currentPlayer = currentPlayer;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public Date getStartDate() {

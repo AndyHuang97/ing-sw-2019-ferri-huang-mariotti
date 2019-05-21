@@ -148,6 +148,15 @@ public abstract class Tile implements Targetable {
 
 	@Override
 	public String toString() {
-		return color.getColor();
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(color.getColor());
+		builder.append(": ");
+		for (LinkType l : links) {
+			builder.append(l);
+
+			builder.append(" ");
+		}
+		return builder.toString();
 	}
 }
