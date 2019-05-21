@@ -63,6 +63,9 @@ public class Game extends Observable implements Serializable {
 	}
 
 	public void updateTurn() {
+		int newIndex = playerList.indexOf(currentPlayer) + 1;
+		if(newIndex >= playerList.size()) {newIndex = 0;}
+		currentPlayer = playerList.get(newIndex);
 	}
 
 	public Player getCurrentPlayer() {
