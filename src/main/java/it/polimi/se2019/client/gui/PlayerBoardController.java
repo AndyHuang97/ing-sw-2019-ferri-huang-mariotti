@@ -19,7 +19,10 @@ public class PlayerBoardController {
 
     @FXML
     private TextField playerColor;
-
+    @FXML
+    private TextField damageAmount;
+    @FXML
+    private HBox hbox;
 
     private MainApp mainApp;
 
@@ -44,31 +47,40 @@ public class PlayerBoardController {
     @FXML
     public void handleDamage() {
 
-        List<PlayerColor> colors = Arrays.asList(PlayerColor.BLUE);
-        AnchorPane anchorPlayerBoard = (AnchorPane) mainApp.getPrimaryStage().getScene().lookup("#PlayerBoard");
-        HBox hbox = (HBox) anchorPlayerBoard.lookup("#hbox");
+        String color = playerColor.getText();
+        Integer amount = Integer.parseInt(damageAmount.getText());
+        logger.info(color + " - " + amount);
 
         //logger.info(hbox.toString());
         //logger.info(hbox.getChildren().toString());
         int i = 0;
         for (Node n : hbox.getChildren()) {
-            //logger.info(n.toString());
-            if( i < 5) {
-                if (((AnchorPane) n).getChildren().isEmpty()) {
-                    logger.info("found an empty cell");
-                    Circle circle = new Circle();
-                    circle.setRadius(20.0);
-                    circle.fillProperty().setValue(Paint.valueOf(PlayerColor.BLUE.getColor()));
-                    AnchorPane.setTopAnchor(circle, 26.0);
-                    AnchorPane.setRightAnchor(circle, 12.0);
-                    AnchorPane.setBottomAnchor(circle, 27.0);
-                    AnchorPane.setLeftAnchor(circle, 11.0);
-                    ((AnchorPane) n).getChildren().add(circle);
-                }
+            logger.info(((AnchorPane) n).getChildren().toString());
+            logger.info(i + "," + amount);
+            if (((AnchorPane) n).getChildren().isEmpty() && i < amount) {
+                logger.info("EMPTY CELL");
+
+                Node token = getDmgMarkerToken(color);
+
+                AnchorPane.setTopAnchor(token, 12.0);
+                AnchorPane.setRightAnchor(token, 7.0);
+                AnchorPane.setBottomAnchor(token, 11.0);
+                AnchorPane.setLeftAnchor(token, 7.0);
+                ((AnchorPane) n).getChildren().add(token);
+                i++;
             }
-            i++;
+
+
 
         }
+    }
+
+    // TODO make the token image and replace the circle node
+    public Node getDmgMarkerToken(String color) {
+        Circle circle = new Circle();
+        circle.setRadius(10.0);
+        circle.fillProperty().setValue(Paint.valueOf(color));
+        return circle;
     }
 
     public void handleMarker() {
