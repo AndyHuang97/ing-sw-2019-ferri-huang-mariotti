@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="PlayerBoard" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.PlayerBoardController">
+<AnchorPane fx:id="PlayerBoard" prefHeight="668.0" prefWidth="1386.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.PlayerBoardController">
    <children>
       <ImageView fx:id="image" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="0.0">
          <image>

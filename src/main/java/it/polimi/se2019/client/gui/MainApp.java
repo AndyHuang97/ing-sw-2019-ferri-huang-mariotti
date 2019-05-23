@@ -31,7 +31,8 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Adrenaline");
 
         initRootLayout();
-        showPlayerBoard();
+        //showPlayerBoard();
+        showGameBoard();
 
         primaryStage.setResizable(true);
         primaryStage.sizeToScene();

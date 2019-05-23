@@ -1,6 +1,5 @@
 package it.polimi.se2019.client.gui;
 
-import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
