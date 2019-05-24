@@ -119,7 +119,7 @@ public class PlayerBoardController {
 
         Optional<ImageView> node = markerToken.getChildren().stream()
                 .map(n -> (ImageView) n)
-                .filter(i -> ((NamedImage)i.getImage()).getName().equals(color))
+                .filter(i -> ((NamedImage)i.getImage()).getName().toLowerCase().equals(color.toLowerCase()))
                 .findAny();
 
         if (node.isPresent()) {

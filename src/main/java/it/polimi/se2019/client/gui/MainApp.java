@@ -31,7 +31,8 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Adrenaline");
 
         initRootLayout();
-        showPlayerBoard();
+        showMap();
+        //showPlayerBoard();
         //showGameBoard();
 
         primaryStage.setResizable(true);
@@ -108,6 +109,22 @@ public class MainApp extends Application {
         //System.out.println(index);
         showGameBoard(Integer.parseInt(index));
 
+    }
+
+    public void showMap() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/Map.fxml"));
+            AnchorPane anchorPane = (AnchorPane) loader.load();
+
+            rootlayout.setCenter(anchorPane);
+
+            MapController controller = loader.getController();
+            controller.setMainApp(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void showPlayerBoard() {
