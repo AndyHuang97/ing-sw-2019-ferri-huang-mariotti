@@ -3,34 +3,55 @@ package it.polimi.se2019.client.gui;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.TilePane;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class PlayerBoardController {
 
     private static final Logger logger = Logger.getLogger(PlayerBoardController.class.getName());
+    private static final String TOKEN_PATH = "/images/tokens/";
+    private static final String PNG = ".png";
+    private static final String SKULL_PATH = "/images/redSkull.png";
 
     @FXML
     private TextField playerColor;
     @FXML
     private TextField damageAmount;
     @FXML
-    private HBox hbox;
+    private TilePane damagePane;
+    @FXML
+    private TilePane markerToken;
+    @FXML
+    private TilePane markerLabel;
+    @FXML
+    private TilePane skullPane;
+
+    private class NamedImage extends Image {
+
+        private String name;
+
+        public NamedImage(String url) {
+            super(url);
+            name = url.split(TOKEN_PATH)[1].split(PNG)[0];
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
 
     private MainApp mainApp;
 
     @FXML
     private void initialize() {
-
+        initMarkerPane(PlayerColor.GREY);
     }
-
     /**
      *  Is called by the main application to set itself.
      *
@@ -40,6 +61,21 @@ public class PlayerBoardController {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Initializes the marker bar.
+     * @param color is the color of the client.
+     */
+    public void initMarkerPane(PlayerColor color) {
+
+        int i = 0;
+        for (PlayerColor pc : PlayerColor.values()) {
+            if (pc != color) {
+                ImageView iv = (ImageView) markerToken.getChildren().get(i);
+                iv.setImage(getPlayerToken(pc));
+                i++;
+            }
+        }
+    }
 
     /**
      * Adds damage from attacker player to damage bar.
@@ -47,43 +83,112 @@ public class PlayerBoardController {
     @FXML
     public void handleDamage() {
 
-        String color = playerColor.getText();
-        Integer amount = Integer.parseInt(damageAmount.getText());
-        logger.info(color + " - " + amount);
+        String color = getPlayerColor();
+        int amount = getDamageAmount();
+        //logger.info(color + " - " + amount);
 
-        //logger.info(hbox.toString());
-        //logger.info(hbox.getChildren().toString());
         int i = 0;
-        for (Node n : hbox.getChildren()) {
-            logger.info(((AnchorPane) n).getChildren().toString());
-            logger.info(i + "," + amount);
-            if (((AnchorPane) n).getChildren().isEmpty() && i < amount) {
-                logger.info("EMPTY CELL");
+        try {
+            for (Node n : damagePane.getChildren()) {
+                //logger.info(i + "," + amount);
 
-                Node token = getDmgMarkerToken(color);
+                if (((ImageView) n).getImage() == null && i < amount) {
+                    //logger.info("EMPTY IMAGE");
 
-                AnchorPane.setTopAnchor(token, 12.0);
-                AnchorPane.setRightAnchor(token, 7.0);
-                AnchorPane.setBottomAnchor(token, 11.0);
-                AnchorPane.setLeftAnchor(token, 7.0);
-                ((AnchorPane) n).getChildren().add(token);
-                i++;
+                    Image token = getPlayerToken(PlayerColor.valueOf(color.toUpperCase()));
+                    ((ImageView) n).setImage(token);
+
+                    i++;
+                }
+
             }
-
-
-
+        } catch (Exception e) {
+            logger.warning("Invalid Color.");
         }
     }
 
-    // TODO make the token image and replace the circle node
-    public Node getDmgMarkerToken(String color) {
-        Circle circle = new Circle();
-        circle.setRadius(10.0);
-        circle.fillProperty().setValue(Paint.valueOf(color));
-        return circle;
-    }
-
+    /**
+     * Adds markers of attacker color.
+     */
+    @FXML
     public void handleMarker() {
 
+        String color = getPlayerColor();
+        int amount = getDamageAmount();
+        //logger.info(color + " - " + amount);
+
+        Optional<ImageView> node = markerToken.getChildren().stream()
+                .map(n -> (ImageView) n)
+                .filter(i -> ((NamedImage)i.getImage()).getName().equals(color))
+                .findAny();
+
+        if (node.isPresent()) {
+            //logger.info("IS PRESENT");
+            ImageView iv = node.get();
+            int index = markerToken.getChildren().indexOf(iv);
+            Label label = (Label) markerLabel.getChildren().get(index);
+            int base = Integer.parseInt(label.getText().split("x")[1]);
+            int updated = base + amount;
+            label.setText("x" + String.valueOf(updated));
+        }
+    }
+
+    @FXML
+    public void handleSkull() {
+
+        Optional<ImageView> iv = skullPane.getChildren().stream()
+                .map(n -> (ImageView) n)
+                .filter(i -> i.getImage() == null)
+                .findFirst();
+
+        if (iv.isPresent()) {
+            iv.get().setImage(new Image(SKULL_PATH));
+        }
+    }
+
+    /**
+     * Resets the damage bar.
+     */
+    @FXML
+    public void handleResetDamage() {
+
+        for (Node n : damagePane.getChildren()) {
+            ((ImageView) n).setImage(null);
+        }
+    }
+
+    /**
+     * Resets the marker bar.
+     */
+    @FXML
+    public void handleResetMarker() {
+        markerLabel.getChildren().stream()
+                .forEach(n -> ((Label) n).setText("x0"));
+    }
+
+    /**
+     * Gets the correct color token to add in damage and/or marker bar.
+     * @param color is the player color.
+     * @return an image of the player color token.
+     */
+    public Image getPlayerToken(PlayerColor color) {
+        String path = TOKEN_PATH + color.getColor().toLowerCase() + PNG;
+        return new NamedImage(path);
+    }
+
+    /**
+     * Gets attacker's color.
+     * @return attacker's color.
+     */
+    public String getPlayerColor() {
+        return playerColor.getText();
+    }
+
+    /**
+     * Gets the number of tokens to add to marker/damage bar.
+     * @return
+     */
+    public int getDamageAmount() {
+        return Integer.parseInt(damageAmount.getText());
     }
 }
