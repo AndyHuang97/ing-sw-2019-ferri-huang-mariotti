@@ -6,6 +6,7 @@ import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class ShootPlayerAction extends PlayerAction {
     }
 
     @Override
-    public String getErrorMessage() {
+    public ErrorResponse getErrorMessage() {
         return null;
     }
 }

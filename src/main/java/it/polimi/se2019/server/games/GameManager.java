@@ -1,7 +1,5 @@
 package it.polimi.se2019.server.games;
 
-import java.io.*;
-
 import com.google.gson.Gson;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
@@ -9,7 +7,11 @@ import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.users.UserData;
 
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -140,6 +142,7 @@ public class GameManager {
 	}
 
 	public List<Tuple> getWaitingList() {
+		// TODO: is that method useful? Other classes cannot use Tuple type!
 		return waitingList;
 	}
 

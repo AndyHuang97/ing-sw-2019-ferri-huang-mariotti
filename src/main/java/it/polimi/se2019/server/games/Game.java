@@ -27,7 +27,7 @@ public class Game extends Observable<Response> implements Serializable {
 	private List<ActionUnit> currentActionUnitsList;
 
 	public Game() {
-		// dont use this constructor
+		// don't use this constructor
 		this.startDate = new Date();
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;

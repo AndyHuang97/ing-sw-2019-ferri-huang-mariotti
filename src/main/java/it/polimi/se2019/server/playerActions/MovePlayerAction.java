@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.graphs.Graph;
+import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class MovePlayerAction extends PlayerAction {
     }
 
     @Override
-    public String getErrorMessage() {
-        return errorMessage;
+    public ErrorResponse getErrorMessage() {
+        return new ErrorResponse(errorMessage);
     }
 }
