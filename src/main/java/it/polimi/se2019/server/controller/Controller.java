@@ -25,33 +25,34 @@ public class Controller implements Observer<Request> {
         action.run();
     }
 
-    // TODO: Maybe refactor the error message proagation with exceptions
     @Override
-    public void update(Request request) throws GameManager.GameNotFoundException, MessageParseException, UnpackingException {
+    public void update(Request request) {
         /**
          * Create an Action object by parsing the messageType and params list from
          * the array, then run the action
          */
+        try {
+            RequestParser requestParser = new RequestParser();
+            requestParser.parse(request, gameManager);
+            List<PlayerAction> playerActionList = requestParser.getPlayerActionList();
 
-        RequestParser requestParser = new RequestParser();
-        requestParser.parse(request, gameManager);
+            boolean runnable = true;
 
-        List<PlayerAction> playerActionList = requestParser.getPlayerActionList();
-
-        boolean runnable = true;
-
-        for (PlayerAction playerAction : playerActionList) {
-            if (!playerAction.check()) {
-                CommandHandler commandHandler = requestParser.getCommandHandler();
-                commandHandler.reportError(playerAction.getErrorMessage());
-                runnable = false;
-            }
-        }
-
-        if (runnable) {
             for (PlayerAction playerAction : playerActionList) {
-                applyAction(playerAction);
+                if (!playerAction.check()) {
+                    CommandHandler commandHandler = requestParser.getCommandHandler();
+                    commandHandler.reportError(playerAction.getErrorMessage());
+                    runnable = false;
+                }
             }
+
+            if (runnable) {
+                for (PlayerAction playerAction : playerActionList) {
+                    applyAction(playerAction);
+                }
+            }
+        } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
+
         }
     }
 

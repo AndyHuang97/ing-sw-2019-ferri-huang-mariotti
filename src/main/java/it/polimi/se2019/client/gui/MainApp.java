@@ -32,9 +32,8 @@ public class MainApp extends Application {
 
         initRootLayout();
         //showMap();
-        showGameBoard();
         //showPlayerBoard();
-
+        showGameBoard();
 
         primaryStage.setResizable(true);
         primaryStage.sizeToScene();
@@ -91,23 +90,12 @@ public class MainApp extends Application {
 
         try{
             // Load root layout from fxml file
-            FXMLLoader gmLoader = new FXMLLoader();
-            gmLoader.setLocation(MainApp.class.getResource("/fxml/GameBoard.fxml"));
-            AnchorPane gameBoard = (AnchorPane) gmLoader.load();
-            GameBoardController gmController = gmLoader.getController();
-            gmController.setMainApp(this);
-
-            FXMLLoader pbLoader = new FXMLLoader();
-            pbLoader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
-            AnchorPane playerBoard = pbLoader.load();
-            PlayerBoardController pbController = pbLoader.getController();
-            pbController.setMainApp(this);
-
-            playerBoard.getChildren().remove(0);
-            gmController.getPlayerBoard().getChildren().add(playerBoard);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/fxml/GameBoard.fxml"));
+            AnchorPane anchorPane = (AnchorPane) loader.load();
 
             // Set the scene containing the root layout
-            rootlayout.setCenter(gameBoard);
+            rootlayout.setCenter(anchorPane);
 
         } catch(IOException e) {
             e.printStackTrace();
@@ -143,13 +131,12 @@ public class MainApp extends Application {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
-            AnchorPane anchorPane = loader.load();
+            AnchorPane anchorPane = (AnchorPane) loader.load();
+
+            rootlayout.setCenter(anchorPane);
 
             PlayerBoardController controller = loader.getController();
             controller.setMainApp(this);
-
-
-
 
         } catch (IOException e) {
             e.printStackTrace();

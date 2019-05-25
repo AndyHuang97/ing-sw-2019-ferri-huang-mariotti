@@ -20,11 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ControllerTest {
-    GameManager gameManager;
-    Controller controller;
-    Tile[][] tileMap;
-    Board board;
-    CommandHandler actualPlayerCommandHandler;
+    private GameManager gameManager;
+    private Controller controller;
+    private Tile[][] tileMap;
+    private Board board;
+    private CommandHandler actualPlayerCommandHandler;
+    static final String testNick = "testNick0";
 
 
     @Before
@@ -45,7 +46,7 @@ public class ControllerTest {
             }
         }
 
-        Game game = gameManager.retrieveGame("testNick0");
+        Game game = gameManager.retrieveGame(testNick);
 
         // Board init
         tileMap = new Tile[2][3];
@@ -66,7 +67,7 @@ public class ControllerTest {
         game.setBoard(board);
 
         // Spawn players
-        Player player0 = game.getPlayerByNickname("testNick0");
+        Player player0 = game.getPlayerByNickname(testNick);
         player0.getCharacterState().setTile(tileMap[0][0]);
 
         // Set testNick0 as current player
@@ -78,8 +79,7 @@ public class ControllerTest {
 
     @Test
     public void test() throws GameManager.GameNotFoundException, PlayerNotFoundException {
-        Player player = gameManager.retrieveGame("testNick0").getPlayerByNickname("testNick0");
-        Tile playerTile = player.getCharacterState().getTile();
+        Player player = gameManager.retrieveGame(testNick).getPlayerByNickname(testNick);
 
         List<Targetable> targetableList = new ArrayList<>();
         targetableList.add(tileMap[0][1]);
@@ -88,10 +88,10 @@ public class ControllerTest {
         command.put("MovePlayerAction", targetableList);
 
         Message message =  new Message(command);
-        Request request = new Request(message, "testNick0");
+        Request request = new Request(message, testNick);
 
         actualPlayerCommandHandler.handle(request);
 
-        Assert.assertTrue(player.getCharacterState().getTile() == tileMap[0][1]);
+        Assert.assertSame(player.getCharacterState().getTile(), tileMap[0][1]);
     }
 }

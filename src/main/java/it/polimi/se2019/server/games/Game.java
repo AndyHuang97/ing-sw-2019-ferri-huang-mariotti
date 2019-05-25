@@ -118,7 +118,7 @@ public class Game extends Observable<Response> implements Serializable {
 
 	public Player getPlayerByNickname(String nickname) throws PlayerNotFoundException {
 	    for (Player player : playerList) {
-	        if (player.getUserData().getNickname() == nickname) {
+	        if (player.getUserData().getNickname().equals(nickname)) {
 	            return player;
             }
         }

@@ -49,7 +49,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         /**
          * Response on move done
          */
-        showMessage(response.serialize());
+        //showMessage(response.serialize());
 
     }
 
