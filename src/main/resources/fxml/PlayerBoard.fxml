@@ -1,68 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="PlayerBoard" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.PlayerBoardController">
    <children>
-      <ImageView fx:id="image" fitHeight="454.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <ImageView fx:id="image" fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <image>
             <Image url="@../images/playerBoards/Blue_PlayerBoard_Normal.png" />
          </image>
       </ImageView>
-      <Button layoutX="180.0" layoutY="4.0" mnemonicParsing="false" onAction="#handleDamage" text="Add damage" />
-      <Button layoutX="77.0" layoutY="4.0" mnemonicParsing="false" onAction="#handleMarker" text="Add Marker" />
-      <Button layoutX="469.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleResetDamage" text="Reset Damage" />
-      <Button layoutX="473.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleResetMarker" text="Reset marker" />
-      <TextField fx:id="playerColor" layoutX="460.0" layoutY="4.0" prefHeight="27.0" prefWidth="125.0" promptText="Input player color" />
-      <TextField fx:id="damageAmount" layoutX="457.0" layoutY="41.0" prefHeight="27.0" prefWidth="131.0" promptText="Input dmg amount" />
-      <TilePane fx:id="markerToken" layoutX="284.0" layoutY="-2.0" prefColumns="4" prefRows="1" prefTileHeight="35.0" prefTileWidth="34.0">
+      <StackPane layoutX="197.0" layoutY="-1.0" prefHeight="22.0" prefWidth="102.0">
          <children>
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+            <GridPane fx:id="markerToken" prefWidth="102.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+               </children>
+            </GridPane>
+            <GridPane fx:id="markerLabel" prefWidth="102.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="8.5" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="8.5" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="8.5" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="8.5" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="9.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="x0">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label text="x0" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label text="x0" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label text="x0" GridPane.columnIndex="3">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+               </children>
+               <StackPane.margin>
+                  <Insets top="5.0" />
+               </StackPane.margin>
+            </GridPane>
          </children>
-      </TilePane>
-      <TilePane fx:id="markerLabel" layoutX="284.0" layoutY="-2.0" prefColumns="4" prefRows="1" prefTileHeight="45.0" prefTileWidth="34.0" vgap="5.0">
+      </StackPane>
+      <GridPane fx:id="damagePane" layoutX="33.0" layoutY="32.0" prefHeight="34.0" prefWidth="272.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <Label text="x0" />
-            <Label text="x0" />
-            <Label text="x0" />
-            <Label text="x0" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" />
+            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" />
          </children>
-      </TilePane>
-      <TilePane fx:id="damagePane" layoutX="51.0" layoutY="48.0" prefColumns="12" prefRows="1" prefTileHeight="45.0" prefTileWidth="34.0">
+      </GridPane>
+      <GridPane fx:id="skullPane" layoutX="82.0" layoutY="70.0" prefHeight="21.0" prefWidth="127.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="35.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
          </children>
-      </TilePane>
-      <TilePane fx:id="skullPane" layoutX="122.0" layoutY="107.0" prefColumns="6" prefRows="1" prefTileHeight="40.0" prefTileWidth="32.0">
-         <children>
-            <ImageView fitHeight="40.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="40.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="40.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="40.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="40.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="40.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </TilePane>
-      <Button layoutX="24.0" layoutY="107.0" mnemonicParsing="false" onAction="#handleSkull" text="Add skulls" />
+      </GridPane>
+      <Button layoutX="94.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleDamage" text="Add damage">
+         <font>
+            <Font size="7.0" />
+         </font>
+      </Button>
+      <Button layoutX="42.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleMarker" text="Add Marker">
+         <font>
+            <Font size="7.0" />
+         </font></Button>
+      <Button layoutX="322.0" layoutY="74.0" mnemonicParsing="false" onAction="#handleResetDamage" text="Reset Damage">
+         <font>
+            <Font size="7.0" />
+         </font></Button>
+      <Button layoutX="325.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleResetMarker" text="Reset marker">
+         <font>
+            <Font size="7.0" />
+         </font></Button>
+      <Button layoutX="38.0" layoutY="69.0" mnemonicParsing="false" onAction="#handleSkull" text="Add skulls">
+         <font>
+            <Font size="7.0" />
+         </font></Button>
+      <TextField fx:id="playerColor" layoutX="313.0" layoutY="7.0" prefHeight="13.0" prefWidth="68.0" promptText="Input player color">
+         <font>
+            <Font size="7.0" />
+         </font></TextField>
+      <TextField fx:id="damageAmount" layoutX="310.0" layoutY="30.0" prefHeight="12.0" prefWidth="71.0" promptText="Input dmg amount">
+         <font>
+            <Font size="7.0" />
+         </font></TextField>
    </children>
 </AnchorPane>

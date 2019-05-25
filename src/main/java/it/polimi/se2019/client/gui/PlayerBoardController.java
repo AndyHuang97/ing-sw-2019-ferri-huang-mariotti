@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.GridPane;
 
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -24,13 +24,13 @@ public class PlayerBoardController {
     @FXML
     private TextField damageAmount;
     @FXML
-    private TilePane damagePane;
+    private GridPane damagePane;
     @FXML
-    private TilePane markerToken;
+    private GridPane markerToken;
     @FXML
-    private TilePane markerLabel;
+    private GridPane markerLabel;
     @FXML
-    private TilePane skullPane;
+    private GridPane skullPane;
 
     private class NamedImage extends Image {
 
@@ -190,5 +190,9 @@ public class PlayerBoardController {
      */
     public int getDamageAmount() {
         return Integer.parseInt(damageAmount.getText());
+    }
+
+    public void resize(Node n) {
+
     }
 }
