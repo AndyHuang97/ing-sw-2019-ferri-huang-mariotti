@@ -77,7 +77,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void test() {
+    public void test() throws GameManager.GameNotFoundException, PlayerNotFoundException {
         Player player = gameManager.retrieveGame("testNick0").getPlayerByNickname("testNick0");
         Tile playerTile = player.getCharacterState().getTile();
 
