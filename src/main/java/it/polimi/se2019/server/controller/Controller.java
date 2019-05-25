@@ -3,55 +3,56 @@ package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.server.exceptions.MessageParseException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
-import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
-import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.server.virtualview.VirtualView;
-import it.polimi.se2019.util.*;
+import it.polimi.se2019.util.Observer;
+import it.polimi.se2019.util.Request;
+import it.polimi.se2019.util.RequestParser;
 
-import java.sql.Struct;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Controller implements Observer<Request> {
 
     private GameManager gameManager;
-    private VirtualView virtualView;
     private TurnHandler turnHandler;
 
-    public Controller(GameManager activeGames, VirtualView virtualView) {
+    public Controller(GameManager activeGames) {
         this.gameManager = activeGames;
-        this.virtualView = virtualView;
-    }
-
-    public void onNotify(Request request) {
-        /**
-         * Create an Action object by parsing the messageType and params list from
-         * the array, then run the action
-         */
     }
 
     public void applyAction(PlayerAction action){
-
+        action.run();
     }
 
     // TODO: Maybe refactor the error message proagation with exceptions
     @Override
-    public void update(Request request) {
-        Game game = new Game();
+    public void update(Request request) throws GameManager.GameNotFoundException, MessageParseException, UnpackingException {
+        /**
+         * Create an Action object by parsing the messageType and params list from
+         * the array, then run the action
+         */
 
-        game.performMove("Move");
-    }
+        RequestParser requestParser = new RequestParser();
+        requestParser.parse(request, gameManager);
 
-    public VirtualView getVirtualView() {
-        return virtualView;
-    }
+        List<PlayerAction> playerActionList = requestParser.getPlayerActionList();
 
-    public void setVirtualView(VirtualView virtualView) {
-        this.virtualView = virtualView;
+        boolean runnable = true;
+
+        for (PlayerAction playerAction : playerActionList) {
+            if (!playerAction.check()) {
+                CommandHandler commandHandler = requestParser.getCommandHandler();
+                commandHandler.reportError(playerAction.getErrorMessage());
+                runnable = false;
+            }
+        }
+
+        if (runnable) {
+            for (PlayerAction playerAction : playerActionList) {
+                applyAction(playerAction);
+            }
+        }
     }
 
     public GameManager getGameManager() {
