@@ -3,8 +3,6 @@ package it.polimi.se2019.client.gui;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -12,20 +10,19 @@ import java.io.IOException;
 
 public class GameBoardController {
 
-    private static final String IMAGE_PATH = "/images/playerBoards/PlayerBoard_";
     private static final String NORMAL = "_Normal";
     private static final String FRENZY = "_Frenzy";
     private static final String PNG = ".png";
+    private MainApp mainApp;
 
-
+    @FXML
+    private VBox leftVbox;
     @FXML
     private AnchorPane map;
     @FXML
     private AnchorPane playerBoard;
     @FXML
     private VBox opponents;
-
-    private MainApp mainApp;
 
     /**
      * The main game board initializer.
@@ -44,13 +41,34 @@ public class GameBoardController {
     }
 
     /**
+     * Initializes the map.
+     */
+    public void initMap() {
+
+        try {
+            FXMLLoader mloader = new FXMLLoader();
+            mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
+            AnchorPane decoratedMap = (AnchorPane) mloader.load();
+            MapController mController = mloader.getController();
+            mController.setMainApp(mainApp);
+
+            // removes the old anchor and adds the new one
+            leftVbox.getChildren().remove(0);
+            leftVbox.getChildren().add(0, decoratedMap);
+            mController.handleMapLoading();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
      * Initializes the players' boards.
      */
     public void initPlayerBoards(PlayerColor playerColor) {
 
         setUpPlayerBoard(playerColor);
         setUpOpponentsBoard(playerColor);
-
     }
 
     /**
@@ -65,12 +83,16 @@ public class GameBoardController {
             AnchorPane correctBoard = playerLoader.load();
 
             PlayerBoardController playerController = playerLoader.getController();
+            playerController.setMainApp(mainApp);
+            playerController.setGameBoardController(this);
             playerController.initMarkerPane(playerColor);
-            playerController.addActionTileButtons(playerColor, NORMAL.split("_")[1]);
 
+            // removes the static image view and adds the decorated one
+            playerBoard.getChildren().remove(0);
             playerBoard.getChildren().add(correctBoard);
-            ImageView playerIV = (ImageView) playerBoard.getChildren().get(0);
-            playerIV.setImage(getPlayerBoardImage(playerColor, NORMAL));
+            playerController.initPlayerBoard(playerColor);
+            playerController.addActionTileButtons(playerColor, NORMAL.split("_")[1]);
+            //playerController.handleFrenzyKill(playerColor);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,12 +117,13 @@ public class GameBoardController {
                     // gets the decorated pane
                     AnchorPane correctPane = (AnchorPane) opponentLoader.load();
 
-                    PlayerBoardController pbController = opponentLoader.getController();
-                    pbController.initMarkerPane(pc);
+                    PlayerBoardController opponentController = opponentLoader.getController();
+                    opponentController.initMarkerPane(pc);
 
+                    // removes the static image view of the opponent and loads the decorated one
+                    opponentPane.getChildren().remove(0);
                     opponentPane.getChildren().add(correctPane);
-                    ImageView iv = (ImageView) opponentPane.getChildren().get(0);
-                    iv.setImage(getPlayerBoardImage(pc, NORMAL));
+                    opponentController.initPlayerBoard(pc);
                     i++;
                 }
             }
@@ -143,11 +166,11 @@ public class GameBoardController {
     }
 
     /**
-     * Returns the player board of a certain color.
-     *
+     * Getter for the left Vbox of the game board.
+     * @return left Vbox of the game board.
      */
-    public Image getPlayerBoardImage(PlayerColor playerColor, String mode) {
-        String path = IMAGE_PATH + playerColor.getColor() + mode + PNG;
-        return new Image(path);
+    public VBox getLeftVbox() {
+        return leftVbox;
     }
+
 }

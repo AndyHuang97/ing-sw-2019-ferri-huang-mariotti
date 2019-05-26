@@ -2,6 +2,8 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -10,14 +12,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * This is the main class of the GUI.
  */
 public class MainApp extends Application {
 
+    private static final Logger logger = Logger.getLogger(MainApp.class.getName());
     private PlayerColor playerColor;
     private Stage primaryStage;
     private BorderPane rootlayout;
@@ -58,7 +63,7 @@ public class MainApp extends Application {
             controller.setMainApp(this);
 
         } catch(IOException e) {
-            e.printStackTrace();
+            logger.warning("Could not find resource.");
         }
     }
 
@@ -96,23 +101,18 @@ public class MainApp extends Application {
             AnchorPane gameBoard = (AnchorPane) gbLoader.load();
             GameBoardController gbController = gbLoader.getController();
             gbController.setMainApp(this);
-            gbController.initPlayerBoards(playerColor);
-
-            FXMLLoader mloader = new FXMLLoader();
-            mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
-            AnchorPane map = (AnchorPane) mloader.load();
-            MapController mController = mloader.getController();
-            mController.setMainApp(this);
-
-            AnchorPane mapPane = gbController.getMap();
-            mapPane.getChildren().remove(0);
-            mapPane.getChildren().add(map);
 
             // Set the scene containing the root layout
             rootlayout.setCenter(gameBoard);
 
+            // initialization of the map must precede the initialization of the player boards
+            gbController.initMap();
+            gbController.initPlayerBoards(playerColor);
+
+
+
         } catch(IOException e) {
-            e.printStackTrace();
+            logger.warning("Could not find resource.");
         }
     }
 
@@ -125,46 +125,32 @@ public class MainApp extends Application {
 
     }
 
-    public void showMap() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/Map.fxml"));
-            AnchorPane anchorPane = (AnchorPane) loader.load();
+    @FXML
+    public static void getInput(ActionEvent event) {
 
-            rootlayout.setCenter(anchorPane);
-
-            MapController controller = loader.getController();
-            controller.setMainApp(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void showPlayerBoard() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
-            AnchorPane anchorPane = (AnchorPane) loader.load();
 
-            rootlayout.setCenter(anchorPane);
-
-            PlayerBoardController controller = loader.getController();
-            controller.setMainApp(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Getter of the primary stage.
+     * @return the primary stage.
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
 
+    /**
+     * Getter of the player color.
+     * @return the player color.
+     */
     public PlayerColor getPlayerColor() {
         return playerColor;
     }
 
+    /**
+     * Setter of the player color.
+     * @param playerColor is the player's color.
+     */
     public void setPlayerColor(PlayerColor playerColor) {
         this.playerColor = playerColor;
     }

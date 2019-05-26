@@ -4,7 +4,6 @@ import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,7 +14,6 @@ import javafx.scene.layout.GridPane;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
 
 public class PlayerBoardController {
 
@@ -23,10 +21,14 @@ public class PlayerBoardController {
     private static final String TOKEN_PATH = "/images/tokens/";
     private static final String SKULL_PATH = "/images/redSkull.png";
     private static final String PNG = ".png";
-    private static final String ACTION_PATH = "/images/playerBoards/ActionTile_";
+    private static final String BOARD_PATH = "/images/playerBoards/PlayerBoard_";
     private static final String NORMAL = "_Normal";
     private static final String FRENZY = "_Frenzy";
+    private MainApp mainApp;
+    private GameBoardController gameBoardController;
 
+    @FXML
+    private AnchorPane main;
     @FXML
     private TextField playerColor;
     @FXML
@@ -38,7 +40,7 @@ public class PlayerBoardController {
     @FXML
     private GridPane markerLabel;
     @FXML
-    private GridPane skullPane;
+    private AnchorPane skullPane;
     @FXML
     private AnchorPane actionTile;
 
@@ -60,8 +62,6 @@ public class PlayerBoardController {
         }
     }
 
-    private MainApp mainApp;
-
     /**
      * The player board initializer.
      */
@@ -80,6 +80,14 @@ public class PlayerBoardController {
     }
 
     /**
+     *
+     * @param gameBoardController
+     */
+    public void setGameBoardController(GameBoardController gameBoardController) {
+        this.gameBoardController = gameBoardController;
+    }
+
+    /**
      * Initializes the marker bar.
      * @param color is the color of the client.
      */
@@ -93,6 +101,16 @@ public class PlayerBoardController {
                 i++;
             }
         }
+    }
+
+    /**
+     * Initializes the main player board.
+     * @param playerColor is the player's color.
+     */
+    @FXML
+    public void initPlayerBoard(PlayerColor playerColor) {
+        ImageView iv = (ImageView) main.getChildren().get(0);
+        iv.setImage(getPlayerBoardImage(playerColor, NORMAL));
     }
 
     /**
@@ -133,7 +151,6 @@ public class PlayerBoardController {
 
         String color = getPlayerColor();
         int amount = getDamageAmount();
-        //logger.info(color + " - " + amount);
 
         Optional<ImageView> node = markerToken.getChildren().stream()
                 .map(n -> (ImageView) n)
@@ -141,7 +158,6 @@ public class PlayerBoardController {
                 .findAny();
 
         if (node.isPresent()) {
-            //logger.info("IS PRESENT");
             ImageView iv = node.get();
             int index = markerToken.getChildren().indexOf(iv);
             Label label = (Label) markerLabel.getChildren().get(index);
@@ -156,8 +172,8 @@ public class PlayerBoardController {
      */
     @FXML
     public void handleSkull() {
-
-        Optional<ImageView> iv = skullPane.getChildren().stream()
+        GridPane gridPane = (GridPane) skullPane.getChildren().get(0);
+        Optional<ImageView> iv = gridPane.getChildren().stream()
                 .map(n -> (ImageView) n)
                 .filter(i -> i.getImage() == null)
                 .findFirst();
@@ -188,26 +204,46 @@ public class PlayerBoardController {
     }
 
     /**
-     * Swaps the action tile with the frenzy mode's tile when in frenzy mode.
+     * Adds the buttons to the action tile according to player's color and
+     * game's current mode.
+     * @param playerColor is the color of the player.
+     * @param mode is the game's current mode.
      */
-    @FXML
-    public void handleActionTileFrenzy() {
-
-    }
-
     public void addActionTileButtons(PlayerColor playerColor, String mode) {
 
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/ActionTile" + mode + ".fxml"));
             AnchorPane buttonedPane = loader.load();
+            ActionTileController atController = loader.getController();
+            atController.setMainApp(mainApp);
+            atController.initGrids();
 
             actionTile.getChildren().add(buttonedPane);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning("Could not find resource.");
         }
+    }
 
+    /**
+     * Swaps the main image and sets up the new skull bar for frenzy mode
+     * @param playerColor is the players' color
+     */
+    public void handleFrenzyKill(PlayerColor playerColor) {
+        ImageView iv = (ImageView) main.getChildren().get(0);
+        iv.setImage(getPlayerBoardImage(playerColor, FRENZY));
 
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/SkullBarFrenzy.fxml"));
+            AnchorPane pane = loader.load();
+
+            skullPane.getChildren().remove(0);
+            skullPane.getChildren().add(pane.getChildren().get(0));
+
+        } catch (IOException e) {
+            logger.warning("Could not find resource.");
+        }
 
     }
 
@@ -237,4 +273,12 @@ public class PlayerBoardController {
         return Integer.parseInt(damageAmount.getText());
     }
 
+    /**
+     * Returns the player board of a certain color.
+     *
+     */
+    public Image getPlayerBoardImage(PlayerColor playerColor, String mode) {
+        String path = BOARD_PATH + playerColor.getColor() + mode + PNG;
+        return new Image(path);
+    }
 }
