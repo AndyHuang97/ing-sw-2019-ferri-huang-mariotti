@@ -5,6 +5,8 @@ import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ public abstract class PlayerAction {
 
     private Game game;
     private Player player;
+    private CommandHandler commandHandler;
 
     @Deprecated
     private Action action;
@@ -38,7 +41,7 @@ public abstract class PlayerAction {
 
     public abstract boolean check();
 
-    public abstract String getErrorMessage();
+    public abstract ErrorResponse getErrorMessage();
 
     public Game getGame() {
         return game;

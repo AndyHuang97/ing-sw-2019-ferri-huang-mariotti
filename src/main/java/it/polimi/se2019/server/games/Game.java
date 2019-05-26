@@ -7,16 +7,16 @@ import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
-import java.util.Observable;
 
-public class Game extends Observable implements Serializable {
+public class Game extends Observable<Response> implements Serializable {
 
-	private String id;
 	private Date startDate;
 	private List<Player> playerList;
 	private Player currentPlayer;
@@ -27,7 +27,7 @@ public class Game extends Observable implements Serializable {
 	private List<ActionUnit> currentActionUnitsList;
 
 	public Game() {
-		this.id = "";
+		// don't use this constructor
 		this.startDate = new Date();
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
@@ -37,8 +37,19 @@ public class Game extends Observable implements Serializable {
 		this.powerupDeck = new ArrayList<>();
 	}
 
-	public Game(String id, Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
-		this.id = id;
+	public Game(List<Player> playerList) {
+		// use this constructor to start a new game
+		this.startDate = new Date();
+		this.playerList = playerList;
+		this.currentPlayer = playerList.get(0);
+		this.board = new Board();
+		this.killshotTrack = 0;
+		this.weaponDeck = new ArrayList<>();
+		this.powerupDeck = new ArrayList<>();
+	}
+
+	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
+		// use this one to resume? a current one
 		this.startDate = startDate;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
@@ -49,10 +60,13 @@ public class Game extends Observable implements Serializable {
 	}
 
 	public GameData generateGameData() {
-		return new GameData(getId(), getStartDate());
+		return new GameData(getStartDate());
 	}
 
 	public void updateTurn() {
+		int newIndex = playerList.indexOf(currentPlayer) + 1;
+		if(newIndex >= playerList.size()) {newIndex = 0;}
+		currentPlayer = playerList.get(newIndex);
 	}
 
 	public Player getCurrentPlayer() {
@@ -61,14 +75,6 @@ public class Game extends Observable implements Serializable {
 
 	public void setCurrentPlayer(Player currentPlayer) {
 		if(currentPlayer.getActive()) this.currentPlayer = currentPlayer;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public Date getStartDate() {
@@ -112,7 +118,7 @@ public class Game extends Observable implements Serializable {
 
 	public Player getPlayerByNickname(String nickname) throws PlayerNotFoundException {
 	    for (Player player : playerList) {
-	        if (player.getUserData().getNickname() == nickname) {
+	        if (player.getUserData().getNickname().equals(nickname)) {
 	            return player;
             }
         }
@@ -150,5 +156,12 @@ public class Game extends Observable implements Serializable {
 
 	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
 		this.currentActionUnitsList = currentActionUnitsList;
+	}
+
+	public void performMove(String action) {
+
+		Response response = new Response(new Game(), true, "");
+		notify(response);
+
 	}
 }

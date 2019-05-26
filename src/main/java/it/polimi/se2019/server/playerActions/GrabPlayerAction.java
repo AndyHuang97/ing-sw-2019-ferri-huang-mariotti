@@ -6,6 +6,7 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.SpawnTile;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class GrabPlayerAction extends PlayerAction {
             List<Weapon> weaponCrate = playerPosition.getWeaponCrate();
 
             for (Weapon weapon : weaponCrate) {
-                if(weapon ==weaponToGrab) {
+                if(weapon == weaponToGrab) {
                     return true;
                 }
             }
@@ -46,8 +47,8 @@ public class GrabPlayerAction extends PlayerAction {
     }
 
     @Override
-    public String getErrorMessage() {
-        return errorMessage;
+    public ErrorResponse getErrorMessage() {
+        return new ErrorResponse(errorMessage);
     }
 
     @Override

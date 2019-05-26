@@ -136,12 +136,12 @@
       ]
     },
     {
+      "type": "NormalTile",
+      "pos": [
+        1,
+        2
+      ],
       "params": {
-        "type": "NormalTile",
-        "pos": [
-          1,
-          2
-        ],
         "color": "WHITE",
         "links": [
           "DOOR",
