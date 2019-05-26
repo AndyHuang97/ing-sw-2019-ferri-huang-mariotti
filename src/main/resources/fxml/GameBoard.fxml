@@ -20,7 +20,7 @@
                <children>
                   <VBox prefHeight="900.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane fx:id="gameBoardPane" prefHeight="454.0" prefWidth="600.0">
+                        <AnchorPane fx:id="map" prefHeight="454.0" prefWidth="600.0">
                            <children>
                               <ImageView fitHeight="454.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
@@ -63,14 +63,14 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <AnchorPane fx:id="playerBoard" >
+                              <AnchorPane fx:id="playerBoard">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                                  <children>
                                     <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/playerBoards/Yellow_PlayerBoard_Normal.png" />
+                                          <Image url="@../images/playerBoards/PlayerBoard_Yellow_Normal.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -141,7 +141,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="900.0" prefWidth="400.0">
                <children>
-                  <VBox layoutX="54.0" prefHeight="900.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox fx:id="opponents" layoutX="54.0" prefHeight="900.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane prefHeight="150.0" prefWidth="400.0">
                            <children>
@@ -172,11 +172,15 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="53.0">
-                                 <image>
-                                    <Image url="@../images/playerBoards/Blue_PlayerBoard_Normal.png" />
-                                 </image>
-                              </ImageView>
+                              <AnchorPane layoutY="53.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="53.0">
+                                 <children>
+                                    <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/playerBoards/PlayerBoard_Blue_Normal.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="150.0" prefWidth="400.0">
@@ -208,14 +212,18 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="53.0">
-                                 <viewport>
-                                    <Rectangle2D />
-                                 </viewport>
-                                 <image>
-                                    <Image url="@../images/playerBoards/Green_PlayerBoard_Normal.png" />
-                                 </image>
-                              </ImageView>
+                              <AnchorPane layoutY="53.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="53.0">
+                                 <children>
+                                    <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                       <image>
+                                          <Image url="@../images/playerBoards/PlayerBoard_Green_Normal.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="150.0" prefWidth="400.0">
@@ -247,14 +255,18 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0">
-                                 <viewport>
-                                    <Rectangle2D />
-                                 </viewport>
-                                 <image>
-                                    <Image url="@../images/playerBoards/Grey_PlayerBoard_Normal.png" />
-                                 </image>
-                              </ImageView>
+                              <AnchorPane layoutY="52.0" AnchorPane.bottomAnchor="0.0">
+                                 <children>
+                                    <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                       <image>
+                                          <Image url="@../images/playerBoards/PlayerBoard_Grey_Normal.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="150.0" prefWidth="400.0">
@@ -286,14 +298,18 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0">
-                                 <viewport>
-                                    <Rectangle2D />
-                                 </viewport>
-                                 <image>
-                                    <Image url="@../images/playerBoards/Purple_PlayerBoard_Normal.png" />
-                                 </image>
-                              </ImageView>
+                              <AnchorPane layoutY="52.0" AnchorPane.bottomAnchor="0.0">
+                                 <children>
+                                    <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                                       <viewport>
+                                          <Rectangle2D />
+                                       </viewport>
+                                       <image>
+                                          <Image url="@../images/playerBoards/PlayerBoard_Purple_Normal.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                      </children>

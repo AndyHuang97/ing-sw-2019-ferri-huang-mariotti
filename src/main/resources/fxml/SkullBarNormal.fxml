@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.SkullBar">
+   <children>
+      <GridPane fx:id="skullPane" prefHeight="21.0" prefWidth="127.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+            <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+            <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

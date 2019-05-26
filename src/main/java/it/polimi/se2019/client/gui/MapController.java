@@ -54,10 +54,20 @@ public class MapController {
 
     }
 
+    /**
+     *  Is called by the main application to set itself.
+     *
+     * @param mainApp
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
+
+    /**
+     * Handles the loading of a map. It shows the clickable tiles based on
+     * the map's json file.
+     */
     @FXML
     public void handleMapLoading() {
 

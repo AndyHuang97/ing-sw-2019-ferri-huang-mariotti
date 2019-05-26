@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,6 +18,7 @@ import java.io.IOException;
  */
 public class MainApp extends Application {
 
+    private PlayerColor playerColor;
     private Stage primaryStage;
     private BorderPane rootlayout;
 
@@ -27,15 +29,15 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        setPlayerColor(PlayerColor.BLUE);
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
         initRootLayout();
-        //showMap();
-        //showPlayerBoard();
         showGameBoard();
 
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
+        primaryStage.setFullScreen(true);
         primaryStage.sizeToScene();
         primaryStage.show();
 
@@ -89,20 +91,22 @@ public class MainApp extends Application {
     public void showGameBoard() {
 
         try{
-            FXMLLoader gmLoader = new FXMLLoader();
-            gmLoader.setLocation(MainApp.class.getResource("/fxml/GameBoard.fxml"));
-            AnchorPane gameBoard = (AnchorPane) gmLoader.load();
-            GameBoardController gmController = gmLoader.getController();
-            gmController.setMainApp(this);
+            FXMLLoader gbLoader = new FXMLLoader();
+            gbLoader.setLocation(MainApp.class.getResource("/fxml/GameBoard.fxml"));
+            AnchorPane gameBoard = (AnchorPane) gbLoader.load();
+            GameBoardController gbController = gbLoader.getController();
+            gbController.setMainApp(this);
+            gbController.initPlayerBoards(playerColor);
 
-            FXMLLoader pbLoader = new FXMLLoader();
-            pbLoader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
-            AnchorPane playerBoard = pbLoader.load();
-            PlayerBoardController pbController = pbLoader.getController();
-            pbController.setMainApp(this);
+            FXMLLoader mloader = new FXMLLoader();
+            mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
+            AnchorPane map = (AnchorPane) mloader.load();
+            MapController mController = mloader.getController();
+            mController.setMainApp(this);
 
-            playerBoard.getChildren().remove(0);
-            gmController.getPlayerBoard().getChildren().add(playerBoard);
+            AnchorPane mapPane = gbController.getMap();
+            mapPane.getChildren().remove(0);
+            mapPane.getChildren().add(map);
 
             // Set the scene containing the root layout
             rootlayout.setCenter(gameBoard);
@@ -155,5 +159,13 @@ public class MainApp extends Application {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public PlayerColor getPlayerColor() {
+        return playerColor;
+    }
+
+    public void setPlayerColor(PlayerColor playerColor) {
+        this.playerColor = playerColor;
     }
 }

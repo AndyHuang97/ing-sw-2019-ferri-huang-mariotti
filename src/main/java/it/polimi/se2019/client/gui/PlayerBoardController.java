@@ -2,22 +2,30 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 public class PlayerBoardController {
 
     private static final Logger logger = Logger.getLogger(PlayerBoardController.class.getName());
     private static final String TOKEN_PATH = "/images/tokens/";
-    private static final String PNG = ".png";
     private static final String SKULL_PATH = "/images/redSkull.png";
+    private static final String PNG = ".png";
+    private static final String ACTION_PATH = "/images/playerBoards/ActionTile_";
+    private static final String NORMAL = "_Normal";
+    private static final String FRENZY = "_Frenzy";
 
     @FXML
     private TextField playerColor;
@@ -31,7 +39,13 @@ public class PlayerBoardController {
     private GridPane markerLabel;
     @FXML
     private GridPane skullPane;
+    @FXML
+    private AnchorPane actionTile;
 
+    /**
+     * NamedImage extends the base Image class by adding a string type member
+     * variable to store the name of the image.
+     */
     private class NamedImage extends Image {
 
         private String name;
@@ -48,10 +62,14 @@ public class PlayerBoardController {
 
     private MainApp mainApp;
 
+    /**
+     * The player board initializer.
+     */
     @FXML
     private void initialize() {
-        initMarkerPane(PlayerColor.GREY);
+
     }
+
     /**
      *  Is called by the main application to set itself.
      *
@@ -119,7 +137,7 @@ public class PlayerBoardController {
 
         Optional<ImageView> node = markerToken.getChildren().stream()
                 .map(n -> (ImageView) n)
-                .filter(i -> ((NamedImage)i.getImage()).getName().toLowerCase().equals(color.toLowerCase()))
+                .filter(i -> ((NamedImage)i.getImage()).getName().equalsIgnoreCase(color))
                 .findAny();
 
         if (node.isPresent()) {
@@ -129,10 +147,13 @@ public class PlayerBoardController {
             Label label = (Label) markerLabel.getChildren().get(index);
             int base = Integer.parseInt(label.getText().split("x")[1]);
             int updated = base + amount;
-            label.setText("x" + String.valueOf(updated));
+            label.setText("x" + updated);
         }
     }
 
+    /**
+     * Adds skulls to the skull bar.
+     */
     @FXML
     public void handleSkull() {
 
@@ -167,6 +188,30 @@ public class PlayerBoardController {
     }
 
     /**
+     * Swaps the action tile with the frenzy mode's tile when in frenzy mode.
+     */
+    @FXML
+    public void handleActionTileFrenzy() {
+
+    }
+
+    public void addActionTileButtons(PlayerColor playerColor, String mode) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/ActionTile" + mode + ".fxml"));
+            AnchorPane buttonedPane = loader.load();
+
+            actionTile.getChildren().add(buttonedPane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+    /**
      * Gets the correct color token to add in damage and/or marker bar.
      * @param color is the player color.
      * @return an image of the player color token.
@@ -192,7 +237,4 @@ public class PlayerBoardController {
         return Integer.parseInt(damageAmount.getText());
     }
 
-    public void resize(Node n) {
-
-    }
 }
