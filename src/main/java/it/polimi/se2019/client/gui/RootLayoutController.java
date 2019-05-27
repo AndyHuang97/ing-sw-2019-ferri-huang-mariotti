@@ -35,7 +35,7 @@ public class RootLayoutController {
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
 
         if (file != null) {
-            mainApp.selectGameBoard(file);
+            //mainApp.selectGameBoard(file);
         }
     }
 

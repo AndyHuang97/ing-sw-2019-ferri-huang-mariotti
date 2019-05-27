@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.games;
 
-import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
@@ -24,7 +23,7 @@ public class Game extends Observable<Response> implements Serializable {
 	private Integer killshotTrack;
 	private List<Weapon> weaponDeck;
 	private List<PowerUp> powerupDeck;
-	private List<ActionUnit> currentActionUnitsList;
+	private List<String> currentActionUnitsList;
 
 	public Game() {
 		// don't use this constructor
@@ -150,11 +149,11 @@ public class Game extends Observable<Response> implements Serializable {
 		this.powerupDeck = powerupDeck;
 	}
 
-	public List<ActionUnit> getCurrentActionUnitsList() {
+	public List<String> getCurrentActionUnitsList() {
 		return currentActionUnitsList;
 	}
 
-	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
+	public void setCurrentActionUnitsList(List<String> currentActionUnitsList) {
 		this.currentActionUnitsList = currentActionUnitsList;
 	}
 

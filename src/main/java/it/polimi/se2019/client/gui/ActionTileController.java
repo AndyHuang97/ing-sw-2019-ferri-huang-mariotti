@@ -34,7 +34,8 @@ public class ActionTileController {
 
     @FXML
     public void handleMMM(){
-        tileGrid.setVisible(true);
 
+        tileGrid.toFront();
+        tileGrid.setVisible(true);
     }
 }

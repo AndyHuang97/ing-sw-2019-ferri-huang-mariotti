@@ -14,7 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -54,7 +53,7 @@ public class MapController {
      */
     @FXML
     public void initialize() {
-
+        // need to wait initialization of other parameters
     }
 
     /**
@@ -69,7 +68,7 @@ public class MapController {
 
     /**
      * Handles the loading of a map. It shows the clickable tiles based on
-     * the map's json file.
+     * the map's json file and the present ammo tiles.
      */
     @FXML
     public void handleMapLoading() {
@@ -88,9 +87,8 @@ public class MapController {
 
                 ObservableList<Node> tileChildren = tileGrid.getChildren();
                 ObservableList<Node> ammoChildren = ammoGrid.getChildren();
-                ObservableList<Node> playerChildren = playerGrid.getChildren();
 
-                // remove buttons from the anchors if present
+                // remove buttons from the anchor pane if present
                 tileChildren.stream()
                         .map(n -> (AnchorPane) n)
                         .filter(ap -> !ap.getChildren().isEmpty())
@@ -104,7 +102,6 @@ public class MapController {
 
                     setUpTileGrid(jsonTile, tileChildren, i);
                     setUpAmmoGrid(jsonTile, ammoChildren, i);
-                    setUpPlayerGrid(jsonTile, playerChildren, i);
 
                     i++;
                 }
@@ -121,35 +118,37 @@ public class MapController {
     }
 
     public void setUpTileGrid(JsonObject jsonTile, ObservableList<Node> children, int i) {
+
         String type = jsonTile.get("type").getAsString();
         if (!type.equals("NoTile")) {
             AnchorPane anchorPane = (AnchorPane) children.get(i);
-
             Button button = new Button("");
             button.setOpacity(0.4);
             AnchorPane.setTopAnchor(button, 0.0);
             AnchorPane.setRightAnchor(button, 0.0);
             AnchorPane.setBottomAnchor(button, 0.0);
             AnchorPane.setLeftAnchor(button, 0.0);
-            button.setOnAction(this::handleTileSelected);
+            // TODO handle event
+            button.setOnAction(event -> {
+
+                mainApp.getPlayerInput().put("tile", i);
+            });
 
             anchorPane.getChildren().add(button);
         }
     }
 
     public void setUpAmmoGrid(JsonObject jsonTile, ObservableList<Node> children, int i) {
+
         String type = jsonTile.get("type").getAsString();
         if (type.equals("NormalTile")) {
             // gets the i-th anchorpane containing the imageview
             AnchorPane anchorPane = (AnchorPane) ((HBox) children.get(i)).getChildren().get(0);
             ImageView iv = (ImageView) anchorPane.getChildren().get(0);
             iv.setImage(new Image("/images/ammo/AD_ammo_042.png"));
-
+            // TODO handle event
+            iv.setOnMouseClicked(event -> System.out.println(i));
         }
-
-    }
-
-    public void setUpPlayerGrid(JsonObject jsonTile, ObservableList<Node> children, int i) {
 
     }
 

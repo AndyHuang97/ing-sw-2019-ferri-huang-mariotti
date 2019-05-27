@@ -125,6 +125,6 @@ public class AmmoTest {
         assertEquals(1, p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
         assertEquals(0, p1.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).intValue());
 
-        // a consumption that makes an ammo color's valure negative is not possible for the conditions
+        // a consumption that makes an ammo color's value negative is not possible for the conditions
     }
 }

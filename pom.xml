@@ -96,9 +96,6 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.2</version>
-                <configuration>
-                    <mainClass>HelloFX</mainClass>
-                </configuration>
             </plugin>
         </plugins>
 

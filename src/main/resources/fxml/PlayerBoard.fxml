@@ -163,7 +163,7 @@
             <Font size="7.0" />
          </font>
       </Button>
-      <TextField fx:id="playerColor" layoutX="313.0" layoutY="7.0" prefHeight="13.0" prefWidth="68.0" promptText="Input player color">
+      <TextField fx:id="pColor" layoutX="313.0" layoutY="7.0" prefHeight="13.0" prefWidth="68.0" promptText="Input player color">
          <font>
             <Font size="7.0" />
          </font></TextField>

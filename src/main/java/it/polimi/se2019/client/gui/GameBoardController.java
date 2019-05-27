@@ -7,13 +7,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 public class GameBoardController {
 
+    private static final Logger logger = Logger.getLogger(GameBoardController.class.getName());
     private static final String NORMAL = "_Normal";
     private static final String FRENZY = "_Frenzy";
     private static final String PNG = ".png";
+
     private MainApp mainApp;
+    private List<PlayerBoardController> playerList;
 
     @FXML
     private VBox leftVbox;
@@ -57,7 +63,7 @@ public class GameBoardController {
             leftVbox.getChildren().add(0, decoratedMap);
             mController.handleMapLoading();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning("Error loading map.");
         }
 
     }
@@ -67,71 +73,43 @@ public class GameBoardController {
      */
     public void initPlayerBoards(PlayerColor playerColor) {
 
-        setUpPlayerBoard(playerColor);
-        setUpOpponentsBoard(playerColor);
-    }
-
-    /**
-     * Sets up the player's board according to his/her color.
-     * @param playerColor the player's color.
-     */
-    public void setUpPlayerBoard(PlayerColor playerColor) {
-        // loading player board
-        try {
-            FXMLLoader playerLoader = new FXMLLoader();
-            playerLoader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
-            AnchorPane correctBoard = playerLoader.load();
-
-            PlayerBoardController playerController = playerLoader.getController();
-            playerController.setMainApp(mainApp);
-            playerController.setGameBoardController(this);
-            playerController.initMarkerPane(playerColor);
-
-            // removes the static image view and adds the decorated one
-            playerBoard.getChildren().remove(0);
-            playerBoard.getChildren().add(correctBoard);
-            playerController.initPlayerBoard(playerColor);
-            playerController.addActionTileButtons(playerColor, NORMAL.split("_")[1]);
-            //playerController.handleFrenzyKill(playerColor);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Sets up the opponents' boards.
-     * @param playerColor the player's(client) color.
-     */
-    public void setUpOpponentsBoard(PlayerColor playerColor) {
-        // loading opponents' boards
+        AnchorPane targetPane;
         int i = 0;
         for (PlayerColor pc : PlayerColor.values()) {
             try {
+                FXMLLoader playerLoader = new FXMLLoader();
+                playerLoader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
+                // gets the decorated pane
+                AnchorPane decoratedPane = playerLoader.load();
+
+                PlayerBoardController playerController = playerLoader.getController();
+                playerController.setMainApp(mainApp);
+                playerController.setPlayerColor(pc);
+                playerController.initMarkerPane(pc);
+
                 if (pc != playerColor) {
-                    FXMLLoader opponentLoader = new FXMLLoader();
-                    opponentLoader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
                     // gets the anchorPane containing the imageview
                     AnchorPane box = (AnchorPane) opponents.getChildren().get(i);
-                    AnchorPane opponentPane = (AnchorPane) box.getChildren().get(1);
-                    // gets the decorated pane
-                    AnchorPane correctPane = (AnchorPane) opponentLoader.load();
+                    targetPane = (AnchorPane) box.getChildren().get(1);
 
-                    PlayerBoardController opponentController = opponentLoader.getController();
-                    opponentController.initMarkerPane(pc);
-
-                    // removes the static image view of the opponent and loads the decorated one
-                    opponentPane.getChildren().remove(0);
-                    opponentPane.getChildren().add(correctPane);
-                    opponentController.initPlayerBoard(pc);
                     i++;
+                }else {
+                    targetPane = playerBoard;
+                    playerController.addActionTileButtons(playerColor, NORMAL.split("_")[1]);
                 }
+                // removes the static image view and loads the decorated one
+                targetPane.getChildren().remove(0);
+                targetPane.getChildren().add(decoratedPane);
+                playerController.initPlayerBoard(pc);
+
             }
             catch (IOException e) {
-                e.printStackTrace();
+                logger.warning("Error loading player boards");
             }
         }
+
     }
+
 
     /**
      * Getter for the player's board.
@@ -173,4 +151,19 @@ public class GameBoardController {
         return leftVbox;
     }
 
+    /**
+     * Gets the list of the player boards' controller.
+     * @return list of player boards' controller
+     */
+    public List<PlayerBoardController> getPlayerList() {
+        return playerList;
+    }
+
+    public PlayerBoardController getPlayerBoard(PlayerColor playerColor) {
+        Optional<PlayerBoardController> optional = getPlayerList().stream()
+                .filter(pc -> pc.getPlayerColor() == playerColor)
+                .findFirst();
+
+        return optional.orElse(null);
+    }
 }

@@ -25,12 +25,12 @@ public class PlayerBoardController {
     private static final String NORMAL = "_Normal";
     private static final String FRENZY = "_Frenzy";
     private MainApp mainApp;
-    private GameBoardController gameBoardController;
+    private PlayerColor playerColor;
 
     @FXML
     private AnchorPane main;
     @FXML
-    private TextField playerColor;
+    private TextField pColor;
     @FXML
     private TextField damageAmount;
     @FXML
@@ -67,7 +67,7 @@ public class PlayerBoardController {
      */
     @FXML
     private void initialize() {
-
+        // need to wait initialization of other parameters.
     }
 
     /**
@@ -77,14 +77,6 @@ public class PlayerBoardController {
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-    }
-
-    /**
-     *
-     * @param gameBoardController
-     */
-    public void setGameBoardController(GameBoardController gameBoardController) {
-        this.gameBoardController = gameBoardController;
     }
 
     /**
@@ -119,18 +111,14 @@ public class PlayerBoardController {
     @FXML
     public void handleDamage() {
 
-        String color = getPlayerColor();
+        String color = getpColor();
         int amount = getDamageAmount();
-        //logger.info(color + " - " + amount);
 
         int i = 0;
         try {
             for (Node n : damagePane.getChildren()) {
-                //logger.info(i + "," + amount);
 
                 if (((ImageView) n).getImage() == null && i < amount) {
-                    //logger.info("EMPTY IMAGE");
-
                     Image token = getPlayerToken(PlayerColor.valueOf(color.toUpperCase()));
                     ((ImageView) n).setImage(token);
 
@@ -149,7 +137,7 @@ public class PlayerBoardController {
     @FXML
     public void handleMarker() {
 
-        String color = getPlayerColor();
+        String color = getpColor();
         int amount = getDamageAmount();
 
         Optional<ImageView> node = markerToken.getChildren().stream()
@@ -261,8 +249,8 @@ public class PlayerBoardController {
      * Gets attacker's color.
      * @return attacker's color.
      */
-    public String getPlayerColor() {
-        return playerColor.getText();
+    public String getpColor() {
+        return pColor.getText();
     }
 
     /**
@@ -280,5 +268,13 @@ public class PlayerBoardController {
     public Image getPlayerBoardImage(PlayerColor playerColor, String mode) {
         String path = BOARD_PATH + playerColor.getColor() + mode + PNG;
         return new Image(path);
+    }
+
+    public void setPlayerColor(PlayerColor playerColor) {
+        this.playerColor = playerColor;
+    }
+
+    public PlayerColor getPlayerColor() {
+        return playerColor;
     }
 }

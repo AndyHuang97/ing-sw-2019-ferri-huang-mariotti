@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -23,6 +24,8 @@ import java.util.logging.Logger;
 public class MainApp extends Application {
 
     private static final Logger logger = Logger.getLogger(MainApp.class.getName());
+
+    private Map<String, Integer> playerInput;
     private PlayerColor playerColor;
     private Stage primaryStage;
     private BorderPane rootlayout;
@@ -67,32 +70,6 @@ public class MainApp extends Application {
         }
     }
 
-    public void showGameBoard(int index) {
-
-        String map = "/images/maps/map" + index + ".png";
-        Image image = new Image(map);
-        ImageView iv = new ImageView();
-        iv.setImage(image);
-        iv.setFitWidth(1024);
-        iv.setPreserveRatio(true);
-        iv.setSmooth(true);
-        iv.setCache(true);
-
-        AnchorPane anchorPane = new AnchorPane();
-        AnchorPane.setTopAnchor(iv, 0.0);
-        AnchorPane.setRightAnchor(iv, 0.0);
-        AnchorPane.setBottomAnchor(iv, 0.0);
-        AnchorPane.setLeftAnchor(iv, 0.0);
-        anchorPane.getChildren().add(iv);
-        //anchorPane.setPrefSize(1024, 1024);
-        //iv.autosize();
-        //anchorPane.autosize();
-
-        rootlayout.setCenter(anchorPane);
-
-        //rootlayout.autosize();
-    }
-
     public void showGameBoard() {
 
         try{
@@ -116,20 +93,10 @@ public class MainApp extends Application {
         }
     }
 
-    public void selectGameBoard(File file) {
-
-        String sub = file.getName().split(".png")[0];
-        String index = sub.substring(sub.length()-1);
-        //System.out.println(index);
-        showGameBoard(Integer.parseInt(index));
-
-    }
-
     @FXML
     public static void getInput(ActionEvent event) {
 
     }
-
 
     /**
      * Getter of the primary stage.
@@ -153,5 +120,9 @@ public class MainApp extends Application {
      */
     public void setPlayerColor(PlayerColor playerColor) {
         this.playerColor = playerColor;
+    }
+
+    public Map<String, Integer> getPlayerInput() {
+        return playerInput;
     }
 }
