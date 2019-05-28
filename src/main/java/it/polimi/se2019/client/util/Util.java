@@ -1,4 +1,4 @@
-package it.polimi.se2019.client.gui.util;
+package it.polimi.se2019.client.util;
 
 public class Util {
 

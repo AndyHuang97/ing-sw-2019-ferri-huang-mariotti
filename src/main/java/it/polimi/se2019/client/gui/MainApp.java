@@ -2,6 +2,7 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.polimi.se2019.client.util.ConnectionType;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
@@ -53,11 +54,12 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        initRootLayout();
-        showGameBoard();
+        showLogin();
+        //initRootLayout();
+        //showGameBoard();
 
         primaryStage.setResizable(false);
-        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(false);
         primaryStage.sizeToScene();
         primaryStage.show();
 
@@ -98,11 +100,29 @@ public class MainApp extends Application {
             gbController.initMap();
             gbController.initPlayerBoards(playerColor);
 
-
-
         } catch(IOException e) {
             logger.warning("Could not find resource.");
         }
+    }
+
+    public void showLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/Login.fxml"));
+            AnchorPane login = loader.load();
+
+            Scene scene = new Scene(login);
+            primaryStage.setScene(scene);
+
+        } catch (IOException e) {
+            logger.warning("Login window loading error.");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void connect(String nickname, String ip, int port, ConnectionType connectionType) {
+
     }
 
     @FXML
@@ -116,8 +136,6 @@ public class MainApp extends Application {
     public void sendInput(){
 
     }
-
-
 
     /**
      * Getter of the primary stage.

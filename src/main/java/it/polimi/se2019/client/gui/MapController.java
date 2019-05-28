@@ -1,7 +1,7 @@
 package it.polimi.se2019.client.gui;
 
 import com.google.gson.*;
-import it.polimi.se2019.client.gui.util.Util;
+import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.games.board.Tile;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,9 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -80,61 +77,39 @@ public class MapController {
     @FXML
     public void handleMapLoading() {
 
+        mapImage.setImage(new Image(IMAGE_PATH + mainApp.getGame().getBoard().getId() + PNG));
+
         try {
-            mapImage.setImage(new Image(IMAGE_PATH + mainApp.getGame().getBoard().getId() + PNG));
 
-            BufferedReader bufferedReader = new BufferedReader(
-                    new FileReader(JSON_PATH + mainApp.getGame().getBoard().getId() + JSON));
-            try {
-                JsonParser parser = new JsonParser();
-                JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
-                JsonArray jsonArray = json.getAsJsonArray("tiles");
+            ObservableList<Node> tileChildren = tileGrid.getChildren();
+            ObservableList<Node> ammoChildren = ammoGrid.getChildren();
 
-                ObservableList<Node> tileChildren = tileGrid.getChildren();
-                ObservableList<Node> ammoChildren = ammoGrid.getChildren();
+            // remove buttons from the anchor pane if present
+            tileChildren.stream()
+                    .map(n -> (AnchorPane) n)
+                    .filter(ap -> !ap.getChildren().isEmpty())
+                    .forEach(pane -> pane.getChildren().remove(0));
 
-                // remove buttons from the anchor pane if present
-                tileChildren.stream()
-                        .map(n -> (AnchorPane) n)
-                        .filter(ap -> !ap.getChildren().isEmpty())
-                        .forEach(pane -> pane.getChildren().remove(0));
+            // here the number of elements of the json array and the dimension of the grid pane
+            // is the same
 
-                // here the number of elements of the json array and the dimension of the grid pane
-                // is the same
-                /*int i = 0;
-                for (JsonElement tileElement : jsonArray) {
-                    JsonObject jsonTile = tileElement.getAsJsonObject();
+            Tile[][] tileMap = mainApp.getGame().getBoard().getTileMap();
+            IntStream.range(0, tileMap[0].length)
+                    .forEach(y -> IntStream.range(0, tileMap.length)
+                            .forEach(x -> {
+                                setUpTileGrid(tileMap, tileChildren, x, y);
+                            }));
 
-                    setUpTileGrid(jsonTile, tileChildren, i);
-                    setUpAmmoGrid(jsonTile, ammoChildren, i);
+            tileGrid.setVisible(false);
 
-                    i++;
-                }
-
-                 */
-
-                Tile[][] tileMap = mainApp.getGame().getBoard().getTileMap();
-                IntStream.range(0, tileMap[0].length)
-                        .forEach(y -> IntStream.range(0, tileMap.length)
-                                .forEach(x -> {
-                                    setUpTileGrid(tileMap, tileChildren, x, y);
-                                }));
-
-                tileGrid.setVisible(false);
-
-            } catch (IllegalArgumentException e) {
-                logger.warning("Invalid map.");
-            } finally {
-                bufferedReader.close();
-            }
-        } catch (IOException e) {
-            logger.warning("Buffer I/O errors.");
+        } catch (IllegalArgumentException e) {
+            logger.warning("Invalid map.");
         }
     }
 
-    public void setUpTileGrid(Tile[][] tile, ObservableList<Node> children, int x, int y) {
+    public void setUpTileGrid(Tile[][] tileMap, ObservableList<Node> children, int x, int y) {
 
-        if (tile != null) {
+        if (tileMap[x][y] != null) {
             AnchorPane anchorPane = (AnchorPane) children.get(Util.convertToIndex(x,y));
             Button button = new Button("");
             button.setOpacity(0.4);
@@ -162,38 +137,6 @@ public class MapController {
 
             anchorPane.getChildren().add(button);
         }
-        /*
-        String type = jsonTile.get("type").getAsString();
-        if (!type.equals("NoTile")) {
-            AnchorPane anchorPane = (AnchorPane) children.get(i);
-            Button button = new Button("");
-            button.setOpacity(0.4);
-            AnchorPane.setTopAnchor(button, 0.0);
-            AnchorPane.setRightAnchor(button, 0.0);
-            AnchorPane.setBottomAnchor(button, 0.0);
-            AnchorPane.setLeftAnchor(button, 0.0);
-
-            // TODO handle event
-            button.setOnAction(event -> {
-                button.setStyle("");
-                button.setDisable(true);
-                BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-                GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
-
-                Optional<Circle> circle = progressBar.getChildren().stream()
-                        .map(n -> (Circle) n)
-                        .filter(c ->  c.getFill() == Paint.valueOf("white"))
-                        .findFirst();
-
-                circle.ifPresent(value -> value.setFill(Paint.valueOf("green")));
-
-                handleTileSelected(i);
-            });
-
-            anchorPane.getChildren().add(button);
-        }
-
-         */
     }
 
     public void setUpAmmoGrid(JsonObject jsonTile, ObservableList<Node> children, int i) {
