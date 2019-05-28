@@ -109,7 +109,7 @@ public class GameTest {
     @Test
     public void testSetWeaponDeck() {
 
-        ArrayList<Weapon> weaponDeck = new ArrayList<>();
+        Deck<Weapon> weaponDeck = new Deck<>(null);
 
         game.setWeaponDeck(weaponDeck);
 
@@ -119,7 +119,7 @@ public class GameTest {
     @Test
     public void testSetPowerupDeck() {
 
-        ArrayList<PowerUp> powerupDeck = new ArrayList<>();
+        Deck<PowerUp> powerupDeck = new Deck<>(null);
 
         game.setPowerupDeck(powerupDeck);
 

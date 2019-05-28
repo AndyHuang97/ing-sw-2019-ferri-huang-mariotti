@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.LoginController">
+   <children>
+      <GridPane prefHeight="300.0" prefWidth="600.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Nickname" />
+            <Label text="IP: PORT" GridPane.rowIndex="1" />
+            <Label text="Connection type" GridPane.rowIndex="2" />
+            <TextField fx:id="nickname" maxWidth="150.0" prefWidth="150.0" promptText="Input nickname" GridPane.columnIndex="1" />
+            <HBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <TextField fx:id="ip" maxWidth="150.0" promptText="Input IP" />
+                  <TextField fx:id="port" maxWidth="60.0" promptText="PORT" />
+               </children>
+            </HBox>
+            <ChoiceBox fx:id="connectType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleConnect" text="Connect" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

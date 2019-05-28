@@ -2,13 +2,12 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.se2019.client.gui.util.Util;
+import it.polimi.se2019.client.util.ConnectionType;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.board.Board;
-import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -55,11 +54,12 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        initRootLayout();
-        showGameBoard();
+        showLogin();
+        //initRootLayout();
+        //showGameBoard();
 
         primaryStage.setResizable(false);
-        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreen(false);
         primaryStage.sizeToScene();
         primaryStage.show();
 
@@ -100,11 +100,29 @@ public class MainApp extends Application {
             gbController.initMap();
             gbController.initPlayerBoards(playerColor);
 
-
-
         } catch(IOException e) {
             logger.warning("Could not find resource.");
         }
+    }
+
+    public void showLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/Login.fxml"));
+            AnchorPane login = loader.load();
+
+            Scene scene = new Scene(login);
+            primaryStage.setScene(scene);
+
+        } catch (IOException e) {
+            logger.warning("Login window loading error.");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void connect(String nickname, String ip, int port, ConnectionType connectionType) {
+
     }
 
     @FXML
@@ -118,8 +136,6 @@ public class MainApp extends Application {
     public void sendInput(){
 
     }
-
-
 
     /**
      * Getter of the primary stage.
@@ -179,8 +195,10 @@ public class MainApp extends Application {
         BoardDeserializer boardDeserializer = new BoardDeserializer();
         factory.registerDeserializer("tile", new TileDeserializerSupplier());
 
-        String path = "src/main/resources/json/maps/map3.json";
+        String path = "src/main/resources/json/maps/map0.json";
         BufferedReader bufferedReader;
+
+        Board board = null;
 
         try {
             bufferedReader = new BufferedReader(new FileReader(path));
@@ -188,6 +206,7 @@ public class MainApp extends Application {
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
             game.setBoard(boardDeserializer.deserialize(json, factory));
+
             try {
                 bufferedReader.close();
             } catch (IOException e) {
