@@ -6,13 +6,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 public class PlayerTest {
 
     Player player;
 
     @Before
     public void setUp() {
-        player = new Player(false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
+        player = new Player(UUID.randomUUID().toString(),false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
     }
 
     @After

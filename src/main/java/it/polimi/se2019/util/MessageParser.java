@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class MessageParser {
 
-    public List<PlayerAction> parse(Message message, Game game, Player player) throws MessageParseException, UnpackingException {
+    public List<PlayerAction> parse(InternalMessage message, Game game, Player player) throws MessageParseException, UnpackingException {
         List<PlayerAction> playerActions = new ArrayList<>();
         for (String k : message.getCommands().keySet()) {
             List<Targetable> params = message.getCommandParams(k);

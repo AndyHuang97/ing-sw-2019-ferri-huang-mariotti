@@ -24,6 +24,7 @@ public class Tile implements Targetable {
 	private boolean isSpawnTile;
 	private List<Weapon> weaponCrate;
 	private AmmoCrate ammoCrate;
+	private String id;
 
 	/**
 	 *
@@ -47,12 +48,21 @@ public class Tile implements Targetable {
 		this.isSpawnTile = false;
 	}
 
-	public Tile(RoomColor color, LinkType[] links, List<Weapon> weaponCrate) {
+	public Tile(String id, LinkType[] links, List<Weapon> weaponCrate, RoomColor color) {
+		this.id = id;
 		this.color = color;
 		this.links = links;
 		this.weaponCrate = weaponCrate;
 		this.ammoCrate = null;
 		this.isSpawnTile = true;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public RoomColor getColor() {

@@ -15,6 +15,7 @@ public class Player implements Observer<PlayerDeath>, Targetable {
 	private UserData userData;
 	private CharacterState characterState;
 	private PlayerColor color;
+	private String id;
 
 	// ----------------------------------------------------
 	// The following class variable is not present in UML.
@@ -30,11 +31,20 @@ public class Player implements Observer<PlayerDeath>, Targetable {
 	 * @param characterState
 	 * @param color
 	 */
-	public Player(boolean active, UserData userData, CharacterState characterState, PlayerColor color) {
+	public Player(String id, boolean active, UserData userData, CharacterState characterState, PlayerColor color) {
 		this.active = active;
 		this.userData = userData;
+		this.id = id;
 		this.characterState = characterState;
 		this.color = color;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**

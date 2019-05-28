@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 
 public class TileTest {
@@ -40,14 +41,14 @@ public class TileTest {
         game.setBoard(board);
 
 
-        p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
-        p1.getCharacterState().setTile(tileMap[0][0]);
-        p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
-        p2.getCharacterState().setTile(tileMap[0][1]);
-        p3 = new Player(true, new UserData("C"), new CharacterState(), PlayerColor.YELLOW);
+        p1 = new Player(UUID.randomUUID().toString(), true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
+        p1.getCharacterState().setTile(tileMap[1][0]);
+        p2 = new Player(UUID.randomUUID().toString(), true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
+        p2.getCharacterState().setTile(tileMap[1][1]);
+        p3 = new Player(UUID.randomUUID().toString(), true, new UserData("C"), new CharacterState(), PlayerColor.YELLOW);
         p3.getCharacterState().setTile(tileMap[1][0]);
-        p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
-        p4.getCharacterState().setTile(tileMap[1][1]);
+        p4 = new Player(UUID.randomUUID().toString(), true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
+        p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
         tile = tileMap[1][1];

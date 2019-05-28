@@ -26,7 +26,7 @@ public class RequestParser {
                 .filter(p -> p.getUserData().getNickname().equals(nickname))
                 .collect(Collectors.toList()).get(0);
 
-        playerActionList = messageParser.parse(request.getMessage(), game, player);
+        playerActionList = messageParser.parse((InternalMessage) request.getMessage(), game, player);
 
         commandHandler = request.getCommandHandler();
     }

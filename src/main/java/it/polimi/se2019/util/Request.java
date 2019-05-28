@@ -24,6 +24,10 @@ public class Request implements Serializable, NetMsg {
         return this.message;
     }
 
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
     public String getNickname() {
         return this.nickname;
     }
