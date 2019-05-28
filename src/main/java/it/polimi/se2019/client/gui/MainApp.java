@@ -2,11 +2,13 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.polimi.se2019.client.gui.util.Util;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -177,10 +179,8 @@ public class MainApp extends Application {
         BoardDeserializer boardDeserializer = new BoardDeserializer();
         factory.registerDeserializer("tile", new TileDeserializerSupplier());
 
-        String path = "src/main/resources/json/maps/map0.json";
+        String path = "src/main/resources/json/maps/map3.json";
         BufferedReader bufferedReader;
-
-        Board board = null;
 
         try {
             bufferedReader = new BufferedReader(new FileReader(path));
@@ -188,7 +188,6 @@ public class MainApp extends Application {
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
             game.setBoard(boardDeserializer.deserialize(json, factory));
-
             try {
                 bufferedReader.close();
             } catch (IOException e) {
