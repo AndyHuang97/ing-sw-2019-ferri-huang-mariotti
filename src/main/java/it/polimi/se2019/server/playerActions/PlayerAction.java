@@ -59,12 +59,12 @@ public abstract class PlayerAction {
         this.player = player;
     }
 
-    // TODO: remove getAction
+    // TODO: remove getActionNumber
     public Action getAction() {
         return action;
     }
 
-    // TODO: remove setAction
+    // TODO: remove setActionNumber
     public void setAction(Action action) {
         this.action = action;
     }

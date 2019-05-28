@@ -16,10 +16,11 @@ public class BoardDeserializer implements RandomDeserializer {
     public Board deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
+        String id = json.get("id").getAsString();
         JsonArray jsonTileArray = json.getAsJsonArray("tiles");
 
         // TODO: hardcoded array size
-        Tile[][] tileMap = new Tile[12][12];
+        Tile[][] tileMap = new Tile[4][3];
         // TODO: use LeafDeseializer (?), read deserializer name from confic
         TileDeserializer tileDeserializer = (TileDeserializer) deserializerFactory.getDeserializer("tile");
 
@@ -46,6 +47,6 @@ public class BoardDeserializer implements RandomDeserializer {
 
         // TODO: pad empty map spaces with void unlinked tiles, maybe flyweight pattern (?)
 
-        return new Board(tileMap);
+        return new Board(id, tileMap);
     }
 }

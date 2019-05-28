@@ -41,7 +41,7 @@ public class MinDistanceTest {
         tileMap[0][2] = new NormalTile(RoomColor.YELLOW, links02, null);
         LinkType[] links12 = {LinkType.WALL, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
         tileMap[1][2] = new NormalTile(RoomColor.WHITE, links12, null);
-        board = new Board(tileMap);
+        board = new Board("",tileMap);
         game.setBoard(board);
 
 

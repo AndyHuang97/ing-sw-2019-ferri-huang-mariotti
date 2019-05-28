@@ -4296,7 +4296,7 @@
 											"top": 1366,
 											"width": 206,
 											"height": 13,
-											"text": "-action: ArrayList<ActionUnit>",
+											"text": "-actionNumber: ArrayList<ActionUnit>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -12473,7 +12473,7 @@
 											"top": 987,
 											"width": 334.19140625,
 											"height": 13,
-											"text": "+getPossibleAction(action ): ArrayList<ActionUnit>",
+											"text": "+getPossibleAction(actionNumber ): ArrayList<ActionUnit>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -13261,7 +13261,7 @@
 											"top": 564,
 											"width": 311.79052734375,
 											"height": 13,
-											"text": "+applyAction(action: PlayerAction, game: Game): void",
+											"text": "+applyAction(actionNumber: PlayerAction, game: Game): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -14540,7 +14540,7 @@
 											"top": 1364,
 											"width": 175,
 											"height": 13,
-											"text": "-action",
+											"text": "-actionNumber",
 											"horizontalAlignment": 0
 										}
 									],
@@ -18695,7 +18695,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpv1WQemxAH7k="
 							},
-							"nickname": "action",
+							"nickname": "actionNumber",
 							"visibility": "private",
 							"type": "ArrayList<ActionUnit>"
 						}
@@ -19923,7 +19923,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp7mZEf2LmdhM="
 									},
-									"nickname": "action "
+									"nickname": "actionNumber "
 								},
 								{
 									"_type": "UMLParameter",
@@ -20075,7 +20075,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp873oyWKn+fA="
 									},
-									"nickname": "action",
+									"nickname": "actionNumber",
 									"type": {
 										"$ref": "AAAAAAFp9/NbsmHvsWs="
 									}
@@ -20191,7 +20191,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp9/NbsmHvsWs="
 							},
-							"nickname": "action",
+							"nickname": "actionNumber",
 							"visibility": "private"
 						}
 					]

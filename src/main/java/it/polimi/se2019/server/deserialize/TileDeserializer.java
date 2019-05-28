@@ -22,12 +22,14 @@ public class TileDeserializer implements RandomDeserializer {
         if (name.equals("NormalTile")) {
             // TODO: maybe edit data so that NoTitle has a param field
             String params = json.get("params").toString();
-            tile = gson.fromJson(params, NormalTile.class);
+            tile = gson.fromJson(params, Tile.class);
+            tile.setSpawnTile(false);
         }
 
         else if (name.equals("SpawnTile")) {
             String params = json.get("params").toString();
-            tile = gson.fromJson(params, SpawnTile.class);
+            tile = gson.fromJson(params, Tile.class);
+            tile.setSpawnTile(true);
         }
 
         else if (name.equals("NoTile")) {

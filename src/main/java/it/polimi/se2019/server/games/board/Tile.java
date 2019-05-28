@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.games.board;
 
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -13,12 +15,15 @@ import java.util.stream.Collectors;
 /**
  * 
  */
-public abstract class Tile implements Targetable {
+public class Tile implements Targetable {
 
 	private static final Logger logger = Logger.getLogger(Tile.class.getName());
 
 	private RoomColor color;
 	private LinkType[] links;
+	private boolean isSpawnTile;
+	private List<Weapon> weaponCrate;
+	private AmmoCrate ammoCrate;
 
 	/**
 	 *
@@ -29,6 +34,25 @@ public abstract class Tile implements Targetable {
 	public Tile(RoomColor color, LinkType[] links) {
 		this.color = color;
 		this.links = links;
+		this.weaponCrate = null;
+		this.ammoCrate = null;
+		this.isSpawnTile = false;
+	}
+
+	public Tile(RoomColor color, LinkType[] links, AmmoCrate ammoCrate) {
+		this.color = color;
+		this.links = links;
+		this.ammoCrate = ammoCrate;
+		this.weaponCrate = null;
+		this.isSpawnTile = false;
+	}
+
+	public Tile(RoomColor color, LinkType[] links, List<Weapon> weaponCrate) {
+		this.color = color;
+		this.links = links;
+		this.weaponCrate = weaponCrate;
+		this.ammoCrate = null;
+		this.isSpawnTile = true;
 	}
 
 	public RoomColor getColor() {
@@ -158,5 +182,29 @@ public abstract class Tile implements Targetable {
 			builder.append(" ");
 		}
 		return builder.toString();
+	}
+
+	public List<Weapon> getWeaponCrate() {
+		return weaponCrate;
+	}
+
+	public void setWeaponCrate(List<Weapon> weaponCrate) {
+		this.weaponCrate = weaponCrate;
+	}
+
+	public AmmoCrate getAmmoCrate() {
+		return ammoCrate;
+	}
+
+	public void setAmmoCrate(AmmoCrate ammoCrate) {
+		this.ammoCrate = ammoCrate;
+	}
+
+	public boolean isSpawnTile() {
+		return isSpawnTile;
+	}
+
+	public void setSpawnTile(boolean spawnTile) {
+		isSpawnTile = spawnTile;
 	}
 }

@@ -7,15 +7,18 @@ import it.polimi.se2019.server.graphs.Graph;
 import java.util.stream.IntStream;
 
 public class Board {
+
+    private String id;
     private Tile[][] tileMap;
     private Graph<Tile> tileTree;
 
     public Board() {
     }
 
-    public Board (Tile[][] tileMap) {
+    public Board (String id, Tile[][] tileMap) {
+        this.id = id;
         this.tileMap = tileMap;
-        tileTree = generateGraph();
+        this.tileTree = generateGraph();
     }
 
     public Tile[][] getTileMap() {
@@ -54,8 +57,8 @@ public class Board {
                 .forEach(y -> IntStream.range(0, tileMap.length)
                         .forEach(x -> graph.addVertex(tileMap[x][y])));
 
-        for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
-            for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
+        for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
+             for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
                 Tile actualTile = tileMap[xCoord][yCoord];
 
                 // intercept the null tile
@@ -88,10 +91,16 @@ public class Board {
         StringBuilder bld = new StringBuilder();
         for(Tile[] row : tileMap) {
             for(Tile t : row) {
-                bld.append(t.toString()+" ");
+                if (t != null) {
+                    bld.append(t.toString() + " ");
+                }
             }
             bld.append("\n");
         }
         return bld.toString();
+    }
+
+    public String getId() {
+        return id;
     }
 }

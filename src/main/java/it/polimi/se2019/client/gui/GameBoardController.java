@@ -3,10 +3,16 @@ package it.polimi.se2019.client.gui;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -19,7 +25,8 @@ public class GameBoardController {
     private static final String PNG = ".png";
 
     private MainApp mainApp;
-    private List<PlayerBoardController> playerList;
+    private List<PlayerBoardController> pbControllerList;
+    private MapController mapController;
 
     @FXML
     private VBox leftVbox;
@@ -29,12 +36,21 @@ public class GameBoardController {
     private AnchorPane playerBoard;
     @FXML
     private VBox opponents;
+    @FXML
+    private Label infoText;
+    @FXML
+    private GridPane progressBar;
+    @FXML
+    private Button confirmButton;
+    @FXML
+    private Button cancelButton;
 
     /**
      * The main game board initializer.
      */
     @FXML
     private void initialize() {
+        pbControllerList = new ArrayList<>();
     }
 
     /**
@@ -55,13 +71,13 @@ public class GameBoardController {
             FXMLLoader mloader = new FXMLLoader();
             mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
             AnchorPane decoratedMap = (AnchorPane) mloader.load();
-            MapController mController = mloader.getController();
-            mController.setMainApp(mainApp);
+            mapController = mloader.getController();
+            mapController.setMainApp(mainApp);
 
             // removes the old anchor and adds the new one
             leftVbox.getChildren().remove(0);
             leftVbox.getChildren().add(0, decoratedMap);
-            mController.handleMapLoading();
+            mapController.handleMapLoading();
         } catch (IOException e) {
             logger.warning("Error loading map.");
         }
@@ -83,6 +99,7 @@ public class GameBoardController {
                 AnchorPane decoratedPane = playerLoader.load();
 
                 PlayerBoardController playerController = playerLoader.getController();
+                pbControllerList.add(playerController);
                 playerController.setMainApp(mainApp);
                 playerController.setPlayerColor(pc);
                 playerController.initMarkerPane(pc);
@@ -110,6 +127,25 @@ public class GameBoardController {
 
     }
 
+    @FXML
+    public void handleConfirm() {
+        mainApp.sendInput();
+        handleCancel();
+    }
+
+    @FXML
+    public void handleCancel() {
+        progressBar.getChildren().stream()
+                .map(n -> (Circle) n)
+                .forEach(c -> {
+                    c.setFill(Paint.valueOf("white"));
+                    c.setVisible(false);
+                });
+        infoText.setText("Select an action("+mainApp.getActionNumber()+")");
+        cancelButton.setDisable(true);
+        confirmButton.setDisable(true);
+        mapController.disableGrids();
+    }
 
     /**
      * Getter for the player's board.
@@ -155,12 +191,17 @@ public class GameBoardController {
      * Gets the list of the player boards' controller.
      * @return list of player boards' controller
      */
-    public List<PlayerBoardController> getPlayerList() {
-        return playerList;
+    public List<PlayerBoardController> getPbControllerList() {
+        return pbControllerList;
     }
 
-    public PlayerBoardController getPlayerBoard(PlayerColor playerColor) {
-        Optional<PlayerBoardController> optional = getPlayerList().stream()
+    /**
+     * Gets the player board corresponding to the player's color
+     * @param playerColor the player's color associated to the board
+     * @return the player board with the correct player color
+     */
+    public PlayerBoardController getPlayerBoardController(PlayerColor playerColor) {
+        Optional<PlayerBoardController> optional = getPbControllerList().stream()
                 .filter(pc -> pc.getPlayerColor() == playerColor)
                 .findFirst();
 

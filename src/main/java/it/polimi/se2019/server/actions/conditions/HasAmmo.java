@@ -14,15 +14,15 @@ import java.util.Map;
  */
 public class HasAmmo implements Condition {
 
-    private EnumMap<AmmoColor, Integer> ammoNeeded;
+    private Map<AmmoColor, Integer> ammoNeeded;
 
-    public HasAmmo(EnumMap<AmmoColor, Integer> ammoNeeded) {
+    public HasAmmo(Map<AmmoColor, Integer> ammoNeeded) {
         this.ammoNeeded = ammoNeeded;
     }
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        EnumMap<AmmoColor, Integer> ammoBag = game.getCurrentPlayer().getCharacterState().getAmmoBag();
+        Map<AmmoColor, Integer> ammoBag = game.getCurrentPlayer().getCharacterState().getAmmoBag();
 
         return Arrays.stream(AmmoColor.values())
                 .allMatch(color -> {

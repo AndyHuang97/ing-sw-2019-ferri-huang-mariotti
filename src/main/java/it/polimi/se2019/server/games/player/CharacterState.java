@@ -6,8 +6,9 @@ import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -16,8 +17,8 @@ public class CharacterState {
 
 	private CharacterValue characterValue;
 	private List<PlayerColor> damageBar;
-	private EnumMap<PlayerColor, Integer> markerBar;
-	private EnumMap<AmmoColor, Integer> ammoBag;
+	private Map<PlayerColor, Integer> markerBar;
+	private Map<AmmoColor, Integer> ammoBag;
 	private List<Weapon> weapoonBag;
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
@@ -50,7 +51,7 @@ public class CharacterState {
 	 * @param score
 	 */
 	public CharacterState(List<PlayerColor> damageBar, CharacterValue characterValue,
-						  EnumMap<PlayerColor, Integer> markerBar, EnumMap<AmmoColor, Integer> ammoBag,
+						  Map<PlayerColor, Integer> markerBar, Map<AmmoColor, Integer> ammoBag,
 						  List<Weapon> weapoonBag, List<PowerUp> powerUpBag, Tile tile, Integer score) {
 		this.damageBar = damageBar;
 		this.characterValue = characterValue;
@@ -98,8 +99,8 @@ public class CharacterState {
 		damageBar.clear();
 	}
 
-	public EnumMap<PlayerColor, Integer> initMarkerBar() {
-		EnumMap<PlayerColor, Integer> markerBar = new EnumMap<>(PlayerColor.class);
+	public Map<PlayerColor, Integer> initMarkerBar() {
+		Map<PlayerColor, Integer> markerBar = new HashMap<>();
 		markerBar.put(PlayerColor.BLUE, 0);
 		markerBar.put(PlayerColor.GREEN, 0);
 		markerBar.put(PlayerColor.GREY, 0);
@@ -112,14 +113,14 @@ public class CharacterState {
 	/**
 	 * @return markerBar
 	 */
-	public EnumMap<PlayerColor, Integer> getMarkerBar() {
+	public Map<PlayerColor, Integer> getMarkerBar() {
 		return markerBar;
 	}
 
 	/**
 	 * @param markerBar
 	 */
-	public void setMarkerBar(EnumMap<PlayerColor, Integer> markerBar) {
+	public void setMarkerBar(Map<PlayerColor, Integer> markerBar) {
 		this.markerBar = markerBar;
 	}
 
@@ -145,8 +146,8 @@ public class CharacterState {
 	 * This method initializes the ammoBag by creating a new instance and setting the values of all keys to 0.
 	 * @return the newly created ammoBag.
 	 */
-	public EnumMap<AmmoColor, Integer> initAmmoBag() {
-		EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
+	public Map<AmmoColor, Integer> initAmmoBag() {
+		Map<AmmoColor, Integer> ammoBag = new HashMap<>();
 		ammoBag.put(AmmoColor.BLUE, 0);
 		ammoBag.put(AmmoColor.RED, 0);
 		ammoBag.put(AmmoColor.YELLOW, 0);
@@ -158,7 +159,7 @@ public class CharacterState {
 	 * This method returns the player's ammoBag.
 	 * @return player's ammoBag.
 	 */
-	public EnumMap<AmmoColor, Integer> getAmmoBag() {
+	public Map<AmmoColor, Integer> getAmmoBag() {
 		return ammoBag;
 	}
 
@@ -166,7 +167,7 @@ public class CharacterState {
 	 * This method sets a new reference for the ammoBag.
 	 * @param ammoBag is the new ammoBag.
 	 */
-	public void setAmmoBag(EnumMap<AmmoColor, Integer> ammoBag) {
+	public void setAmmoBag(Map<AmmoColor, Integer> ammoBag) {
 		this.ammoBag = ammoBag;
 	}
 
@@ -175,7 +176,7 @@ public class CharacterState {
 	 * it keeps an ammo color's max value to 3.
 	 * @param ammoToAdd is a map containing the amount of each ammo color to add to the player's ammoBag.
 	 */
-	public void addAmmo(EnumMap<AmmoColor, Integer> ammoToAdd) {
+	public void addAmmo(Map<AmmoColor, Integer> ammoToAdd) {
 		ammoToAdd.keySet().stream()
 				.forEach(k -> {
 					if (ammoBag.get(k) + ammoToAdd.get(k) > 3) {
@@ -191,7 +192,7 @@ public class CharacterState {
 	 * it keeps an ammo color's max value to 0.
 	 * @param ammoToConsume is a map containing the amount of each ammo color to consume from the player's ammoBag.
 	 */
-	public void consumeAmmo(EnumMap<AmmoColor, Integer> ammoToConsume) {
+	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume) {
 		ammoToConsume.keySet().stream()
 				.forEach(k -> ammoBag.put(k, ammoBag.get(k) - ammoToConsume.get(k)));
 	}

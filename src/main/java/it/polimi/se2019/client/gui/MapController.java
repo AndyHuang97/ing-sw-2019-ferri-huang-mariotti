@@ -1,6 +1,8 @@
 package it.polimi.se2019.client.gui;
 
 import com.google.gson.*;
+import it.polimi.se2019.client.gui.util.Util;
+import it.polimi.se2019.server.games.board.Tile;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,13 +12,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 public class MapController {
 
@@ -74,12 +81,10 @@ public class MapController {
     public void handleMapLoading() {
 
         try {
-            int mapIndex = 0;
-            //int mapIndex = Integer.parseInt(mapNumber.getText());
-            mapImage.setImage(new Image(IMAGE_PATH + mapIndex + PNG));
+            mapImage.setImage(new Image(IMAGE_PATH + mainApp.getGame().getBoard().getId() + PNG));
 
             BufferedReader bufferedReader = new BufferedReader(
-                    new FileReader(JSON_PATH + mapIndex + JSON));
+                    new FileReader(JSON_PATH + mainApp.getGame().getBoard().getId() + JSON));
             try {
                 JsonParser parser = new JsonParser();
                 JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
@@ -96,7 +101,7 @@ public class MapController {
 
                 // here the number of elements of the json array and the dimension of the grid pane
                 // is the same
-                int i = 0;
+                /*int i = 0;
                 for (JsonElement tileElement : jsonArray) {
                     JsonObject jsonTile = tileElement.getAsJsonObject();
 
@@ -105,6 +110,16 @@ public class MapController {
 
                     i++;
                 }
+
+                 */
+
+                Tile[][] tileMap = mainApp.getGame().getBoard().getTileMap();
+                IntStream.range(0, tileMap[0].length)
+                        .forEach(y -> IntStream.range(0, tileMap.length)
+                                .forEach(x -> {
+                                    setUpTileGrid(tileMap, tileChildren, x, y);
+                                }));
+
                 tileGrid.setVisible(false);
 
             } catch (IllegalArgumentException e) {
@@ -117,8 +132,37 @@ public class MapController {
         }
     }
 
-    public void setUpTileGrid(JsonObject jsonTile, ObservableList<Node> children, int i) {
+    public void setUpTileGrid(Tile[][] tile, ObservableList<Node> children, int x, int y) {
 
+        if (tile != null) {
+            AnchorPane anchorPane = (AnchorPane) children.get(Util.convertToIndex(x,y));
+            Button button = new Button("");
+            button.setOpacity(0.4);
+            AnchorPane.setTopAnchor(button, 0.0);
+            AnchorPane.setRightAnchor(button, 0.0);
+            AnchorPane.setBottomAnchor(button, 0.0);
+            AnchorPane.setLeftAnchor(button, 0.0);
+
+            // TODO handle event
+            button.setOnAction(event -> {
+                button.setStyle("");
+                button.setDisable(true);
+                BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+                GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
+
+                Optional<Circle> circle = progressBar.getChildren().stream()
+                        .map(n -> (Circle) n)
+                        .filter(c ->  c.getFill() == Paint.valueOf("white"))
+                        .findFirst();
+
+                circle.ifPresent(value -> value.setFill(Paint.valueOf("green")));
+
+                handleTileSelected(x,y);
+            });
+
+            anchorPane.getChildren().add(button);
+        }
+        /*
         String type = jsonTile.get("type").getAsString();
         if (!type.equals("NoTile")) {
             AnchorPane anchorPane = (AnchorPane) children.get(i);
@@ -128,14 +172,28 @@ public class MapController {
             AnchorPane.setRightAnchor(button, 0.0);
             AnchorPane.setBottomAnchor(button, 0.0);
             AnchorPane.setLeftAnchor(button, 0.0);
+
             // TODO handle event
             button.setOnAction(event -> {
+                button.setStyle("");
+                button.setDisable(true);
+                BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+                GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
 
-                mainApp.getPlayerInput().put("tile", i);
+                Optional<Circle> circle = progressBar.getChildren().stream()
+                        .map(n -> (Circle) n)
+                        .filter(c ->  c.getFill() == Paint.valueOf("white"))
+                        .findFirst();
+
+                circle.ifPresent(value -> value.setFill(Paint.valueOf("green")));
+
+                handleTileSelected(i);
             });
 
             anchorPane.getChildren().add(button);
         }
+
+         */
     }
 
     public void setUpAmmoGrid(JsonObject jsonTile, ObservableList<Node> children, int i) {
@@ -154,10 +212,10 @@ public class MapController {
 
     /**
      * Handles the selection of a button from tile grid.
-     * @param event
+     * @param x is the position of the tile in the grid's children list
      */
-    public void handleTileSelected(ActionEvent event) {
-        mainApp.getInput(event);
+    public void handleTileSelected(int x, int y) {
+        mainApp.getInput(x,y);
 
     }
 
@@ -175,6 +233,12 @@ public class MapController {
      */
     public void handlePlayerSelected(ActionEvent event) {
 
+    }
+
+    public void disableGrids() {
+        tileGrid.setVisible(false);
+        ammoGrid.setDisable(true);
+        playerGrid.setDisable(true);
     }
 
     /**

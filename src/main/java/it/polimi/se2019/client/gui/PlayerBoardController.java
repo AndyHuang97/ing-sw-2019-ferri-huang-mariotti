@@ -124,7 +124,6 @@ public class PlayerBoardController {
 
                     i++;
                 }
-
             }
         } catch (Exception e) {
             logger.warning("Invalid Color.");
@@ -205,8 +204,10 @@ public class PlayerBoardController {
             AnchorPane buttonedPane = loader.load();
             ActionTileController atController = loader.getController();
             atController.setMainApp(mainApp);
-            atController.initGrids();
+            atController.initParams();
 
+            ImageView iv = (ImageView) buttonedPane.getChildren().get(0);
+            iv.setImage(new Image("/images/playerBoards/ActionTile_"+mainApp.getPlayerColor().getColor()+"_"+mode+".png"));
             actionTile.getChildren().add(buttonedPane);
         } catch (IOException e) {
             logger.warning("Could not find resource.");

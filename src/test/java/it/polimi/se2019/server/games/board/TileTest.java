@@ -36,7 +36,7 @@ public class TileTest {
         tileMap[1][0] = new NormalTile(RoomColor.BLUE, links10, null);
         LinkType[] links11 = {LinkType.OPEN, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
         tileMap[1][1] = new NormalTile(RoomColor.BLUE, links11, null);
-        board = new Board(tileMap);
+        board = new Board("",tileMap);
         game.setBoard(board);
 
 
