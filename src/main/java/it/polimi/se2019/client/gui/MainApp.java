@@ -6,6 +6,7 @@ import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
@@ -59,7 +60,8 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        showLogin();
+
+        //showLogin();
         initRootLayout();
         showGameBoard();
 
@@ -79,6 +81,7 @@ public class MainApp extends Application {
 
             // Set the scene containing the root layout
             Scene scene = new Scene(rootlayout);
+            scene.getStylesheets().add("/css/root.css");
             primaryStage.setScene(scene);
 
             RootLayoutController controller = loader.getController();
@@ -102,8 +105,7 @@ public class MainApp extends Application {
             rootlayout.setCenter(gameBoard);
 
             // initialization of the map must precede the initialization of the player boards
-            gbController.initMap();
-            gbController.initPlayerBoards(playerColor);
+            gbController.init(playerColor);
 
         } catch(IOException e) {
             logger.warning("Could not find resource.");
@@ -157,6 +159,10 @@ public class MainApp extends Application {
 
     @FXML
     public void getInput(int x, int y) {
+
+    }
+
+    public void handleCardSelection() {
 
     }
 
@@ -225,7 +231,7 @@ public class MainApp extends Application {
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("A"), new CharacterState(), PlayerColor.GREEN);
-        p1.getCharacterState().setTile(game.getBoard().getTile(0,0));
+        p1.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("B"), new CharacterState(), PlayerColor.BLUE);
         p2.getCharacterState().setTile(game.getBoard().getTile(1,1));
         Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("C"), new CharacterState(), PlayerColor.YELLOW);
@@ -261,7 +267,19 @@ public class MainApp extends Application {
                     .forEach(y -> IntStream.range(0, tileMap.length)
                             .forEach(x -> {
                                 if (tileMap[x][y] != null) {
-                                    tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "042"));
+                                    if (!tileMap[x][y].isSpawnTile()) {
+                                        tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "042"));
+                                    }
+                                    else {
+                                        tileMap[x][y].setWeaponCrate(
+                                                Arrays.asList(
+                                                        new Weapon(null, "026", null
+                                                                , null, null),
+                                                        new Weapon(null, "027", null
+                                                                , null, null),
+                                                        new Weapon(null, "028", null
+                                                                , null, null)));
+                                    }
                                 }
                             }));
 

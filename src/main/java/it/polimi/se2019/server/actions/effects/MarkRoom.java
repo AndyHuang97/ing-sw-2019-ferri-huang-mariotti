@@ -21,10 +21,10 @@ public class MarkRoom implements Effect {
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
         Tile tile = (Tile) targets.get("tile").get(0);
-        RoomColor roomColor = tile.getColor();
+        RoomColor roomColor = tile.getRoomColor();
 
         List<Player> playerList = game.getPlayerList().stream()
-                .filter(p -> p.getCharacterState().getTile().getColor() == roomColor && p != game.getCurrentPlayer())
+                .filter(p -> p.getCharacterState().getTile().getRoomColor() == roomColor && p != game.getCurrentPlayer())
                 .collect(Collectors.toList());
 
         playerList.stream()

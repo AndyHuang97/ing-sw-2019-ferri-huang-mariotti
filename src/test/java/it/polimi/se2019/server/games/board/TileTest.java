@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.games.board;
 
-import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
@@ -68,9 +67,9 @@ public class TileTest {
     @Test
     public void testSetColor() {
 
-        tile.setColor(RoomColor.BLUE);
+        tile.setRoomColor(RoomColor.BLUE);
 
-        Assert.assertEquals(RoomColor.BLUE, tile.getColor());
+        Assert.assertEquals(RoomColor.BLUE, tile.getRoomColor());
     }
 
 
@@ -110,7 +109,7 @@ public class TileTest {
     @Test
     public void testGetPlayers() {
 
-        List<Player> playerList = new ArrayList<>(Arrays.asList(p4));
+        List<Player> playerList = new ArrayList<>(Arrays.asList(p2));
 
         Assert.assertEquals(playerList, tile.getPlayers(game));
     }
@@ -125,7 +124,7 @@ public class TileTest {
 
     @Test
     public void testGetVisibleTargets() {
-        List<Player> expectedList = Arrays.asList(p2, p3);
+        List<Player> expectedList = Arrays.asList(p1, p3, p4);
 
         Assert.assertEquals(expectedList, tile.getVisibleTargets(game));
     }

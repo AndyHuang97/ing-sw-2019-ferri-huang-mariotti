@@ -1,0 +1,10 @@
+.my-node {
+    -fx-border-color: red;
+}
+
+.empty-node {
+
+}
+.info {
+    -fx-border-color: blue;
+}

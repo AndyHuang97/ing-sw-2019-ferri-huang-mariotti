@@ -1,6 +1,5 @@
 package it.polimi.se2019.client.gui;
 
-import com.google.gson.*;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
@@ -18,6 +17,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -25,7 +26,9 @@ import java.util.stream.IntStream;
 public class MapController {
 
     private static final Logger logger = Logger.getLogger(MapController.class.getName());
+
     private MainApp mainApp;
+    private List<GridPane> weaponCrateList;
 
     @FXML
     private ImageView mapImage;
@@ -54,6 +57,7 @@ public class MapController {
     @FXML
     public void initialize() {
         // need to wait initialization of other parameters
+        weaponCrateList = Arrays.asList(blueWeapons,redWeapons,yellowWeapons);
     }
 
     /**
@@ -90,12 +94,15 @@ public class MapController {
             tileGrid.setVisible(false);
             ammoGrid.setDisable(true);
             showPlayers();
+            setUpWeaponCrates();
+            showWeaponCrates();
 
         } catch (IllegalArgumentException e) {
             logger.warning("Invalid map.");
             e.printStackTrace();
         }
     }
+
 
     public void setUpGridButton(Tile[][] tileMap, int x, int y) {
 
@@ -112,10 +119,10 @@ public class MapController {
                 button.setStyle("");
                 button.setDisable(true);
                 BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-                GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
+                GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
-                isFirstSelection(root, progressBar);
-                updateCircle(progressBar);
+                Util.isFirstSelection(root, progressBar);
+                Util.updateCircle(progressBar);
 
                 boolean last = progressBar.getChildren().stream()
                         .map(n -> (Circle) n)
@@ -140,6 +147,13 @@ public class MapController {
         }
     }
 
+    /**
+     * This is the first initialization of the ammo grid, which defines the effect of mouse click
+     * for every single ammo card.
+     * @param tileMap is tile map.
+     * @param x is the x coordinate of the tile.
+     * @param y is the y coordintate of the tile.
+     */
     public void setUpGridAmmo(Tile[][] tileMap, int x, int y) {
 
         if (tileMap[x][y] != null) {
@@ -148,16 +162,18 @@ public class MapController {
                 AnchorPane anchorPane = (AnchorPane) ((HBox) ammoGrid.getChildren().get(Util.convertToIndex(x, y))).getChildren().get(0);
                 ImageView iv = (ImageView) anchorPane.getChildren().get(0);
                 String id = mainApp.getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
+                //TODO separate the image loading form the setup, no need to iterate the mouse click behavior
                 iv.setImage(new Image(Constants.AMMO_PATH + id + ".png"));
                 iv.setVisible(true);
 
                 iv.setOnMouseClicked(event -> {
-                    iv.setDisable(true);
+                    anchorPane.setDisable(true);
+                    anchorPane.setOpacity(0.6);
                     BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-                    GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
+                    GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
-                    isFirstSelection(root, progressBar);
-                    updateCircle(progressBar);
+                    Util.isFirstSelection(root, progressBar);
+                    Util.updateCircle(progressBar);
 
                     ammoGrid.getChildren().stream()
                             .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
@@ -165,10 +181,65 @@ public class MapController {
                             .filter(ap -> ap.getChildren().get(0).isVisible())
                             .forEach(ap -> ap.setStyle(""));
 
-                    handleAmmoTileSelected(x, y);
+                    handleAmmoCrateSelected(x, y);
                 });
             }
         }
+    }
+
+    /**
+     * Sets the mouse click behavior on weapon crates' cards.
+     */
+    public void setUpWeaponCrates() {
+
+        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
+
+        weaponCrateList.stream()
+                .forEach(wc -> {
+                    wc.setDisable(true);
+                    wc.getChildren().stream()
+                            .forEach(n ->
+                                    n.setOnMouseClicked(event -> {
+                                        wc.setDisable(true);
+                                        n.setDisable(true);
+                                        n.setOpacity(0.6);
+
+                                        Util.isFirstSelection(root, progressBar);
+                                        Util.updateCircle(progressBar);
+
+                                        handleWeaponSelected(1,1);
+                                    })
+                            );
+                });
+    }
+
+    /**
+     * Plainly shows the weapon crates.
+     */
+    public void showWeaponCrates() {
+        Tile[][] tileMap = mainApp.getGame().getBoard().getTileMap();
+        IntStream.range(0, tileMap[0].length)
+                .forEach(y -> IntStream.range(0, tileMap.length)
+                        .filter(x -> tileMap[x][y] != null)
+                        .filter(x -> tileMap[x][y].isSpawnTile())
+                        .forEach(x -> {
+                            //System.out.println(x + "," + y);
+                            String roomColor = tileMap[x][y].getRoomColor().getColor();
+                            Optional<GridPane> optGrid = weaponCrateList.stream()
+                                    .filter(wc -> wc.getId().split("Weapons")[0].equalsIgnoreCase(roomColor))
+                                    .findFirst();
+                            if (optGrid.isPresent()){
+                                GridPane actualGrid = optGrid.get();
+                                IntStream.range(0, 3)
+                                        .forEach(i -> {
+                                            ImageView iv = (ImageView) actualGrid.getChildren().get(i);
+                                            String weaponID = tileMap[x][y].getWeaponCrate().get(i).getName();
+                                            //System.out.println(Constants.WEAPON_PATH+weaponID+".png");
+                                            iv.setImage(new Image(Constants.WEAPON_PATH+weaponID+".png"));
+                                        });
+                            }
+                        }));
     }
 
     /**
@@ -211,14 +282,23 @@ public class MapController {
 
     }
 
+    public void handleCardSelected(int id) {
+        mainApp.handleCardSelection();
+    }
+
+    public void handleWeaponSelected(int x, int y) {
+        System.out.println("Weapon selected: " + x + "," + y);
+        handleCardSelected(x);
+    }
+
     /**
-     * Handles the selection of a button from ammo tile grid.
+     * Handles the selection of an ammo card from ammo tile grid.
      * @param x is the x coordinate in the grid.
      * @param y is the y coordinate in the grid.
      */
-    public void handleAmmoTileSelected(int x, int y) {
+    public void handleAmmoCrateSelected(int x, int y) {
         System.out.println("Ammocrate selected: "+Util.convertToIndex(x, y));
-
+        handleCardSelected(x);
     }
 
     /**
@@ -227,32 +307,6 @@ public class MapController {
      */
     public void handlePlayerSelected(ActionEvent event) {
 
-    }
-
-    /**
-     * Checks whether the selections is the first in th sequence, if true it enables the confirm button.
-     * @param root is the root node.
-     * @param progressBar is the progress bar.
-     */
-    public void isFirstSelection(BorderPane root, GridPane progressBar) {
-        boolean first = progressBar.getChildren().stream()
-                .map(n -> (Circle) n)
-                .filter(Node::isVisible)
-                .allMatch(c -> c.getFill() == Paint.valueOf("white"));
-
-        if (first) {
-            root.getCenter().lookup("#confirmButton").setDisable(false);
-        }
-    }
-
-    public void updateCircle(GridPane progressBar) {
-        Optional<Circle> circle = progressBar.getChildren().stream()
-                .map(n -> (Circle) n)
-                .filter(c ->  c.getFill() == Paint.valueOf("white"))
-                .filter(Node::isVisible)
-                .findFirst();
-
-        circle.ifPresent(value -> value.setFill(Paint.valueOf("green")));
     }
 
     /**
@@ -280,6 +334,7 @@ public class MapController {
         ammoGrid.setDisable(true);
         resetAmmoGridBorder();
         playerGrid.setDisable(true);
+        resetWeaponGrids();
     }
 
     /**
@@ -305,10 +360,32 @@ public class MapController {
                 .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
                 .filter(ap -> ap.getChildren().get(0).isVisible())
                 .forEach(ap -> {
-                    ap.setStyle("");
-                    ap.getChildren().get(0).setDisable(false);
+                    if(!ap.getStyleClass().isEmpty()){
+                        ap.getStyleClass().remove(0);
+                    }
+                    ap.setDisable(false);
+                    ap.setOpacity(1.0);
                 });
     }
+
+    /**
+     * Resets the weapons grids' border.
+     */
+    public void resetWeaponGrids() {
+        weaponCrateList.stream()
+                .forEach(wc -> {
+                    //wc.getStyleClass().remove(0);
+                    if(!wc.getStyleClass().isEmpty()){
+                        wc.getStyleClass().remove(0);
+                    }
+                    wc.getChildren().stream()
+                            .forEach(n -> {
+                                n.setDisable(false);
+                                n.setOpacity(1.0);
+                            });
+                });
+    }
+
     /**
      * Getter for the tile grid.
      * @return tile grid.

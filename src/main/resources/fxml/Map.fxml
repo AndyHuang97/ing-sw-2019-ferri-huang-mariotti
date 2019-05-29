@@ -452,24 +452,24 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
          </children>
       </GridPane>
-      <GridPane fx:id="yellowWeapons" layoutX="-6.0" layoutY="160.0" prefHeight="198.0" prefWidth="96.0">
+      <GridPane fx:id="redWeapons" layoutX="-6.0" layoutY="160.0" prefHeight="198.0" prefWidth="96.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -479,24 +479,24 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="91.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+            <ImageView fitHeight="85.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="1">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="2">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
          </children>
       </GridPane>
-      <GridPane fx:id="redWeapons" layoutX="513.0" layoutY="254.0" prefHeight="200.0" prefWidth="86.0">
+      <GridPane fx:id="yellowWeapons" layoutX="513.0" layoutY="254.0" prefHeight="200.0" prefWidth="86.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
@@ -506,20 +506,29 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView fitHeight="91.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+            <ImageView fitHeight="80.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
+               <GridPane.margin>
+                  <Insets top="-7.0" />
+               </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="26.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="1">
+            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
+               <GridPane.margin>
+                  <Insets top="-7.0" />
+               </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="26.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="2">
+            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
+               <GridPane.margin>
+                  <Insets top="-7.0" />
+               </GridPane.margin>
             </ImageView>
          </children>
       </GridPane>
@@ -604,7 +613,7 @@
                </children>
             </HBox>
          </children></AnchorPane>
-      <Button layoutX="42.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleMapLoading" prefHeight="18.0" prefWidth="96.0" text="Change Map" />
-      <TextField fx:id="mapNumber" layoutX="144.0" layoutY="65.0" prefHeight="27.0" prefWidth="130.0" promptText="Input map number" />
+      <Button layoutX="42.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleMapLoading" prefHeight="18.0" prefWidth="96.0" text="Change Map" visible="false" />
+      <TextField fx:id="mapNumber" layoutX="144.0" layoutY="65.0" prefHeight="27.0" prefWidth="130.0" promptText="Input map number" visible="false" />
     </children>
 </AnchorPane>

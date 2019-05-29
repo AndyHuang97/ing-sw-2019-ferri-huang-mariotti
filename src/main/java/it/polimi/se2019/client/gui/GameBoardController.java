@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -43,6 +45,10 @@ public class GameBoardController {
     private Button confirmButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private GridPane myWeapons;
+    @FXML
+    private GridPane myPowerups;
 
     /**
      * The main game board initializer.
@@ -59,6 +65,15 @@ public class GameBoardController {
      */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+    }
+
+    /**
+     * Initializes all parameters
+     */
+    public void init(PlayerColor playerColor) {
+        initMap();
+        initPlayerBoards(playerColor);
+        initMyCards();
     }
 
     /**
@@ -80,7 +95,6 @@ public class GameBoardController {
         } catch (IOException e) {
             logger.warning("Error loading map.");
         }
-
     }
 
     /**
@@ -117,13 +131,33 @@ public class GameBoardController {
                 targetPane.getChildren().remove(0);
                 targetPane.getChildren().add(decoratedPane);
                 playerController.initPlayerBoard(pc);
-
             }
             catch (IOException e) {
                 logger.warning("Error loading player boards");
             }
         }
+    }
 
+    public void initMyCards() {
+        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
+        Arrays.asList(myPowerups,myWeapons).stream()
+                .forEach(myCards -> {
+                    myCards.setDisable(true);
+                    myCards.getChildren().stream()
+                            .forEach(w -> {
+                                //w.setVisible(false);
+                                w.setOnMouseClicked(event -> {
+                                    myWeapons.setDisable(true);
+                                    w.setOpacity(0.6);
+
+                                    Util.isFirstSelection(root, progressBar);
+                                    Util.updateCircle(progressBar);
+
+                                    mainApp.handleCardSelection();
+                                });
+                            });
+                });
     }
 
     @FXML
@@ -143,12 +177,25 @@ public class GameBoardController {
         infoText.setText("Select an action("+mainApp.getActionNumber()+")");
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
+
+        Arrays.asList(myPowerups,myWeapons).stream()
+                .forEach(myCards -> {
+                    if (!myCards.getStyleClass().isEmpty()) {
+                        myCards.getStyleClass().remove(0);
+                    }
+                    myCards.getChildren().stream()
+                            .forEach(w ->
+                                    w.setOpacity(1.0)
+                            );
+                });
+
         enableActionButtons();
         mapController.disableGrids();
     }
 
     public void enableActionButtons() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        // if it's not necessary to control specific buttons, it is wiser to get their container
         root.getCenter().lookup("#mmm").setDisable(false);
         root.getCenter().lookup("#mg").setDisable(false);
         root.getCenter().lookup("#s").setDisable(false);
