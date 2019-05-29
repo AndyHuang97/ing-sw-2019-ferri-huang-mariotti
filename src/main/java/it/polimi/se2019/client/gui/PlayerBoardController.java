@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +19,6 @@ import java.util.logging.Logger;
 public class PlayerBoardController {
 
     private static final Logger logger = Logger.getLogger(PlayerBoardController.class.getName());
-    private static final String TOKEN_PATH = "/images/tokens/";
-    private static final String SKULL_PATH = "/images/redSkull.png";
-    private static final String PNG = ".png";
-    private static final String BOARD_PATH = "/images/playerBoards/PlayerBoard_";
-    private static final String NORMAL = "_Normal";
-    private static final String FRENZY = "_Frenzy";
     private MainApp mainApp;
     private PlayerColor playerColor;
 
@@ -54,7 +49,7 @@ public class PlayerBoardController {
 
         public NamedImage(String url) {
             super(url);
-            name = url.split(TOKEN_PATH)[1].split(PNG)[0];
+            name = url.split(Constants.TOKEN_PATH)[1].split(".png")[0];
         }
 
         public String getName() {
@@ -102,7 +97,7 @@ public class PlayerBoardController {
     @FXML
     public void initPlayerBoard(PlayerColor playerColor) {
         ImageView iv = (ImageView) main.getChildren().get(0);
-        iv.setImage(getPlayerBoardImage(playerColor, NORMAL));
+        iv.setImage(getPlayerBoardImage(playerColor, Constants.NORMAL));
     }
 
     /**
@@ -166,7 +161,7 @@ public class PlayerBoardController {
                 .findFirst();
 
         if (iv.isPresent()) {
-            iv.get().setImage(new Image(SKULL_PATH));
+            iv.get().setImage(new Image(Constants.SKULL_PATH));
         }
     }
 
@@ -220,7 +215,7 @@ public class PlayerBoardController {
      */
     public void handleFrenzyKill(PlayerColor playerColor) {
         ImageView iv = (ImageView) main.getChildren().get(0);
-        iv.setImage(getPlayerBoardImage(playerColor, FRENZY));
+        iv.setImage(getPlayerBoardImage(playerColor, Constants.FRENZY));
 
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -242,7 +237,7 @@ public class PlayerBoardController {
      * @return an image of the player color token.
      */
     public Image getPlayerToken(PlayerColor color) {
-        String path = TOKEN_PATH + color.getColor().toLowerCase() + PNG;
+        String path = Constants.TOKEN_PATH + color.getColor().toLowerCase() + ".png";
         return new NamedImage(path);
     }
 
@@ -267,7 +262,7 @@ public class PlayerBoardController {
      *
      */
     public Image getPlayerBoardImage(PlayerColor playerColor, String mode) {
-        String path = BOARD_PATH + playerColor.getColor() + mode + PNG;
+        String path = Constants.BOARD_PATH + playerColor.getColor() + mode + ".png";
         return new Image(path);
     }
 

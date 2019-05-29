@@ -51,6 +51,9 @@ public class SocketServer {
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 commandHandler = new CommandHandler(this);
 
+                String nickname = in.readLine();
+                System.out.println(nickname);
+
                 out.println("Copy and paste this input for test: {\"message\":{},\"nickname\":\"Jon Snow\"}");
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {

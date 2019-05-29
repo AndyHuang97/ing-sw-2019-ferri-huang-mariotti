@@ -34,17 +34,11 @@
                         </AnchorPane>
                         <HBox alignment="CENTER_LEFT" minHeight="50.0" prefHeight="48.0" prefWidth="600.0">
                            <children>
-                              <AnchorPane prefHeight="50.0" prefWidth="300.0" style="-fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2;">
+                              <HBox alignment="CENTER" prefWidth="195.0" style="-fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2;">
                                  <children>
-                                    <Label fx:id="infoText" contentDisplay="CENTER" layoutX="98.0" layoutY="17.0" text="Info Message" textFill="WHITE" AnchorPane.bottomAnchor="16.0" AnchorPane.topAnchor="17.0" />
+                                    <Label fx:id="infoText" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="RIGHT_TO_LEFT" text="Info Text" textFill="WHITE" />
                                  </children>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" top="10.0" />
-                                 </HBox.margin>
-                                 <padding>
-                                    <Insets bottom="-5.0" top="-5.0" />
-                                 </padding>
-                              </AnchorPane>
+                              </HBox>
                               <GridPane fx:id="progressBar">
                                 <columnConstraints>
                                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
@@ -62,7 +56,7 @@
                                     <Circle fill="WHITE" layoutX="135.0" layoutY="35.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" GridPane.columnIndex="3" />
                                  </children>
                               </GridPane>
-                              <HBox>
+                              <HBox fx:id="buttonBox">
                                  <children>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                                        <children>
@@ -99,17 +93,17 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="unloadedWeapons" fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                                        </image>
@@ -132,7 +126,7 @@
                         </HBox>
                         <HBox prefHeight="138.0">
                            <children>
-                              <GridPane hgap="10.0">
+                              <GridPane fx:id="myWeapons" hgap="10.0">
                                 <columnConstraints>
                                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -159,7 +153,7 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <GridPane alignment="CENTER" hgap="10.0" prefWidth="265.0">
+                              <GridPane fx:id="myPowerups" alignment="CENTER" hgap="10.0" prefWidth="265.0">
                                 <columnConstraints>
                                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -208,17 +202,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
@@ -248,17 +242,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
@@ -291,17 +285,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
@@ -334,17 +328,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
                                        </image>

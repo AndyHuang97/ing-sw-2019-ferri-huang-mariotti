@@ -24,13 +24,12 @@
         </rowConstraints>
          <children>
             <Label text="Nickname" />
-            <Label text="IP: PORT" GridPane.rowIndex="1" />
+            <Label text="IP address" GridPane.rowIndex="1" />
             <Label text="Connection type" GridPane.rowIndex="2" />
             <TextField fx:id="nickname" maxWidth="150.0" prefWidth="150.0" promptText="Input nickname" GridPane.columnIndex="1" />
             <HBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <TextField fx:id="ip" maxWidth="150.0" promptText="Input IP" />
-                  <TextField fx:id="port" maxWidth="60.0" promptText="PORT" />
                </children>
             </HBox>
             <ChoiceBox fx:id="connectType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />

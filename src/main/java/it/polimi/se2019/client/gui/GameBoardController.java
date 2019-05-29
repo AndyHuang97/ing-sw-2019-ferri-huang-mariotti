@@ -1,11 +1,13 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -20,9 +22,6 @@ import java.util.logging.Logger;
 public class GameBoardController {
 
     private static final Logger logger = Logger.getLogger(GameBoardController.class.getName());
-    private static final String NORMAL = "_Normal";
-    private static final String FRENZY = "_Frenzy";
-    private static final String PNG = ".png";
 
     private MainApp mainApp;
     private List<PlayerBoardController> pbControllerList;
@@ -112,7 +111,7 @@ public class GameBoardController {
                     i++;
                 }else {
                     targetPane = playerBoard;
-                    playerController.addActionTileButtons(playerColor, NORMAL.split("_")[1]);
+                    playerController.addActionTileButtons(playerColor, Constants.NORMAL.split("_")[1]);
                 }
                 // removes the static image view and loads the decorated one
                 targetPane.getChildren().remove(0);
@@ -144,7 +143,16 @@ public class GameBoardController {
         infoText.setText("Select an action("+mainApp.getActionNumber()+")");
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
+        enableActionButtons();
         mapController.disableGrids();
+    }
+
+    public void enableActionButtons() {
+        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        root.getCenter().lookup("#mmm").setDisable(false);
+        root.getCenter().lookup("#mg").setDisable(false);
+        root.getCenter().lookup("#s").setDisable(false);
+        root.getCenter().lookup("#r").setDisable(false);
     }
 
     /**

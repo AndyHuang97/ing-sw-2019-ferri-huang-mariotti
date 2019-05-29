@@ -2,13 +2,20 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.se2019.client.util.ConnectionType;
+import it.polimi.se2019.client.net.RmiClient;
+import it.polimi.se2019.client.net.SocketClient;
+import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.CharacterState;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.server.users.UserData;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,12 +24,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 /**
  * This is the main class of the GUI.
@@ -35,6 +40,7 @@ public class MainApp extends Application {
     private Game game;
     private PlayerColor playerColor;
     private int actionNumber;
+
     private Stage primaryStage;
     private BorderPane rootlayout;
 
@@ -47,19 +53,18 @@ public class MainApp extends Application {
 
         setPlayerColor(PlayerColor.GREEN);
         // TODO the game should be deserialized from the network, and should be already completely initialized
-        game = new Game();
-        boardDeserialize();
+        initGame();
 
         actionNumber = 1;
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
         showLogin();
-        //initRootLayout();
-        //showGameBoard();
+        initRootLayout();
+        showGameBoard();
 
         primaryStage.setResizable(false);
-        primaryStage.setFullScreen(false);
+        primaryStage.setFullScreen(true);
         primaryStage.sizeToScene();
         primaryStage.show();
 
@@ -110,18 +115,43 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/Login.fxml"));
             AnchorPane login = loader.load();
+            LoginController controller = loader.getController();
+            controller.setMainApp(this);
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Login");
+            controller.setLoginStage(loginStage);
 
             Scene scene = new Scene(login);
-            primaryStage.setScene(scene);
+            loginStage.setScene(scene);
+            loginStage.showAndWait();
 
         } catch (IOException e) {
             logger.warning("Login window loading error.");
             e.printStackTrace();
         }
+    }
+
+    public void connect(String nickname, String ip, String connectionType) {
+        switch (connectionType) {
+            case Constants.RMI:
+                // connect via rmi
+                new RmiClient(nickname, ip);
+                break;
+            case Constants.SOCKET:
+                // connect via socket
+                new SocketClient(nickname, ip);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + connectionType);
+        }
+    }
+
+    public void connectSocket(String ip, int port) {
 
     }
 
-    public void connect(String nickname, String ip, int port, ConnectionType connectionType) {
+    public void connectRMI(String ip, int port) {
 
     }
 
@@ -190,6 +220,25 @@ public class MainApp extends Application {
         this.actionNumber = actionNumber;
     }
 
+    public void initGame() {
+        game = new Game();
+        boardDeserialize();
+
+        Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("A"), new CharacterState(), PlayerColor.GREEN);
+        p1.getCharacterState().setTile(game.getBoard().getTile(0,0));
+        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("B"), new CharacterState(), PlayerColor.BLUE);
+        p2.getCharacterState().setTile(game.getBoard().getTile(1,1));
+        Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("C"), new CharacterState(), PlayerColor.YELLOW);
+        p3.getCharacterState().setTile(game.getBoard().getTile(1,1));
+        Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
+        p4.getCharacterState().setTile(game.getBoard().getTile(0,1));
+        Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("E"), new CharacterState(), PlayerColor.PURPLE);
+        p5.getCharacterState().setTile(game.getBoard().getTile(3,2));
+        game.setPlayerList(Arrays.asList(p1,p2,p3,p4,p5));
+        game.setCurrentPlayer(p1);
+
+    }
+
     public void boardDeserialize() {
         DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
         BoardDeserializer boardDeserializer = new BoardDeserializer();
@@ -206,6 +255,16 @@ public class MainApp extends Application {
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
             game.setBoard(boardDeserializer.deserialize(json, factory));
+
+            Tile[][] tileMap = game.getBoard().getTileMap();
+            IntStream.range(0, tileMap[0].length)
+                    .forEach(y -> IntStream.range(0, tileMap.length)
+                            .forEach(x -> {
+                                if (tileMap[x][y] != null) {
+                                    tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "042"));
+                                }
+                            }));
+
 
             try {
                 bufferedReader.close();

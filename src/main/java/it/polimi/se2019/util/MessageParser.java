@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/run them.
+ * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/setUp them.
  */
 public class MessageParser {
 
