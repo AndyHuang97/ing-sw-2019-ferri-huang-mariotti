@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
@@ -21,8 +22,9 @@ public class Game extends Observable<Response> implements Serializable {
 	private Player currentPlayer;
 	private Board board;
 	private Integer killshotTrack;
-	private List<Weapon> weaponDeck;
-	private List<PowerUp> powerupDeck;
+	private Deck<Weapon> weaponDeck;
+	private Deck<PowerUp> powerupDeck;
+	private Deck<AmmoCrate> ammoCrateDeck;
 	private List<String> currentActionUnitsList;
 
 	public Game() {
@@ -32,8 +34,9 @@ public class Game extends Observable<Response> implements Serializable {
 		this.currentPlayer = null;
 		this.board = new Board();
 		this.killshotTrack = 0;
-		this.weaponDeck = new ArrayList<>();
-		this.powerupDeck = new ArrayList<>();
+		this.weaponDeck = null;
+		this.powerupDeck = null;
+		this.ammoCrateDeck = null;
 	}
 
 	public Game(List<Player> playerList) {
@@ -43,11 +46,12 @@ public class Game extends Observable<Response> implements Serializable {
 		this.currentPlayer = playerList.get(0);
 		this.board = new Board();
 		this.killshotTrack = 0;
-		this.weaponDeck = new ArrayList<>();
-		this.powerupDeck = new ArrayList<>();
+		this.weaponDeck = null;
+		this.powerupDeck = null;
+		this.ammoCrateDeck = null;
 	}
 
-	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
+	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerupDeck, Deck<AmmoCrate> ammoCrateDeck) {
 		// use this one to resume? a current one
 		this.startDate = startDate;
 		this.playerList = playerList;
@@ -56,6 +60,7 @@ public class Game extends Observable<Response> implements Serializable {
 		this.killshotTrack = killshotTrack;
 		this.weaponDeck = weaponDeck;
 		this.powerupDeck = powerupDeck;
+		this.ammoCrateDeck = ammoCrateDeck;
 	}
 
 	public GameData generateGameData() {
@@ -133,19 +138,19 @@ public class Game extends Observable<Response> implements Serializable {
 		this.killshotTrack = killshotTrack;
 	}
 
-	public List<Weapon> getWeaponDeck() {
+	public Deck<Weapon> getWeaponDeck() {
 		return weaponDeck;
 	}
 
-	public void setWeaponDeck(List<Weapon> weaponDeck) {
+	public void setWeaponDeck(Deck<Weapon> weaponDeck) {
 		this.weaponDeck = weaponDeck;
 	}
 
-	public List<PowerUp> getPowerupDeck() {
+	public Deck<PowerUp> getPowerupDeck() {
 		return powerupDeck;
 	}
 
-	public void setPowerupDeck(List<PowerUp> powerupDeck) {
+	public void setPowerupDeck(Deck<PowerUp> powerupDeck) {
 		this.powerupDeck = powerupDeck;
 	}
 

@@ -21,11 +21,11 @@ public class KillshotTrackTest {
 
     @Before
     public void setUp() {
-        p1 = new Player(true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
-        p2 = new Player(true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
-        p3 = new Player(true, new UserData("C"), new CharacterState(), PlayerColor.GREY);
-        p4 = new Player(true, new UserData("D"), new CharacterState(), PlayerColor.PURPLE);
-        p5 = new Player(true, new UserData("E"), new CharacterState(), PlayerColor.YELLOW);
+        p1 = new Player(UUID.randomUUID().toString(),true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
+        p2 = new Player(UUID.randomUUID().toString(),true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
+        p3 = new Player(UUID.randomUUID().toString(),true, new UserData("C"), new CharacterState(), PlayerColor.GREY);
+        p4 = new Player(UUID.randomUUID().toString(),true, new UserData("D"), new CharacterState(), PlayerColor.PURPLE);
+        p5 = new Player(UUID.randomUUID().toString(),true, new UserData("E"), new CharacterState(), PlayerColor.YELLOW);
         pc1 = p1.getColor();
         pc3 = p3.getColor();
         pc4 = p4.getColor();

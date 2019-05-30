@@ -21,7 +21,7 @@ public class IsRoomVisible implements Condition {
         RoomColor targetRoom = (RoomColor)roomColor.get(0);
         Player attacker = (Player) game.getCurrentPlayer();
         return attacker.getCharacterState().getTile().getVisibleTiles(game.getBoard()).stream()
-                    .map(Tile::getColor)
+                    .map(Tile::getRoomColor)
                     .collect(Collectors.toList()).contains(targetRoom);
     }
 }

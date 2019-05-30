@@ -4,26 +4,8 @@ import it.polimi.se2019.server.games.Targetable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
-public class Message {
-    /**
-     * TODO: implement composition of PlayerActions
-     * String messageType, List<Targetable>
-     */
+public interface Message {
 
-    private Map<String, List<Targetable>> commands;
-    //private String messageType;
-    //private List<Targetable> params;
-
-    public Message(Map<String, List<Targetable>> commands) {
-        this.commands = commands;
-    }
-
-    public List<Targetable> getCommandParams(String commandName) {
-        return commands.get(commandName);
-    }
-
-    public Map<String, List<Targetable>> getCommands() {
-        return commands;
-    }
 }

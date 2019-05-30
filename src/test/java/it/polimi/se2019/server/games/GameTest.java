@@ -15,6 +15,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 
 public class GameTest {
 
@@ -45,7 +46,7 @@ public class GameTest {
     @Test
     public void testSetCurrentPlayer_NotActivePlayer() {
 
-        Player nextPlayer = new Player(false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
+        Player nextPlayer = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
         Player currPlayer = game.getCurrentPlayer();
 
         game.setCurrentPlayer(nextPlayer);
@@ -56,7 +57,7 @@ public class GameTest {
     @Test
     public void testSetCurrentPlayer_ActivePlayer() {
 
-        Player nextPlayer = new Player(true, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
+        Player nextPlayer = new Player(UUID.randomUUID().toString(), true, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
 
         game.setCurrentPlayer(nextPlayer);
 
@@ -76,8 +77,8 @@ public class GameTest {
     @Test
     public void testSetPlayerList() {
 
-        Player p1 = new Player(false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
-        Player p2 = new Player(true, new UserData("Nick2"), new CharacterState(), PlayerColor.GREEN);
+        Player p1 = new Player(UUID.randomUUID().toString(), false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
+        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Nick2"), new CharacterState(), PlayerColor.GREEN);
         ArrayList<Player> playerList = new ArrayList<>(Arrays.asList(p1, p2));
 
         game.setPlayerList(playerList);
@@ -108,7 +109,7 @@ public class GameTest {
     @Test
     public void testSetWeaponDeck() {
 
-        ArrayList<Weapon> weaponDeck = new ArrayList<>();
+        Deck<Weapon> weaponDeck = new Deck<>(null);
 
         game.setWeaponDeck(weaponDeck);
 
@@ -118,7 +119,7 @@ public class GameTest {
     @Test
     public void testSetPowerupDeck() {
 
-        ArrayList<PowerUp> powerupDeck = new ArrayList<>();
+        Deck<PowerUp> powerupDeck = new Deck<>(null);
 
         game.setPowerupDeck(powerupDeck);
 

@@ -8,7 +8,7 @@
         0
       ],
       "params": {
-        "color": "RED",
+        "roomColor": "RED",
         "links": [
           "WALL",
           "DOOR",
@@ -24,7 +24,7 @@
         0
       ],
       "params": {
-        "color": "BLUE",
+        "roomColor": "BLUE",
         "links": [
           "WALL",
           "OPEN",
@@ -40,7 +40,7 @@
         0
       ],
       "params": {
-        "color": "BLUE",
+        "roomColor": "BLUE",
         "links": [
           "WALL",
           "DOOR",
@@ -56,7 +56,7 @@
         0
       ],
       "params": {
-        "color": "Green",
+        "roomColor": "Green",
         "links": [
           "WALL",
           "WALL",
@@ -72,7 +72,7 @@
         1
       ],
       "params": {
-        "color": "RED",
+        "roomColor": "RED",
         "links": [
           "OPEN",
           "WALL",
@@ -88,7 +88,7 @@
         1
       ],
       "params": {
-        "color": "PURPLE",
+        "roomColor": "PURPLE",
         "links": [
           "DOOR",
           "WALL",
@@ -104,7 +104,7 @@
         1
       ],
       "params": {
-        "color": "YELLOW",
+        "roomColor": "YELLOW",
         "links": [
           "DOOR",
           "OPEN",
@@ -120,7 +120,7 @@
         1
       ],
       "params": {
-        "color": "YELLOW",
+        "roomColor": "YELLOW",
         "links": [
           "DOOR",
           "WALL",
@@ -136,7 +136,7 @@
         2
       ],
       "params": {
-        "color": "WHITE",
+        "roomColor": "WHITE",
         "links": [
           "DOOR",
           "OPEN",
@@ -152,7 +152,7 @@
         2
       ],
       "params": {
-        "color": "WHITE",
+        "roomColor": "WHITE",
         "links": [
           "DOOR",
           "DOOR",
@@ -168,7 +168,7 @@
         2
       ],
       "params": {
-        "color": "YELLOW",
+        "roomColor": "YELLOW",
         "links": [
           "OPEN",
           "OPEN",
@@ -184,7 +184,7 @@
         2
       ],
       "params": {
-        "color": "YELLOW",
+        "roomColor": "YELLOW",
         "links": [
           "OPEN",
           "WALL",

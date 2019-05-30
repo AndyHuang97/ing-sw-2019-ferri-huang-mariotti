@@ -2,14 +2,23 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.se2019.client.gui.util.Util;
+import it.polimi.se2019.client.net.RmiClient;
+import it.polimi.se2019.client.net.SocketClient;
+import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.Util;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.CharacterState;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.server.users.UserData;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +27,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * This is the main class of the GUI.
@@ -36,6 +44,7 @@ public class MainApp extends Application {
     private Game game;
     private PlayerColor playerColor;
     private int actionNumber;
+
     private Stage primaryStage;
     private BorderPane rootlayout;
 
@@ -48,13 +57,14 @@ public class MainApp extends Application {
 
         setPlayerColor(PlayerColor.GREEN);
         // TODO the game should be deserialized from the network, and should be already completely initialized
-        game = new Game();
-        boardDeserialize();
+        initGame();
 
         actionNumber = 1;
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
+
+        //showLogin();
         initRootLayout();
         showGameBoard();
 
@@ -74,6 +84,7 @@ public class MainApp extends Application {
 
             // Set the scene containing the root layout
             Scene scene = new Scene(rootlayout);
+            scene.getStylesheets().add("/css/root.css");
             primaryStage.setScene(scene);
 
             RootLayoutController controller = loader.getController();
@@ -97,18 +108,72 @@ public class MainApp extends Application {
             rootlayout.setCenter(gameBoard);
 
             // initialization of the map must precede the initialization of the player boards
-            gbController.initMap();
-            gbController.initPlayerBoards(playerColor);
 
-
+            gbController.init(Util.getPlayerByColor(game, playerColor));
 
         } catch(IOException e) {
             logger.warning("Could not find resource.");
         }
     }
 
+    public void showLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/Login.fxml"));
+            AnchorPane login = loader.load();
+            LoginController controller = loader.getController();
+            controller.setMainApp(this);
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Login");
+            controller.setLoginStage(loginStage);
+
+            Scene scene = new Scene(login);
+            loginStage.setScene(scene);
+            loginStage.showAndWait();
+
+        } catch (IOException e) {
+            logger.warning("Login window loading error.");
+            e.printStackTrace();
+        }
+    }
+
+    public void connect(String nickname, String ip, String connectionType) {
+        switch (connectionType) {
+            case Constants.RMI:
+                // connect via rmi
+                new RmiClient(nickname, ip);
+                break;
+            case Constants.SOCKET:
+                // connect via socket
+                new SocketClient(nickname, ip);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + connectionType);
+        }
+    }
+
+    public void connectSocket(String ip, int port) {
+
+    }
+
+    public void connectRMI(String ip, int port) {
+
+    }
+
     @FXML
     public void getInput(int x, int y) {
+
+    }
+
+    /**
+     * Get the next type of input.
+     */
+    public void nextInput() {
+
+    }
+
+    public void handleCardSelection() {
 
     }
 
@@ -118,8 +183,6 @@ public class MainApp extends Application {
     public void sendInput(){
 
     }
-
-
 
     /**
      * Getter of the primary stage.
@@ -174,13 +237,66 @@ public class MainApp extends Application {
         this.actionNumber = actionNumber;
     }
 
+    public void initGame() {
+        game = new Game();
+        boardDeserialize();
+
+        Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.GREEN);
+        p1.getCharacterState().setTile(game.getBoard().getTile(2,0));
+        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Jamie"), new CharacterState(), PlayerColor.BLUE);
+        p2.getCharacterState().setTile(game.getBoard().getTile(1,1));
+        Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Daenerys"), new CharacterState(), PlayerColor.YELLOW);
+        p3.getCharacterState().setTile(game.getBoard().getTile(1,1));
+        Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("Arya"), new CharacterState(), PlayerColor.GREY);
+        p4.getCharacterState().setTile(game.getBoard().getTile(0,1));
+        Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Night King"), new CharacterState(), PlayerColor.PURPLE);
+        p5.getCharacterState().setTile(game.getBoard().getTile(3,2));
+        game.setPlayerList(Arrays.asList(p1,p2,p3,p4,p5));
+        game.setCurrentPlayer(p1);
+        Weapon w1 = new Weapon(null, "0216", null
+                , null, null);
+        w1.setLoaded(true);
+        Weapon w2 = new Weapon(null, "0217", null
+                , null, null);
+        w2.setLoaded(true);
+        Weapon w3 = new Weapon(null, "0218", null
+                , null, null);
+        w3.setLoaded(true);
+        p1.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w3));
+        p1.getCharacterState().setPowerUpBag(Arrays.asList(
+                new PowerUp(null, "026"),
+                new PowerUp(null, "027"),
+                new PowerUp(null, "028")));
+
+        p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
+        p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));
+        p3.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.YELLOW,PlayerColor.BLUE));
+        p4.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.YELLOW));
+        p5.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.GREEN,PlayerColor.BLUE));
+        p1.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
+        p1.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p2.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 3);
+        p2.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p3.getCharacterState().getMarkerBar().put(PlayerColor.PURPLE, 1);
+        p3.getCharacterState().getMarkerBar().put(PlayerColor.GREEN, 2);
+        p4.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
+        p4.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 2);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.GREEN, 1);
+
+    }
+
     public void boardDeserialize() {
         DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
         BoardDeserializer boardDeserializer = new BoardDeserializer();
         factory.registerDeserializer("tile", new TileDeserializerSupplier());
 
-        String path = "src/main/resources/json/maps/map3.json";
+        String path = "src/main/resources/json/maps/map0.json";
         BufferedReader bufferedReader;
+
+        Board board = null;
 
         try {
             bufferedReader = new BufferedReader(new FileReader(path));
@@ -188,6 +304,27 @@ public class MainApp extends Application {
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
             game.setBoard(boardDeserializer.deserialize(json, factory));
+
+            Tile[][] tileMap = game.getBoard().getTileMap();
+            IntStream.range(0, tileMap[0].length)
+                    .forEach(y -> IntStream.range(0, tileMap.length)
+                            .forEach(x -> {
+                                if (tileMap[x][y] != null) {
+                                    if (!tileMap[x][y].isSpawnTile()) {
+                                        tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "042"));
+                                    }
+                                    else {
+                                        tileMap[x][y].setWeaponCrate(
+                                                Arrays.asList(
+                                                        new Weapon(null, "026", null
+                                                                , null, null),
+                                                        new Weapon(null, "027", null
+                                                                , null, null),
+                                                        new Weapon(null, "028", null
+                                                                , null, null)));
+                                    }
+                                }
+                            }));
             try {
                 bufferedReader.close();
             } catch (IOException e) {

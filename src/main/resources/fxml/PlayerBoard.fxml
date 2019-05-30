@@ -23,7 +23,7 @@
       <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="98.0" prefWidth="37.5" />
       <StackPane layoutX="197.0" layoutY="-1.0" prefHeight="22.0" prefWidth="102.0">
          <children>
-            <GridPane fx:id="markerToken" prefWidth="102.0">
+            <GridPane fx:id="markerBar" prefWidth="102.0">
                <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
@@ -78,7 +78,7 @@
             </GridPane>
          </children>
       </StackPane>
-      <GridPane fx:id="damagePane" layoutX="33.0" layoutY="32.0" prefHeight="34.0" prefWidth="272.0">
+      <GridPane fx:id="damageBar" layoutX="33.0" layoutY="32.0" prefHeight="34.0" prefWidth="272.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
@@ -136,38 +136,38 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <Button layoutX="94.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleDamage" text="Add damage">
+      <Button layoutX="94.0" layoutY="5.0" mnemonicParsing="false" text="Add damage" visible="false">
          <font>
             <Font size="7.0" />
          </font>
       </Button>
-      <Button layoutX="42.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleMarker" text="Add Marker">
+      <Button layoutX="42.0" layoutY="5.0" mnemonicParsing="false" text="Add Marker" visible="false">
          <font>
             <Font size="7.0" />
          </font></Button>
-      <Button layoutX="322.0" layoutY="74.0" mnemonicParsing="false" onAction="#handleResetDamage" text="Reset Damage">
+      <Button layoutX="322.0" layoutY="74.0" mnemonicParsing="false" onAction="#handleResetDamage" text="Reset Damage" visible="false">
          <font>
             <Font size="7.0" />
          </font></Button>
-      <Button layoutX="325.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleResetMarker" text="Reset marker">
+      <Button layoutX="325.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleResetMarker" text="Reset marker" visible="false">
          <font>
             <Font size="7.0" />
          </font></Button>
-      <Button layoutX="35.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleSkull" text="Add skulls">
+      <Button layoutX="35.0" layoutY="65.0" mnemonicParsing="false" text="Add skulls" visible="false">
          <font>
             <Font size="7.0" />
          </font>
       </Button>
-      <Button layoutX="40.0" layoutY="82.0" mnemonicParsing="false" text="Frenzy">
+      <Button layoutX="40.0" layoutY="82.0" mnemonicParsing="false" text="Frenzy" visible="false">
          <font>
             <Font size="7.0" />
          </font>
       </Button>
-      <TextField fx:id="pColor" layoutX="313.0" layoutY="7.0" prefHeight="13.0" prefWidth="68.0" promptText="Input player color">
+      <TextField fx:id="pColor" layoutX="313.0" layoutY="7.0" prefHeight="13.0" prefWidth="68.0" promptText="Input player color" visible="false">
          <font>
             <Font size="7.0" />
          </font></TextField>
-      <TextField fx:id="damageAmount" layoutX="310.0" layoutY="30.0" prefHeight="12.0" prefWidth="71.0" promptText="Input dmg amount">
+      <TextField fx:id="damageAmount" layoutX="310.0" layoutY="30.0" prefHeight="12.0" prefWidth="71.0" promptText="Input dmg amount" visible="false">
          <font>
             <Font size="7.0" />
          </font></TextField>

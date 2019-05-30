@@ -29,7 +29,7 @@ public class Controller implements Observer<Request> {
     public void update(Request request) {
         /**
          * Create an Action object by parsing the messageType and params list from
-         * the array, then run the action
+         * the array, then setUp the action
          */
         try {
             RequestParser requestParser = new RequestParser();

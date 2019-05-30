@@ -8,7 +8,7 @@
         0
       ],
       "params": {
-        "color": "BLUE",
+        "roomColor": "BLUE",
         "links": [
           "WALL",
           "OPEN",
@@ -24,7 +24,7 @@
         0
       ],
       "params": {
-        "color": "BLUE",
+        "roomColor": "BLUE",
         "links": [
           "WALL",
           "OPEN",
@@ -40,7 +40,7 @@
         0
       ],
       "params": {
-        "color": "BLUE",
+        "roomColor": "BLUE",
         "links": [
           "WALL",
           "WALL",
@@ -63,7 +63,7 @@
         1
       ],
       "params": {
-        "color": "RED",
+        "roomColor": "RED",
         "links": [
           "DOOR",
           "OPEN",
@@ -79,7 +79,7 @@
         1
       ],
       "params": {
-        "color": "RED",
+        "roomColor": "RED",
         "links": [
           "WALL",
           "OPEN",
@@ -95,7 +95,7 @@
         1
       ],
       "params": {
-        "color": "RED",
+        "roomColor": "RED",
         "links": [
           "DOOR",
           "DOOR",
@@ -111,7 +111,7 @@
         1
       ],
       "params": {
-        "color": "YELLOW",
+        "roomColor": "YELLOW",
         "links": [
           "WALL",
           "WALL",
@@ -134,7 +134,7 @@
         2
       ],
       "params": {
-        "color": "WHITE",
+        "roomColor": "WHITE",
         "links": [
           "DOOR",
           "OPEN",
@@ -150,7 +150,7 @@
         2
       ],
       "params": {
-        "color": "WHITE",
+        "roomColor": "WHITE",
         "links": [
           "WALL",
           "DOOR",
@@ -166,7 +166,7 @@
         2
       ],
       "params": {
-        "color": "YELLOW",
+        "roomColor": "YELLOW",
         "links": [
           "OPEN",
           "WALL",

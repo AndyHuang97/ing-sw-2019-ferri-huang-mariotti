@@ -25,7 +25,7 @@ public class PlayerNotInRoom implements Condition {
 
         return Arrays.stream(tileMap)
                 .allMatch(row -> Arrays.stream(row)
-                        .filter(t -> t.getColor() == roomColor)
+                        .filter(t -> t.getRoomColor() == roomColor)
                         .map(t -> t.getPlayers(game))
                         .noneMatch(lst -> lst.contains(attacker)));
     }

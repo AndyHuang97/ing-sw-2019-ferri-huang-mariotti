@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.graphs.Graph;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class Board {
@@ -23,6 +25,16 @@ public class Board {
 
     public Tile[][] getTileMap() {
         return tileMap;
+    }
+
+    public List<Tile> getTileList() {
+        List<Tile> tileList = new ArrayList<>();
+        for (int i = 0; i < tileMap.length; i++) {
+            for (int j = 0; j < tileMap[i].length; j++) {
+                tileList.add(tileMap[i][j]);
+            }
+        }
+        return tileList;
     }
 
     public void setTileMap(Tile[][] tileMap) {

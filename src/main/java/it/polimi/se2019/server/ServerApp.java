@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
- * This class is used to run the server.
+ * This class is used to setUp the server.
  */
 public class ServerApp {
     private static final Logger logger = Logger.getLogger(ServerApp.class.getName());

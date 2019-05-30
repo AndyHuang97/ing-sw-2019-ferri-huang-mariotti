@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
+import java.util.UUID;
 
 public class GameManager {
 	private static final Logger logger = Logger.getLogger(GameManager.class.getName());
@@ -121,7 +122,7 @@ public class GameManager {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
 			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
-			playerList.add(new Player(true, tuple.userData, new CharacterState(), color));
+			playerList.add(new Player(UUID.randomUUID().toString(), true, tuple.userData, new CharacterState(), color));
 			// register all players
 			newGame.register(tuple.commandHandler);
 		});

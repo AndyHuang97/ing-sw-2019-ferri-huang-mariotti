@@ -1366,7 +1366,7 @@
 											"top": 894,
 											"width": 263,
 											"height": 13,
-											"text": "-color: String",
+											"text": "-roomColor: String",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1682,7 +1682,7 @@
 											"top": 1510,
 											"width": 108.3544921875,
 											"height": 13,
-											"text": "-color: AmmoColor",
+											"text": "-roomColor: AmmoColor",
 											"horizontalAlignment": 0
 										}
 									],
@@ -10699,7 +10699,7 @@
 										"$ref": "AAAAAAFpznQLOStOQc4="
 									},
 									"edgePosition": 1,
-									"text": "-color"
+									"text": "-roomColor"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -18128,7 +18128,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"nickname": "color",
+							"nickname": "roomColor",
 							"visibility": "private",
 							"type": "String"
 						},
@@ -18267,7 +18267,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFput0EFfZQRF8="
 							},
-							"nickname": "color",
+							"nickname": "roomColor",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFqP9UAq7fVu/E="

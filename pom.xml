@@ -24,7 +24,7 @@
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
 
-        <sonar.host.url>http://localhost:9000/</sonar.host.url>
+        <sonar.serverHost.url>http://localhost:9000/</sonar.serverHost.url>
         <!--sonar.login>admin</sonar.login>
         <sonar.password>admin</sonar.password-->
 

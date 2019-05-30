@@ -42,6 +42,7 @@ public class BoardDeserializer implements RandomDeserializer {
             int xCoord = position.get(0).getAsInt();
             int yCoord = position.get(1).getAsInt();
 
+            //System.out.println(tile);
             tileMap[xCoord][yCoord] = tile;
         }
 
