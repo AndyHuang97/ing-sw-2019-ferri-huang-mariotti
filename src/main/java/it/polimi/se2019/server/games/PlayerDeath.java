@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.games;
 
-import it.polimi.se2019.server.games.player.CharacterValue;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 
 import java.util.*;
@@ -11,30 +11,25 @@ import static java.util.stream.Collectors.toMap;
 public class PlayerDeath {
 
     private PlayerColor deadPlayer;
-    private List<PlayerColor> attackers;
-    private PlayerColor firstAttacker;
-    private CharacterValue characterValue;
+    private List<PlayerColor> damageBar;
+    private int[] valueBar;
+    private int deaths;
 
     /**
      * Constructs the main object to notify every player to update their score.
-     * @param deadPlayer is the player that got killed.
-     * @param damageBar is an ordered list of the attacks that deadPlayer  received.
-     * @param firstAttacker is the first attacker of the dead player, needed to keep track of bonus point.
-     * @param characterValue is the value of the dead player.
      */
-    public PlayerDeath(PlayerColor deadPlayer, List<PlayerColor> damageBar, PlayerColor firstAttacker, CharacterValue characterValue) {
-        this.deadPlayer = deadPlayer;
-        this.attackers = rankAttackers(damageBar);
-        this.firstAttacker = firstAttacker;
-        this.characterValue = characterValue;
+    public PlayerDeath(Player player) {
+        this.deadPlayer = player.getColor();
+        this.damageBar = player.getCharacterState().getDamageBar();
+        this.valueBar = player.getCharacterState().getValueBar();
+        this.deaths = player.getCharacterState().getDeaths();
     }
 
     /**
      * Sorts in descending order the players who attacked the dead player.
-     * @param damageBar is a list of damage the dead player has received.
-     * @return rankedKillers, a descending sorted list of the attacker.
+     * @return rankedAttackers, a descending sorted list of the attackers.
      */
-    public List<PlayerColor> rankAttackers(List<PlayerColor> damageBar) {
+    public List<PlayerColor> rankedAttackers() {
 
         List<PlayerColor> rankedAttackers = new ArrayList<>();
         EnumMap<PlayerColor, Integer> map = new EnumMap<>(PlayerColor.class);
@@ -62,20 +57,12 @@ public class PlayerDeath {
         return rankedAttackers;
     }
 
-    public List<PlayerColor> getAttackers() {
-        return attackers;
+    public List<PlayerColor> getDamageBar() {
+        return damageBar;
     }
 
-    public void setAttackers(List<PlayerColor> attackers) {
-        this.attackers = attackers;
-    }
-
-    public PlayerColor getFirstAttacker() {
-        return firstAttacker;
-    }
-
-    public void setFirstAttacker(PlayerColor firstAttacker) {
-        this.firstAttacker = firstAttacker;
+    public void setDamageBar(List<PlayerColor> damageBar) {
+        this.damageBar = damageBar;
     }
 
     public PlayerColor getDeadPlayer() {
@@ -86,11 +73,19 @@ public class PlayerDeath {
         this.deadPlayer = deadPlayer;
     }
 
-    public CharacterValue getCharacterValue() {
-        return characterValue;
+    public int[] getValueBar() {
+        return valueBar;
     }
 
-    public void setCharacterValue(CharacterValue characterValue) {
-        this.characterValue = characterValue;
+    public void setValueBar(int[] valueBar) {
+        this.valueBar = valueBar;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
     }
 }

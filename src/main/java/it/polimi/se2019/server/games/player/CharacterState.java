@@ -15,7 +15,11 @@ import java.util.Map;
  */
 public class CharacterState {
 
-	private CharacterValue characterValue;
+	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
+	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
+
+	private int deaths;
+	private int[] valueBar;
 	private List<PlayerColor> damageBar;
 	private Map<PlayerColor, Integer> markerBar;
 	private Map<AmmoColor, Integer> ammoBag;
@@ -30,7 +34,8 @@ public class CharacterState {
 	 */
 
 	public CharacterState() {
-		this.characterValue = CharacterValue.ZERODEATHS;
+		this.deaths = 0;
+		this.valueBar = NORMAL_VALUE_BAR;
 		this.damageBar = new ArrayList<>();
 		this.markerBar = initMarkerBar();
 		this.ammoBag = initAmmoBag();
@@ -42,7 +47,6 @@ public class CharacterState {
 
 	/**
 	 * @param damageBar
-	 * @param characterValue
 	 * @param markerBar
 	 * @param ammoBag
 	 * @param weapoonBag
@@ -50,11 +54,10 @@ public class CharacterState {
 	 * @param tile
 	 * @param score
 	 */
-	public CharacterState(List<PlayerColor> damageBar, CharacterValue characterValue,
-						  Map<PlayerColor, Integer> markerBar, Map<AmmoColor, Integer> ammoBag,
-						  List<Weapon> weapoonBag, List<PowerUp> powerUpBag, Tile tile, Integer score) {
+	public CharacterState(List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
+						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weapoonBag,
+						  List<PowerUp> powerUpBag, Tile tile, Integer score) {
 		this.damageBar = damageBar;
-		this.characterValue = characterValue;
 		this.markerBar = markerBar;
 		this.ammoBag = ammoBag;
 		this.weapoonBag = weapoonBag;
@@ -63,14 +66,6 @@ public class CharacterState {
 		this.score = score;
 	}
 
-
-	public CharacterValue getCharacterValue() {
-		return characterValue;
-	}
-
-	public void setCharacterValue(CharacterValue characterValue) {
-		this.characterValue = characterValue;
-	}
 
 	/**
 	 * @return damageBar
@@ -223,13 +218,17 @@ public class CharacterState {
 
 	public void updateScore(PlayerDeath message, PlayerColor playerColor) {
 
-		if(playerColor != message.getDeadPlayer() && message.getAttackers().contains(playerColor)) {
+		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
 			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
-			if(message.getFirstAttacker() == playerColor) {
+			if(message.getDamageBar().get(0) == playerColor) {
 				score += 1;
 			}
 
-			score += message.getCharacterValue().getValue(message.getAttackers().indexOf(playerColor));
+			int deaths = message.getDeaths();
+			int rank = message.rankedAttackers().indexOf(playerColor);
+			if (deaths+rank < message.getValueBar().length) {
+				score += message.getValueBar()[deaths+rank];
+			}
 		}
 	}
 
@@ -255,5 +254,21 @@ public class CharacterState {
 
 	public void setPowerUpBag(List<PowerUp> powerUpBag) {
 		this.powerUpBag = powerUpBag;
+	}
+
+	public int[] getValueBar() {
+		return valueBar;
+	}
+
+	public void setValueBar(int[] valueBar) {
+		this.valueBar = valueBar;
+	}
+
+	public int getDeaths() {
+		return deaths;
+	}
+
+	public void setDeaths(int deaths) {
+		this.deaths = deaths;
 	}
 }

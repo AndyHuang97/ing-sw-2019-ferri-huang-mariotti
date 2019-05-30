@@ -1,7 +1,6 @@
 package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
-import it.polimi.se2019.server.games.player.CharacterValue;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
@@ -146,7 +145,7 @@ public class PlayerBoardController {
         Arrays.stream(PlayerColor.values())
                 .filter(p -> p == player.getColor())
                 .forEach(p -> {
-                    player.getCharacterState().getCharacterValue();
+                    //player.getCharacterState().
                 });
 
         GridPane gridPane = (GridPane) skullPane.getChildren().get(0);
