@@ -61,6 +61,7 @@ public class GameManager {
 	}
 
 	public void dumpToFile() {
+		//System.out.println(dumpName);
 		logger.info("Loading saved games");
 		try {
 			FileWriter writer = new FileWriter(this.dumpName);
