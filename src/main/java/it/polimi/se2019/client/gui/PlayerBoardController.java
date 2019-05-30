@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
@@ -14,7 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,16 +97,27 @@ public class PlayerBoardController {
 
     /**
      * Initializes the main player board.
-     * @param playerColor is the player's color.
+     * @param player is the owner of this board.
      */
     @FXML
-    public void initPlayerBoard(PlayerColor playerColor) {
+    public void initPlayerBoard(Player player) {
         ImageView iv = (ImageView) main.getChildren().get(0);
-        iv.setImage(getPlayerBoardImage(playerColor, Constants.NORMAL));
+
+        iv.setImage(getPlayerBoardImage(player.getColor(), Util.getCorrectPlayerBoardMode(player)));
     }
 
     /**
-     * Shows player's damage bar
+     * Shows the action tile
+     * @param player is the owner of this action tile.
+     */
+    public void showActionTile(Player player) {
+        ImageView iv = (ImageView) actionTile.getChildren().get(0);
+        String gameMode = mainApp.getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
+        iv.setImage(new Image(Constants.ACTION_TILE+player.getColor()+gameMode+".png"));
+    }
+
+    /**
+     * Shows the player's damage bar.
      */
     public void showDamageBar(Player player) {
 
@@ -121,7 +132,7 @@ public class PlayerBoardController {
     }
 
     /**
-     * Adds markers of attacker color.
+     * Shows the player's marker bar.
      */
     public void showMarkerBar(Player player) {
 
@@ -138,25 +149,22 @@ public class PlayerBoardController {
     }
 
     /**
-     * Adds skulls to the skull bar.
+     * Shows the player's skull bar.
      */
-    public void showSkull(Player player) {
-
-        Arrays.stream(PlayerColor.values())
-                .filter(p -> p == player.getColor())
-                .forEach(p -> {
-                    //player.getCharacterState().
-                });
+    public void showSkullBar(Player player) {
 
         GridPane gridPane = (GridPane) skullPane.getChildren().get(0);
-        Optional<ImageView> iv = gridPane.getChildren().stream()
-                .map(n -> (ImageView) n)
-                .filter(i -> i.getImage() == null)
-                .findFirst();
 
-        if (iv.isPresent()) {
-            iv.get().setImage(new Image(Constants.SKULL_PATH));
-        }
+        IntStream.range(0, player.getCharacterState().getDeaths())
+                .forEach(death -> {
+                    Optional<ImageView> iv = gridPane.getChildren().stream()
+                            .map(n -> (ImageView) n)
+                            .filter(i -> i.getImage() == null)
+                            .findFirst();
+                    if (iv.isPresent()) {
+                        iv.get().setImage(new Image(Constants.SKULL_PATH));
+                    }
+                });
     }
 
     /**
@@ -196,7 +204,7 @@ public class PlayerBoardController {
             atController.init();
 
             ImageView iv = (ImageView) buttonedPane.getChildren().get(0);
-            iv.setImage(new Image("/images/playerBoards/ActionTile_"+mainApp.getPlayerColor().getColor()+"_"+mode+".png"));
+            iv.setImage(new Image(Constants.ACTION_TILE +playerColor.getColor()+"_"+mode+".png"));
             actionTile.getChildren().add(buttonedPane);
         } catch (IOException e) {
             e.printStackTrace();
@@ -206,7 +214,7 @@ public class PlayerBoardController {
 
     /**
      * Swaps the main image and sets up the new skull bar for frenzy mode
-     * @param playerColor is the players' color
+     * @param playerColor is the player's color
      */
     public void handleFrenzyKill(PlayerColor playerColor) {
         ImageView iv = (ImageView) main.getChildren().get(0);

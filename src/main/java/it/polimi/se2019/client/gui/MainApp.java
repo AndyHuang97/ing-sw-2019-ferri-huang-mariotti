@@ -239,6 +239,7 @@ public class MainApp extends Application {
 
     public void initGame() {
         game = new Game();
+        game.setFrenzy(false);
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.GREEN);
@@ -273,6 +274,7 @@ public class MainApp extends Application {
         p3.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.YELLOW,PlayerColor.BLUE));
         p4.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.YELLOW));
         p5.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.GREEN,PlayerColor.BLUE));
+
         p1.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
         p1.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
         p2.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 3);
@@ -285,6 +287,25 @@ public class MainApp extends Application {
         p5.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 2);
         p5.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
         p5.getCharacterState().getMarkerBar().put(PlayerColor.GREEN, 1);
+
+        p1.getCharacterState().setDeaths(1);
+        p2.getCharacterState().setDeaths(2);
+        p3.getCharacterState().setDeaths(3);
+        p4.getCharacterState().setDeaths(4);
+        p5.getCharacterState().setDeaths(5);
+
+        p1.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+        p2.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+        p3.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+        p4.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+        p5.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+
+        p1.getCharacterState().setScore(1);
+        p2.getCharacterState().setScore(2);
+        p3.getCharacterState().setScore(3);
+        p4.getCharacterState().setScore(4);
+        p5.getCharacterState().setScore(5);
+
 
     }
 

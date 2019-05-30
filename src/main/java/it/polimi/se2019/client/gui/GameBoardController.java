@@ -59,6 +59,8 @@ public class GameBoardController {
     private GridPane unloadedWeapons;
     @FXML
     private GridPane myPowerups;
+    @FXML
+    private AnchorPane actionButtons;
 
     /**
      * The main game board initializer.
@@ -128,9 +130,6 @@ public class GameBoardController {
                 playerController.setPlayerColor(pc);
                 playerController.initMarkerPane(pc);
 
-                playerController.showDamageBar(Util.getPlayerByColor(mainApp.getGame(), pc));
-                playerController.showMarkerBar(Util.getPlayerByColor(mainApp.getGame(), pc));
-
                 if (pc != player.getColor()) {
                     // gets the anchorPane containing the imageview
                     AnchorPane box = (AnchorPane) opponents.getChildren().get(i);
@@ -145,13 +144,19 @@ public class GameBoardController {
                     i++;
                 }else {
                     targetPane = playerBoard;
-                    playerController.addActionTileButtons(player.getColor(), Constants.NORMAL.split("_")[1]);
+                    showActionButtons();
                 }
 
                 // removes the static image view and loads the decorated one
                 targetPane.getChildren().remove(0);
                 targetPane.getChildren().add(decoratedPane);
-                playerController.initPlayerBoard(pc);
+                playerController.initPlayerBoard(Util.getPlayerByColor(mainApp.getGame(), pc));
+
+                playerController.showDamageBar(Util.getPlayerByColor(mainApp.getGame(), pc));
+                playerController.showMarkerBar(Util.getPlayerByColor(mainApp.getGame(), pc));
+                playerController.showSkullBar(Util.getPlayerByColor(mainApp.getGame(), pc));
+                playerController.showActionTile(Util.getPlayerByColor(mainApp.getGame(), pc));
+
             }
             catch (IOException e) {
                 logger.warning(e.toString());
@@ -182,6 +187,29 @@ public class GameBoardController {
                                 });
                             });
                 });
+    }
+
+    /**
+     * Adds the buttons to the action tile according to player's color and
+     * game's current mode.
+     */
+    public void showActionButtons() {
+        try {
+            AnchorPane buttonedPane = null;
+            FXMLLoader loader = new FXMLLoader();
+            String gameMode = mainApp.getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
+
+            loader.setLocation(getClass().getResource(Constants.ACTION_BUTTONS + gameMode.split("_")[1] + ".fxml"));
+            buttonedPane = loader.load();
+
+            ActionTileController atController = loader.getController();
+            atController.setMainApp(mainApp);
+            atController.init();
+
+            actionButtons.getChildren().add(buttonedPane);
+        }catch (IOException e) {
+            logger.warning(e.toString());
+        }
     }
 
     /**

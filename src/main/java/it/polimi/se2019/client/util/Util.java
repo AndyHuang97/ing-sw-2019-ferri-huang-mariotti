@@ -2,6 +2,7 @@ package it.polimi.se2019.client.util;
 
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.scene.Node;
@@ -76,5 +77,10 @@ public class Util {
         return  game.getPlayerList().stream()
                 .filter(p -> p.getColor() == playerColor)
                 .collect(Collectors.toList()).get(0);
+    }
+
+    public static String getCorrectPlayerBoardMode(Player player) {
+        return player.getCharacterState().getValueBar() == CharacterState.NORMAL_VALUE_BAR ?
+                Constants.NORMAL : Constants.FRENZY;
     }
 }
