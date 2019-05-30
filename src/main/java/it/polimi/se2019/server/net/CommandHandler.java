@@ -39,7 +39,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         }
     }
 
-    public Message convertNetMessage(NetMessage netMessage, Game game) throws TargetableNotFoundException {
+    public InternalMessage convertNetMessage(NetMessage netMessage, Game game) throws TargetableNotFoundException {
         Map<String, List<Targetable>> newCommands = new HashMap<>();
         List<Targetable> newValues = new ArrayList<>();
         netMessage.getCommands().forEach((key, values) -> {
@@ -63,11 +63,11 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     public synchronized void handle(Request request) {
         // log request
-        NetMessage message = (NetMessage) request.getMessage();
+        NetMessage message = request.getNetMessage();
         String nickname = request.getNickname();
         try {
             Game game = ServerApp.gameManager.retrieveGame(nickname);
-            request.setMessage(convertNetMessage(message, game));
+            request.setInternalMessage(convertNetMessage(message, game));
         } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
             //TODO: gestire exception game not found, probabilmente è la prima volta che si connette? va inserito in una waiting list?
         }
@@ -80,7 +80,12 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         // TODO update shouldn't be called from here, but from the model with its notify, and it should receive a Response
         update(new Response(new Game(), true, request.getNickname()));
 
-        ServerApp.gameManager.dumpToFile();
+        // TODO: refactor, some tests do not use ServerApp
+        try {
+            ServerApp.gameManager.dumpToFile();
+        } catch (NullPointerException e) {
+
+        }
 
     }
 

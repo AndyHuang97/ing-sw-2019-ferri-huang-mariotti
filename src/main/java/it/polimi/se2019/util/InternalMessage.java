@@ -12,8 +12,6 @@ public class InternalMessage implements Message {
      */
 
     private Map<String, List<Targetable>> commands;
-    //private String messageType;
-    //private List<Targetable> params;
 
     public InternalMessage(Map<String, List<Targetable>> commands) {
         this.commands = commands;

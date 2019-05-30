@@ -9,7 +9,7 @@ import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.PlayerAction;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 
 public class RequestParser {
@@ -22,11 +22,18 @@ public class RequestParser {
         String nickname = request.getNickname();
         Game game = gameManager.retrieveGame(nickname);
 
-        player = game.getPlayerList().stream()
-                .filter(p -> p.getUserData().getNickname().equals(nickname))
-                .collect(Collectors.toList()).get(0);
+        System.out.println(game.getPlayerList());
 
-        playerActionList = messageParser.parse((InternalMessage) request.getMessage(), game, player);
+        Optional<Player> optPlayer = game.getPlayerList().stream()
+                .filter(p -> p.getUserData().getNickname().equals(nickname))
+                .findFirst();
+
+        if (optPlayer.isPresent()) {
+            player = optPlayer.get();
+            System.out.println(player);
+        }
+
+        playerActionList = messageParser.parse(request.getInternalMessage(), game, player);
 
         commandHandler = request.getCommandHandler();
     }
