@@ -2,11 +2,17 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.games.player.CharacterState;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -20,6 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class GameBoardController {
 
@@ -48,6 +56,8 @@ public class GameBoardController {
     @FXML
     private GridPane myWeapons;
     @FXML
+    private GridPane unloadedWeapons;
+    @FXML
     private GridPane myPowerups;
 
     /**
@@ -70,10 +80,11 @@ public class GameBoardController {
     /**
      * Initializes all parameters
      */
-    public void init(PlayerColor playerColor) {
+    public void init(Player player) {
         initMap();
-        initPlayerBoards(playerColor);
+        initPlayerBoards(player);
         initMyCards();
+        showMyCards();
     }
 
     /**
@@ -98,9 +109,9 @@ public class GameBoardController {
     }
 
     /**
-     * Initializes the players' boards.
+     * Initializes the players' boards with all their info.
      */
-    public void initPlayerBoards(PlayerColor playerColor) {
+    public void initPlayerBoards(Player player) {
 
         AnchorPane targetPane;
         int i = 0;
@@ -117,23 +128,33 @@ public class GameBoardController {
                 playerController.setPlayerColor(pc);
                 playerController.initMarkerPane(pc);
 
-                if (pc != playerColor) {
+                playerController.showDamageBar(Util.getPlayerByColor(mainApp.getGame(), pc));
+                playerController.showMarkerBar(Util.getPlayerByColor(mainApp.getGame(), pc));
+
+                if (pc != player.getColor()) {
                     // gets the anchorPane containing the imageview
                     AnchorPane box = (AnchorPane) opponents.getChildren().get(i);
                     targetPane = (AnchorPane) box.getChildren().get(1);
 
+                    Label nameLabel = (Label) box.getChildren().get(2);
+                    String name = mainApp.getGame().getPlayerList().stream()
+                            .filter(p -> p.getColor() == pc)
+                            .map(p -> p.getUserData().getNickname())
+                            .collect(Collectors.toList()).get(0);
+                    nameLabel.setText(name);
                     i++;
                 }else {
                     targetPane = playerBoard;
-                    playerController.addActionTileButtons(playerColor, Constants.NORMAL.split("_")[1]);
+                    playerController.addActionTileButtons(player.getColor(), Constants.NORMAL.split("_")[1]);
                 }
+
                 // removes the static image view and loads the decorated one
                 targetPane.getChildren().remove(0);
                 targetPane.getChildren().add(decoratedPane);
                 playerController.initPlayerBoard(pc);
             }
             catch (IOException e) {
-                logger.warning("Error loading player boards");
+                logger.warning(e.toString());
             }
         }
     }
@@ -141,18 +162,21 @@ public class GameBoardController {
     public void initMyCards() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
         GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
-        Arrays.asList(myPowerups,myWeapons).stream()
+        Arrays.asList(myPowerups,myWeapons, unloadedWeapons).stream()
                 .forEach(myCards -> {
                     myCards.setDisable(true);
                     myCards.getChildren().stream()
-                            .forEach(w -> {
-                                //w.setVisible(false);
-                                w.setOnMouseClicked(event -> {
-                                    myWeapons.setDisable(true);
-                                    w.setOpacity(0.6);
+                            .forEach(c -> {
+                                c.setVisible(false);
+                                c.setOnMouseClicked(event -> {
+                                    c.setOpacity(0.6);
 
-                                    Util.isFirstSelection(root, progressBar);
+                                    Util.ifFirstSelection(root, progressBar);
                                     Util.updateCircle(progressBar);
+
+                                    if(Util.isLastSelection(progressBar)) {
+                                        myCards.setDisable(true);
+                                    }
 
                                     mainApp.handleCardSelection();
                                 });
@@ -160,9 +184,40 @@ public class GameBoardController {
                 });
     }
 
+    /**
+     * Plainly shows the client player's cards.
+     */
+    public void showMyCards() {
+        CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
+                .filter(p -> p.getColor() == mainApp.getPlayerColor())
+                .collect(Collectors.toList()).get(0).getCharacterState();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
+
+        IntStream.range(0, myWeaponsModel.size())
+                .forEach(i -> {
+                    ImageView iv = null;
+                    if (myWeaponsModel.get(i).isLoaded()) {
+                        iv = (ImageView) myWeapons.getChildren().get(i);
+                    }
+                    else {
+                        iv = (ImageView) unloadedWeapons.getChildren().get(i);
+                    }
+                    iv.setImage(new Image(Constants.WEAPON_PATH + myWeaponsModel.get(i).getName() + ".png"));
+                    iv.setVisible(true);
+                });
+
+        IntStream.range(0, myPowerUpsModel.size())
+                .forEach(i -> {
+                    ImageView iv = (ImageView) myPowerups.getChildren().get(i);
+                    iv.setImage(new Image(Constants.POWERUP_PATH+myPowerUpsModel.get(i).getName()+".png"));
+                    iv.setVisible(true);
+                });
+    }
+
     @FXML
     public void handleConfirm() {
-        mainApp.sendInput();
+        mainApp.nextInput();
         handleCancel();
     }
 
@@ -178,7 +233,7 @@ public class GameBoardController {
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
 
-        Arrays.asList(myPowerups,myWeapons).stream()
+        Arrays.asList(myPowerups,myWeapons, unloadedWeapons).stream()
                 .forEach(myCards -> {
                     if (!myCards.getStyleClass().isEmpty()) {
                         myCards.getStyleClass().remove(0);

@@ -27,6 +27,7 @@ public class ActionTileController {
     private Button cancelButton;
     private List<GridPane> weaponCrateList;
     private GridPane myWeapons;
+    private GridPane unloadedWeapons;
     private GridPane myPowerups;
 
     @FXML
@@ -66,6 +67,7 @@ public class ActionTileController {
         weaponCrateList.add((GridPane) map.lookup("#yellowWeapons"));
 
         myWeapons = (GridPane) vBox.lookup("#myWeapons");
+        unloadedWeapons = (GridPane) vBox.lookup("#unloadedWeapons");
         myPowerups = (GridPane) vBox.lookup("#myPowerups");
 
     }
@@ -102,16 +104,13 @@ public class ActionTileController {
         infoText.setText("Select 1 tile ");
         cancelButton.setDisable(false);
 
-        setUpProgressBar(3);
+        setUpProgressBar(1);
     }
 
     @FXML
     public void handleGrab() {
 
         disableActionButtons();
-        ammoGrid.toFront();
-        ammoGrid.setDisable(false);
-        ammoGrid.setVisible(true);
 
         infoText.setText("Select 1 card ");
         cancelButton.setDisable(false);
@@ -121,7 +120,7 @@ public class ActionTileController {
         try {
             int[] coords = mainApp.getGame().getBoard().getTilePosition(t);
             if (t.isSpawnTile()) {
-                System.out.println("spawntile");
+                System.out.println("spawn tile");
                 String roomColor = t.getRoomColor().getColor();
                 Optional<GridPane> optGrid = weaponCrateList.stream()
                         .filter(wc -> wc.getId().split("Weapons")[0].equalsIgnoreCase(roomColor))
@@ -132,7 +131,10 @@ public class ActionTileController {
                 }
             }
             else {
-                System.out.println("normaltile");
+                System.out.println("normal tile");
+                ammoGrid.toFront();
+                ammoGrid.setDisable(false);
+                ammoGrid.setVisible(true);
                 HBox hBox = (HBox) ammoGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
                 Node n = hBox.getChildren().get(0);
                 n.getStyleClass().add("my-node");
@@ -141,11 +143,6 @@ public class ActionTileController {
             e.printStackTrace();
         }
 
-        /*ammoGrid.getChildren().stream()
-                .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
-                .filter(ap -> ap.getChildren().get(0).isVisible())
-                .forEach(ap -> ap.setStyle("-fx-border-color: red"));
-         */
         setUpProgressBar(1);
     }
 
@@ -164,6 +161,47 @@ public class ActionTileController {
 
     @FXML
     public void handleReload() {
+        handleTarget();
+/*
+        disableActionButtons();
+        infoText.setText("Select 1 card ");
+        cancelButton.setDisable(false);
+
+        unloadedWeapons.setDisable(false);
+        unloadedWeapons.getStyleClass().add("my-node");
+
+        setUpProgressBar(1);
+
+ */
+    }
+
+    public void handleTarget() {
+        System.out.println("target");
+        disableActionButtons();
+        playerGrid.toFront();
+        playerGrid.setDisable(false);
+        playerGrid.setVisible(true);
+
+        infoText.setText("Select 3 players ");
+        cancelButton.setDisable(false);
+
+        //TODO do not let player choose himself
+        playerGrid.getChildren().stream()
+                .map(n -> (VBox) n)
+                .forEach(vBox -> vBox.getChildren().stream()
+                        .map(n -> (HBox) n)
+                        .filter(hbox -> !hbox.getChildren().isEmpty())
+                        .forEach(hBox -> hBox.getChildren().stream()
+                                .map(n -> (Circle) n)
+                                .filter(Node::isVisible)
+                                .forEach(c -> {
+                                    c.setDisable(false);
+                                    c.getStyleClass().add("my-shape");
+                                })
+                        )
+                );
+
+        setUpProgressBar(3);
 
     }
 

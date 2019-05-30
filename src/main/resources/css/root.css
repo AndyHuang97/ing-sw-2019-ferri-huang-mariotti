@@ -1,5 +1,11 @@
 .my-node {
     -fx-border-color: red;
+    -fx-border-width: 2.0;
+}
+
+.my-shape {
+    -fx-stroke: red;
+    -fx-stroke-width: 2;
 }
 
 .empty-node {

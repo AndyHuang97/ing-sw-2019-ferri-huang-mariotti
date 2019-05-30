@@ -5,8 +5,6 @@ import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -86,11 +84,12 @@ public class MapController {
             IntStream.range(0, tileMap[0].length)
                     .forEach(y -> IntStream.range(0, tileMap.length)
                             .forEach(x -> {
-                                setUpGridButton(tileMap, x, y);
-                                setUpGridAmmo(tileMap, x, y);
+                                setUpTileGrid(tileMap, x, y);
+                                setUpAmmoGrid(tileMap, x, y);
+                                setUpPlayerGrid(tileMap, x, y);
                             }));
 
-            resetTileGridColor();
+            resetTileGridStyle();
             tileGrid.setVisible(false);
             ammoGrid.setDisable(true);
             showPlayers();
@@ -104,7 +103,13 @@ public class MapController {
     }
 
 
-    public void setUpGridButton(Tile[][] tileMap, int x, int y) {
+    /**
+     * Add a button to every tile of the map.
+     * @param tileMap is the tile map.
+     * @param x is the x coordinate of the tile.
+     * @param y is the y coordintate of the tile.
+     */
+    public void setUpTileGrid(Tile[][] tileMap, int x, int y) {
 
         if (tileMap[x][y] != null) {
             AnchorPane anchorPane = (AnchorPane) tileGrid.getChildren().get(Util.convertToIndex(x,y));
@@ -121,15 +126,10 @@ public class MapController {
                 BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
                 GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
-                Util.isFirstSelection(root, progressBar);
+                Util.ifFirstSelection(root, progressBar);
                 Util.updateCircle(progressBar);
 
-                boolean last = progressBar.getChildren().stream()
-                        .map(n -> (Circle) n)
-                        .filter(Node::isVisible)
-                        .allMatch(c -> c.getFill() == Paint.valueOf("green"));
-
-                if (last) {
+                if (Util.isLastSelection(progressBar)) {
                     // if its the last element that needs to be selected it disables visibility of all other
                     // buttons
                     tileGrid.getChildren().stream()
@@ -150,11 +150,11 @@ public class MapController {
     /**
      * This is the first initialization of the ammo grid, which defines the effect of mouse click
      * for every single ammo card.
-     * @param tileMap is tile map.
+     * @param tileMap is the tile map.
      * @param x is the x coordinate of the tile.
      * @param y is the y coordintate of the tile.
      */
-    public void setUpGridAmmo(Tile[][] tileMap, int x, int y) {
+    public void setUpAmmoGrid(Tile[][] tileMap, int x, int y) {
 
         if (tileMap[x][y] != null) {
             if (!tileMap[x][y].isSpawnTile()) {
@@ -172,7 +172,7 @@ public class MapController {
                     BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
                     GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
-                    Util.isFirstSelection(root, progressBar);
+                    Util.ifFirstSelection(root, progressBar);
                     Util.updateCircle(progressBar);
 
                     ammoGrid.getChildren().stream()
@@ -184,6 +184,39 @@ public class MapController {
                     handleAmmoCrateSelected(x, y);
                 });
             }
+        }
+    }
+
+    public void setUpPlayerGrid(Tile[][] tileMap, int x, int y) {
+
+        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
+
+        playerGrid.setDisable(true);
+        if (tileMap[x][y] != null) {
+            VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(x, y));
+
+            vbox.getChildren().stream()
+                    .map(n -> (HBox) n)
+                    .filter(row -> !row.getChildren().isEmpty())
+                    .forEach(row -> row.getChildren().stream()
+                            .map(n -> (Circle) n)
+                            .forEach(c -> {
+                                c.setOnMouseClicked(event -> {
+                                    c.setDisable(true);
+                                    c.setOpacity(0.6);
+
+                                    Util.ifFirstSelection(root, progressBar);
+                                    Util.updateCircle(progressBar);
+
+                                    if (Util.isLastSelection(progressBar)) {
+                                        playerGrid.setDisable(true);
+                                    }
+
+                                    handlePlayerSelected(c.getFill().toString());
+                                });
+                            })
+                    );
         }
     }
 
@@ -201,12 +234,15 @@ public class MapController {
                     wc.getChildren().stream()
                             .forEach(n ->
                                     n.setOnMouseClicked(event -> {
-                                        wc.setDisable(true);
                                         n.setDisable(true);
                                         n.setOpacity(0.6);
 
-                                        Util.isFirstSelection(root, progressBar);
+                                        Util.ifFirstSelection(root, progressBar);
                                         Util.updateCircle(progressBar);
+
+                                        if (Util.isLastSelection(progressBar)) {
+                                            wc.setDisable(true);
+                                        }
 
                                         handleWeaponSelected(1,1);
                                     })
@@ -239,7 +275,8 @@ public class MapController {
                                             iv.setImage(new Image(Constants.WEAPON_PATH+weaponID+".png"));
                                         });
                             }
-                        }));
+                        })
+                );
     }
 
     /**
@@ -252,11 +289,15 @@ public class MapController {
                     try {
                         int[] coords = mainApp.getGame().getBoard().getTilePosition(p.getCharacterState().getTile());
                         VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
+                        vbox.setDisable(false);
 
-                        ObservableList<Node> firstRow = ((HBox) vbox.getChildren().get(1)).getChildren();
-                        ObservableList<Node> secondRow = ((HBox) vbox.getChildren().get(2)).getChildren();
+                        HBox firstRow = (HBox) vbox.getChildren().get(1);
+                        HBox secondRow = (HBox) vbox.getChildren().get(2);
 
-                        boolean isSecondRow = firstRow.stream()
+                        firstRow.setDisable(false);
+                        secondRow.setDisable(false);
+
+                        boolean isSecondRow = firstRow.getChildren().stream()
                                 .allMatch(Node::isVisible);
                         if (!isSecondRow) {
                             addPlayerCircle(firstRow, p);
@@ -267,8 +308,21 @@ public class MapController {
                     } catch (TileNotFoundException e) {
                         e.printStackTrace();
                     }
-
                 });
+    }
+
+    /**
+     * Adds player in a row of the player grid.
+     */
+    public void addPlayerCircle(HBox row, Player p) {
+        Optional<Node> optNode = row.getChildren().stream()
+                .filter(n -> !n.isVisible())
+                .findFirst();
+        optNode.ifPresent(node -> {
+            node.setVisible(true);
+            node.setDisable(false);
+            ((Circle) node).setFill(Paint.valueOf(p.getColor().getColor()));
+        });
     }
 
     /**
@@ -303,44 +357,30 @@ public class MapController {
 
     /**
      * Handles the selection of a button from player grid.
-     * @param event
+     * @param id
      */
-    public void handlePlayerSelected(ActionEvent event) {
-
-    }
-
-    /**
-     * Adds player in a row of the player grid.
-     */
-    public void addPlayerCircle(ObservableList<Node> row, Player p) {
-        Optional<Node> optNode = row.stream()
-                .filter(n -> !n.isVisible())
-                .findFirst();
-        optNode.ifPresent(node -> {
-            node.setVisible(true);
-            ((Circle) node).setFill(Paint.valueOf(p.getColor().getColor()));
-            node.setOnMouseClicked(event -> {
-
-            });
-        });
+    public void handlePlayerSelected(String id) {
+        System.out.println("Selected player: " + id);
     }
 
     /**
      * Disables and resets all grids.
      */
     public void disableGrids() {
+        resetTileGridStyle();
+        resetAmmoGridStyle();
+        resetPlayerGridStyle();
         tileGrid.setVisible(false);
-        resetTileGridColor();
         ammoGrid.setDisable(true);
-        resetAmmoGridBorder();
         playerGrid.setDisable(true);
-        resetWeaponGrids();
+        resetWeaponCrates();
+
     }
 
     /**
      * Resets the tile grid's buttons to the player's color
      */
-    public void resetTileGridColor() {
+    public void resetTileGridStyle() {
         tileGrid.getChildren().stream()
                 .map(n -> (AnchorPane) n) // gets the anchorpane
                 .filter(ap -> !ap.getChildren().isEmpty())
@@ -355,7 +395,7 @@ public class MapController {
     /**
      * Resets the ammo grid's panes border.
      */
-    public void resetAmmoGridBorder() {
+    public void resetAmmoGridStyle() {
         ammoGrid.getChildren().stream()
                 .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
                 .filter(ap -> ap.getChildren().get(0).isVisible())
@@ -368,10 +408,29 @@ public class MapController {
                 });
     }
 
+    public void resetPlayerGridStyle() {
+        playerGrid.getChildren().stream()
+                .map(n -> (VBox) n)
+                .forEach(vBox -> vBox.getChildren().stream()
+                        .map(n -> (HBox) n)
+                        .filter(hbox -> !hbox.getChildren().isEmpty())
+                        .forEach(hBox -> hBox.getChildren().stream()
+                                .map(n -> (Circle) n)
+                                .filter(Node::isVisible)
+                                .forEach(c -> {
+                                    c.setOpacity(1.0);
+                                    if (!c.getStyleClass().isEmpty()) {
+                                        c.getStyleClass().remove(0);
+                                    }
+                                })
+                        )
+                );
+    }
+
     /**
      * Resets the weapons grids' border.
      */
-    public void resetWeaponGrids() {
+    public void resetWeaponCrates() {
         weaponCrateList.stream()
                 .forEach(wc -> {
                     //wc.getStyleClass().remove(0);

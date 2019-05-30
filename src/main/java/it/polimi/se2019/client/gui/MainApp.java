@@ -5,7 +5,9 @@ import com.google.gson.JsonParser;
 import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
@@ -28,6 +30,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -105,7 +108,8 @@ public class MainApp extends Application {
             rootlayout.setCenter(gameBoard);
 
             // initialization of the map must precede the initialization of the player boards
-            gbController.init(playerColor);
+
+            gbController.init(Util.getPlayerByColor(game, playerColor));
 
         } catch(IOException e) {
             logger.warning("Could not find resource.");
@@ -159,6 +163,13 @@ public class MainApp extends Application {
 
     @FXML
     public void getInput(int x, int y) {
+
+    }
+
+    /**
+     * Get the next type of input.
+     */
+    public void nextInput() {
 
     }
 
@@ -230,18 +241,50 @@ public class MainApp extends Application {
         game = new Game();
         boardDeserialize();
 
-        Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("A"), new CharacterState(), PlayerColor.GREEN);
+        Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.GREEN);
         p1.getCharacterState().setTile(game.getBoard().getTile(2,0));
-        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("B"), new CharacterState(), PlayerColor.BLUE);
+        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Jamie"), new CharacterState(), PlayerColor.BLUE);
         p2.getCharacterState().setTile(game.getBoard().getTile(1,1));
-        Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("C"), new CharacterState(), PlayerColor.YELLOW);
+        Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Daenerys"), new CharacterState(), PlayerColor.YELLOW);
         p3.getCharacterState().setTile(game.getBoard().getTile(1,1));
-        Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
+        Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("Arya"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(game.getBoard().getTile(0,1));
-        Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("E"), new CharacterState(), PlayerColor.PURPLE);
+        Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Night King"), new CharacterState(), PlayerColor.PURPLE);
         p5.getCharacterState().setTile(game.getBoard().getTile(3,2));
         game.setPlayerList(Arrays.asList(p1,p2,p3,p4,p5));
         game.setCurrentPlayer(p1);
+        Weapon w1 = new Weapon(null, "0216", null
+                , null, null);
+        w1.setLoaded(true);
+        Weapon w2 = new Weapon(null, "0217", null
+                , null, null);
+        w2.setLoaded(true);
+        Weapon w3 = new Weapon(null, "0218", null
+                , null, null);
+        w3.setLoaded(true);
+        p1.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w3));
+        p1.getCharacterState().setPowerUpBag(Arrays.asList(
+                new PowerUp(null, "026"),
+                new PowerUp(null, "027"),
+                new PowerUp(null, "028")));
+
+        p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
+        p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));
+        p3.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.YELLOW,PlayerColor.BLUE));
+        p4.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.YELLOW));
+        p5.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.GREEN,PlayerColor.BLUE));
+        p1.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
+        p1.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p2.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 3);
+        p2.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p3.getCharacterState().getMarkerBar().put(PlayerColor.PURPLE, 1);
+        p3.getCharacterState().getMarkerBar().put(PlayerColor.GREEN, 2);
+        p4.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
+        p4.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 2);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
+        p5.getCharacterState().getMarkerBar().put(PlayerColor.GREEN, 1);
 
     }
 
@@ -282,8 +325,6 @@ public class MainApp extends Application {
                                     }
                                 }
                             }));
-
-
             try {
                 bufferedReader.close();
             } catch (IOException e) {

@@ -23,7 +23,7 @@
       <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="98.0" prefWidth="37.5" />
       <StackPane layoutX="197.0" layoutY="-1.0" prefHeight="22.0" prefWidth="102.0">
          <children>
-            <GridPane fx:id="markerToken" prefWidth="102.0">
+            <GridPane fx:id="markerBar" prefWidth="102.0">
                <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
@@ -78,7 +78,7 @@
             </GridPane>
          </children>
       </StackPane>
-      <GridPane fx:id="damagePane" layoutX="33.0" layoutY="32.0" prefHeight="34.0" prefWidth="272.0">
+      <GridPane fx:id="damageBar" layoutX="33.0" layoutY="32.0" prefHeight="34.0" prefWidth="272.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
@@ -136,12 +136,12 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <Button layoutX="94.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleDamage" text="Add damage" visible="false">
+      <Button layoutX="94.0" layoutY="5.0" mnemonicParsing="false" text="Add damage" visible="false">
          <font>
             <Font size="7.0" />
          </font>
       </Button>
-      <Button layoutX="42.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleMarker" text="Add Marker" visible="false">
+      <Button layoutX="42.0" layoutY="5.0" mnemonicParsing="false" text="Add Marker" visible="false">
          <font>
             <Font size="7.0" />
          </font></Button>
@@ -153,7 +153,7 @@
          <font>
             <Font size="7.0" />
          </font></Button>
-      <Button layoutX="35.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleSkull" text="Add skulls" visible="false">
+      <Button layoutX="35.0" layoutY="65.0" mnemonicParsing="false" text="Add skulls" visible="false">
          <font>
             <Font size="7.0" />
          </font>

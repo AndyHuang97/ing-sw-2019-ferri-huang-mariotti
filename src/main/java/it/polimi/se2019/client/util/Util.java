@@ -1,6 +1,9 @@
 package it.polimi.se2019.client.util;
 
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -8,6 +11,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Util {
 
@@ -36,7 +40,7 @@ public class Util {
      * @param root is the root node.
      * @param progressBar is the progress bar.
      */
-    public static void isFirstSelection(BorderPane root, GridPane progressBar) {
+    public static void ifFirstSelection(BorderPane root, GridPane progressBar) {
         boolean first = progressBar.getChildren().stream()
                 .map(n -> (Circle) n)
                 .filter(Node::isVisible)
@@ -59,5 +63,18 @@ public class Util {
                 .findFirst();
 
         circle.ifPresent(value -> value.setFill(Paint.valueOf("green")));
+    }
+
+    public static boolean isLastSelection(GridPane progressBar) {
+        return progressBar.getChildren().stream()
+                .map(n -> (Circle) n)
+                .filter(Node::isVisible)
+                .allMatch(c -> c.getFill() == Paint.valueOf("green"));
+    }
+
+    public static Player getPlayerByColor(Game game, PlayerColor playerColor) {
+        return  game.getPlayerList().stream()
+                .filter(p -> p.getColor() == playerColor)
+                .collect(Collectors.toList()).get(0);
     }
 }

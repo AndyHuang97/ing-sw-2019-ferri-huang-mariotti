@@ -1,6 +1,8 @@
 package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.games.player.CharacterValue;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +15,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 public class PlayerBoardController {
 
@@ -29,9 +35,9 @@ public class PlayerBoardController {
     @FXML
     private TextField damageAmount;
     @FXML
-    private GridPane damagePane;
+    private GridPane damageBar;
     @FXML
-    private GridPane markerToken;
+    private GridPane markerBar;
     @FXML
     private GridPane markerLabel;
     @FXML
@@ -83,7 +89,7 @@ public class PlayerBoardController {
         int i = 0;
         for (PlayerColor pc : PlayerColor.values()) {
             if (pc != color) {
-                ImageView iv = (ImageView) markerToken.getChildren().get(i);
+                ImageView iv = (ImageView) markerBar.getChildren().get(i);
                 iv.setImage(getPlayerToken(pc));
                 i++;
             }
@@ -101,59 +107,48 @@ public class PlayerBoardController {
     }
 
     /**
-     * Adds damage from attacker player to damage bar.
+     * Shows player's damage bar
      */
-    @FXML
-    public void handleDamage() {
+    public void showDamageBar(Player player) {
 
-        String color = getpColor();
-        int amount = getDamageAmount();
+        List<PlayerColor> damageBar = player.getCharacterState().getDamageBar();
 
-        int i = 0;
-        try {
-            for (Node n : damagePane.getChildren()) {
-
-                if (((ImageView) n).getImage() == null && i < amount) {
-                    Image token = getPlayerToken(PlayerColor.valueOf(color.toUpperCase()));
-                    ((ImageView) n).setImage(token);
-
-                    i++;
-                }
-            }
-        } catch (Exception e) {
-            logger.warning("Invalid Color.");
-        }
+        IntStream.range(0, damageBar.size())
+                .forEach(i -> {
+                    ImageView iv = (ImageView) this.damageBar.getChildren().get(i);
+                    Image token = getPlayerToken(damageBar.get(i));
+                    iv.setImage(token);
+                });
     }
 
     /**
      * Adds markers of attacker color.
      */
-    @FXML
-    public void handleMarker() {
+    public void showMarkerBar(Player player) {
 
-        String color = getpColor();
-        int amount = getDamageAmount();
+        Map<PlayerColor, Integer> markerbar = player.getCharacterState().getMarkerBar();
 
-        Optional<ImageView> node = markerToken.getChildren().stream()
-                .map(n -> (ImageView) n)
-                .filter(i -> ((NamedImage)i.getImage()).getName().equalsIgnoreCase(color))
-                .findAny();
-
-        if (node.isPresent()) {
-            ImageView iv = node.get();
-            int index = markerToken.getChildren().indexOf(iv);
-            Label label = (Label) markerLabel.getChildren().get(index);
-            int base = Integer.parseInt(label.getText().split("x")[1]);
-            int updated = base + amount;
-            label.setText("x" + updated);
+        int i = 0;
+        for (PlayerColor pc : PlayerColor.values()) {
+            if (pc != player.getColor()) {
+                Label label = (Label) markerLabel.getChildren().get(i);
+                label.setText("x" + markerbar.get(pc).toString());
+                i++;
+            }
         }
     }
 
     /**
      * Adds skulls to the skull bar.
      */
-    @FXML
-    public void handleSkull() {
+    public void showSkull(Player player) {
+
+        Arrays.stream(PlayerColor.values())
+                .filter(p -> p == player.getColor())
+                .forEach(p -> {
+                    player.getCharacterState().getCharacterValue();
+                });
+
         GridPane gridPane = (GridPane) skullPane.getChildren().get(0);
         Optional<ImageView> iv = gridPane.getChildren().stream()
                 .map(n -> (ImageView) n)
@@ -171,7 +166,7 @@ public class PlayerBoardController {
     @FXML
     public void handleResetDamage() {
 
-        for (Node n : damagePane.getChildren()) {
+        for (Node n : damageBar.getChildren()) {
             ((ImageView) n).setImage(null);
         }
     }

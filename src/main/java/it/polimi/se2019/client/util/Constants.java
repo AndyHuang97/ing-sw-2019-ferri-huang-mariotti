@@ -1,7 +1,13 @@
 package it.polimi.se2019.client.util;
 
 public class Constants {
+
+    private Constants() {
+        throw new IllegalStateException("Constans class");
+    }
+
     public static final String WEAPON_PATH = "/images/weapons/AD_weapons_IT_";
+    public static final String POWERUP_PATH = "/images/powerups/AD_powerups_IT_";
     public static final String AMMO_PATH = "/images/ammo/AD_ammo_";
     public static final String MAP_IMAGE = "/images/maps/map";
     public static final String TOKEN_PATH = "/images/tokens/";
