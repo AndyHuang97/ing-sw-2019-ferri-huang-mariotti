@@ -40,7 +40,7 @@ public class PlayerBoardController {
     @FXML
     private GridPane markerLabel;
     @FXML
-    private AnchorPane skullPane;
+    private AnchorPane skullBar;
     @FXML
     private AnchorPane actionTile;
 
@@ -104,6 +104,11 @@ public class PlayerBoardController {
         ImageView iv = (ImageView) main.getChildren().get(0);
 
         iv.setImage(getPlayerBoardImage(player.getColor(), Util.getCorrectPlayerBoardMode(player)));
+
+        if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
+            damageBar.setPrefWidth(264);
+            damageBar.setLayoutX(40);
+        }
     }
 
     /**
@@ -153,8 +158,28 @@ public class PlayerBoardController {
      */
     public void showSkullBar(Player player) {
 
-        GridPane gridPane = (GridPane) skullPane.getChildren().get(0);
+        GridPane gridPane = (GridPane) skullBar.getChildren().get(0);
 
+        try {
+            if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/SkullBarFrenzy.fxml"));
+                AnchorPane pane = loader.load();
+
+                gridPane = (GridPane) pane.getChildren().get(0);
+                skullBar.getChildren().remove(0);
+                skullBar.getChildren().add(gridPane);
+
+            }
+        } catch (IOException e) {
+            logger.warning(e.toString());
+        }
+
+        showSkulls(player,gridPane);
+
+    }
+
+    public void showSkulls(Player player, GridPane gridPane) {
         IntStream.range(0, player.getCharacterState().getDeaths())
                 .forEach(death -> {
                     Optional<ImageView> iv = gridPane.getChildren().stream()
@@ -225,8 +250,8 @@ public class PlayerBoardController {
             loader.setLocation(getClass().getResource("/fxml/SkullBarFrenzy.fxml"));
             AnchorPane pane = loader.load();
 
-            skullPane.getChildren().remove(0);
-            skullPane.getChildren().add(pane.getChildren().get(0));
+            skullBar.getChildren().remove(0);
+            skullBar.getChildren().add(pane.getChildren().get(0));
 
         } catch (IOException e) {
             logger.warning("Could not find resource.");

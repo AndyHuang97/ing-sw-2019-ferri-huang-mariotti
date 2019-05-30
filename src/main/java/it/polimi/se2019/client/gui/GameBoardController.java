@@ -245,6 +245,7 @@ public class GameBoardController {
 
     @FXML
     public void handleConfirm() {
+        // TODO add input to a list
         mainApp.nextInput();
         handleCancel();
     }

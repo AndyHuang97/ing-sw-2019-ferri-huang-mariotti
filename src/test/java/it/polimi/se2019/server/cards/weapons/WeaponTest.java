@@ -1,19 +1,14 @@
 package it.polimi.se2019.server.cards.weapons;
 
-import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.actions.ActionUnit;
-import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class WeaponTest {
 
@@ -31,7 +26,7 @@ public class WeaponTest {
 
     @Test
     public void testSetter() {
-        ActionUnit actionUnit = new ActionUnit(true, "Damage Target", null, null);
+        ActionUnit actionUnit = new ActionUnit(true, "Damage Target", null, null, 0, 0, false);
         List<ActionUnit> expectedAUList = Arrays.asList(actionUnit);
         List<AmmoColor> expectedAmmoColorList = Arrays.asList(AmmoColor.BLUE);
 
