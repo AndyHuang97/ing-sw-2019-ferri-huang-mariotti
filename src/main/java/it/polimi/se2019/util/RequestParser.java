@@ -33,7 +33,7 @@ public class RequestParser {
             System.out.println(player);
         }
 
-        playerActionList = messageParser.parse((InternalMessage) request.getMessage(), game, player);
+        playerActionList = messageParser.parse(request.getInternalMessage(), game, player);
 
         commandHandler = request.getCommandHandler();
     }

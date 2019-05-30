@@ -11,21 +11,30 @@ import java.io.Serializable;
 
 public class Request implements Serializable, NetMsg {
 
-    private Message message;
+    private InternalMessage internalMessage;
+    private NetMessage netMessage;
     private String nickname;
     private CommandHandler commandHandler;
 
-    public Request(Message message, String nickname) {
-        this.message = message;
+    public Request(InternalMessage internalMessage, String nickname) {
+        this.internalMessage = internalMessage;
         this.nickname = nickname;
     }
 
-    public Message getMessage() {
-        return this.message;
+    public InternalMessage getInternalMessage() {
+        return internalMessage;
     }
 
-    public void setMessage(Message message) {
-        this.message = message;
+    public NetMessage getNetMessage() {
+        return netMessage;
+    }
+
+    public void setInternalMessage(InternalMessage internalMessage) {
+        this.internalMessage = internalMessage;
+    }
+
+    public void setNetMessage(NetMessage netMessage) {
+        this.netMessage = netMessage;
     }
 
     public String getNickname() {

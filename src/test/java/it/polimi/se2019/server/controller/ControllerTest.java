@@ -8,7 +8,7 @@ import it.polimi.se2019.server.games.board.*;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.users.UserData;
-import it.polimi.se2019.util.Message;
+import it.polimi.se2019.util.InternalMessage;
 import it.polimi.se2019.util.Request;
 import org.junit.Assert;
 import org.junit.Before;
@@ -90,7 +90,7 @@ public class ControllerTest {
         Map<String, List<Targetable>> command = new HashMap<>();
         command.put(className, targetableList);
 
-        Message message =  new Message(command);
+        InternalMessage message =  new InternalMessage(command);
         Request request = new Request(message, testNick);
 
         actualPlayerCommandHandler.handle(request);

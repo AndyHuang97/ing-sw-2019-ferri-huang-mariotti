@@ -10,7 +10,7 @@ import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.playerActions.MovePlayerAction;
 import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.util.Message;
+import it.polimi.se2019.util.InternalMessage;
 import it.polimi.se2019.util.MessageParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class MessageParserTest {
         Map<String, List<Targetable>> command = new HashMap<>();
         command.put(className, targetableList);
 
-        Message message = new Message(command);
+        InternalMessage message = new InternalMessage(command);
 
         MessageParser messageParser = new MessageParser();
 
@@ -54,7 +54,7 @@ public class MessageParserTest {
         MovePlayerAction movePlayerAction = (MovePlayerAction) playerActionList.get(0);
         Tile parsedTile = movePlayerAction.getMoveList().get(0);
 
-        Assert.assertSame(tile.getColor(), parsedTile.getColor());
+        Assert.assertSame(tile.getRoomColor(), parsedTile.getRoomColor());
     }
 
 }
