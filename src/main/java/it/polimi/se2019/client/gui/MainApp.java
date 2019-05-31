@@ -15,6 +15,7 @@ import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -111,7 +112,7 @@ public class MainApp extends Application {
             gbController.init(Util.getPlayerByColor(game, playerColor));
 
         } catch(IOException e) {
-            logger.warning("Could not find resource.");
+            logger.warning(e.toString());
         }
     }
 
@@ -262,7 +263,15 @@ public class MainApp extends Application {
         Weapon w3 = new Weapon(null, "0218", null
                 , null, null);
         w3.setLoaded(true);
+        Weapon w4 = new Weapon(null, "0219", null
+                , null, null);
+        w4.setLoaded(false);
         p1.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w3));
+        p2.getCharacterState().setWeapoonBag(Arrays.asList(w4,w2,w3));
+        p3.getCharacterState().setWeapoonBag(Arrays.asList(w1,w4,w3));
+        p4.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
+        p5.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
+
         p1.getCharacterState().setPowerUpBag(Arrays.asList(
                 new PowerUp(null, "026"),
                 new PowerUp(null, "027"),
@@ -299,11 +308,26 @@ public class MainApp extends Application {
         p4.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
         p5.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
 
-        p1.getCharacterState().setScore(1);
+        p1.getCharacterState().setScore(6);
         p2.getCharacterState().setScore(2);
         p3.getCharacterState().setScore(3);
         p4.getCharacterState().setScore(4);
         p5.getCharacterState().setScore(5);
+
+        EnumMap<AmmoColor, Integer> ammoMap = new EnumMap<>(AmmoColor.class);
+        ammoMap.putIfAbsent(AmmoColor.BLUE, 3);
+        ammoMap.putIfAbsent(AmmoColor.RED, 2);
+        ammoMap.putIfAbsent(AmmoColor.YELLOW, 3);
+
+        p1.getCharacterState().setAmmoBag(ammoMap);
+        p2.getCharacterState().setAmmoBag(ammoMap);
+        p3.getCharacterState().setAmmoBag(ammoMap);
+        p4.getCharacterState().setAmmoBag(ammoMap);
+        p5.getCharacterState().setAmmoBag(ammoMap);
+
+        //game.getRanking().stream()
+          //      .forEach(player -> System.out.println(player.getUserData().getNickname() + ": " +
+            //            player.getCharacterState().getScore()));
 
     }
 
