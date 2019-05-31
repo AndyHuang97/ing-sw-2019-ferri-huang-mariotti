@@ -19,6 +19,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.Request;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -63,7 +64,8 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        //showLogin();
+        showLogin();
+
         initRootLayout();
         showGameBoard();
 
@@ -145,6 +147,9 @@ public class MainApp extends Application {
                 break;
             case Constants.SOCKET:
                 // connect via socket
+                SocketClient client = new SocketClient(nickname, ip);
+                client.start();
+                client.send(new Request(nickname).serialize());
                 new SocketClient(nickname, ip);
                 break;
             default:

@@ -63,7 +63,7 @@ public class GameManager {
 
 	public void dumpToFile() {
 		//System.out.println(dumpName);
-		logger.info("Loading saved games");
+		logger.info("Saving games to file");
 		try {
 			FileWriter writer = new FileWriter(this.dumpName);
 			// Write file
@@ -75,7 +75,7 @@ public class GameManager {
 			}
 
 		} catch (IOException e) {
-			logger.info("Error while loading gamefile, skip loading saved games!");
+			logger.info("Error while saving games to file");
 		}
 	}
 
@@ -136,7 +136,9 @@ public class GameManager {
 			throw new AlreadyPlayingException("User " + newUser.getNickname() + "is already playing or waiting!");
 		}
 		this.waitingList.add(new Tuple(newUser, currentCommandHandler));
+		logger.info("Added user " + newUser.getNickname() + " to the waiting list");
 		if (waitingList.size() > waitingListMaxSize) {
+			logger.info("Starting a new game");
 			Game newGame = createGame(waitingList);
 			this.gameList.add(newGame);
 			this.waitingList = new ArrayList<>();
