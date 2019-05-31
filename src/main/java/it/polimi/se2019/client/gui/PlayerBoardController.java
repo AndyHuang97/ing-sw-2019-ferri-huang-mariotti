@@ -135,7 +135,7 @@ public class PlayerBoardController {
     public void showActionTile(Player player) {
         ImageView iv = (ImageView) actionTile.getChildren().get(0);
         String gameMode = mainApp.getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
-        iv.setImage(new Image(Constants.ACTION_TILE+player.getColor()+gameMode+".png"));
+        iv.setImage(new Image(Constants.ACTION_TILE+player.getColor().getColor()+gameMode+".png"));
     }
 
     /**

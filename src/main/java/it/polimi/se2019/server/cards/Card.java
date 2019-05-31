@@ -12,6 +12,7 @@ public abstract class Card implements Targetable {
 
 	private List<ActionUnit> actionUnitList;
 	private String name;
+	private String id;
 
 	/**
 	 * Default constructor
@@ -37,5 +38,14 @@ public abstract class Card implements Targetable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }
