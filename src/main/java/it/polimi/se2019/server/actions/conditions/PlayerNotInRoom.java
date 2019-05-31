@@ -5,13 +5,15 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.util.ConditionConstants;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class PlayerNotInRoom implements Condition {
+
+    private static final int ROOMCOLORPOSITION = 0;
 
     private Player attacker;
     private String Color;
@@ -19,8 +21,7 @@ public class PlayerNotInRoom implements Condition {
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Player attacker = (Player) game.getCurrentPlayer();
-        RoomColor roomColor = (RoomColor) targets.get("roomColor").get(0);
-        List<Tile> room = new ArrayList<>();
+        RoomColor roomColor = (RoomColor) targets.get(ConditionConstants.ROOMCOLOR).get(ROOMCOLORPOSITION);
         Tile[][] tileMap = game.getBoard().getTileMap();
 
         return Arrays.stream(tileMap)
