@@ -12,6 +12,7 @@ import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game extends Observable<Response> implements Serializable {
 
@@ -111,13 +112,9 @@ public class Game extends Observable<Response> implements Serializable {
 	 * @return
 	 */
 	public Player getPlayerByColor(PlayerColor color) {
-		List<Player> players = getPlayerList();
-
-		for(Player p : players) {
-			if(p.getColor() == color)
-				return p;
-		}
-		return null;
+		return getPlayerList().stream()
+				.filter(p -> p.getColor() == color)
+				.collect(Collectors.toList()).get(0);
 	}
 
 	public Board getBoard() {

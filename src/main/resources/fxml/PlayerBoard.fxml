@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,21 +9,20 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="main" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.PlayerBoardController">
+<AnchorPane fx:id="main" prefHeight="117.0" prefWidth="479.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.PlayerBoardController">
    <children>
-      <ImageView fitHeight="98.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="117.0" fitWidth="479.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/playerBoards/PlayerBoard_Blue_Normal.png" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="98.0" prefWidth="37.5">
+      <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="117.0" prefWidth="37.5">
          <children>
-            <ImageView fitHeight="98.0" fitWidth="37.5" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="117.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
          </children></AnchorPane>
-      <StackPane layoutX="197.0" layoutY="-1.0" prefHeight="22.0" prefWidth="102.0">
+      <StackPane layoutX="254.0" layoutY="3.0" prefHeight="22.0" prefWidth="102.0">
          <children>
             <GridPane fx:id="markerBar" prefWidth="102.0">
                <columnConstraints>
@@ -82,7 +79,7 @@
             </GridPane>
          </children>
       </StackPane>
-      <GridPane fx:id="damageBar" layoutX="33.0" layoutY="32.0" prefHeight="34.0" prefWidth="272.0">
+      <GridPane fx:id="damageBar" layoutX="39.0" layoutY="37.0" prefHeight="41.0" prefWidth="325.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="22.0" />
@@ -101,132 +98,43 @@
             <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" />
-            <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" />
+            <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" />
          </children>
       </GridPane>
-      <AnchorPane fx:id="skullBar" layoutX="82.0" layoutY="70.0">
+      <AnchorPane fx:id="skullBar" layoutX="97.0" layoutY="85.0" prefHeight="31.0" prefWidth="155.0">
          <children>
-            <GridPane prefHeight="21.0" prefWidth="127.0">
+            <GridPane prefHeight="31.0" prefWidth="155.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
-                  <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
-                  <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
-                  <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
-                  <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
-                  <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="21.0" />
+                  <ColumnConstraints halignment="CENTER" maxWidth="25.0" minWidth="26.0" prefWidth="25.0" />
+                  <ColumnConstraints halignment="CENTER" maxWidth="25.0" minWidth="26.0" prefWidth="25.0" />
+                  <ColumnConstraints halignment="CENTER" maxWidth="25.0" minWidth="26.0" prefWidth="25.0" />
+                  <ColumnConstraints halignment="CENTER" maxWidth="25.0" minWidth="26.0" prefWidth="25.0" />
+                  <ColumnConstraints halignment="CENTER" maxWidth="25.0" minWidth="26.0" prefWidth="25.0" />
+                  <ColumnConstraints halignment="CENTER" maxWidth="25.0" minWidth="26.0" prefWidth="25.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-                  <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-                  <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-                  <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
-                  <ImageView fitHeight="20.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
                </children>
             </GridPane>
-         </children>
-      </AnchorPane>
-      <Button layoutX="94.0" layoutY="5.0" mnemonicParsing="false" text="Add damage" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font>
-      </Button>
-      <Button layoutX="42.0" layoutY="5.0" mnemonicParsing="false" text="Add Marker" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font></Button>
-      <Button layoutX="322.0" layoutY="74.0" mnemonicParsing="false" onAction="#handleResetDamage" text="Reset Damage" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font></Button>
-      <Button layoutX="325.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleResetMarker" text="Reset marker" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font></Button>
-      <Button layoutX="35.0" layoutY="65.0" mnemonicParsing="false" text="Add skulls" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font>
-      </Button>
-      <Button layoutX="40.0" layoutY="82.0" mnemonicParsing="false" text="Frenzy" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font>
-      </Button>
-      <TextField fx:id="pColor" layoutX="313.0" layoutY="7.0" prefHeight="13.0" prefWidth="68.0" promptText="Input player color" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font></TextField>
-      <TextField fx:id="damageAmount" layoutX="310.0" layoutY="30.0" prefHeight="12.0" prefWidth="71.0" promptText="Input dmg amount" visible="false">
-         <font>
-            <Font size="7.0" />
-         </font></TextField>
-      <StackPane layoutX="322.0" layoutY="68.0">
-         <children>
-            <GridPane prefHeight="20.0" prefWidth="60.0">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="20.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="20.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" GridPane.columnIndex="1" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="YELLOW" height="20.0" layoutX="30.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="20.0" GridPane.columnIndex="2" />
-               </children>
-            </GridPane>
-            <GridPane layoutX="10.0" layoutY="10.0" prefHeight="20.0" prefWidth="60.0">
-               <columnConstraints>
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label fx:id="blueAmmo" text="x0" textAlignment="CENTER">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="redAmmo" text="x0" textAlignment="CENTER" GridPane.columnIndex="1">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="yellowAmmo" text="x0" textAlignment="CENTER" GridPane.columnIndex="2">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-               </children>
-            </GridPane>
-         </children>
-      </StackPane>
-      <AnchorPane layoutX="40.0" style="-fx-background-color: black;">
-         <children>
-            <Label fx:id="nameLabel" text="Name" textFill="WHITE">
-               <padding>
-                  <Insets left="5.0" right="5.0" />
-               </padding></Label>
          </children>
       </AnchorPane>
    </children>

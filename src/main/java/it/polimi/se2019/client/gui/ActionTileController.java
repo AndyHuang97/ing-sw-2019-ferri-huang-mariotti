@@ -2,18 +2,24 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.CharacterState;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ActionTileController {
@@ -27,7 +33,6 @@ public class ActionTileController {
     private Button cancelButton;
     private List<GridPane> weaponCrateList;
     private GridPane myWeapons;
-    private GridPane unloadedWeapons;
     private GridPane myPowerups;
 
     @FXML
@@ -52,9 +57,12 @@ public class ActionTileController {
         initInfo();
     }
 
+    /**
+     * Gets the references of grids for maps and cards.
+     */
     public void initGrids() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-        VBox vBox = (VBox) (root.getCenter()).lookup("#leftVbox");
+        VBox vBox = (VBox) (root.getCenter()).lookup("#leftVBox");
         AnchorPane map = (AnchorPane) vBox.getChildren().get(0);
 
         tileGrid = (GridPane) map.lookup("#tileGrid");
@@ -67,11 +75,14 @@ public class ActionTileController {
         weaponCrateList.add((GridPane) map.lookup("#yellowWeapons"));
 
         myWeapons = (GridPane) vBox.lookup("#myWeapons");
-        unloadedWeapons = (GridPane) vBox.lookup("#unloadedWeapons");
         myPowerups = (GridPane) vBox.lookup("#myPowerups");
 
     }
 
+    /**
+     * Gets the references for the info objects.
+     *
+     */
     public void initInfo() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
 
@@ -86,13 +97,6 @@ public class ActionTileController {
 
     }
 
-    public void disableActionButtons() {
-        mmm.setDisable(true);
-        mg.setDisable(true);
-        s.setDisable(true);
-        r.setDisable(true);
-    }
-
     @FXML
     public void handleMove(){
 
@@ -104,7 +108,7 @@ public class ActionTileController {
         infoText.setText("Select 1 tile ");
         cancelButton.setDisable(false);
 
-        setUpProgressBar(1);
+        setUpProgressBar(3);
     }
 
     @FXML
@@ -114,7 +118,101 @@ public class ActionTileController {
 
         infoText.setText("Select 1 card ");
         cancelButton.setDisable(false);
+        showGrabbableCards();
 
+        setUpProgressBar(1);
+    }
+
+    @FXML
+    public void handleShoot() {
+
+        disableActionButtons();
+        infoText.setText("Select 1 card ");
+        cancelButton.setDisable(false);
+
+        myWeapons.setDisable(false);
+        myWeapons.getStyleClass().add("my-node");
+        showMyLoadedWeapons();
+
+        setUpProgressBar(1);
+    }
+
+    @FXML
+    public void handleReload() {
+
+        disableActionButtons();
+        infoText.setText("Select 1 card ");
+        cancelButton.setDisable(false);
+
+        myWeapons.setDisable(false);
+        myWeapons.getStyleClass().add("my-node");
+        showMyUnloadedWeapons();
+
+        setUpProgressBar(3);
+
+    }
+
+    @FXML
+    public void handleTarget() {
+        System.out.println("target");
+        disableActionButtons();
+        playerGrid.toFront();
+        playerGrid.setDisable(false);
+        playerGrid.setVisible(true);
+
+        infoText.setText("Select 3 players ");
+        cancelButton.setDisable(false);
+
+        //TODO do not let player choose himself
+        playerGrid.getChildren().stream()
+                .map(n -> (VBox) n)
+                .forEach(vBox -> vBox.getChildren().stream()
+                        .map(n -> (HBox) n)
+                        .filter(hbox -> !hbox.getChildren().isEmpty())
+                        .forEach(hBox -> hBox.getChildren().stream()
+                                .map(n -> (Circle) n)
+                                .filter(Node::isVisible)
+                                .forEach(c -> {
+                                    if (c.getFill() != Paint.valueOf(mainApp.getPlayerColor().getColor())){
+                                        c.setDisable(false);
+                                        c.getStyleClass().add("my-shape");
+                                    }
+                                    else {
+                                        c.setVisible(false);
+                                    }
+                                })
+                        )
+                );
+
+        setUpProgressBar(3);
+    }
+
+    /**
+     * Deactivates the action buttons.
+     *
+     */
+    public void disableActionButtons() {
+        mmm.setDisable(true);
+        mg.setDisable(true);
+        s.setDisable(true);
+        r.setDisable(true);
+    }
+
+    /**
+     * Prepares the number of circles indicating the max number of selections needed.
+     * @param numOfTargets is the number of selections.
+     */
+    public void setUpProgressBar(int numOfTargets) {
+
+        IntStream.range(0, numOfTargets)
+                .forEach(i -> progressBar.getChildren().get(i).setVisible(true));
+    }
+
+    /**
+     * Shows the objects that are grabbable from the player's position in the map.
+     *
+     */
+    public void showGrabbableCards() {
         Tile t  = mainApp.getGame().getCurrentPlayer().getCharacterState().getTile();
         System.out.println(t);
         try {
@@ -142,76 +240,56 @@ public class ActionTileController {
         } catch (TileNotFoundException e) {
             e.printStackTrace();
         }
-
-        setUpProgressBar(1);
     }
 
-    @FXML
-    public void handleShoot() {
+    /**
+     * Shows the unloaded weapons for selection, and hides the loaded ones.
+     *
+     */
+    public void showMyUnloadedWeapons() {
+        CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
+                .filter(p -> p.getColor() == mainApp.getPlayerColor())
+                .collect(Collectors.toList()).get(0).getCharacterState();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
-        disableActionButtons();
-        infoText.setText("Select 1 card ");
-        cancelButton.setDisable(false);
-
-        myWeapons.setDisable(false);
-        myWeapons.getStyleClass().add("my-node");
-
-        setUpProgressBar(1);
+        IntStream.range(0, myWeaponsModel.size())
+                .forEach(i -> {
+                    ImageView iv = null;
+                    iv = (ImageView) myWeapons.getChildren().get(i);
+                    if (!myWeaponsModel.get(i).isLoaded()) {
+                        iv.setOpacity(1.0);
+                        iv.setDisable(false);
+                    }
+                    else {
+                        iv.setVisible(false);
+                    }
+                });
     }
 
-    @FXML
-    public void handleReload() {
-        handleTarget();
-/*
-        disableActionButtons();
-        infoText.setText("Select 1 card ");
-        cancelButton.setDisable(false);
+    /**
+     * Shows the loaded weapons for selection, and hides the unloaded ones.
+     *
+     */
+    public void showMyLoadedWeapons() {
+        CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
+                .filter(p -> p.getColor() == mainApp.getPlayerColor())
+                .collect(Collectors.toList()).get(0).getCharacterState();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
-        unloadedWeapons.setDisable(false);
-        unloadedWeapons.getStyleClass().add("my-node");
-
-        setUpProgressBar(1);
-
- */
-    }
-
-    public void handleTarget() {
-        System.out.println("target");
-        disableActionButtons();
-        playerGrid.toFront();
-        playerGrid.setDisable(false);
-        playerGrid.setVisible(true);
-
-        infoText.setText("Select 3 players ");
-        cancelButton.setDisable(false);
-
-        //TODO do not let player choose himself
-        playerGrid.getChildren().stream()
-                .map(n -> (VBox) n)
-                .forEach(vBox -> vBox.getChildren().stream()
-                        .map(n -> (HBox) n)
-                        .filter(hbox -> !hbox.getChildren().isEmpty())
-                        .forEach(hBox -> hBox.getChildren().stream()
-                                .map(n -> (Circle) n)
-                                .filter(Node::isVisible)
-                                .forEach(c -> {
-                                    c.setDisable(false);
-                                    c.getStyleClass().add("my-shape");
-                                })
-                        )
-                );
-
-        setUpProgressBar(3);
-
-    }
-
-    public void handleActionUnit() {
-
-    }
-
-    public void setUpProgressBar(int numOfTargets) {
-        IntStream.range(0, numOfTargets)
-                .forEach(i -> ((Circle) progressBar.getChildren().get(i)).setVisible(true));
+        IntStream.range(0, myWeaponsModel.size())
+                .forEach(i -> {
+                    ImageView iv = null;
+                    iv = (ImageView) myWeapons.getChildren().get(i);
+                    if (!myWeaponsModel.get(i).isLoaded()) {
+                        iv.setVisible(false);
+                    }
+                    else {
+                        iv.setOpacity(1.0);
+                        iv.setDisable(false);
+                    }
+                });
     }
 
 }

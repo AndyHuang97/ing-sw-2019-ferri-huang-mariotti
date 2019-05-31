@@ -48,9 +48,11 @@ public class MapController {
     private AnchorPane powerupDeck;
     @FXML
     private AnchorPane weaponDeck;
+    @FXML
+    private GridPane progressBar;
 
     /**
-     * The map initializer.
+     * The map initializer that is called wen the Map.fxml file is loaded.
      */
     @FXML
     public void initialize() {
@@ -71,6 +73,7 @@ public class MapController {
     /**
      * Handles the loading of a map. It shows the clickable tiles based on
      * the map's json file and the present ammo tiles.
+     *
      */
     @FXML
     public void handleMapLoading() {
@@ -104,7 +107,8 @@ public class MapController {
 
 
     /**
-     * Add a button to every tile of the map.
+     * Adds a button to every tile of the map.
+     *
      * @param tileMap is the tile map.
      * @param x is the x coordinate of the tile.
      * @param y is the y coordintate of the tile.
@@ -148,8 +152,9 @@ public class MapController {
     }
 
     /**
-     * This is the first initialization of the ammo grid, which defines the effect of mouse click
+     * This is the first initialization of the ammo grid, which defines the effect of mouse click.
      * for every single ammo card.
+     *
      * @param tileMap is the tile map.
      * @param x is the x coordinate of the tile.
      * @param y is the y coordintate of the tile.
@@ -187,6 +192,13 @@ public class MapController {
         }
     }
 
+    /**
+     *
+     *
+     * @param tileMap
+     * @param x
+     * @param y
+     */
     public void setUpPlayerGrid(Tile[][] tileMap, int x, int y) {
 
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
@@ -222,6 +234,7 @@ public class MapController {
 
     /**
      * Sets the mouse click behavior on weapon crates' cards.
+     *
      */
     public void setUpWeaponCrates() {
 
@@ -251,7 +264,8 @@ public class MapController {
     }
 
     /**
-     * Plainly shows the weapon crates.
+     * Shows the weapon crates.
+     *
      */
     public void showWeaponCrates() {
         Tile[][] tileMap = mainApp.getGame().getBoard().getTileMap();
@@ -280,7 +294,8 @@ public class MapController {
     }
 
     /**
-     * Shows player on map.
+     * Shows the players on map.
+     *
      */
     public void showPlayers() {
 
@@ -313,20 +328,27 @@ public class MapController {
 
     /**
      * Adds player in a row of the player grid.
+     *
+     * @param row is the horizontal box containing the circles that represent players.
+     * @param player is the player to be added to the row
      */
-    public void addPlayerCircle(HBox row, Player p) {
+    public void addPlayerCircle(HBox row, Player player) {
         Optional<Node> optNode = row.getChildren().stream()
                 .filter(n -> !n.isVisible())
                 .findFirst();
         optNode.ifPresent(node -> {
+            if (!node.getStyleClass().isEmpty()) {
+                node.getStyleClass().remove(0);
+            }
             node.setVisible(true);
             node.setDisable(false);
-            ((Circle) node).setFill(Paint.valueOf(p.getColor().getColor()));
+            ((Circle) node).setFill(Paint.valueOf(player.getColor().getColor()));
         });
     }
 
     /**
      * Handles the selection of a button from tile grid.
+     *
      * @param x is the x coordinate in the grid.
      * @param y is the y coordinate in the grid.
      */
@@ -336,10 +358,19 @@ public class MapController {
 
     }
 
+    /**
+     * Handles the selection of a card.
+     *
+     * @param id
+     */
     public void handleCardSelected(int id) {
         mainApp.handleCardSelection();
     }
 
+    /**
+     * Handles the selection of a weapon card.
+     *
+     */
     public void handleWeaponSelected(int x, int y) {
         System.out.println("Weapon selected: " + x + "," + y);
         handleCardSelected(x);
@@ -347,6 +378,7 @@ public class MapController {
 
     /**
      * Handles the selection of an ammo card from ammo tile grid.
+     *
      * @param x is the x coordinate in the grid.
      * @param y is the y coordinate in the grid.
      */
@@ -357,6 +389,7 @@ public class MapController {
 
     /**
      * Handles the selection of a button from player grid.
+     *
      * @param id
      */
     public void handlePlayerSelected(String id) {
@@ -366,19 +399,21 @@ public class MapController {
     /**
      * Disables and resets all grids.
      */
-    public void disableGrids() {
+    public void resetGrids() {
         resetTileGridStyle();
         resetAmmoGridStyle();
+        showPlayers();
         resetPlayerGridStyle();
         tileGrid.setVisible(false);
         ammoGrid.setDisable(true);
         playerGrid.setDisable(true);
-        resetWeaponCrates();
+        resetWeaponCratesStyle();
 
     }
 
     /**
-     * Resets the tile grid's buttons to the player's color
+     * Resets the tile grid's buttons to the player's color.
+     *
      */
     public void resetTileGridStyle() {
         tileGrid.getChildren().stream()
@@ -393,7 +428,8 @@ public class MapController {
     }
 
     /**
-     * Resets the ammo grid's panes border.
+     * Resets the ammo grid's style.
+     *
      */
     public void resetAmmoGridStyle() {
         ammoGrid.getChildren().stream()
@@ -408,6 +444,10 @@ public class MapController {
                 });
     }
 
+    /**
+     * Resets the player grid's style.
+     *
+     */
     public void resetPlayerGridStyle() {
         playerGrid.getChildren().stream()
                 .map(n -> (VBox) n)
@@ -428,9 +468,10 @@ public class MapController {
     }
 
     /**
-     * Resets the weapons grids' border.
+     * Resets the weapons grids' style.
+     *
      */
-    public void resetWeaponCrates() {
+    public void resetWeaponCratesStyle() {
         weaponCrateList.stream()
                 .forEach(wc -> {
                     //wc.getStyleClass().remove(0);
@@ -447,9 +488,20 @@ public class MapController {
 
     /**
      * Getter for the tile grid.
+     *
      * @return tile grid.
      */
     public GridPane getTileGrid() {
         return tileGrid;
+    }
+
+    /**
+     * Getter fot the progress bar that contains the circles representing the number
+     * of players to be selected.
+     *
+     * @return the progress bar.
+     */
+    public GridPane getProgressBar() {
+        return progressBar;
     }
 }

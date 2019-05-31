@@ -4,6 +4,7 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -16,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,20 +36,26 @@ public class GameBoardController {
     private List<PlayerBoardController> pbControllerList;
     private MapController mapController;
 
+    private GridPane progressBar;
+
     @FXML
-    private VBox leftVbox;
+    private VBox leftVBox;
     @FXML
     private AnchorPane map;
     @FXML
     private AnchorPane playerBoard;
     @FXML
-    private VBox opponents;
+    private VBox rightVBox;
     @FXML
     private HBox infoPane;
     @FXML
     private Label infoText;
     @FXML
-    private GridPane progressBar;
+    private Label myName;
+    @FXML
+    private GridPane myAmmo;
+    @FXML
+    private Label myScore;
     @FXML
     private Button confirmButton;
     @FXML
@@ -64,7 +72,7 @@ public class GameBoardController {
     private GridPane rankingGrid;
 
     /**
-     * The main game board initializer.
+     * The main game board initializer which is called when the GameBoard.fxml file is loaded.
      */
     @FXML
     private void initialize() {
@@ -81,19 +89,22 @@ public class GameBoardController {
     }
 
     /**
-     * Initializes all parameters
+     * Initializes all parameters.
+     *
      */
     public void init(Player player) {
+        setInfoPaneStyle();
         initMap();
         initPlayerBoards(player);
         initMyCards();
-        setInfoPaneStyle();
+
         showMyCards();
-        showRaking();
+        //showRaking();
     }
 
     /**
-     * Initializes the map.
+     * Initializes the map by loading the fxml containing the decorated map.
+     *
      */
     public void initMap() {
 
@@ -105,9 +116,10 @@ public class GameBoardController {
             mapController.setMainApp(mainApp);
 
             // removes the old anchor and adds the new one
-            leftVbox.getChildren().remove(0);
-            leftVbox.getChildren().add(0, decoratedMap);
+            leftVBox.getChildren().remove(0);
+            leftVBox.getChildren().add(0, decoratedMap);
             mapController.handleMapLoading();
+            progressBar = mapController.getProgressBar();
         } catch (IOException e) {
             logger.warning("Error loading map.");
         }
@@ -115,8 +127,11 @@ public class GameBoardController {
 
     /**
      * Initializes the players' boards with all their info.
+     *
+     * @param player is the client.
      */
     public void initPlayerBoards(Player player) {
+        Font.loadFont(PlayerBoardController.class.getResource("/css/sofachromerg.ttf").toExternalForm(),10);
 
         AnchorPane targetPane;
         int i = 0;
@@ -135,35 +150,38 @@ public class GameBoardController {
 
                 if (pc != player.getColor()) {
                     // gets the anchorPane containing the imageview
-                    AnchorPane box = (AnchorPane) opponents.getChildren().get(i+1);
+                    AnchorPane box = (AnchorPane) rightVBox.getChildren().get(i);
                     targetPane = (AnchorPane) box.getChildren().get(1);
 
-                    /*Label nameLabel = (Label) box.getChildren().get(2);
-                    Util.setLabelColor(nameLabel, pc);
+                    HBox scoreBox = (HBox)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(2);
+                    HBox nameBox = (HBox)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(3);
+                    GridPane ammoPane = (GridPane)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(4);
 
-                    String name = mainApp.getGame().getPlayerList().stream()
-                            .filter(p -> p.getColor() == pc)
-                            .map(p -> p.getUserData().getNickname())
-                            .collect(Collectors.toList()).get(0);
-                    nameLabel.setText(name);
-                     */
+                    showName(mainApp.getGame().getPlayerByColor(pc), (Label) nameBox.getChildren().get(0));
+                    showScore(mainApp.getGame().getPlayerByColor(pc),(Label) scoreBox.getChildren().get(0));
+                    showAmmo(mainApp.getGame().getPlayerByColor(pc), ammoPane);
+                    showOpponentUnloadedWeapons(mainApp.getGame().getPlayerByColor(pc), i);
                     i++;
                 }else {
                     targetPane = playerBoard;
                     showActionButtons();
+
+                    showName(player, myName);
+                    showAmmo(player, myAmmo);
+                    showScore(player, myScore);
                 }
 
                 // removes the static image view and loads the decorated one
                 targetPane.getChildren().remove(0);
                 targetPane.getChildren().add(decoratedPane);
-                playerController.initPlayerBoard(Util.getPlayerByColor(mainApp.getGame(), pc));
 
-                playerController.showPlayerName(Util.getPlayerByColor(mainApp.getGame(), pc));
-                playerController.showDamageBar(Util.getPlayerByColor(mainApp.getGame(), pc));
-                playerController.showMarkerBar(Util.getPlayerByColor(mainApp.getGame(), pc));
-                playerController.showSkullBar(Util.getPlayerByColor(mainApp.getGame(), pc));
-                playerController.showActionTile(Util.getPlayerByColor(mainApp.getGame(), pc));
-                playerController.showAmmo(Util.getPlayerByColor(mainApp.getGame(), pc));
+
+                playerController.showPlayerBoard(mainApp.getGame().getPlayerByColor(pc));
+                playerController.showDamageBar(mainApp.getGame().getPlayerByColor(pc));
+                playerController.showMarkerBar(mainApp.getGame().getPlayerByColor(pc));
+                playerController.showSkullBar(mainApp.getGame().getPlayerByColor(pc));
+                playerController.showActionTile(mainApp.getGame().getPlayerByColor(pc));
+
 
             }
             catch (IOException e) {
@@ -173,12 +191,12 @@ public class GameBoardController {
     }
 
     /**
-     * Initialize the client's cards to respond to mouse clicks.
+     * Initialize the client's cards to respond to mouse click events.
+     *
      */
     public void initMyCards() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-        GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
-        Arrays.asList(myPowerUps,myWeapons, unloadedWeapons).stream()
+        Arrays.asList(myPowerUps,myWeapons).stream()
                 .forEach(myCards -> {
                     myCards.setDisable(true);
                     myCards.getChildren().stream()
@@ -200,13 +218,79 @@ public class GameBoardController {
                 });
     }
 
+    /**
+     * Sets the style of info panes.
+     *
+     */
     public void setInfoPaneStyle() {
         infoPane.getStyleClass().add("info-pane");
-        rankingGrid.getStyleClass().add("info-pane");
+        //rankingGrid.getStyleClass().add("info-pane");
     }
+
+    /**
+     * Shows the player's score.
+     *
+     * @param player can be either the client or an opponent.
+     * @param score is the label containing the player's score.
+     */
+    public void showScore(Player player, Label score) {
+        score.setText(player.getCharacterState().getScore().toString() + " pts");
+    }
+
+    /**
+     * Shows the player's name.
+     *
+     * @param player can be either the client or an opponent.
+     * @param name is the label containing the name of the player.
+     */
+    public void showName(Player player, Label name) {
+        name.setText(player.getUserData().getNickname());
+        name.getStyleClass().add("name");
+        Util.setLabelColor(name, player.getColor());
+    }
+
+    /**
+     * Shows the player's ammo.
+     *
+     * @param player can be either the client or an opponent.
+     * @param gridPane  is the grid pane containing the ammo images and text.
+     */
+    public void showAmmo(Player player, GridPane gridPane) {
+        Label blueAmmo = (Label) ((HBox) gridPane.getChildren().get(0)).getChildren().get(0);
+        blueAmmo.setText(player.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).toString());
+        Label redAmmo = (Label) ((HBox) gridPane.getChildren().get(1)).getChildren().get(0);
+        redAmmo.setText(player.getCharacterState().getAmmoBag().get(AmmoColor.RED).toString());
+        Label yellowAmmo = (Label) ((HBox) gridPane.getChildren().get(2)).getChildren().get(0);
+        yellowAmmo.setText(player.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).toString());
+    }
+
+    /**
+     * Shows opponents' unloaded weapons.
+     *
+     * @param player is an opponent player.
+     * @param i the i-th player in the right half of the window.
+     */
+    public void showOpponentUnloadedWeapons(Player player, int i) {
+        GridPane unloadedWeapons = (GridPane)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(0);
+        List<Weapon> weaponBag =player.getCharacterState().getWeapoonBag();
+        IntStream.range(0, weaponBag.size())
+                .forEach(x -> {
+                    if (weaponBag.get(x) != null) {
+                        if (weaponBag.get(x).isLoaded()) {
+                            unloadedWeapons.getChildren().get(x).setVisible(false);
+                        }else {
+                            ImageView iv = (ImageView) unloadedWeapons.getChildren().get(x);
+                            iv.setVisible(true);
+                            iv.setImage(new Image(Constants.WEAPON_PATH + weaponBag.get(x).getName() + ".png"));
+                        }
+                    }
+                });
+    }
+
     /**
      * Adds the buttons to the action tile according to player's color and
      * game's current mode.
+     *
      */
     public void showActionButtons() {
         try {
@@ -228,7 +312,8 @@ public class GameBoardController {
     }
 
     /**
-     * Plainly shows the client player's cards.
+     * Plainly shows the client player's weapon and powerup cards.
+     *
      */
     public void showMyCards() {
         CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
@@ -237,14 +322,20 @@ public class GameBoardController {
         List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
+        if (!myWeapons.getStyleClass().isEmpty()) {
+            myWeapons.getStyleClass().remove(0);
+        }
         IntStream.range(0, myWeaponsModel.size())
                 .forEach(i -> {
                     ImageView iv = null;
-                    if (myWeaponsModel.get(i).isLoaded()) {
-                        iv = (ImageView) myWeapons.getChildren().get(i);
+                    iv = (ImageView) myWeapons.getChildren().get(i);
+                    if (!myWeaponsModel.get(i).isLoaded()) {
+                        iv.setOpacity(0.6);
+                        iv.setDisable(true);
                     }
                     else {
-                        iv = (ImageView) unloadedWeapons.getChildren().get(i);
+                        iv.setOpacity(1.0);
+                        iv.setDisable(false);
                     }
                     iv.setImage(new Image(Constants.WEAPON_PATH + myWeaponsModel.get(i).getName() + ".png"));
                     iv.setVisible(true);
@@ -255,13 +346,15 @@ public class GameBoardController {
                     ImageView iv = (ImageView) myPowerUps.getChildren().get(i);
                     iv.setImage(new Image(Constants.POWERUP_PATH+myPowerUpsModel.get(i).getName()+".png"));
                     iv.setVisible(true);
+                    iv.setOpacity(1.0);
                 });
     }
 
     /**
      * Show the player's raking with their scores.
+     *
      */
-    public void showRaking() {
+    public void showRanking() {
         List<Player> ranking = mainApp.getGame().getRanking();
         rankingGrid.getChildren().removeAll(rankingGrid.getChildren());
         ranking.stream()
@@ -275,6 +368,12 @@ public class GameBoardController {
                 });
     }
 
+
+    /**
+     * Handles the confirm button, it prepares the interface to receive the next input.
+     * Finally, it refreshes the interface as the cancel button.
+     *
+     */
     @FXML
     public void handleConfirm() {
         // TODO add input to a list
@@ -282,6 +381,11 @@ public class GameBoardController {
         handleCancel();
     }
 
+    /**
+     * Handles the cancel button, it refreshes the interface to a state prior to the input
+     * selection.
+     *
+     */
     @FXML
     public void handleCancel() {
         progressBar.getChildren().stream()
@@ -294,7 +398,9 @@ public class GameBoardController {
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
 
-        Arrays.asList(myPowerUps,myWeapons, unloadedWeapons).stream()
+        showMyCards();
+        /*
+        Arrays.asList(myPowerUps).stream()
                 .forEach(myCards -> {
                     if (!myCards.getStyleClass().isEmpty()) {
                         myCards.getStyleClass().remove(0);
@@ -305,10 +411,28 @@ public class GameBoardController {
                             );
                 });
 
+        Arrays.asList(myWeapons).stream()
+                .forEach(myCards -> {
+                    if (!myCards.getStyleClass().isEmpty()) {
+                        myCards.getStyleClass().remove(0);
+                    }
+                    myCards.getChildren().stream()
+                            .filter(w -> !new Double(w.getOpacity()).equals(0.6))
+                            .forEach(w ->
+                                    w.setOpacity(1.0)
+                            );
+                });
+
+         */
+
         enableActionButtons();
-        mapController.disableGrids();
+        mapController.resetGrids();
     }
 
+    /**
+     * Enables the selection of the action buttons.
+     *
+     */
     public void enableActionButtons() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
         // if it's not necessary to control specific buttons, it is wiser to get their container
@@ -320,6 +444,7 @@ public class GameBoardController {
 
     /**
      * Getter for the player's board.
+     *
      * @return player board the player.
      */
     public AnchorPane getPlayerBoard() {
@@ -328,6 +453,7 @@ public class GameBoardController {
 
     /**
      * Setter for the player's board.
+     *
      * @param playerBoard is the new player's board.
      */
     public void setPlayerBoard(AnchorPane playerBoard) {
@@ -336,6 +462,7 @@ public class GameBoardController {
 
     /**
      * Getter for the map of the game.
+     *
      * @return the map of the game.
      */
     public AnchorPane getMap() {
@@ -344,6 +471,7 @@ public class GameBoardController {
 
     /**
      * Setter for the map of the game.
+     *
      * @param map is the new map of the game.
      */
     public void setMap(AnchorPane map) {
@@ -352,14 +480,16 @@ public class GameBoardController {
 
     /**
      * Getter for the left Vbox of the game board.
+     *
      * @return left Vbox of the game board.
      */
-    public VBox getLeftVbox() {
-        return leftVbox;
+    public VBox getLeftVBox() {
+        return leftVBox;
     }
 
     /**
      * Gets the list of the player boards' controller.
+     *
      * @return list of player boards' controller
      */
     public List<PlayerBoardController> getPbControllerList() {
@@ -368,6 +498,7 @@ public class GameBoardController {
 
     /**
      * Gets the player board corresponding to the player's color
+     *
      * @param playerColor the player's color associated to the board
      * @return the player board with the correct player color
      */

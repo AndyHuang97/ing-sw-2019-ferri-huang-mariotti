@@ -615,5 +615,22 @@
          </children></AnchorPane>
       <Button layoutX="42.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleMapLoading" prefHeight="18.0" prefWidth="96.0" text="Change Map" visible="false" />
       <TextField fx:id="mapNumber" layoutX="144.0" layoutY="65.0" prefHeight="27.0" prefWidth="130.0" promptText="Input map number" visible="false" />
+      <GridPane fx:id="progressBar" alignment="CENTER" layoutX="241.0" layoutY="418.0" maxHeight="36.0" maxWidth="118.0" prefHeight="36.0" prefWidth="118.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Circle fill="WHITE" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" />
+            <Circle fill="WHITE" layoutX="35.0" layoutY="35.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" GridPane.columnIndex="1" />
+            <Circle fill="WHITE" layoutX="85.0" layoutY="35.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" GridPane.columnIndex="2" />
+            <Circle fill="WHITE" layoutX="135.0" layoutY="35.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" GridPane.columnIndex="3" />
+         </children>
+      </GridPane>
     </children>
 </AnchorPane>
