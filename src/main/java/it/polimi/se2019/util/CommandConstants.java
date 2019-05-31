@@ -1,6 +1,6 @@
 package it.polimi.se2019.util;
 
-public class ConditionConstants {
+public class CommandConstants {
     public static final String TARGETLIST = "targetList";
     public static final String TARGET = "target";
     public static final String TILELIST = "tileList";

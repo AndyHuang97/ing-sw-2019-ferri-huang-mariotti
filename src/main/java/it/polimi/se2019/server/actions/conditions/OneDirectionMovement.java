@@ -4,7 +4,7 @@ import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
-import it.polimi.se2019.util.ConditionConstants;
+import it.polimi.se2019.util.CommandConstants;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class OneDirectionMovement implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        Tile targetTile = (Tile) targets.get(ConditionConstants.TILE).get(TARGETTILEPOSITION);
+        Tile targetTile = (Tile) targets.get(CommandConstants.TILE).get(TARGETTILEPOSITION);
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
         boolean result = false;
 
