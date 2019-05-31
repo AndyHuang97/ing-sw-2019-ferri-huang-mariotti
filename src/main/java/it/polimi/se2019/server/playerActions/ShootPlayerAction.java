@@ -5,6 +5,7 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ConditionConstants;
 import it.polimi.se2019.util.ErrorResponse;
@@ -14,30 +15,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ShootCharacterPlayerAction extends PlayerAction {
+public class ShootPlayerAction extends PlayerAction {
 
-    private final int targetPositionInParams = 0;
-    private final int weaponPositionInParams = 1;
-    private final int actionUnitPositionInParams = 2;
+    private static final int TARGETPOSITIONINPARAMS = 0;
+    private static final int WEAPONPOSITIONINPARAMS = 1;
+    private static final int ACTIONUNITPOSITIONINPARAMS = 2;
+    private static final int TILEPOSITIONINPARAMS = 3;
+    private static final int EFFECTTILEPOSITIONINPARAMS = 4;
 
     private final String errorMessage = "Shoot action failed";
     private Player target;
     private Weapon chosenWeapon;
     private ActionUnit chosenActionUnit;
+    private Tile chosenTile;
+    private Tile effectTile;
 
-    public ShootCharacterPlayerAction(Game game, Player player) { super(game, player); }
+
+    public ShootPlayerAction(Game game, Player player) { super(game, player); }
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
-        target = (Player) params.get(targetPositionInParams);
-        chosenWeapon = (Weapon) params.get(weaponPositionInParams);
-        chosenActionUnit = (ActionUnit) params.get(actionUnitPositionInParams);
+        target = (Player) params.get(TARGETPOSITIONINPARAMS);
+        chosenWeapon = (Weapon) params.get(WEAPONPOSITIONINPARAMS);
+        chosenActionUnit = (ActionUnit) params.get(ACTIONUNITPOSITIONINPARAMS);
+        chosenTile = (Tile) params.get(TILEPOSITIONINPARAMS);
+        effectTile = (Tile) params.get(EFFECTTILEPOSITIONINPARAMS);
     }
 
     @Override
     public void run() {
-
-
+        chosenActionUnit.run();
     }
 
     @Override
@@ -58,12 +65,24 @@ public class ShootCharacterPlayerAction extends PlayerAction {
             return false;
         }
 
-        // build Map<String, List<Targetable>>
+        // build params for Condition (every possible Condition)
         Map<String, List<Targetable>> conditionParams = new HashMap<>();
-        List<Targetable> targetableList = new ArrayList<>();
 
-        targetableList.add(target);
-        conditionParams.put(ConditionConstants.TARGET, targetableList);
+        List<Targetable> targetList = new ArrayList<>();
+        targetList.add(target);
+
+        conditionParams.put(ConditionConstants.TARGET, targetList);
+
+        List<Targetable> chosenTileList = new ArrayList<>();
+        chosenTileList.add(chosenTile);
+
+        conditionParams.put(ConditionConstants.TILE, chosenTileList);
+
+        List<Targetable> tileList = new ArrayList<>();
+        tileList.add(chosenTile);
+        tileList.add(effectTile);
+
+        conditionParams.put(ConditionConstants.TILELIST, tileList);
 
         return chosenActionUnit.check(getGame(), conditionParams);
     }
