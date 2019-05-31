@@ -6,5 +6,10 @@ public enum Direction implements Targetable {
     NORTH,
     EAST,
     SOUTH,
-    WEST
+    WEST;
+
+    @Override
+    public String getId() {
+        return null;
+    }
 }
