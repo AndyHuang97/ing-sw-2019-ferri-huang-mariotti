@@ -1,11 +1,12 @@
 package it.polimi.se2019.server.actions;
 
-import it.polimi.se2019.server.Transaction;
 import it.polimi.se2019.server.actions.conditions.Condition;
 import it.polimi.se2019.server.actions.effects.Effect;
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -36,7 +37,7 @@ public class ActionUnit implements Targetable {
 		this.conditionList = conditionList;
 	}
 
-	public boolean check() {
+	public boolean check(Game game, Map<String, List<Targetable>> targets) {
 		return false;
 	}
 

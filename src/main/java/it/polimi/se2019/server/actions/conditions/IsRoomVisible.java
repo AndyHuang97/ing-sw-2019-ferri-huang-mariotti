@@ -5,6 +5,7 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.util.ConditionConstants;
 
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,12 @@ import java.util.stream.Collectors;
  */
 public class IsRoomVisible implements Condition {
 
+    private static final int ROOMCOLORPOSITIONINLIST = 0;
+
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        List<Targetable> roomColor = targets.get("roomColor");
-        RoomColor targetRoom = (RoomColor)roomColor.get(0);
+        List<Targetable> roomColor = targets.get(ConditionConstants.ROOMCOLOR);
+        RoomColor targetRoom = (RoomColor)roomColor.get(ROOMCOLORPOSITIONINLIST);
         Player attacker = (Player) game.getCurrentPlayer();
         return attacker.getCharacterState().getTile().getVisibleTiles(game.getBoard()).stream()
                     .map(Tile::getRoomColor)
