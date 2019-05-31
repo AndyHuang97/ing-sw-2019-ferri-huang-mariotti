@@ -89,7 +89,7 @@ public class GameBoardController {
         initMyCards();
         setInfoPaneStyle();
         showMyCards();
-        showRaking();
+        //showRaking();
     }
 
     /**
