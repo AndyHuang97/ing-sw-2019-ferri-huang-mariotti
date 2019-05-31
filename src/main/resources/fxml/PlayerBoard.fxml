@@ -20,7 +20,10 @@
             <Image url="@../images/playerBoards/PlayerBoard_Blue_Normal.png" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="98.0" prefWidth="37.5" />
+      <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="98.0" prefWidth="37.5">
+         <children>
+            <ImageView fitHeight="98.0" fitWidth="37.5" pickOnBounds="true" preserveRatio="true" />
+         </children></AnchorPane>
       <StackPane layoutX="197.0" layoutY="-1.0" prefHeight="22.0" prefWidth="102.0">
          <children>
             <GridPane fx:id="markerBar" prefWidth="102.0">
@@ -111,7 +114,7 @@
             <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" />
          </children>
       </GridPane>
-      <AnchorPane fx:id="skullPane" layoutX="82.0" layoutY="70.0">
+      <AnchorPane fx:id="skullBar" layoutX="82.0" layoutY="70.0">
          <children>
             <GridPane prefHeight="21.0" prefWidth="127.0">
                <columnConstraints>

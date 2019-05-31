@@ -6,6 +6,7 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.socket.SocketServer;
+import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.*;
 
 import java.util.ArrayList;
@@ -68,8 +69,13 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         try {
             Game game = ServerApp.gameManager.retrieveGame(nickname);
             request.setInternalMessage(convertNetMessage(message, game));
-        } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
-            //TODO: gestire exception game not found, probabilmente è la prima volta che si connette? va inserito in una waiting list?
+        } catch (GameManager.GameNotFoundException | TargetableNotFoundException e1) {
+            try {
+                logger.info(nickname);
+                ServerApp.gameManager.addUserToWaitingList(new UserData(nickname), this);
+            } catch (GameManager.AlreadyPlayingException e2) {
+                logger.info("User " + nickname + " tried to join multiple times");
+            }
         }
 
         request.setCommandHandler(this);
@@ -84,7 +90,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         try {
             ServerApp.gameManager.dumpToFile();
         } catch (NullPointerException e) {
-
+            logger.info("Tried to dump game to file but failed");
         }
 
     }

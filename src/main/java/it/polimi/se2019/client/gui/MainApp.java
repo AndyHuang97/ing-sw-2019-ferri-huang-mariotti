@@ -19,6 +19,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.Request;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,7 +41,7 @@ public class MainApp extends Application {
 
     private static final Logger logger = Logger.getLogger(MainApp.class.getName());
 
-    private Map<String, Integer> playerInput;
+    private Map<String, String> playerInput;
     private Game game;
     private PlayerColor playerColor;
     private int actionNumber;
@@ -63,8 +64,8 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
+        showLogin();
 
-        //showLogin();
         initRootLayout();
         showGameBoard();
 
@@ -146,6 +147,9 @@ public class MainApp extends Application {
                 break;
             case Constants.SOCKET:
                 // connect via socket
+                SocketClient client = new SocketClient(nickname, ip);
+                client.start();
+                client.send(new Request(nickname).serialize());
                 new SocketClient(nickname, ip);
                 break;
             default:
@@ -225,7 +229,7 @@ public class MainApp extends Application {
         this.playerColor = playerColor;
     }
 
-    public Map<String, Integer> getPlayerInput() {
+    public Map<String, String> getPlayerInput() {
         return playerInput;
     }
 
@@ -239,18 +243,19 @@ public class MainApp extends Application {
 
     public void initGame() {
         game = new Game();
+        game.setFrenzy(false);
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.GREEN);
         p1.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Jamie"), new CharacterState(), PlayerColor.BLUE);
-        p2.getCharacterState().setTile(game.getBoard().getTile(1,1));
+        p2.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Daenerys"), new CharacterState(), PlayerColor.YELLOW);
-        p3.getCharacterState().setTile(game.getBoard().getTile(1,1));
+        p3.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("Arya"), new CharacterState(), PlayerColor.GREY);
-        p4.getCharacterState().setTile(game.getBoard().getTile(0,1));
+        p4.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Night King"), new CharacterState(), PlayerColor.PURPLE);
-        p5.getCharacterState().setTile(game.getBoard().getTile(3,2));
+        p5.getCharacterState().setTile(game.getBoard().getTile(2,0));
         game.setPlayerList(Arrays.asList(p1,p2,p3,p4,p5));
         game.setCurrentPlayer(p1);
         Weapon w1 = new Weapon(null, "0216", null
@@ -273,6 +278,7 @@ public class MainApp extends Application {
         p3.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.YELLOW,PlayerColor.BLUE));
         p4.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.YELLOW));
         p5.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.GREEN,PlayerColor.BLUE));
+
         p1.getCharacterState().getMarkerBar().put(PlayerColor.BLUE, 3);
         p1.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
         p2.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 3);
@@ -285,6 +291,24 @@ public class MainApp extends Application {
         p5.getCharacterState().getMarkerBar().put(PlayerColor.GREY, 2);
         p5.getCharacterState().getMarkerBar().put(PlayerColor.YELLOW, 2);
         p5.getCharacterState().getMarkerBar().put(PlayerColor.GREEN, 1);
+
+        p1.getCharacterState().setDeaths(1);
+        p2.getCharacterState().setDeaths(5);
+        p3.getCharacterState().setDeaths(3);
+        p4.getCharacterState().setDeaths(4);
+        p5.getCharacterState().setDeaths(5);
+
+        p1.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+        p2.getCharacterState().setValueBar(CharacterState.FRENZY_VALUE_BAR);
+        p3.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+        p4.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+        p5.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
+
+        p1.getCharacterState().setScore(1);
+        p2.getCharacterState().setScore(2);
+        p3.getCharacterState().setScore(3);
+        p4.getCharacterState().setScore(4);
+        p5.getCharacterState().setScore(5);
 
     }
 

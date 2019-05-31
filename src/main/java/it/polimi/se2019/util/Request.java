@@ -16,6 +16,10 @@ public class Request implements Serializable, NetMsg {
     private String nickname;
     private CommandHandler commandHandler;
 
+    public Request(String nickname) {
+        this.nickname = nickname;
+    }
+
     public Request(InternalMessage internalMessage, String nickname) {
         this.internalMessage = internalMessage;
         this.nickname = nickname;

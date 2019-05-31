@@ -29,12 +29,9 @@ public class KillshotTrack extends Observable<PlayerDeath> {
 
         EnumMap<PlayerColor, Integer> colorIntegerEnumMap;
 
-        CharacterState deadPlayerState = player.getCharacterState();
         PlayerColor deadPlayerColor = player.getColor();
-        List<PlayerColor> damageBar = deadPlayerState.getDamageBar();
-        PlayerColor firstKiller = damageBar.get(0);
 
-        PlayerDeath playerDeath = new PlayerDeath(deadPlayerColor, damageBar, firstKiller, deadPlayerState.getCharacterValue());
+        PlayerDeath playerDeath = new PlayerDeath(player);
         if(!deathTrack.containsKey(trackState)) {
             colorIntegerEnumMap = new EnumMap<>(PlayerColor.class);
             updateTrackSlotValue(overkill, deadPlayerColor, colorIntegerEnumMap, 0);

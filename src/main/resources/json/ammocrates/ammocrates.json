@@ -25,7 +25,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -55,7 +58,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -85,7 +91,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -115,7 +124,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -145,7 +157,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -175,7 +190,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -203,7 +221,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -231,7 +252,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -259,7 +283,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -295,7 +322,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -331,7 +361,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -367,7 +400,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""

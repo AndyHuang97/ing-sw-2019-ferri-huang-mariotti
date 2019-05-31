@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
@@ -110,18 +111,23 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <AnchorPane fx:id="playerBoard">
+                              <StackPane>
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
                                  <children>
-                                    <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/playerBoards/PlayerBoard_Yellow_Normal.png" />
-                                       </image>
-                                    </ImageView>
+                                    <AnchorPane fx:id="playerBoard">
+                                       <children>
+                                          <ImageView fitHeight="100.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/playerBoards/PlayerBoard_Yellow_Normal.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane fx:id="actionButtons" />
                                  </children>
-                              </AnchorPane>
+                              </StackPane>
                            </children>
                         </HBox>
                         <HBox prefHeight="138.0">

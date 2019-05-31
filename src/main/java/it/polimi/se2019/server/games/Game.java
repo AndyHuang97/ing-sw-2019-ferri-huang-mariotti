@@ -26,6 +26,7 @@ public class Game extends Observable<Response> implements Serializable {
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
 	private List<String> currentActionUnitsList;
+	private boolean frenzy;
 
 	public Game() {
 		// don't use this constructor
@@ -37,6 +38,7 @@ public class Game extends Observable<Response> implements Serializable {
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
+		this.frenzy = false;
 	}
 
 	public Game(List<Player> playerList) {
@@ -167,5 +169,13 @@ public class Game extends Observable<Response> implements Serializable {
 		Response response = new Response(new Game(), true, "");
 		notify(response);
 
+	}
+
+	public boolean isFrenzy() {
+		return frenzy;
+	}
+
+	public void setFrenzy(boolean frenzy) {
+		this.frenzy = frenzy;
 	}
 }

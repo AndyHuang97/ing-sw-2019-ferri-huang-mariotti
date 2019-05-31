@@ -32,7 +32,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -86,9 +89,13 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
+
       "image": ""
     },
     {
@@ -116,7 +123,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -164,7 +174,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Turret Tripod Effect",
@@ -216,7 +229,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -246,7 +262,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -294,7 +313,10 @@
                 "actionUnits" : ["Basic Mode", "Chain Reaction Effect"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "High Voltage Effect",
@@ -346,7 +368,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -376,7 +401,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -399,7 +427,10 @@
                 "amount": 2
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Charge Shot Effect",
@@ -445,7 +476,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -488,7 +522,10 @@
                 "amount": 2
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -520,7 +557,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": false
         },
         {
           "name": "Reaper Mode",
@@ -561,7 +601,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [],
@@ -605,7 +648,10 @@
                 "amount": 2
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         },
         {
           "name": "Punisher Mode",
@@ -659,7 +705,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [],
@@ -709,7 +758,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [
@@ -777,7 +829,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -813,7 +868,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Cozy Fire Mode",
@@ -842,7 +900,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -874,7 +935,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -914,7 +978,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Nano-Tracer Mode",
@@ -961,7 +1028,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1000,7 +1070,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 2,
+          "playerSelectionFirst": false
         },
         {
           "name": "Barbecue Mode",
@@ -1053,7 +1126,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 2,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1092,7 +1168,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1133,7 +1212,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -1176,7 +1258,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1211,7 +1296,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 2,
+          "playerSelectionFirst": false
         },
         {
           "name": "Fragmenting Warhead Effect",
@@ -1251,7 +1339,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -1281,7 +1372,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Piercing Mode",
@@ -1302,7 +1396,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [
@@ -1334,7 +1431,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1351,7 +1451,10 @@
             }
           ],
           "conditionList": [
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Slice and Dice Effect",
@@ -1403,7 +1506,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -1440,7 +1546,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Scanner Mode",
@@ -1461,7 +1570,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 3,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1500,7 +1612,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         },
         {
           "name": "Long Barrel Mode",
@@ -1522,7 +1637,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1569,7 +1687,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Rocket Fist Mode",
@@ -1591,7 +1712,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 2,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [
@@ -1637,7 +1761,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 3,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Tsunami Mode",
@@ -1677,7 +1804,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1709,7 +1839,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Pulverize Mode",
@@ -1750,7 +1883,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 2,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [

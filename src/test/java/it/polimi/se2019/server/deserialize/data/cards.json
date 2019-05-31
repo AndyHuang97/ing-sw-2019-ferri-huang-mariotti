@@ -37,7 +37,10 @@
             "amount": 2
           }
         }
-      ]
+      ],
+      "numPlayerTargets" : 1,
+      "numTileTargets": 0,
+      "playerSelectionFirst": true
     }
   ],
   "optionalEffectList": [
