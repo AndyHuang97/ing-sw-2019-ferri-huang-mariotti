@@ -33,10 +33,6 @@ public class PlayerBoardController {
     @FXML
     private AnchorPane main;
     @FXML
-    private TextField pColor;
-    @FXML
-    private TextField damageAmount;
-    @FXML
     private GridPane damageBar;
     @FXML
     private GridPane markerBar;
@@ -110,23 +106,17 @@ public class PlayerBoardController {
      * @param player is the owner of this board.
      */
     @FXML
-    public void initPlayerBoard(Player player) {
+    public void showPlayerBoard(Player player) {
         ImageView iv = (ImageView) main.getChildren().get(0);
 
         iv.setImage(getPlayerBoardImage(player.getColor(), Util.getCorrectPlayerBoardMode(player)));
 
         if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
-            damageBar.setPrefWidth(264);
-            damageBar.setLayoutX(40);
+            damageBar.setPrefWidth(315);
+            damageBar.setLayoutX(47);
         }
     }
 
-    public void showPlayerName(Player player) {
-        Font.loadFont(PlayerBoardController.class.getResource("/css/sofachromerg.ttf").toExternalForm(),10);
-
-        nameLabel.getStyleClass().add("name");
-        nameLabel.setText(player.getUserData().getNickname());
-    }
 
     /**
      * Shows the action tile
@@ -193,7 +183,6 @@ public class PlayerBoardController {
         }
 
         showSkulls(player,gridPane);
-
     }
 
     /**
@@ -212,13 +201,6 @@ public class PlayerBoardController {
                         iv.get().setImage(new Image(Constants.SKULL_PATH));
                     }
                 });
-    }
-
-    public void showAmmo(Player player) {
-        Map<AmmoColor, Integer> ammoBag = player.getCharacterState().getAmmoBag();
-        blueAmmo.setText("x" + ammoBag.get(AmmoColor.BLUE));
-        redAmmo.setText("x" + ammoBag.get(AmmoColor.RED));
-        yellowAmmo.setText("x" + ammoBag.get(AmmoColor.YELLOW));
     }
 
     /**
@@ -296,22 +278,6 @@ public class PlayerBoardController {
     public Image getPlayerToken(PlayerColor color) {
         String path = Constants.TOKEN_PATH + color.getColor().toLowerCase() + ".png";
         return new NamedImage(path);
-    }
-
-    /**
-     * Gets attacker's color.
-     * @return attacker's color.
-     */
-    public String getpColor() {
-        return pColor.getText();
-    }
-
-    /**
-     * Gets the number of tokens to add to marker/damage bar.
-     * @return
-     */
-    public int getDamageAmount() {
-        return Integer.parseInt(damageAmount.getText());
     }
 
     /**

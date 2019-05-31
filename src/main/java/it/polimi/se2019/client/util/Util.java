@@ -75,12 +75,6 @@ public class Util {
                 .allMatch(c -> c.getFill() == Paint.valueOf("green"));
     }
 
-    public static Player getPlayerByColor(Game game, PlayerColor playerColor) {
-        return  game.getPlayerList().stream()
-                .filter(p -> p.getColor() == playerColor)
-                .collect(Collectors.toList()).get(0);
-    }
-
     public static String getCorrectPlayerBoardMode(Player player) {
         return player.getCharacterState().getValueBar() == CharacterState.NORMAL_VALUE_BAR ?
                 Constants.NORMAL : Constants.FRENZY;
