@@ -13,10 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -46,6 +43,8 @@ public class GameBoardController {
     @FXML
     private VBox opponents;
     @FXML
+    private HBox infoPane;
+    @FXML
     private Label infoText;
     @FXML
     private GridPane progressBar;
@@ -58,9 +57,11 @@ public class GameBoardController {
     @FXML
     private GridPane unloadedWeapons;
     @FXML
-    private GridPane myPowerups;
+    private GridPane myPowerUps;
     @FXML
     private AnchorPane actionButtons;
+    @FXML
+    private GridPane rankingGrid;
 
     /**
      * The main game board initializer.
@@ -86,7 +87,9 @@ public class GameBoardController {
         initMap();
         initPlayerBoards(player);
         initMyCards();
+        setInfoPaneStyle();
         showMyCards();
+        showRaking();
     }
 
     /**
@@ -132,15 +135,18 @@ public class GameBoardController {
 
                 if (pc != player.getColor()) {
                     // gets the anchorPane containing the imageview
-                    AnchorPane box = (AnchorPane) opponents.getChildren().get(i);
+                    AnchorPane box = (AnchorPane) opponents.getChildren().get(i+1);
                     targetPane = (AnchorPane) box.getChildren().get(1);
 
-                    Label nameLabel = (Label) box.getChildren().get(2);
+                    /*Label nameLabel = (Label) box.getChildren().get(2);
+                    Util.setLabelColor(nameLabel, pc);
+
                     String name = mainApp.getGame().getPlayerList().stream()
                             .filter(p -> p.getColor() == pc)
                             .map(p -> p.getUserData().getNickname())
                             .collect(Collectors.toList()).get(0);
                     nameLabel.setText(name);
+                     */
                     i++;
                 }else {
                     targetPane = playerBoard;
@@ -152,10 +158,12 @@ public class GameBoardController {
                 targetPane.getChildren().add(decoratedPane);
                 playerController.initPlayerBoard(Util.getPlayerByColor(mainApp.getGame(), pc));
 
+                playerController.showPlayerName(Util.getPlayerByColor(mainApp.getGame(), pc));
                 playerController.showDamageBar(Util.getPlayerByColor(mainApp.getGame(), pc));
                 playerController.showMarkerBar(Util.getPlayerByColor(mainApp.getGame(), pc));
                 playerController.showSkullBar(Util.getPlayerByColor(mainApp.getGame(), pc));
                 playerController.showActionTile(Util.getPlayerByColor(mainApp.getGame(), pc));
+                playerController.showAmmo(Util.getPlayerByColor(mainApp.getGame(), pc));
 
             }
             catch (IOException e) {
@@ -164,10 +172,13 @@ public class GameBoardController {
         }
     }
 
+    /**
+     * Initialize the client's cards to respond to mouse clicks.
+     */
     public void initMyCards() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
         GridPane progressBar = (GridPane) (root.getCenter()).lookup("#progressBar");
-        Arrays.asList(myPowerups,myWeapons, unloadedWeapons).stream()
+        Arrays.asList(myPowerUps,myWeapons, unloadedWeapons).stream()
                 .forEach(myCards -> {
                     myCards.setDisable(true);
                     myCards.getChildren().stream()
@@ -189,6 +200,10 @@ public class GameBoardController {
                 });
     }
 
+    public void setInfoPaneStyle() {
+        infoPane.getStyleClass().add("info-pane");
+        rankingGrid.getStyleClass().add("info-pane");
+    }
     /**
      * Adds the buttons to the action tile according to player's color and
      * game's current mode.
@@ -237,9 +252,26 @@ public class GameBoardController {
 
         IntStream.range(0, myPowerUpsModel.size())
                 .forEach(i -> {
-                    ImageView iv = (ImageView) myPowerups.getChildren().get(i);
+                    ImageView iv = (ImageView) myPowerUps.getChildren().get(i);
                     iv.setImage(new Image(Constants.POWERUP_PATH+myPowerUpsModel.get(i).getName()+".png"));
                     iv.setVisible(true);
+                });
+    }
+
+    /**
+     * Show the player's raking with their scores.
+     */
+    public void showRaking() {
+        List<Player> ranking = mainApp.getGame().getRanking();
+        rankingGrid.getChildren().removeAll(rankingGrid.getChildren());
+        ranking.stream()
+                .forEach(p -> {
+                    Label name = new Label(p.getUserData().getNickname());
+                    Label score = new Label(p.getCharacterState().getScore().toString());
+                    Util.setLabelColor(name, p.getColor());
+                    Util.setLabelColor(score, p.getColor());
+                    rankingGrid.add(name, 0,ranking.indexOf(p));
+                    rankingGrid.add(score, 1, ranking.indexOf(p));
                 });
     }
 
@@ -262,7 +294,7 @@ public class GameBoardController {
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
 
-        Arrays.asList(myPowerups,myWeapons, unloadedWeapons).stream()
+        Arrays.asList(myPowerUps,myWeapons, unloadedWeapons).stream()
                 .forEach(myCards -> {
                     if (!myCards.getStyleClass().isEmpty()) {
                         myCards.getStyleClass().remove(0);

@@ -39,6 +39,7 @@ public class Player implements Observer<PlayerDeath>, Targetable {
 		this.color = color;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}

@@ -55,6 +55,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     newValues.add(tileTarget);
                     return;
                 }
+                //TODO handle cards and others...
                 throw new TargetableNotFoundException("Cannot find a targetable with id: " + value);
             });
             newCommands.put(key, newValues);

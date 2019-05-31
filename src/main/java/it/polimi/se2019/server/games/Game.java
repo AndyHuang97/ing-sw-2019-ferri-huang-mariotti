@@ -11,9 +11,7 @@ import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
+import java.util.*;
 
 public class Game extends Observable<Response> implements Serializable {
 
@@ -97,6 +95,14 @@ public class Game extends Observable<Response> implements Serializable {
 
 	public void setPlayerList(List<Player> playerList) {
 		this.playerList = playerList;
+	}
+
+	public List<Player> getRanking() {
+		List<Player> ranking = new ArrayList<>();
+		ranking.addAll(playerList);
+		Comparator<Player> scoreComparator = (p1, p2) ->  p1.getCharacterState().getScore().compareTo(p2.getCharacterState().getScore());
+		ranking.sort(scoreComparator.reversed());
+		return ranking;
 	}
 
 	/**

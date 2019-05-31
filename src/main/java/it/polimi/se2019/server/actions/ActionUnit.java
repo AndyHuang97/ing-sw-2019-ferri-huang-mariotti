@@ -130,4 +130,9 @@ public class ActionUnit implements Targetable {
 	public void setPlayerSelectionFirst(boolean playerSelectionFirst) {
 		this.playerSelectionFirst = playerSelectionFirst;
 	}
+
+	@Override
+	public String getId() {
+		return name;
+	}
 }

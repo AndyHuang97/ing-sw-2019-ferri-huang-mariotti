@@ -35,7 +35,7 @@
                         </AnchorPane>
                         <HBox alignment="CENTER_LEFT" minHeight="50.0" prefHeight="48.0" prefWidth="600.0">
                            <children>
-                              <HBox alignment="CENTER" prefWidth="195.0" style="-fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2;">
+                              <HBox fx:id="infoPane" alignment="CENTER" prefWidth="195.0" style="-fx-border-color: blue; -fx-border-radius: 10; -fx-border-width: 2;">
                                  <children>
                                     <Label fx:id="infoText" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="RIGHT_TO_LEFT" text="Info Text" textFill="WHITE" />
                                  </children>
@@ -159,7 +159,7 @@
                                     </ImageView>
                                  </children>
                               </GridPane>
-                              <GridPane fx:id="myPowerups" alignment="CENTER" hgap="10.0" prefWidth="265.0">
+                              <GridPane fx:id="myPowerUps" alignment="CENTER" hgap="10.0" prefWidth="265.0">
                                 <columnConstraints>
                                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -194,9 +194,37 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="900.0" prefWidth="400.0">
                <children>
-                  <VBox fx:id="opponents" layoutX="54.0" prefHeight="900.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox fx:id="opponents" alignment="CENTER" layoutX="54.0" prefHeight="900.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane prefHeight="150.0" prefWidth="400.0">
+                        <GridPane fx:id="rankingGrid" alignment="CENTER" maxWidth="200.0" prefHeight="120.0" prefWidth="200.0" style="-fx-border-color: blue; -fx-border-width: 3; -fx-border-radius: 10;">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label text="Label" textFill="WHITE" />
+                              <Label text="Label" textFill="WHITE" GridPane.rowIndex="1" />
+                              <Label text="Label" textFill="WHITE" GridPane.rowIndex="2" />
+                              <Label text="Label" textFill="WHITE" GridPane.rowIndex="3" />
+                              <Label text="Label" textFill="WHITE" GridPane.rowIndex="4" />
+                              <Label text="Label" textFill="WHITE" GridPane.columnIndex="1" />
+                              <Label text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           </children>
+                        </GridPane>
+                        <AnchorPane maxWidth="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="400.0">
                            <children>
                               <GridPane layoutX="14.0" layoutY="6.0" prefHeight="125.0" prefWidth="200.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">
                                  <columnConstraints>
@@ -208,19 +236,19 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
+                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
+                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="98.0" fitWidth="90.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0210.png" />
+                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -234,10 +262,12 @@
                                     </ImageView>
                                  </children>
                               </AnchorPane>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="320.0" layoutY="30.0" text="Name" textAlignment="CENTER" textFill="WHITE" />
                            </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </AnchorPane>
-                        <AnchorPane prefHeight="150.0" prefWidth="400.0">
+                        <AnchorPane maxWidth="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="400.0">
                            <children>
                               <GridPane layoutX="24.0" layoutY="16.0" prefHeight="125.0" prefWidth="200.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">
                                  <columnConstraints>
@@ -278,10 +308,9 @@
                                     </ImageView>
                                  </children>
                               </AnchorPane>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="320.0" layoutY="30.0" text="Name" textAlignment="CENTER" textFill="WHITE" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="150.0" prefWidth="400.0">
+                        <AnchorPane minHeight="150.0" prefHeight="150.0" prefWidth="400.0">
                            <children>
                               <GridPane layoutX="24.0" layoutY="16.0" prefHeight="125.0" prefWidth="200.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">
                                  <columnConstraints>
@@ -322,10 +351,9 @@
                                     </ImageView>
                                  </children>
                               </AnchorPane>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="320.0" layoutY="30.0" text="Name" textAlignment="CENTER" textFill="WHITE" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="150.0" prefWidth="400.0">
+                        <AnchorPane minHeight="150.0" prefHeight="150.0" prefWidth="400.0">
                            <children>
                               <GridPane layoutX="24.0" layoutY="16.0" prefHeight="125.0" prefWidth="200.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="5.0">
                                  <columnConstraints>
@@ -366,7 +394,6 @@
                                     </ImageView>
                                  </children>
                               </AnchorPane>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="320.0" layoutY="30.0" text="Name" textAlignment="CENTER" textFill="WHITE" />
                            </children>
                         </AnchorPane>
                      </children>

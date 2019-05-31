@@ -57,6 +57,7 @@ public class Tile implements Targetable {
 		this.isSpawnTile = true;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}

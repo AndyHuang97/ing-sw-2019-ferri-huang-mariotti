@@ -6,8 +6,10 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -82,5 +84,14 @@ public class Util {
     public static String getCorrectPlayerBoardMode(Player player) {
         return player.getCharacterState().getValueBar() == CharacterState.NORMAL_VALUE_BAR ?
                 Constants.NORMAL : Constants.FRENZY;
+    }
+
+    public static void setLabelColor(Label label, PlayerColor playerColor) {
+        if (playerColor != PlayerColor.GREY) {
+            label.setTextFill(Paint.valueOf(playerColor.getColor()));
+        }
+        else {
+            label.setTextFill(Color.BLACK);
+        }
     }
 }

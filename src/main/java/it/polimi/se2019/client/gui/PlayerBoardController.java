@@ -2,6 +2,7 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
@@ -13,8 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +46,14 @@ public class PlayerBoardController {
     private AnchorPane skullBar;
     @FXML
     private AnchorPane actionTile;
+    @FXML
+    private Label blueAmmo;
+    @FXML
+    private Label redAmmo;
+    @FXML
+    private Label yellowAmmo;
+    @FXML
+    private Label nameLabel;
 
     /**
      * NamedImage extends the base Image class by adding a string type member
@@ -56,7 +67,6 @@ public class PlayerBoardController {
             super(url);
             name = url.split(Constants.TOKEN_PATH)[1].split(".png")[0];
         }
-
         public String getName() {
             return name;
         }
@@ -111,6 +121,13 @@ public class PlayerBoardController {
         }
     }
 
+    public void showPlayerName(Player player) {
+        Font.loadFont(PlayerBoardController.class.getResource("/css/sofachromerg.ttf").toExternalForm(),10);
+
+        nameLabel.getStyleClass().add("name");
+        nameLabel.setText(player.getUserData().getNickname());
+    }
+
     /**
      * Shows the action tile
      * @param player is the owner of this action tile.
@@ -118,7 +135,7 @@ public class PlayerBoardController {
     public void showActionTile(Player player) {
         ImageView iv = (ImageView) actionTile.getChildren().get(0);
         String gameMode = mainApp.getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
-        iv.setImage(new Image(Constants.ACTION_TILE+player.getColor()+gameMode+".png"));
+        iv.setImage(new Image(Constants.ACTION_TILE+player.getColor().getColor()+gameMode+".png"));
     }
 
     /**
@@ -147,7 +164,7 @@ public class PlayerBoardController {
         for (PlayerColor pc : PlayerColor.values()) {
             if (pc != player.getColor()) {
                 Label label = (Label) markerLabel.getChildren().get(i);
-                label.setText("x" + markerbar.get(pc).toString());
+                label.setText(markerbar.get(pc).toString());
                 i++;
             }
         }
@@ -179,6 +196,11 @@ public class PlayerBoardController {
 
     }
 
+    /**
+     * This is the actual method that sets the image in the image view.
+     * @param player is the owner of the board
+     * @param gridPane is the grid pane on which to add skulls.
+     */
     public void showSkulls(Player player, GridPane gridPane) {
         IntStream.range(0, player.getCharacterState().getDeaths())
                 .forEach(death -> {
@@ -190,6 +212,13 @@ public class PlayerBoardController {
                         iv.get().setImage(new Image(Constants.SKULL_PATH));
                     }
                 });
+    }
+
+    public void showAmmo(Player player) {
+        Map<AmmoColor, Integer> ammoBag = player.getCharacterState().getAmmoBag();
+        blueAmmo.setText("x" + ammoBag.get(AmmoColor.BLUE));
+        redAmmo.setText("x" + ammoBag.get(AmmoColor.RED));
+        yellowAmmo.setText("x" + ammoBag.get(AmmoColor.YELLOW));
     }
 
     /**
