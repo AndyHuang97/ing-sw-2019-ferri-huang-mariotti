@@ -7,7 +7,6 @@ public enum AmmoColor implements Targetable {
     RED,
     YELLOW;
 
-
     @Override
     public String getId() {
         return null;

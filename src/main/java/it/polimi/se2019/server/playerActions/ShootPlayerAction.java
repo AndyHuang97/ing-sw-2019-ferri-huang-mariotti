@@ -7,7 +7,7 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.ConditionConstants;
+import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.ArrayList;
@@ -44,7 +44,11 @@ public class ShootPlayerAction extends PlayerAction {
 
     @Override
     public void run() {
-        chosenActionUnit.run();
+        // since ActionUnit.run() signature changed we need to build a Map<String, List<Targetable>>
+        // in order to run the action
+        Map<String, List<Targetable>> effectCommands = buildCommandDict();
+
+        chosenActionUnit.run(getGame(), effectCommands);
     }
 
     @Override
@@ -57,34 +61,43 @@ public class ShootPlayerAction extends PlayerAction {
 
         // Is weapon loaded?
         if (!chosenWeapon.isLoaded()) {
+            System.out.println("lol");
             return false;
         }
 
         // Is chosenActionUnit in chosenWeapon?
         if (chosenWeapon.getActionUnitList().stream().noneMatch(availableActionUnit -> availableActionUnit == chosenActionUnit)) {
+            System.out.println("asd");
             return false;
         }
 
         // build params for Condition (every possible Condition)
-        Map<String, List<Targetable>> conditionParams = new HashMap<>();
+        Map<String, List<Targetable>> conditionCommands = buildCommandDict();
+
+        return chosenActionUnit.check(getGame(), conditionCommands);
+    }
+
+    private Map<String, List<Targetable>> buildCommandDict() {
+        Map<String, List<Targetable>> commandDict = new HashMap<>();
 
         List<Targetable> targetList = new ArrayList<>();
         targetList.add(target);
 
-        conditionParams.put(ConditionConstants.TARGET, targetList);
+        commandDict.put(CommandConstants.TARGET, targetList);
 
         List<Targetable> chosenTileList = new ArrayList<>();
         chosenTileList.add(chosenTile);
 
-        conditionParams.put(ConditionConstants.TILE, chosenTileList);
+        commandDict.put(CommandConstants.TILE, chosenTileList);
 
         List<Targetable> tileList = new ArrayList<>();
         tileList.add(chosenTile);
         tileList.add(effectTile);
 
-        conditionParams.put(ConditionConstants.TILELIST, tileList);
+        commandDict.put(CommandConstants.TILELIST, tileList);
 
-        return chosenActionUnit.check(getGame(), conditionParams);
+        return commandDict;
+
     }
 
     @Override

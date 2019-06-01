@@ -115,7 +115,7 @@ public class MainApp extends Application {
 
             // initialization of the map must precede the initialization of the player boards
 
-            gbController.init(Util.getPlayerByColor(game, playerColor));
+            gbController.init(game.getPlayerByColor(playerColor));
 
         } catch(IOException e) {
             logger.warning(e.toString());
@@ -256,15 +256,15 @@ public class MainApp extends Application {
         game.setFrenzy(false);
         boardDeserialize();
 
-        Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.GREEN);
+        Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
         p1.getCharacterState().setTile(game.getBoard().getTile(2,0));
-        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Jamie"), new CharacterState(), PlayerColor.BLUE);
+        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Mista"), new CharacterState(), PlayerColor.BLUE);
         p2.getCharacterState().setTile(game.getBoard().getTile(2,0));
-        Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Daenerys"), new CharacterState(), PlayerColor.YELLOW);
+        Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Narancia"), new CharacterState(), PlayerColor.YELLOW);
         p3.getCharacterState().setTile(game.getBoard().getTile(2,0));
-        Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("Arya"), new CharacterState(), PlayerColor.GREY);
+        Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("Bucciarati"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(game.getBoard().getTile(2,0));
-        Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Night King"), new CharacterState(), PlayerColor.PURPLE);
+        Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Abbacchio"), new CharacterState(), PlayerColor.PURPLE);
         p5.getCharacterState().setTile(game.getBoard().getTile(2,0));
         game.setPlayerList(Arrays.asList(p1,p2,p3,p4,p5));
         game.setCurrentPlayer(p1);

@@ -78,7 +78,9 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 logger.info("User " + nickname + " tried to join multiple times");
             }
         }
+    }
 
+    public synchronized void handleLocalRequest(Request request) {
         request.setCommandHandler(this);
 
         // here it needs to parse the message!
@@ -93,7 +95,6 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         } catch (NullPointerException e) {
             logger.info("Tried to dump game to file but failed");
         }
-
     }
 
     @Override

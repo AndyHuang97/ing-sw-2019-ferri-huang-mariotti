@@ -38,7 +38,6 @@ public class ActionUnit implements Targetable {
 		 */
 		this.available = available;
 		this.name = name;
-		//this.description = description;
 		this.effectList = effectList;
 		this.conditionList = conditionList;
 		this.numPlayerTargets = numPlayerTargets;
@@ -47,11 +46,21 @@ public class ActionUnit implements Targetable {
 	}
 
 	public boolean check(Game game, Map<String, List<Targetable>> targets) {
-		return false;
+		for (Condition c : conditionList) {
+		    boolean result = c.check(game, targets);
+
+		    if (!result) {
+		        return false;
+            }
+        }
+
+        return true;
 	}
 
-	public void run() {
-
+	public void run(Game game, Map<String, List<Targetable>> commands) {
+		for (Effect e : effectList) {
+		    e.run(game, commands);
+        }
 	}
 
 	public void getRequiredInputs() {

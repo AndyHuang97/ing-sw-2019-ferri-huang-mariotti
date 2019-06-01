@@ -7,7 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
-import it.polimi.se2019.util.ConditionConstants;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,12 +77,12 @@ public class DifferentTargetsInListTest {
     @Test
     public void testDifferentTargets() {
         List<Targetable> testList1 = Arrays.asList(p1, p2);
-        targets.put(ConditionConstants.TARGETLIST, testList1);
+        targets.put(CommandConstants.TARGETLIST, testList1);
         DifferentTargetsInList testCheck1 = new DifferentTargetsInList();
         Assert.assertEquals(true, testCheck1.check(game,targets));
 
         List<Targetable> testList2 = Arrays.asList(p1, p1);
-        targets.put(ConditionConstants.TARGETLIST, testList2);
+        targets.put(CommandConstants.TARGETLIST, testList2);
         DifferentTargetsInList testCheck2 = new DifferentTargetsInList();
         Assert.assertEquals(false, testCheck2.check(game, targets));
     }
