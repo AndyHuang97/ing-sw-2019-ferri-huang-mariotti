@@ -76,6 +76,7 @@ public class Util {
     }
 
     public static Player getPlayerByColor(Game game, PlayerColor playerColor) {
+        System.out.println(playerColor.getColor());
         return  game.getPlayerList().stream()
                 .filter(p -> p.getColor() == playerColor)
                 .collect(Collectors.toList()).get(0);

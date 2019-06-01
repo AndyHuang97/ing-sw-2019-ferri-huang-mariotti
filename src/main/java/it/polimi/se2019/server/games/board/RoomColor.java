@@ -19,4 +19,9 @@ public enum RoomColor implements Targetable {
     public String getColor() {
         return color;
     }
+
+    @Override
+    public String getId() {
+        return null;
+    }
 }
