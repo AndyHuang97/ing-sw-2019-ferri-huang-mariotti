@@ -48,9 +48,11 @@ public class MainApp extends Application {
 
     private Game game;
     private PlayerColor playerColor;
+    private String nickname;
     private int actionNumber;
 
     private Stage primaryStage;
+    private LoginController loginController;
     private BorderPane rootlayout;
 
     public static void main(String[] args) {
@@ -68,7 +70,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        //showLogin();
+        showLogin();
 
         //initRootLayout();
         //showGameBoard();
@@ -128,6 +130,8 @@ public class MainApp extends Application {
             AnchorPane login = loader.load();
             LoginController controller = loader.getController();
             controller.setMainApp(this);
+            this.setLoginController(controller);
+
 
             Stage loginStage = new Stage();
             loginStage.setTitle("Login");
@@ -135,6 +139,7 @@ public class MainApp extends Application {
 
             Scene scene = new Scene(login);
             loginStage.setScene(scene);
+            loginStage.initOwner(primaryStage);
             loginStage.showAndWait();
 
         } catch (IOException e) {
@@ -144,6 +149,7 @@ public class MainApp extends Application {
     }
 
     public void connect(String nickname, String ip, String connectionType) {
+
         switch (connectionType) {
             case Constants.RMI:
                 // connect via rmi
@@ -160,6 +166,14 @@ public class MainApp extends Application {
             default:
                 throw new IllegalStateException("Unexpected value: " + connectionType);
         }
+    }
+
+    public LoginController getLoginController() {
+        return loginController;
+    }
+
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
     }
 
     public void connectSocket(String ip, int port) {
@@ -193,6 +207,14 @@ public class MainApp extends Application {
 
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     /**
      * Getter of the primary stage.
      * @return the primary stage.
@@ -207,6 +229,14 @@ public class MainApp extends Application {
      */
     public PlayerColor getPlayerColor() {
         return playerColor;
+    }
+
+    /**
+     * Setter of the player color.
+     * @param playerColor is the player's color.
+     */
+    public void setPlayerColor(PlayerColor playerColor) {
+        this.playerColor = playerColor;
     }
 
     public String getBackgroundColor() {
@@ -224,14 +254,6 @@ public class MainApp extends Application {
             default:
                 return "";
         }
-    }
-
-    /**
-     * Setter of the player color.
-     * @param playerColor is the player's color.
-     */
-    public void setPlayerColor(PlayerColor playerColor) {
-        this.playerColor = playerColor;
     }
 
     public Map<String, String> getPlayerInput() {
@@ -265,7 +287,7 @@ public class MainApp extends Application {
         p4.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Abbacchio"), new CharacterState(), PlayerColor.PURPLE);
         p5.getCharacterState().setTile(game.getBoard().getTile(2,0));
-        game.setPlayerList(Arrays.asList(p1,p2,p3));
+        game.setPlayerList(Arrays.asList(p1,p2,p3,p4));
         game.setCurrentPlayer(p1);
         Weapon w1 = new Weapon(null, "0216", null
                 , null, null);
@@ -351,7 +373,6 @@ public class MainApp extends Application {
         kt.addDeath(p5, true);
         game.setKillshotTrack(kt);
 
-
     }
 
     public void boardDeserialize() {
@@ -407,4 +428,6 @@ public class MainApp extends Application {
     public Game getGame() {
         return game;
     }
+
+
 }
