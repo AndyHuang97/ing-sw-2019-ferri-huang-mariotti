@@ -2,6 +2,7 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.polimi.se2019.client.net.CommandHandler;
 import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
@@ -28,6 +29,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.concurrent.Task;
+import javafx.application.Platform;
 
 import java.io.*;
 import java.util.*;
@@ -42,6 +45,7 @@ public class MainApp extends Application {
     private static final Logger logger = Logger.getLogger(MainApp.class.getName());
 
     private Map<String, String> playerInput;
+
     private Game game;
     private PlayerColor playerColor;
     private int actionNumber;
@@ -58,7 +62,7 @@ public class MainApp extends Application {
 
         setPlayerColor(PlayerColor.GREEN);
         // TODO the game should be deserialized from the network, and should be already completely initialized
-        initGame();
+        //initGame();
 
         actionNumber = 1;
         this.primaryStage = primaryStage;
@@ -66,13 +70,13 @@ public class MainApp extends Application {
 
         //showLogin();
 
-        initRootLayout();
-        showGameBoard();
+        //initRootLayout();
+        //showGameBoard();
 
-        primaryStage.setResizable(false);
-        primaryStage.setFullScreen(true);
-        primaryStage.sizeToScene();
-        primaryStage.show();
+        //primaryStage.setResizable(false);
+        //primaryStage.setFullScreen(true);
+        //primaryStage.sizeToScene();
+        //primaryStage.show();
 
     }
 
@@ -149,8 +153,9 @@ public class MainApp extends Application {
                 // connect via socket
                 SocketClient client = new SocketClient(nickname, ip);
                 client.start();
+                // starting thread that redraws stuffs
                 client.send(new Request(nickname).serialize());
-                new SocketClient(nickname, ip);
+                Platform.runLater(new CommandHandler(client.getIn(), this));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + connectionType);
@@ -239,6 +244,10 @@ public class MainApp extends Application {
 
     public void setActionNumber(int actionNumber) {
         this.actionNumber = actionNumber;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public void initGame() {

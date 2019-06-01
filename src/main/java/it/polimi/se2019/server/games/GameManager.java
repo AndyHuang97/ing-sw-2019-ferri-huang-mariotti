@@ -6,6 +6,7 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.Response;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -127,6 +128,10 @@ public class GameManager {
 			newGame.register(tuple.commandHandler);
 		});
 		newGame.setPlayerList(playerList);
+		waitingList.forEach(tuple -> {
+
+			tuple.commandHandler.update(new Response(newGame, true, ""));
+		});
 		return newGame;
 	}
 

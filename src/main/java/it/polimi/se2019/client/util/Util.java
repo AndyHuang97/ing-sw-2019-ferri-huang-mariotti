@@ -76,6 +76,13 @@ public class Util {
                 .filter(Node::isVisible)
                 .allMatch(c -> c.getFill() == Paint.valueOf("green"));
     }
+    
+    public static Player getPlayerByColor(Game game, PlayerColor playerColor) {
+        System.out.println(playerColor.getColor());
+        return  game.getPlayerList().stream()
+                .filter(p -> p.getColor() == playerColor)
+                .collect(Collectors.toList()).get(0);
+    }
 
     public static String getCorrectPlayerBoardMode(Player player) {
         return player.getCharacterState().getValueBar() == CharacterState.NORMAL_VALUE_BAR ?

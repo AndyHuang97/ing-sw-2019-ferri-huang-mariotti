@@ -87,7 +87,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         notify(request);
 
         // TODO update shouldn't be called from here, but from the model with its notify, and it should receive a Response
-        update(new Response(new Game(), true, request.getNickname()));
+        //update(new Response(new Game(), true, request.getNickname()));
 
         // TODO: refactor, some tests do not use ServerApp
         try {
@@ -99,10 +99,12 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     @Override
     public void update(Response response) {
+        //System.out.println("update works");
         /**
          * Response on move done
          */
         //showMessage(response.serialize());
+        clientHandler.asyncSend(response.serialize());
 
     }
 

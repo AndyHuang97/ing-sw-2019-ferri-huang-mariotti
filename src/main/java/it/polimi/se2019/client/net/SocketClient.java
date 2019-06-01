@@ -4,10 +4,7 @@ package it.polimi.se2019.client.net;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.util.Request;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +18,7 @@ public class SocketClient {
     private String serverHost;
     private Socket socket;
     private PrintWriter out;
+    private BufferedReader in;
 
     public SocketClient(String nickname, String serverHost) {
         this.nickname = nickname;
@@ -34,6 +32,7 @@ public class SocketClient {
             int socketPort = Integer.parseInt(prop.getProperty("socket.port"));
             socket = new Socket(serverHost, socketPort);
             out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
             logger.info((Supplier<String>) e);
         }
@@ -41,5 +40,9 @@ public class SocketClient {
 
     public void send(String message) {
         out.println(message);
+    }
+
+    public BufferedReader getIn() {
+        return in;
     }
 }
