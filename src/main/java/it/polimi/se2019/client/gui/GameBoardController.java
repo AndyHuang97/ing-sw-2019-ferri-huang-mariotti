@@ -133,9 +133,9 @@ public class GameBoardController {
     public void initPlayerBoards(Player player) {
         Font.loadFont(PlayerBoardController.class.getResource("/css/sofachromerg.ttf").toExternalForm(),10);
 
-        AnchorPane targetPane;
+        AnchorPane playerBoardPane;
         int i = 0;
-        for (PlayerColor pc : PlayerColor.values()) {
+        for (PlayerColor pc : mainApp.getGame().getActiveColors()) {
             try {
                 FXMLLoader playerLoader = new FXMLLoader();
                 playerLoader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
@@ -151,7 +151,8 @@ public class GameBoardController {
                 if (pc != player.getColor()) {
                     // gets the anchorPane containing the imageview
                     AnchorPane box = (AnchorPane) rightVBox.getChildren().get(i);
-                    targetPane = (AnchorPane) box.getChildren().get(1);
+                    box.setVisible(true);
+                    playerBoardPane = (AnchorPane) box.getChildren().get(1);
 
                     HBox scoreBox = (HBox)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(2);
                     HBox nameBox = (HBox)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(3);
@@ -163,7 +164,7 @@ public class GameBoardController {
                     showOpponentUnloadedWeapons(mainApp.getGame().getPlayerByColor(pc), i);
                     i++;
                 }else {
-                    targetPane = playerBoard;
+                    playerBoardPane = playerBoard;
                     showActionButtons();
 
                     showName(player, myName);
@@ -172,8 +173,8 @@ public class GameBoardController {
                 }
 
                 // removes the static image view and loads the decorated one
-                targetPane.getChildren().remove(0);
-                targetPane.getChildren().add(decoratedPane);
+                playerBoardPane.getChildren().remove(0);
+                playerBoardPane.getChildren().add(decoratedPane);
 
 
                 playerController.showPlayerBoard(mainApp.getGame().getPlayerByColor(pc));

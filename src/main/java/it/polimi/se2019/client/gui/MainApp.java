@@ -5,7 +5,6 @@ import com.google.gson.JsonParser;
 import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
-import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
@@ -13,6 +12,7 @@ import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
 import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
@@ -32,7 +32,6 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -65,7 +64,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        showLogin();
+        //showLogin();
 
         initRootLayout();
         showGameBoard();
@@ -93,7 +92,7 @@ public class MainApp extends Application {
             controller.setMainApp(this);
 
         } catch(IOException e) {
-            logger.warning("Could not find resource.");
+            logger.warning(e.toString());
         }
     }
 
@@ -135,7 +134,7 @@ public class MainApp extends Application {
             loginStage.showAndWait();
 
         } catch (IOException e) {
-            logger.warning("Login window loading error.");
+            logger.warning(e.toString());
             e.printStackTrace();
         }
     }
@@ -257,7 +256,7 @@ public class MainApp extends Application {
         p4.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Abbacchio"), new CharacterState(), PlayerColor.PURPLE);
         p5.getCharacterState().setTile(game.getBoard().getTile(2,0));
-        game.setPlayerList(Arrays.asList(p1,p2,p3,p4,p5));
+        game.setPlayerList(Arrays.asList(p1,p2,p3));
         game.setCurrentPlayer(p1);
         Weapon w1 = new Weapon(null, "0216", null
                 , null, null);
@@ -313,12 +312,6 @@ public class MainApp extends Application {
         p4.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
         p5.getCharacterState().setValueBar(CharacterState.NORMAL_VALUE_BAR);
 
-        p1.getCharacterState().setScore(6);
-        p2.getCharacterState().setScore(2);
-        p3.getCharacterState().setScore(3);
-        p4.getCharacterState().setScore(4);
-        p5.getCharacterState().setScore(5);
-
         EnumMap<AmmoColor, Integer> ammoMap = new EnumMap<>(AmmoColor.class);
         ammoMap.putIfAbsent(AmmoColor.BLUE, 3);
         ammoMap.putIfAbsent(AmmoColor.RED, 2);
@@ -330,9 +323,25 @@ public class MainApp extends Application {
         p4.getCharacterState().setAmmoBag(ammoMap);
         p5.getCharacterState().setAmmoBag(ammoMap);
 
-        //game.getRanking().stream()
-          //      .forEach(player -> System.out.println(player.getUserData().getNickname() + ": " +
-            //            player.getCharacterState().getScore()));
+        p1.getCharacterState().setScore(6);
+        p2.getCharacterState().setScore(2);
+        p3.getCharacterState().setScore(3);
+        p4.getCharacterState().setScore(4);
+        p5.getCharacterState().setScore(5);
+
+        KillShotTrack kt = new KillShotTrack(game.getPlayerList());
+        kt.addDeath(p1, false);
+        kt.addDeath(p2, true);
+        kt.addDeath(p3, true);
+        kt.addDeath(p4, true);
+        kt.addDeath(p5, true);
+        kt.addDeath(p1, false);
+        kt.addDeath(p2, true);
+        kt.addDeath(p3, true);
+        kt.addDeath(p4, true);
+        kt.addDeath(p5, true);
+        game.setKillshotTrack(kt);
+
 
     }
 

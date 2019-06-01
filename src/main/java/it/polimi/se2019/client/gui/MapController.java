@@ -3,11 +3,14 @@ package it.polimi.se2019.client.gui;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
+import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +19,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -31,9 +35,11 @@ public class MapController {
     @FXML
     private ImageView mapImage;
     @FXML
-    private GridPane tileGrid;
+    private GridPane killShotTrackPane;
     @FXML
-    private TextField mapNumber;
+    private GridPane frenzyPane;
+    @FXML
+    private GridPane tileGrid;
     @FXML
     private GridPane ammoGrid;
     @FXML
@@ -53,6 +59,7 @@ public class MapController {
 
     /**
      * The map initializer that is called wen the Map.fxml file is loaded.
+     *
      */
     @FXML
     public void initialize() {
@@ -87,16 +94,17 @@ public class MapController {
             IntStream.range(0, tileMap[0].length)
                     .forEach(y -> IntStream.range(0, tileMap.length)
                             .forEach(x -> {
-                                setUpTileGrid(tileMap, x, y);
-                                setUpAmmoGrid(tileMap, x, y);
-                                setUpPlayerGrid(tileMap, x, y);
+                                initTileGrid(tileMap, x, y);
+                                initAmmoGrid(tileMap, x, y);
+                                initPlayerGrid(tileMap, x, y);
                             }));
 
             resetTileGridStyle();
             tileGrid.setVisible(false);
             ammoGrid.setDisable(true);
+            showKillShotTrack();
             showPlayers();
-            setUpWeaponCrates();
+            initWeaponCrates();
             showWeaponCrates();
 
         } catch (IllegalArgumentException e) {
@@ -113,7 +121,7 @@ public class MapController {
      * @param x is the x coordinate of the tile.
      * @param y is the y coordintate of the tile.
      */
-    public void setUpTileGrid(Tile[][] tileMap, int x, int y) {
+    public void initTileGrid(Tile[][] tileMap, int x, int y) {
 
         if (tileMap[x][y] != null) {
             AnchorPane anchorPane = (AnchorPane) tileGrid.getChildren().get(Util.convertToIndex(x,y));
@@ -159,7 +167,7 @@ public class MapController {
      * @param x is the x coordinate of the tile.
      * @param y is the y coordintate of the tile.
      */
-    public void setUpAmmoGrid(Tile[][] tileMap, int x, int y) {
+    public void initAmmoGrid(Tile[][] tileMap, int x, int y) {
 
         if (tileMap[x][y] != null) {
             if (!tileMap[x][y].isSpawnTile()) {
@@ -199,7 +207,7 @@ public class MapController {
      * @param x
      * @param y
      */
-    public void setUpPlayerGrid(Tile[][] tileMap, int x, int y) {
+    public void initPlayerGrid(Tile[][] tileMap, int x, int y) {
 
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
         GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
@@ -236,7 +244,7 @@ public class MapController {
      * Sets the mouse click behavior on weapon crates' cards.
      *
      */
-    public void setUpWeaponCrates() {
+    public void initWeaponCrates() {
 
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
         GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
@@ -291,6 +299,55 @@ public class MapController {
                             }
                         })
                 );
+    }
+
+    /**
+     * Shows the kill shot track.
+     *
+     */
+    public void showKillShotTrack() {
+        KillShotTrack kt = mainApp.getGame().getKillshotTrack();
+
+        int offset = killShotTrackPane.getChildren().size() - kt.getKillsForFrenzy();
+
+        IntStream.range(offset, killShotTrackPane.getChildren().size())
+                .forEach(i -> {
+                    StackPane sp = (StackPane) killShotTrackPane.getChildren().get(i);
+                    ImageView iv = (ImageView) sp.getChildren().get(0);
+                    Label points = (Label) sp.getChildren().get(1);
+
+                    EnumMap<PlayerColor, Integer> colorIntegerEnumMap = kt.getDeathTrack().get(i-offset);
+                    if (i < kt.getKillCounter() + offset) { //shows player tokens
+                        Optional<PlayerColor> optPc= Arrays.stream(PlayerColor.values())
+                                .filter(pc -> colorIntegerEnumMap.containsKey(pc))
+                                .findFirst();
+                        if (optPc.isPresent()) {
+                            iv.setImage(Util.getPlayerToken(optPc.get()));
+                            points.setText(colorIntegerEnumMap.get(optPc.get()).toString());
+                        }
+                    }
+                    else { //shows skulls and frenzy pane
+                        if (kt.getKillCounter() + offset == killShotTrackPane.getChildren().size()-1) {
+
+                            int j = 0;
+                            for (PlayerColor pc : PlayerColor.values()) {
+                                sp = (StackPane) frenzyPane.getChildren().get(j);
+                                iv = (ImageView) sp.getChildren().get(0);
+                                points = (Label) sp.getChildren().get(1);
+                                iv.setImage(Util.getPlayerToken(pc));
+                                if (colorIntegerEnumMap.get(pc) != null) {
+                                    points.setText(colorIntegerEnumMap.get(pc).toString());
+                                }
+                                else {
+                                    points.setText("0");
+                                }
+                                j++;
+                            }
+                        }else {
+                            iv.setImage(new Image(Constants.SKULL_PATH));
+                        }
+                    }
+                });
     }
 
     /**
