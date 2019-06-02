@@ -72,7 +72,7 @@ public class WeaponDeserializerTest {
             List<Condition> conditionList = Arrays.asList(new IsTargetVisible(),
                     new Distance(2));
             expectedWeapon.setActionUnitList(Arrays.asList(
-                    new ActionUnit(true, "Basic Mode", effectList,conditionList)));
+                    new ActionUnit(true, "Basic Mode", effectList,conditionList, 0, 0, false)));
             /*
             jsonWeapon = gson.toJson(expectedWeapon);
             System.out.println(jsonWeapon);

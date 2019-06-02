@@ -50,6 +50,6 @@ public class BoardDeserializerTest {
         }
 
         Tile tile = board.getTile(0,0);
-        Assert.assertTrue(tile.getClass() ==  NormalTile.class);
+        Assert.assertFalse(tile.isSpawnTile());
     }
 }

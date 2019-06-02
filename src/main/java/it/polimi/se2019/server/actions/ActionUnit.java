@@ -1,11 +1,12 @@
 package it.polimi.se2019.server.actions;
 
-import it.polimi.se2019.server.Transaction;
 import it.polimi.se2019.server.actions.conditions.Condition;
 import it.polimi.se2019.server.actions.effects.Effect;
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -17,6 +18,9 @@ public class ActionUnit implements Targetable {
 	private String description;
 	private List<Effect> effectList;
 	private List<Condition> conditionList;
+	private int numPlayerTargets;
+	private int numTileTargets;
+	private boolean playerSelectionFirst;
 
 	/**
 	 * Default constructor
@@ -24,23 +28,42 @@ public class ActionUnit implements Targetable {
 	 * @param name
 	 * @param effectList
 	 * @param conditionList
+	 * @param numPlayerTargets
+	 * @param numTileTargets
+	 * @param playerSelectionFirst
 	 */
-	public ActionUnit(boolean available, String name, List<Effect> effectList, List<Condition> conditionList) {
+	public ActionUnit(boolean available, String name, List<Effect> effectList, List<Condition> conditionList, int numPlayerTargets, int numTileTargets, boolean playerSelectionFirst) {
 		/*
 		TODO: remove and available or justify them!
 		 */
 		this.available = available;
 		this.name = name;
-		//this.description = description;
 		this.effectList = effectList;
 		this.conditionList = conditionList;
+		this.numPlayerTargets = numPlayerTargets;
+		this.numTileTargets = numTileTargets;
+		this.playerSelectionFirst = playerSelectionFirst;
 	}
 
-	public boolean check() {
-		return false;
+	public boolean check(Game game, Map<String, List<Targetable>> targets) {
+		for (Condition c : conditionList) {
+		    boolean result = c.check(game, targets);
+
+		    if (!result) {
+		        return false;
+            }
+        }
+
+        return true;
 	}
 
-	public void run() {
+	public void run(Game game, Map<String, List<Targetable>> commands) {
+		for (Effect e : effectList) {
+		    e.run(game, commands);
+        }
+	}
+
+	public void getRequiredInputs() {
 
 	}
 
@@ -82,5 +105,34 @@ public class ActionUnit implements Targetable {
 
 	public void setConditionList(List<Condition> conditionList) {
 		this.conditionList = conditionList;
+	}
+
+	public int getNumPlayerTargets() {
+		return numPlayerTargets;
+	}
+
+	public void setNumPlayerTargets(int numPlayerTargets) {
+		this.numPlayerTargets = numPlayerTargets;
+	}
+
+	public int getNumTileTargets() {
+		return numTileTargets;
+	}
+
+	public void setNumTileTargets(int numTileTargets) {
+		this.numTileTargets = numTileTargets;
+	}
+
+	public boolean isPlayerSelectionFirst() {
+		return playerSelectionFirst;
+	}
+
+	public void setPlayerSelectionFirst(boolean playerSelectionFirst) {
+		this.playerSelectionFirst = playerSelectionFirst;
+	}
+
+	@Override
+	public String getId() {
+		return name;
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -67,15 +67,15 @@
                         <HBox alignment="CENTER" prefHeight="35.0" spacing="10.0" />
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="35.0" spacing="10.0">
                            <children>
-                              <Circle disable="true" fill="DODGERBLUE" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-                              <Circle disable="true" fill="#ff401f" layoutX="62.0" layoutY="25.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-                              <Circle disable="true" fill="#fbff1f" layoutX="77.0" layoutY="25.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                              <Circle fill="DODGERBLUE" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                              <Circle fill="#ff401f" layoutX="62.0" layoutY="25.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                              <Circle fill="#fbff1f" layoutX="77.0" layoutY="25.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="20.0" prefWidth="103.0" spacing="10.0">
                            <children>
-                              <Circle disable="true" fill="#21ff58" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-                              <Circle disable="true" fill="#ff21c6" layoutX="62.0" layoutY="28.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                              <Circle fill="#21ff58" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+                              <Circle fill="#ff21c6" layoutX="62.0" layoutY="28.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
                            </children>
                         </HBox>
                      </children>
@@ -297,8 +297,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -306,8 +309,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -315,8 +321,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -324,8 +333,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -333,8 +345,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -342,8 +357,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -351,8 +369,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -360,8 +381,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -369,8 +393,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -378,8 +405,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -387,8 +417,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -396,8 +429,11 @@
                      <children>
                         <AnchorPane maxHeight="35.0" prefHeight="35.0">
                            <children>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0" />
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
                         </AnchorPane>
                      </children>
                   </HBox>
@@ -415,24 +451,24 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
          </children>
       </GridPane>
-      <GridPane fx:id="yellowWeapons" layoutX="-6.0" layoutY="160.0" prefHeight="198.0" prefWidth="96.0">
+      <GridPane fx:id="redWeapons" layoutX="-6.0" layoutY="160.0" prefHeight="198.0" prefWidth="96.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -442,24 +478,24 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="91.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+            <ImageView fitHeight="85.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="1">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="2">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
             </ImageView>
          </children>
       </GridPane>
-      <GridPane fx:id="redWeapons" layoutX="513.0" layoutY="254.0" prefHeight="200.0" prefWidth="86.0">
+      <GridPane fx:id="yellowWeapons" layoutX="513.0" layoutY="254.0" prefHeight="200.0" prefWidth="86.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
@@ -469,24 +505,33 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView fitHeight="91.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+            <ImageView fitHeight="80.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
+               <GridPane.margin>
+                  <Insets top="-7.0" />
+               </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="26.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="1">
+            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
+               <GridPane.margin>
+                  <Insets top="-7.0" />
+               </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="91.0" fitWidth="65.0" layoutX="26.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="2">
+            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/weapons/AD_weapons_IT_022.png" />
                </image>
+               <GridPane.margin>
+                  <Insets top="-7.0" />
+               </GridPane.margin>
             </ImageView>
          </children>
       </GridPane>
-      <GridPane alignment="CENTER" layoutX="41.0" layoutY="20.0" prefHeight="36.0" prefWidth="205.0">
+      <GridPane fx:id="killShotTrackPane" alignment="CENTER" layoutX="41.0" layoutY="20.0" prefHeight="36.0" prefWidth="205.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -501,46 +546,149 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="35.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="60.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="86.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="112.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="138.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="20.0" layoutX="164.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7">
-               <image>
-                  <Image url="@../images/redSkull.png" />
-               </image>
-            </ImageView>
+            <StackPane>
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="1">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="2">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="3">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="4">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="5">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="6">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="7">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+         </children>
+      </GridPane>
+      <GridPane fx:id="frenzyPane" layoutX="247.0" layoutY="21.0" prefHeight="66.0" prefWidth="66.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <StackPane>
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="1">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="2">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane layoutX="54.0" layoutY="10.0" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+            <StackPane layoutX="10.0" layoutY="43.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
          </children>
       </GridPane>
       <AnchorPane fx:id="powerupDeck" layoutX="533.0" layoutY="22.0" prefHeight="68.0" prefWidth="50.0">
@@ -567,7 +715,22 @@
                </children>
             </HBox>
          </children></AnchorPane>
-      <Button layoutX="42.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleMapLoading" prefHeight="18.0" prefWidth="96.0" text="Change Map" />
-      <TextField fx:id="mapNumber" layoutX="144.0" layoutY="65.0" prefHeight="27.0" prefWidth="130.0" promptText="Input map number" />
+      <GridPane fx:id="progressBar" alignment="CENTER" layoutX="241.0" layoutY="418.0" maxHeight="36.0" maxWidth="118.0" prefHeight="36.0" prefWidth="118.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Circle fill="WHITE" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" />
+            <Circle fill="WHITE" layoutX="35.0" layoutY="35.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" GridPane.columnIndex="1" />
+            <Circle fill="WHITE" layoutX="85.0" layoutY="35.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" GridPane.columnIndex="2" />
+            <Circle fill="WHITE" layoutX="135.0" layoutY="35.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" visible="false" GridPane.columnIndex="3" />
+         </children>
+      </GridPane>
     </children>
 </AnchorPane>

@@ -1,73 +1,58 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.Util;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 public class PlayerBoardController {
 
     private static final Logger logger = Logger.getLogger(PlayerBoardController.class.getName());
-    private static final String TOKEN_PATH = "/images/tokens/";
-    private static final String SKULL_PATH = "/images/redSkull.png";
-    private static final String PNG = ".png";
-    private static final String BOARD_PATH = "/images/playerBoards/PlayerBoard_";
-    private static final String NORMAL = "_Normal";
-    private static final String FRENZY = "_Frenzy";
     private MainApp mainApp;
-    private GameBoardController gameBoardController;
+    private PlayerColor playerColor;
 
     @FXML
     private AnchorPane main;
     @FXML
-    private TextField playerColor;
+    private GridPane damageBar;
     @FXML
-    private TextField damageAmount;
-    @FXML
-    private GridPane damagePane;
-    @FXML
-    private GridPane markerToken;
+    private GridPane markerBar;
     @FXML
     private GridPane markerLabel;
     @FXML
-    private AnchorPane skullPane;
+    private AnchorPane skullBar;
     @FXML
     private AnchorPane actionTile;
-
-    /**
-     * NamedImage extends the base Image class by adding a string type member
-     * variable to store the name of the image.
-     */
-    private class NamedImage extends Image {
-
-        private String name;
-
-        public NamedImage(String url) {
-            super(url);
-            name = url.split(TOKEN_PATH)[1].split(PNG)[0];
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
+    @FXML
+    private Label blueAmmo;
+    @FXML
+    private Label redAmmo;
+    @FXML
+    private Label yellowAmmo;
+    @FXML
+    private Label nameLabel;
 
     /**
      * The player board initializer.
      */
     @FXML
     private void initialize() {
-
+        // need to wait initialization of other parameters.
     }
 
     /**
@@ -80,14 +65,6 @@ public class PlayerBoardController {
     }
 
     /**
-     *
-     * @param gameBoardController
-     */
-    public void setGameBoardController(GameBoardController gameBoardController) {
-        this.gameBoardController = gameBoardController;
-    }
-
-    /**
      * Initializes the marker bar.
      * @param color is the color of the client.
      */
@@ -96,8 +73,8 @@ public class PlayerBoardController {
         int i = 0;
         for (PlayerColor pc : PlayerColor.values()) {
             if (pc != color) {
-                ImageView iv = (ImageView) markerToken.getChildren().get(i);
-                iv.setImage(getPlayerToken(pc));
+                ImageView iv = (ImageView) markerBar.getChildren().get(i);
+                iv.setImage(Util.getPlayerToken(pc));
                 i++;
             }
         }
@@ -105,82 +82,105 @@ public class PlayerBoardController {
 
     /**
      * Initializes the main player board.
-     * @param playerColor is the player's color.
+     * @param player is the owner of this board.
      */
     @FXML
-    public void initPlayerBoard(PlayerColor playerColor) {
+    public void showPlayerBoard(Player player) {
         ImageView iv = (ImageView) main.getChildren().get(0);
-        iv.setImage(getPlayerBoardImage(playerColor, NORMAL));
+
+        iv.setImage(getPlayerBoardImage(player.getColor(), Util.getCorrectPlayerBoardMode(player)));
+
+        // in frenzy mode, the damage bar needs some resizing and repositioning
+        if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
+            damageBar.setPrefWidth(315);
+            damageBar.setLayoutX(47);
+        }
+    }
+
+
+    /**
+     * Shows the action tile
+     * @param player is the owner of this action tile.
+     */
+    public void showActionTile(Player player) {
+        ImageView iv = (ImageView) actionTile.getChildren().get(0);
+        String gameMode = mainApp.getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
+        iv.setImage(new Image(Constants.ACTION_TILE+player.getColor().getColor()+gameMode+".png"));
     }
 
     /**
-     * Adds damage from attacker player to damage bar.
+     * Shows the player's damage bar.
      */
-    @FXML
-    public void handleDamage() {
+    public void showDamageBar(Player player) {
 
-        String color = getPlayerColor();
-        int amount = getDamageAmount();
-        //logger.info(color + " - " + amount);
+        List<PlayerColor> damageBarModel = player.getCharacterState().getDamageBar();
+
+        IntStream.range(0, damageBarModel.size())
+                .forEach(i -> {
+                    ImageView iv = (ImageView) this.damageBar.getChildren().get(i);
+                    Image token = Util.getPlayerToken(damageBarModel.get(i));
+                    iv.setImage(token);
+                });
+    }
+
+    /**
+     * Shows the player's marker bar.
+     */
+    public void showMarkerBar(Player player) {
+
+        Map<PlayerColor, Integer> markerbar = player.getCharacterState().getMarkerBar();
 
         int i = 0;
+        for (PlayerColor pc : PlayerColor.values()) {
+            if (pc != player.getColor()) {
+                Label label = (Label) markerLabel.getChildren().get(i);
+                label.setText(markerbar.get(pc).toString());
+                i++;
+            }
+        }
+    }
+
+    /**
+     * Shows the player's skull bar.
+     */
+    public void showSkullBar(Player player) {
+
+        GridPane gridPane = (GridPane) skullBar.getChildren().get(0);
+
         try {
-            for (Node n : damagePane.getChildren()) {
-                //logger.info(i + "," + amount);
+            if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/SkullBarFrenzy.fxml"));
+                AnchorPane pane = loader.load();
 
-                if (((ImageView) n).getImage() == null && i < amount) {
-                    //logger.info("EMPTY IMAGE");
-
-                    Image token = getPlayerToken(PlayerColor.valueOf(color.toUpperCase()));
-                    ((ImageView) n).setImage(token);
-
-                    i++;
-                }
+                gridPane = (GridPane) pane.getChildren().get(0);
+                skullBar.getChildren().remove(0);
+                skullBar.getChildren().add(gridPane);
 
             }
-        } catch (Exception e) {
-            logger.warning("Invalid Color.");
+        } catch (IOException e) {
+            logger.warning(e.toString());
         }
+
+        showSkulls(player,gridPane);
     }
 
     /**
-     * Adds markers of attacker color.
+     * This is the actual method that sets the image in the image view.
+     * @param player is the owner of the board
+     * @param gridPane is the grid pane on which to add skulls.
      */
-    @FXML
-    public void handleMarker() {
-
-        String color = getPlayerColor();
-        int amount = getDamageAmount();
-
-        Optional<ImageView> node = markerToken.getChildren().stream()
-                .map(n -> (ImageView) n)
-                .filter(i -> ((NamedImage)i.getImage()).getName().equalsIgnoreCase(color))
-                .findAny();
-
-        if (node.isPresent()) {
-            ImageView iv = node.get();
-            int index = markerToken.getChildren().indexOf(iv);
-            Label label = (Label) markerLabel.getChildren().get(index);
-            int base = Integer.parseInt(label.getText().split("x")[1]);
-            int updated = base + amount;
-            label.setText("x" + updated);
-        }
-    }
-
-    /**
-     * Adds skulls to the skull bar.
-     */
-    @FXML
-    public void handleSkull() {
-        GridPane gridPane = (GridPane) skullPane.getChildren().get(0);
-        Optional<ImageView> iv = gridPane.getChildren().stream()
-                .map(n -> (ImageView) n)
-                .filter(i -> i.getImage() == null)
-                .findFirst();
-
-        if (iv.isPresent()) {
-            iv.get().setImage(new Image(SKULL_PATH));
-        }
+    public void showSkulls(Player player, GridPane gridPane) {
+        IntStream.range(0, player.getCharacterState().getDeaths())
+                .forEach(death -> {
+                    Optional<ImageView> iv = gridPane.getChildren().stream()
+                            .map(n -> (ImageView) n)
+                            .filter(i -> i.getImage() == null)
+                            .findFirst();
+                    if (iv.isPresent()) {
+                        iv.get().setImage(new Image(Constants.SKULL_PATH));
+                    }
+                });
     }
 
     /**
@@ -189,7 +189,7 @@ public class PlayerBoardController {
     @FXML
     public void handleResetDamage() {
 
-        for (Node n : damagePane.getChildren()) {
+        for (Node n : damageBar.getChildren()) {
             ((ImageView) n).setImage(null);
         }
     }
@@ -204,42 +204,20 @@ public class PlayerBoardController {
     }
 
     /**
-     * Adds the buttons to the action tile according to player's color and
-     * game's current mode.
-     * @param playerColor is the color of the player.
-     * @param mode is the game's current mode.
-     */
-    public void addActionTileButtons(PlayerColor playerColor, String mode) {
-
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/ActionTile" + mode + ".fxml"));
-            AnchorPane buttonedPane = loader.load();
-            ActionTileController atController = loader.getController();
-            atController.setMainApp(mainApp);
-            atController.initGrids();
-
-            actionTile.getChildren().add(buttonedPane);
-        } catch (IOException e) {
-            logger.warning("Could not find resource.");
-        }
-    }
-
-    /**
      * Swaps the main image and sets up the new skull bar for frenzy mode
-     * @param playerColor is the players' color
+     * @param playerColor is the player's color
      */
     public void handleFrenzyKill(PlayerColor playerColor) {
         ImageView iv = (ImageView) main.getChildren().get(0);
-        iv.setImage(getPlayerBoardImage(playerColor, FRENZY));
+        iv.setImage(getPlayerBoardImage(playerColor, Constants.FRENZY));
 
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/SkullBarFrenzy.fxml"));
             AnchorPane pane = loader.load();
 
-            skullPane.getChildren().remove(0);
-            skullPane.getChildren().add(pane.getChildren().get(0));
+            skullBar.getChildren().remove(0);
+            skullBar.getChildren().add(pane.getChildren().get(0));
 
         } catch (IOException e) {
             logger.warning("Could not find resource.");
@@ -247,38 +225,21 @@ public class PlayerBoardController {
 
     }
 
-    /**
-     * Gets the correct color token to add in damage and/or marker bar.
-     * @param color is the player color.
-     * @return an image of the player color token.
-     */
-    public Image getPlayerToken(PlayerColor color) {
-        String path = TOKEN_PATH + color.getColor().toLowerCase() + PNG;
-        return new NamedImage(path);
-    }
-
-    /**
-     * Gets attacker's color.
-     * @return attacker's color.
-     */
-    public String getPlayerColor() {
-        return playerColor.getText();
-    }
-
-    /**
-     * Gets the number of tokens to add to marker/damage bar.
-     * @return
-     */
-    public int getDamageAmount() {
-        return Integer.parseInt(damageAmount.getText());
-    }
 
     /**
      * Returns the player board of a certain color.
      *
      */
     public Image getPlayerBoardImage(PlayerColor playerColor, String mode) {
-        String path = BOARD_PATH + playerColor.getColor() + mode + PNG;
+        String path = Constants.BOARD_PATH + playerColor.getColor() + mode + ".png";
         return new Image(path);
+    }
+
+    public void setPlayerColor(PlayerColor playerColor) {
+        this.playerColor = playerColor;
+    }
+
+    public PlayerColor getPlayerColor() {
+        return playerColor;
     }
 }

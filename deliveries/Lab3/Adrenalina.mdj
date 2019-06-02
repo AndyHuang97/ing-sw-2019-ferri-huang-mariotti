@@ -1070,7 +1070,7 @@
 											"top": 742,
 											"width": 228.72509765625,
 											"height": 13,
-											"text": "-color: String",
+											"text": "-roomColor: String",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1598,7 +1598,7 @@
 											"top": 1518,
 											"width": 95,
 											"height": 13,
-											"text": "-color: String",
+											"text": "-roomColor: String",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4490,7 +4490,7 @@
 											"top": 1374,
 											"width": 206,
 											"height": 13,
-											"text": "-action: ArrayList<ActionUnit>",
+											"text": "-actionNumber: ArrayList<ActionUnit>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -10820,7 +10820,7 @@
 										"$ref": "AAAAAAFpznQLOStOQc4="
 									},
 									"edgePosition": 1,
-									"text": "-color"
+									"text": "-roomColor"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -13441,7 +13441,7 @@
 											"top": 771,
 											"width": 334.19140625,
 											"height": 13,
-											"text": "+getPossibleAction(action : Action): ArrayList<ActionUnit>",
+											"text": "+getPossibleAction(actionNumber : Action): ArrayList<ActionUnit>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -14229,7 +14229,7 @@
 											"top": 492,
 											"width": 229.42333984375,
 											"height": 13,
-											"text": "+applyAction(action: PlayerAction): void",
+											"text": "+applyAction(actionNumber: PlayerAction): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -15708,7 +15708,7 @@
 							"top": 584,
 							"width": 225,
 							"height": 73,
-							"text": "added new methods\napplyAction(action: PlayerAction)\n"
+							"text": "added new methods\napplyAction(actionNumber: PlayerAction)\n"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -16035,7 +16035,7 @@
 											"top": 1516,
 											"width": 326,
 											"height": 13,
-											"text": "-action: Action",
+											"text": "-actionNumber: Action",
 											"horizontalAlignment": 0
 										}
 									],
@@ -17394,7 +17394,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpuqalG/UyIeM="
 							},
-							"nickname": "color",
+							"nickname": "roomColor",
 							"visibility": "private",
 							"type": "String"
 						},
@@ -17596,7 +17596,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFput0EFfZQRF8="
 							},
-							"nickname": "color",
+							"nickname": "roomColor",
 							"visibility": "private",
 							"type": "String"
 						}
@@ -18052,7 +18052,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFpv1WQemxAH7k="
 							},
-							"nickname": "action",
+							"nickname": "actionNumber",
 							"visibility": "private",
 							"type": "ArrayList<ActionUnit>"
 						}
@@ -19389,7 +19389,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp7mZEf2LmdhM="
 									},
-									"nickname": "action ",
+									"nickname": "actionNumber ",
 									"type": {
 										"$ref": "AAAAAAFp58Gpejgtok8="
 									}
@@ -19544,7 +19544,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFp873oyWKn+fA="
 									},
-									"nickname": "action",
+									"nickname": "actionNumber",
 									"type": {
 										"$ref": "AAAAAAFp9/NbsmHvsWs="
 									}
@@ -19649,7 +19649,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFp9/NbsmHvsWs="
 							},
-							"nickname": "action",
+							"nickname": "actionNumber",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAFp58Gpejgtok8="

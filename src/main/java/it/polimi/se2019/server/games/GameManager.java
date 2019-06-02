@@ -6,6 +6,7 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.Response;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,11 +15,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
+import java.util.UUID;
 
 public class GameManager {
 	private static final Logger logger = Logger.getLogger(GameManager.class.getName());
 	private List<Game> gameList;
 	private int waitingListMaxSize;
+	private int waitingListStartTimerSize;
+	private int startTimerSeconds;
 	private List<Tuple> waitingList;
 	private String dumpName;
 
@@ -41,7 +45,9 @@ public class GameManager {
 			Properties prop = new Properties();
 			// load a properties file
 			prop.load(input);
-			waitingListMaxSize = Integer.parseInt(prop.getProperty("gamemanager.waitinglistmaxsize"));
+			waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
+			waitingListStartTimerSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_start_timer_size"));
+			startTimerSeconds = Integer.parseInt(prop.getProperty("game_manager.start_timer_seconds"));
 		} catch (IOException ex) {
 			logger.info(ex.toString());
 		}
@@ -61,7 +67,8 @@ public class GameManager {
 	}
 
 	public void dumpToFile() {
-		logger.info("Loading saved games");
+		//System.out.println(dumpName);
+		logger.info("Saving games to file");
 		try {
 			FileWriter writer = new FileWriter(this.dumpName);
 			// Write file
@@ -73,7 +80,7 @@ public class GameManager {
 			}
 
 		} catch (IOException e) {
-			logger.info("Error while loading gamefile, skip loading saved games!");
+			logger.info("Error while saving games to file");
 		}
 	}
 
@@ -112,21 +119,41 @@ public class GameManager {
 		}
 	}
 
-	public Game createGame(List<Tuple> waitingList) throws IndexOutOfBoundsException {
+	public void createGame() throws IndexOutOfBoundsException {
+		logger.info("Starting a new game");
 		//create the new game and reset waiting list, do not use it
 		Game newGame = new Game();
 		List<Player> playerList = new ArrayList<>();
-		waitingList.forEach(tuple -> {
+		this.waitingList.forEach(tuple -> {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
 			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
-			playerList.add(new Player(true, tuple.userData, new CharacterState(), color));
+			playerList.add(new Player(UUID.randomUUID().toString(), true, tuple.userData, new CharacterState(), color));
 			// register all players
 			newGame.register(tuple.commandHandler);
 		});
 		newGame.setPlayerList(playerList);
-		return newGame;
+		this.waitingList.forEach(tuple -> {
+			tuple.commandHandler.update(new Response(newGame, true, ""));
+		});
+		this.gameList.add(newGame);
+		this.waitingList = new ArrayList<>();
 	}
+
+	private void delayedGameCreation(int previousGameListSize) throws IndexOutOfBoundsException {
+		logger.info("Starting game creation countdown (" + this.startTimerSeconds + "s)...");
+		try {
+			Thread.sleep(this.startTimerSeconds * 1000);
+		} catch(InterruptedException e) {
+			logger.info(e.toString());
+			Thread.currentThread().interrupt();
+		}
+		if (previousGameListSize == this.gameList.size()) {
+			createGame();
+		}
+	}
+
+
 
 	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		// add user to waiting list / game (used by view)
@@ -134,15 +161,17 @@ public class GameManager {
 			throw new AlreadyPlayingException("User " + newUser.getNickname() + "is already playing or waiting!");
 		}
 		this.waitingList.add(new Tuple(newUser, currentCommandHandler));
-		if (waitingList.size() > waitingListMaxSize) {
-			Game newGame = createGame(waitingList);
-			this.gameList.add(newGame);
-			this.waitingList = new ArrayList<>();
+		logger.info("Added user " + newUser.getNickname() + " to the waiting list, current waiting list size is " + this.waitingList.size() + " players");
+		if (this.waitingList.size() == waitingListStartTimerSize) {
+			new Thread(() -> delayedGameCreation(this.gameList.size())).start();
+		}
+		if (waitingList.size() >= waitingListMaxSize) {
+			createGame();
 		}
 	}
 
 	public List<Tuple> getWaitingList() {
-		// TODO: is that method useful? Other classes cannot use Tuple type!
+		// TODO: is that method useful? Other classes cannot use Tuple type! ANSWER: No it is not useful for anybody
 		return waitingList;
 	}
 

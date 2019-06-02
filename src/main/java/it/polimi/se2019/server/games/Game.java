@@ -1,6 +1,6 @@
 package it.polimi.se2019.server.games;
 
-import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
@@ -11,9 +11,8 @@ import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game extends Observable<Response> implements Serializable {
 
@@ -21,10 +20,12 @@ public class Game extends Observable<Response> implements Serializable {
 	private List<Player> playerList;
 	private Player currentPlayer;
 	private Board board;
-	private Integer killshotTrack;
-	private List<Weapon> weaponDeck;
-	private List<PowerUp> powerupDeck;
-	private List<ActionUnit> currentActionUnitsList;
+	private KillShotTrack killshotTrack;
+	private Deck<Weapon> weaponDeck;
+	private Deck<PowerUp> powerupDeck;
+	private Deck<AmmoCrate> ammoCrateDeck;
+	private List<String> currentActionUnitsList;
+	private boolean frenzy;
 
 	public Game() {
 		// don't use this constructor
@@ -32,9 +33,11 @@ public class Game extends Observable<Response> implements Serializable {
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
 		this.board = new Board();
-		this.killshotTrack = 0;
-		this.weaponDeck = new ArrayList<>();
-		this.powerupDeck = new ArrayList<>();
+		this.killshotTrack = new KillShotTrack(playerList);
+		this.weaponDeck = null;
+		this.powerupDeck = null;
+		this.ammoCrateDeck = null;
+		this.frenzy = false;
 	}
 
 	public Game(List<Player> playerList) {
@@ -43,12 +46,13 @@ public class Game extends Observable<Response> implements Serializable {
 		this.playerList = playerList;
 		this.currentPlayer = playerList.get(0);
 		this.board = new Board();
-		this.killshotTrack = 0;
-		this.weaponDeck = new ArrayList<>();
-		this.powerupDeck = new ArrayList<>();
+		this.killshotTrack = new KillShotTrack(playerList);
+		this.weaponDeck = null;
+		this.powerupDeck = null;
+		this.ammoCrateDeck = null;
 	}
 
-	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, List<Weapon> weaponDeck, List<PowerUp> powerupDeck) {
+	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killshotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerupDeck, Deck<AmmoCrate> ammoCrateDeck) {
 		// use this one to resume? a current one
 		this.startDate = startDate;
 		this.playerList = playerList;
@@ -57,6 +61,7 @@ public class Game extends Observable<Response> implements Serializable {
 		this.killshotTrack = killshotTrack;
 		this.weaponDeck = weaponDeck;
 		this.powerupDeck = powerupDeck;
+		this.ammoCrateDeck = ammoCrateDeck;
 	}
 
 	public GameData generateGameData() {
@@ -93,19 +98,30 @@ public class Game extends Observable<Response> implements Serializable {
 		this.playerList = playerList;
 	}
 
+	public List<Player> getRanking() {
+		List<Player> ranking = new ArrayList<>();
+		ranking.addAll(playerList);
+		Comparator<Player> scoreComparator = (p1, p2) ->  p1.getCharacterState().getScore().compareTo(p2.getCharacterState().getScore());
+		ranking.sort(scoreComparator.reversed());
+		return ranking;
+	}
+
 	/**
 	 * TODO may add a PlayerNotFoundException instead of returning null
 	 * @param color
 	 * @return
 	 */
 	public Player getPlayerByColor(PlayerColor color) {
-		List<Player> players = getPlayerList();
+		Optional<Player> optPlayer = getPlayerList().stream()
+				.filter(p -> p.getColor() == color)
+				.findFirst();
+		return optPlayer.orElse(null);
+	}
 
-		for(Player p : players) {
-			if(p.getColor() == color)
-				return p;
-		}
-		return null;
+	public List<PlayerColor> getActiveColors() {
+		return getPlayerList().stream()
+				.map(p -> p.getColor())
+				.collect(Collectors.toList());
 	}
 
 	public Board getBoard() {
@@ -126,35 +142,35 @@ public class Game extends Observable<Response> implements Serializable {
         throw new PlayerNotFoundException();
     }
 
-	public Integer getKillshotTrack() {
+	public KillShotTrack getKillshotTrack() {
 		return killshotTrack;
 	}
 
-	public void setKillshotTrack(Integer killshotTrack) {
+	public void setKillshotTrack(KillShotTrack killshotTrack) {
 		this.killshotTrack = killshotTrack;
 	}
 
-	public List<Weapon> getWeaponDeck() {
+	public Deck<Weapon> getWeaponDeck() {
 		return weaponDeck;
 	}
 
-	public void setWeaponDeck(List<Weapon> weaponDeck) {
+	public void setWeaponDeck(Deck<Weapon> weaponDeck) {
 		this.weaponDeck = weaponDeck;
 	}
 
-	public List<PowerUp> getPowerupDeck() {
+	public Deck<PowerUp> getPowerupDeck() {
 		return powerupDeck;
 	}
 
-	public void setPowerupDeck(List<PowerUp> powerupDeck) {
+	public void setPowerupDeck(Deck<PowerUp> powerupDeck) {
 		this.powerupDeck = powerupDeck;
 	}
 
-	public List<ActionUnit> getCurrentActionUnitsList() {
+	public List<String> getCurrentActionUnitsList() {
 		return currentActionUnitsList;
 	}
 
-	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
+	public void setCurrentActionUnitsList(List<String> currentActionUnitsList) {
 		this.currentActionUnitsList = currentActionUnitsList;
 	}
 
@@ -163,5 +179,13 @@ public class Game extends Observable<Response> implements Serializable {
 		Response response = new Response(new Game(), true, "");
 		notify(response);
 
+	}
+
+	public boolean isFrenzy() {
+		return frenzy;
+	}
+
+	public void setFrenzy(boolean frenzy) {
+		this.frenzy = frenzy;
 	}
 }

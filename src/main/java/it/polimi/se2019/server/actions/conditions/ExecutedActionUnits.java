@@ -19,8 +19,6 @@ public class ExecutedActionUnits implements Condition {
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
 
-        return game.getCurrentActionUnitsList().stream()
-                .map(ActionUnit::getName)
-                .collect(Collectors.toList()).containsAll(actionUnits);
+        return game.getCurrentActionUnitsList().containsAll(actionUnits);
     }
 }

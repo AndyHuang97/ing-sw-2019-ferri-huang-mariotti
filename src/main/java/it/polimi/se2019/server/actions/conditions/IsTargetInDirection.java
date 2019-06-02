@@ -7,7 +7,7 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.util.CommandConstants;
 
 import java.util.List;
 import java.util.Map;
@@ -15,12 +15,15 @@ import java.util.logging.Logger;
 
 public class IsTargetInDirection implements Condition {
     private static final Logger logger = Logger.getLogger(IsTargetInDirection.class.getName());
+    private static final int TARGETPOSITION = 0;
+    private static final int DIRECTIONPOSITION = 0;
+
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
-        Player targetPlayer = (Player) targets.get("target").get(0);
+        Player targetPlayer = (Player) targets.get(CommandConstants.TARGET).get(TARGETPOSITION);
         Tile targetTile = targetPlayer.getCharacterState().getTile();
-        Direction dir = (Direction) targets.get("direction").get(0);
+        Direction dir = (Direction) targets.get(CommandConstants.DIRECTION).get(DIRECTIONPOSITION);
         Board board = game.getBoard();
 
         boolean result = false;

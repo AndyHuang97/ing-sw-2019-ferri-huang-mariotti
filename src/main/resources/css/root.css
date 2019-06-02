@@ -1,0 +1,26 @@
+.my-node {
+    -fx-border-color: red;
+    -fx-border-width: 2.0;
+}
+
+.my-shape {
+    -fx-stroke: red;
+    -fx-stroke-width: 2;
+}
+
+.info-pane {
+    -fx-border-color: blue;
+    -fx-border-width: 3;
+    -fx-border-radius: 10;
+    -fx-background-color: #8585ad;
+    -fx-background-radius: 10;
+}
+
+.name {
+    -fx-font-family: "sofachrome";
+    -fx-font-size: 13;
+}
+
+.button {
+    -fx-font-size: 10;
+}

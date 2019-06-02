@@ -23,6 +23,9 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
         boolean available = json.get("available").getAsBoolean();
         JsonArray jsonEffectArray = json.get("effectList").getAsJsonArray();
         JsonArray jsonConditionArray = json.get("conditionList").getAsJsonArray();
+        int numPlayerTargets = json.get("numPlayerTargets").getAsInt();
+        int numTileTargets = json.get("numTileTargets").getAsInt();
+        boolean playerSelectionFirst = json.get("playerSelectionFirst").getAsBoolean();
 
         ConditionDeserializer conditionDeserializer = (ConditionDeserializer) deserializerFactory.getDeserializer("conditions");
         EffectDeserializer effectDeserializer = (EffectDeserializer) deserializerFactory.getDeserializer("effects");
@@ -59,6 +62,6 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
             conditionArrayList.add(conditionObject);
         }
 
-        return new ActionUnit(available, name, effectArrayList, conditionArrayList);
+        return new ActionUnit(available, name, effectArrayList, conditionArrayList, numPlayerTargets, numTileTargets, playerSelectionFirst);
     }
 }

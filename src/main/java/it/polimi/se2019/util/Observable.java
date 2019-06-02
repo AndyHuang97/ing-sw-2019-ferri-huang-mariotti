@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Observable<T> {
-
-    private final List<Observer<T>> observers = new ArrayList<>();
+    private transient final List<Observer<T>> observers = new ArrayList<>();
 
     public void register(Observer<T> observer){
         synchronized (observers) {

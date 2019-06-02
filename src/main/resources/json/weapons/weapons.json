@@ -32,7 +32,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -45,6 +48,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "RED": 1
+                }
               }
             }
           ],
@@ -77,9 +89,13 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
+
       "image": ""
     },
     {
@@ -107,7 +123,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -120,6 +139,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -146,7 +174,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Turret Tripod Effect",
@@ -157,6 +188,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "BLUE": 1
+                }
               }
             }
           ],
@@ -189,7 +229,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -219,7 +262,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -232,6 +278,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "BLUE": 1
+                }
               }
             }
           ],
@@ -258,7 +313,10 @@
                 "actionUnits" : ["Basic Mode", "Chain Reaction Effect"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "High Voltage Effect",
@@ -269,6 +327,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 2
+              }
+            },
+            {
+              "name": "Consume 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "BLUE": 1
+                }
               }
             }
           ],
@@ -301,7 +368,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -331,7 +401,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -354,7 +427,10 @@
                 "amount": 2
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Charge Shot Effect",
@@ -365,6 +441,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "BLUE": 1
+                }
               }
             }
           ],
@@ -391,7 +476,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -434,7 +522,10 @@
                 "amount": 2
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -466,7 +557,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": false
         },
         {
           "name": "Reaper Mode",
@@ -477,6 +571,16 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
                 "amount": 2
+              }
+            },
+            {
+              "name": "Consume 1 Blue and 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "BLUE": 1,
+                  "RED": 1
+                }
               }
             }
           ],
@@ -497,7 +601,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [],
@@ -541,7 +648,10 @@
                 "amount": 2
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         },
         {
           "name": "Punisher Mode",
@@ -558,6 +668,16 @@
               "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
+              }
+            },
+            {
+              "name": "Consume 1 Red and 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "RED": 1,
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -585,7 +705,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [],
@@ -635,7 +758,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [
@@ -654,6 +780,15 @@
               "name": "Move Target List",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
+              }
+            },
+            {
+              "name": "Consume 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "RED": 1
+                }
               }
             }
           ],
@@ -694,7 +829,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -730,7 +868,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Cozy Fire Mode",
@@ -759,7 +900,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -791,7 +935,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -831,7 +978,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Nano-Tracer Mode",
@@ -849,6 +999,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.MarkTile",
               "params": {
                 "amount": 2
+              }
+            },
+            {
+              "name": "Consume 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "RED": 1
+                }
               }
             }
           ],
@@ -869,7 +1028,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -908,7 +1070,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 2,
+          "playerSelectionFirst": false
         },
         {
           "name": "Barbecue Mode",
@@ -926,6 +1091,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 2 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "YELLOW": 2
+                }
               }
             }
           ],
@@ -952,7 +1126,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 2,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -991,7 +1168,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1004,6 +1184,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "RED": 1
+                }
               }
             }
           ],
@@ -1023,7 +1212,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -1066,7 +1258,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1080,6 +1275,15 @@
               "params": {
                 "amount": 2
               }
+            },
+            {
+              "name": "Consume 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "BLUE": 1
+                }
+              }
             }
           ],
           "conditionList": [
@@ -1092,7 +1296,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 2,
+          "playerSelectionFirst": false
         },
         {
           "name": "Fragmenting Warhead Effect",
@@ -1103,6 +1310,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -1123,7 +1339,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -1153,7 +1372,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Piercing Mode",
@@ -1174,7 +1396,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [
@@ -1206,7 +1431,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1223,7 +1451,10 @@
             }
           ],
           "conditionList": [
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Slice and Dice Effect",
@@ -1234,6 +1465,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
               "params": {
                 "amount": 2
+              }
+            },
+            {
+              "name": "Consume 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -1266,7 +1506,10 @@
                 "actionUnits" : ["Basic Mode"]
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -1303,7 +1546,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Scanner Mode",
@@ -1324,7 +1570,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 3,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1363,7 +1612,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 1,
+          "playerSelectionFirst": true
         },
         {
           "name": "Long Barrel Mode",
@@ -1385,7 +1637,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1432,7 +1687,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Rocket Fist Mode",
@@ -1454,7 +1712,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 2,
+          "numTileTargets": 2,
+          "playerSelectionFirst": false
         }
       ],
       "optionalEffectList": [
@@ -1500,7 +1761,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 3,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Tsunami Mode",
@@ -1511,6 +1775,15 @@
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTileList",
               "params": {
                 "amount": 1
+              }
+            },
+            {
+              "name": "Consume 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "RED": 1
+                }
               }
             }
           ],
@@ -1531,7 +1804,10 @@
                 }
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [
@@ -1563,7 +1839,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Pulverize Mode",
@@ -1604,7 +1883,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 2,
+          "playerSelectionFirst": true
         }
       ],
       "optionalEffectList": [

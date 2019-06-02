@@ -4,6 +4,7 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.util.CommandConstants;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class TargetListDistance implements Condition {
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
         Tile targetTile = null;
         Integer distance = null;
-        List<Targetable> targetList = targets.get("targetList");
+        List<Targetable> targetList = targets.get(CommandConstants.TARGETLIST);
         boolean result = true;
 
         for (Targetable t : targetList) {

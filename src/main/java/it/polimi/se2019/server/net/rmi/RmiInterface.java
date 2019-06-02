@@ -7,5 +7,5 @@ import java.rmi.RemoteException;
 
 public interface RmiInterface extends Remote {
 
-    NetMsg send(NetMsg message) throws RemoteException;
+    void send(NetMsg message) throws RemoteException;
 }

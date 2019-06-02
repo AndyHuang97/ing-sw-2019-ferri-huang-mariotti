@@ -30,7 +30,10 @@
                 "amount": 1
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Secondary Effect",
@@ -43,7 +46,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -83,7 +89,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Secondary Effect",
@@ -96,7 +105,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -124,7 +136,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         },
         {
           "name": "Secondary Effect",
@@ -137,7 +152,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -164,7 +182,10 @@
               "params": {
               }
             }
-          ]
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         },
         {
           "name": "Secondary Effect",
@@ -177,7 +198,10 @@
               }
             }
           ],
-          "conditionList": []
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
         }
       ],
       "image": ""

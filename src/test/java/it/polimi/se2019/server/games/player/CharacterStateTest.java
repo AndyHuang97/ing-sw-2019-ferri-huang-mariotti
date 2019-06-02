@@ -5,6 +5,7 @@ import it.polimi.se2019.server.games.board.LinkType;
 import it.polimi.se2019.server.games.board.NormalTile;
 import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -94,13 +95,6 @@ public class CharacterStateTest {
     }
 
     @Test
-    public void testSetCharacterValue() {
-        characterState.setCharacterValue(CharacterValue.ONEDEATH);
-        
-        Assert.assertEquals(CharacterValue.ONEDEATH, characterState.getCharacterValue());
-    }
-
-    @Test
     public void testAddMarker() {
         int oldSize = characterState.getMarkerBar().size();
 
@@ -130,7 +124,11 @@ public class CharacterStateTest {
         p2 = PlayerColor.PURPLE;
         p3 = PlayerColor.YELLOW;
         List<PlayerColor> damageBar = new ArrayList<>(Arrays.asList(p3,p3,p3,p2,p2,p3,p3,p2,p2,p3,p1));
-        PlayerDeath message = new PlayerDeath(PlayerColor.BLUE, damageBar, PlayerColor.YELLOW, CharacterValue.ZERODEATHS);
+
+        Player player = new Player("", true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.BLUE);
+        player.getCharacterState().setDamageBar(damageBar);
+        player.getCharacterState().setDeaths(0);
+        PlayerDeath message = new PlayerDeath(player);
 
         characterState.setScore(0);
         characterState.updateScore(message, PlayerColor.YELLOW);

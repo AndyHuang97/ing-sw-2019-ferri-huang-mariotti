@@ -6,7 +6,7 @@
   ],
   "params":
   {
-    "color": "White",
+    "roomColor": "White",
     "LinkType": [
       "WALL",
       "DOOR",

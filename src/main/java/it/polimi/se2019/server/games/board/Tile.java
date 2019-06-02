@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.games.board;
 
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -13,30 +15,63 @@ import java.util.stream.Collectors;
 /**
  * 
  */
-public abstract class Tile implements Targetable {
+public class Tile implements Targetable {
 
 	private static final Logger logger = Logger.getLogger(Tile.class.getName());
 
-	private RoomColor color;
+	private RoomColor roomColor;
 	private LinkType[] links;
+	private boolean isSpawnTile;
+	private List<Weapon> weaponCrate;
+	private AmmoCrate ammoCrate;
+	private String id;
 
 	/**
 	 *
-	 * @param color
+	 * @param roomColor
 	 * @param links is an array with 4 cells: 0 - north, 1 - south, 2 - east, 3 - west.
 	 */
 
-	public Tile(RoomColor color, LinkType[] links) {
-		this.color = color;
+	public Tile(RoomColor roomColor, LinkType[] links) {
+		this.roomColor = roomColor;
 		this.links = links;
+		this.weaponCrate = null;
+		this.ammoCrate = null;
+		this.isSpawnTile = false;
 	}
 
-	public RoomColor getColor() {
-		return color;
+	public Tile(RoomColor roomColor, LinkType[] links, AmmoCrate ammoCrate) {
+		this.roomColor = roomColor;
+		this.links = links;
+		this.ammoCrate = ammoCrate;
+		this.weaponCrate = null;
+		this.isSpawnTile = false;
 	}
 
-	public void setColor(RoomColor color) {
-		this.color = color;
+	public Tile(String id, LinkType[] links, List<Weapon> weaponCrate, RoomColor roomColor) {
+		this.id = id;
+		this.roomColor = roomColor;
+		this.links = links;
+		this.weaponCrate = weaponCrate;
+		this.ammoCrate = null;
+		this.isSpawnTile = true;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public RoomColor getRoomColor() {
+		return roomColor;
+	}
+
+	public void setRoomColor(RoomColor roomColor) {
+		this.roomColor = roomColor;
 	}
 
 	public LinkType getNorthLink() {
@@ -137,7 +172,7 @@ public abstract class Tile implements Targetable {
 
 		for(int i = 0; i < board.getTileMap()[0].length; i++) {
 			for(int j = 0; j < board.getTileMap().length; j++) {
-				if(board.getTileMap()[j][i].color == color) {
+				if(board.getTileMap()[j][i].getRoomColor() == roomColor) {
 					tiles.add(board.getTileMap()[j][i]);
 				}
 			}
@@ -150,7 +185,7 @@ public abstract class Tile implements Targetable {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(color.getColor());
+		builder.append(roomColor.getColor());
 		builder.append(": ");
 		for (LinkType l : links) {
 			builder.append(l);
@@ -158,5 +193,29 @@ public abstract class Tile implements Targetable {
 			builder.append(" ");
 		}
 		return builder.toString();
+	}
+
+	public List<Weapon> getWeaponCrate() {
+		return weaponCrate;
+	}
+
+	public void setWeaponCrate(List<Weapon> weaponCrate) {
+		this.weaponCrate = weaponCrate;
+	}
+
+	public AmmoCrate getAmmoCrate() {
+		return ammoCrate;
+	}
+
+	public void setAmmoCrate(AmmoCrate ammoCrate) {
+		this.ammoCrate = ammoCrate;
+	}
+
+	public boolean isSpawnTile() {
+		return isSpawnTile;
+	}
+
+	public void setSpawnTile(boolean spawnTile) {
+		isSpawnTile = spawnTile;
 	}
 }

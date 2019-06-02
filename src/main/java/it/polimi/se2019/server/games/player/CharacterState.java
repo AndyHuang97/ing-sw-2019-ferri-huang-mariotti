@@ -6,18 +6,23 @@ import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
  */
 public class CharacterState {
 
-	private CharacterValue characterValue;
+	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
+	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
+
+	private int deaths;
+	private int[] valueBar;
 	private List<PlayerColor> damageBar;
-	private EnumMap<PlayerColor, Integer> markerBar;
-	private EnumMap<AmmoColor, Integer> ammoBag;
+	private Map<PlayerColor, Integer> markerBar;
+	private Map<AmmoColor, Integer> ammoBag;
 	private List<Weapon> weapoonBag;
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
@@ -29,7 +34,8 @@ public class CharacterState {
 	 */
 
 	public CharacterState() {
-		this.characterValue = CharacterValue.ZERODEATHS;
+		this.deaths = 0;
+		this.valueBar = NORMAL_VALUE_BAR;
 		this.damageBar = new ArrayList<>();
 		this.markerBar = initMarkerBar();
 		this.ammoBag = initAmmoBag();
@@ -41,7 +47,6 @@ public class CharacterState {
 
 	/**
 	 * @param damageBar
-	 * @param characterValue
 	 * @param markerBar
 	 * @param ammoBag
 	 * @param weapoonBag
@@ -49,11 +54,10 @@ public class CharacterState {
 	 * @param tile
 	 * @param score
 	 */
-	public CharacterState(List<PlayerColor> damageBar, CharacterValue characterValue,
-						  EnumMap<PlayerColor, Integer> markerBar, EnumMap<AmmoColor, Integer> ammoBag,
-						  List<Weapon> weapoonBag, List<PowerUp> powerUpBag, Tile tile, Integer score) {
+	public CharacterState(List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
+						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weapoonBag,
+						  List<PowerUp> powerUpBag, Tile tile, Integer score) {
 		this.damageBar = damageBar;
-		this.characterValue = characterValue;
 		this.markerBar = markerBar;
 		this.ammoBag = ammoBag;
 		this.weapoonBag = weapoonBag;
@@ -62,14 +66,6 @@ public class CharacterState {
 		this.score = score;
 	}
 
-
-	public CharacterValue getCharacterValue() {
-		return characterValue;
-	}
-
-	public void setCharacterValue(CharacterValue characterValue) {
-		this.characterValue = characterValue;
-	}
 
 	/**
 	 * @return damageBar
@@ -98,8 +94,8 @@ public class CharacterState {
 		damageBar.clear();
 	}
 
-	public EnumMap<PlayerColor, Integer> initMarkerBar() {
-		EnumMap<PlayerColor, Integer> markerBar = new EnumMap<>(PlayerColor.class);
+	public Map<PlayerColor, Integer> initMarkerBar() {
+		Map<PlayerColor, Integer> markerBar = new HashMap<>();
 		markerBar.put(PlayerColor.BLUE, 0);
 		markerBar.put(PlayerColor.GREEN, 0);
 		markerBar.put(PlayerColor.GREY, 0);
@@ -112,14 +108,14 @@ public class CharacterState {
 	/**
 	 * @return markerBar
 	 */
-	public EnumMap<PlayerColor, Integer> getMarkerBar() {
+	public Map<PlayerColor, Integer> getMarkerBar() {
 		return markerBar;
 	}
 
 	/**
 	 * @param markerBar
 	 */
-	public void setMarkerBar(EnumMap<PlayerColor, Integer> markerBar) {
+	public void setMarkerBar(Map<PlayerColor, Integer> markerBar) {
 		this.markerBar = markerBar;
 	}
 
@@ -145,8 +141,8 @@ public class CharacterState {
 	 * This method initializes the ammoBag by creating a new instance and setting the values of all keys to 0.
 	 * @return the newly created ammoBag.
 	 */
-	public EnumMap<AmmoColor, Integer> initAmmoBag() {
-		EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
+	public Map<AmmoColor, Integer> initAmmoBag() {
+		Map<AmmoColor, Integer> ammoBag = new HashMap<>();
 		ammoBag.put(AmmoColor.BLUE, 0);
 		ammoBag.put(AmmoColor.RED, 0);
 		ammoBag.put(AmmoColor.YELLOW, 0);
@@ -158,7 +154,7 @@ public class CharacterState {
 	 * This method returns the player's ammoBag.
 	 * @return player's ammoBag.
 	 */
-	public EnumMap<AmmoColor, Integer> getAmmoBag() {
+	public Map<AmmoColor, Integer> getAmmoBag() {
 		return ammoBag;
 	}
 
@@ -166,7 +162,7 @@ public class CharacterState {
 	 * This method sets a new reference for the ammoBag.
 	 * @param ammoBag is the new ammoBag.
 	 */
-	public void setAmmoBag(EnumMap<AmmoColor, Integer> ammoBag) {
+	public void setAmmoBag(Map<AmmoColor, Integer> ammoBag) {
 		this.ammoBag = ammoBag;
 	}
 
@@ -175,7 +171,7 @@ public class CharacterState {
 	 * it keeps an ammo color's max value to 3.
 	 * @param ammoToAdd is a map containing the amount of each ammo color to add to the player's ammoBag.
 	 */
-	public void addAmmo(EnumMap<AmmoColor, Integer> ammoToAdd) {
+	public void addAmmo(Map<AmmoColor, Integer> ammoToAdd) {
 		ammoToAdd.keySet().stream()
 				.forEach(k -> {
 					if (ammoBag.get(k) + ammoToAdd.get(k) > 3) {
@@ -191,7 +187,7 @@ public class CharacterState {
 	 * it keeps an ammo color's max value to 0.
 	 * @param ammoToConsume is a map containing the amount of each ammo color to consume from the player's ammoBag.
 	 */
-	public void consumeAmmo(EnumMap<AmmoColor, Integer> ammoToConsume) {
+	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume) {
 		ammoToConsume.keySet().stream()
 				.forEach(k -> ammoBag.put(k, ammoBag.get(k) - ammoToConsume.get(k)));
 	}
@@ -222,13 +218,21 @@ public class CharacterState {
 
 	public void updateScore(PlayerDeath message, PlayerColor playerColor) {
 
-		if(playerColor != message.getDeadPlayer() && message.getAttackers().contains(playerColor)) {
+		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
 			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
-			if(message.getFirstAttacker() == playerColor) {
+			// first attack bonus
+			if(message.getDamageBar().get(0) == playerColor) {
 				score += 1;
 			}
 
-			score += message.getCharacterValue().getValue(message.getAttackers().indexOf(playerColor));
+			int deaths = message.getDeaths();
+			int rank = message.rankedAttackers().indexOf(playerColor);
+			if (deaths+rank < message.getValueBar().length) {
+				score += message.getValueBar()[deaths+rank];
+			}
+			else {
+				score++;
+			}
 		}
 	}
 
@@ -254,5 +258,21 @@ public class CharacterState {
 
 	public void setPowerUpBag(List<PowerUp> powerUpBag) {
 		this.powerUpBag = powerUpBag;
+	}
+
+	public int[] getValueBar() {
+		return valueBar;
+	}
+
+	public void setValueBar(int[] valueBar) {
+		this.valueBar = valueBar;
+	}
+
+	public int getDeaths() {
+		return deaths;
+	}
+
+	public void setDeaths(int deaths) {
+		this.deaths = deaths;
 	}
 }

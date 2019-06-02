@@ -13,13 +13,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 public class PlayerActionTest {
 
     PlayerAction playerAction;
 
     @Before
     public void setUp() {
-        Player player= new Player(false, null, null, PlayerColor.BLUE);
+        Player player= new Player(UUID.randomUUID().toString(),false, null, null, PlayerColor.BLUE);
         playerAction = new ConcreteAction(new Game(), player, Action.MMM);
     }
 
@@ -39,7 +41,7 @@ public class PlayerActionTest {
 
     @Test
     public void testSetPlayer() {
-        Player newPlayer = new Player(true, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
+        Player newPlayer = new Player(UUID.randomUUID().toString(), true, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
 
         playerAction.setPlayer(newPlayer);
 

@@ -25,7 +25,7 @@ public abstract class TurnHandler {
     }
 
     /**
-     * The run method contains the business logic of a player's turn.
+     * The setUp method contains the business logic of a player's turn.
      */
     public abstract void run();
 

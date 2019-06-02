@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/run them.
+ * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/setUp them.
  */
 public class MessageParser {
 
-    public List<PlayerAction> parse(Message message, Game game, Player player) throws MessageParseException, UnpackingException {
+    public List<PlayerAction> parse(InternalMessage message, Game game, Player player) throws MessageParseException, UnpackingException {
         List<PlayerAction> playerActions = new ArrayList<>();
         for (String k : message.getCommands().keySet()) {
             List<Targetable> params = message.getCommandParams(k);

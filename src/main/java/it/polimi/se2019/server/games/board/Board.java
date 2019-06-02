@@ -4,22 +4,40 @@ import com.google.gson.Gson;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.graphs.Graph;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Board {
+
+    private String id;
     private Tile[][] tileMap;
     private Graph<Tile> tileTree;
 
     public Board() {
     }
 
-    public Board (Tile[][] tileMap) {
+    public Board (String id, Tile[][] tileMap) {
+        this.id = id;
         this.tileMap = tileMap;
-        tileTree = generateGraph();
+        this.tileTree = generateGraph();
     }
 
     public Tile[][] getTileMap() {
         return tileMap;
+    }
+
+    public List<Tile> getTileList() {
+        List<Tile> tileList = new ArrayList<>();
+        for (int i = 0; i < tileMap.length; i++) {
+            for (int j = 0; j < tileMap[i].length; j++) {
+                tileList.add(tileMap[i][j]);
+            }
+        }
+        return tileList;
     }
 
     public void setTileMap(Tile[][] tileMap) {
@@ -54,8 +72,8 @@ public class Board {
                 .forEach(y -> IntStream.range(0, tileMap.length)
                         .forEach(x -> graph.addVertex(tileMap[x][y])));
 
-        for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
-            for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
+        for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
+             for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
                 Tile actualTile = tileMap[xCoord][yCoord];
 
                 // intercept the null tile
@@ -75,6 +93,22 @@ public class Board {
         return graph;
     }
 
+    public List<Tile> tileMapToList() {
+        List<Tile> list = new ArrayList<>();
+        for (Tile[] array : tileMap){
+            list.addAll(Arrays.asList(array));
+        }
+        return list;
+    }
+
+    public Tile getSpawnTile(RoomColor roomColor) {
+        return tileMapToList().stream()
+                .filter(Objects::nonNull)
+                .filter(Tile::isSpawnTile)
+                .filter(t -> t.getRoomColor() == roomColor)
+                .collect(Collectors.toList()).get(0);
+    }
+
     public Graph<Tile> getTileTree() {
         return tileTree;
     }
@@ -88,10 +122,16 @@ public class Board {
         StringBuilder bld = new StringBuilder();
         for(Tile[] row : tileMap) {
             for(Tile t : row) {
-                bld.append(t.toString()+" ");
+                if (t != null) {
+                    bld.append(t.toString() + " ");
+                }
             }
             bld.append("\n");
         }
         return bld.toString();
+    }
+
+    public String getId() {
+        return id;
     }
 }

@@ -16,4 +16,4 @@ log/
 target/
 
 # Game save
-dump.json
+games_dump.json
