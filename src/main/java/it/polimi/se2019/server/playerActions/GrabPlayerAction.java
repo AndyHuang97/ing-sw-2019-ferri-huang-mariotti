@@ -13,6 +13,7 @@ import java.util.List;
 public class GrabPlayerAction extends PlayerAction {
 
     private static final int WEAPONPOSITION = 0;
+    private static final int MAXWEAPONINBAG = 3;
     private static final String errorMessage = "Grab action failed";
 
     private Weapon weaponToGrab;
@@ -34,19 +35,30 @@ public class GrabPlayerAction extends PlayerAction {
     @Override
     public boolean check() {
         try {
+            // assert that the player is on a SpawnTile
             SpawnTile playerPosition = (SpawnTile) getPlayer().getCharacterState().getTile();
 
             List<Weapon> weaponCrate = playerPosition.getWeaponCrate();
 
+            // assert that the weapon is avabile in the SpawnTile
+            boolean isWeaponAvailable = false;
+
             for (Weapon weapon : weaponCrate) {
                 if(weapon == weaponToGrab) {
-                    return true;
+                    isWeaponAvailable = true;
                 }
             }
+
+            // assert that player have 2 or less weapon
+            if (getPlayer().getCharacterState().getWeapoonBag().size() >= MAXWEAPONINBAG) {
+                return false;
+            }
+
+            return isWeaponAvailable;
+
         } catch (ClassCastException e) {
             return false;
         }
-        return false;
     }
 
     @Override
