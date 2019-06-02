@@ -225,7 +225,6 @@ public class GameBoardController {
      */
     public void setInfoPaneStyle() {
         infoPane.getStyleClass().add("info-pane");
-        //rankingGrid.getStyleClass().add("info-pane");
     }
 
     /**

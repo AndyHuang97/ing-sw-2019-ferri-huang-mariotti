@@ -1,9 +1,7 @@
 package it.polimi.se2019.client.gui;
 
-import com.sun.tools.internal.jxc.ap.Const;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
-import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.board.Tile;
@@ -20,10 +18,13 @@ import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ActionTileController {
+
+    private static final Logger logger = Logger.getLogger(ActionTileController.class.getName());
 
     private MainApp mainApp;
     private GridPane tileGrid;
@@ -57,7 +58,7 @@ public class ActionTileController {
     private Button mmmg;
 
     public void initialize() {
-
+        // do nothing
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -111,34 +112,34 @@ public class ActionTileController {
 
     @FXML
     public void handleM() {
-        mainApp.getInputRequested().add(() -> handleMove());
+        mainApp.getInputRequested().add(this::handleMove);
         mainApp.getInput();
     }
 
     @FXML
     public void handleMG() {
-        mainApp.getInputRequested().add(() -> handleMove());
-        mainApp.getInputRequested().add(() -> handleGrab());
+        mainApp.getInputRequested().add(this::handleMove);
+        mainApp.getInputRequested().add(this::handleGrab);
         mainApp.getInput();
     }
 
     @FXML
     public void handleS() {
-        mainApp.getInputRequested().add(() -> handleShoot());
+        mainApp.getInputRequested().add(this::handleShoot);
         mainApp.getInput();
     }
 
     @FXML
     public void handleR() {
-        mainApp.getInputRequested().add(() -> handleReload());
+        mainApp.getInputRequested().add(this::handleReload);
         mainApp.getInput();
     }
 
     @FXML
     public void handleMRS() {
-        mainApp.getInputRequested().add(() -> handleMove());
-        mainApp.getInputRequested().add(() -> handleReload());
-        mainApp.getInputRequested().add(() -> handleShoot());
+        mainApp.getInputRequested().add(this::handleMove);
+        mainApp.getInputRequested().add(this::handleReload);
+        mainApp.getInputRequested().add(this::handleShoot);
         mainApp.getInput();
     }
 
@@ -300,7 +301,7 @@ public class ActionTileController {
                 n.getStyleClass().add("my-node");
             }
         } catch (TileNotFoundException e) {
-            e.printStackTrace();
+            logger.warning(e.toString());
         }
     }
 
@@ -313,7 +314,6 @@ public class ActionTileController {
                 .filter(p -> p.getColor() == mainApp.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
         List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
-        List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
         IntStream.range(0, myWeaponsModel.size())
                 .forEach(i -> {
@@ -340,8 +340,7 @@ public class ActionTileController {
                 .filter(p -> p.getColor() == mainApp.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
         List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
-        List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
-        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+
 
         IntStream.range(0, myWeaponsModel.size())
                 .forEach(i -> {
@@ -358,25 +357,6 @@ public class ActionTileController {
 
                 });
     }
-
-    /*
-    public void setShootSelectionBehavior(ImageView iv, BorderPane root) {
-        iv.setOnMouseClicked(event -> {
-            iv.setOpacity(0.6);
-
-            Util.ifFirstSelection(root, progressBar);
-            Util.updateCircle(progressBar);
-
-            if(Util.isLastSelection(progressBar)) {
-                myWeapons.setDisable(true);
-            }
-            NamedImage image = (NamedImage) iv.getImage();
-
-            mainApp.addInput(Constants.CARD, image.getName());
-        });
-    }
-
-     */
 
 
 }

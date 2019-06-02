@@ -71,7 +71,6 @@ public class LoginController {
 
     @FXML
     public void handleConnect() {
-        String exception = null;
         try {
 
             if (nickname.getText().equals("")) { throw new NicknameNotFound("Nickname not found"); }
@@ -81,7 +80,6 @@ public class LoginController {
             mainApp.setNickname(nickname.getText());
             mainApp.connect(nickname.getText(), ip.getText(), (String) connectType.getValue());
             loginStage.close();
-            //showWaiting();
         } catch (NicknameNotFound e) {
             showNoSelectionAlert("nickname");
         } catch (IpNotFound e) {

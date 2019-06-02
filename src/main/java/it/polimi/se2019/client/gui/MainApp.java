@@ -146,7 +146,6 @@ public class MainApp extends Application {
 
         } catch (IOException e) {
             logger.warning(e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -178,25 +177,10 @@ public class MainApp extends Application {
         this.loginController = loginController;
     }
 
-    public void connectSocket(String ip, int port) {
-
-    }
-
-    public void connectRMI(String ip, int port) {
-
-    }
-
     public void getInput() {
         if (!getInputRequested().isEmpty()) {
             getInputRequested().remove(0).run();
         }
-    }
-
-    /**
-     * Get the next type of input.
-     */
-    public void nextInput() {
-
     }
 
     public void addInput(String key, String id) {
@@ -393,12 +377,11 @@ public class MainApp extends Application {
         factory.registerDeserializer("tile", new TileDeserializerSupplier());
 
         String path = "src/main/resources/json/maps/map0.json";
-        BufferedReader bufferedReader;
 
         Board board = null;
 
         try {
-            bufferedReader = new BufferedReader(new FileReader(path));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
@@ -427,13 +410,13 @@ public class MainApp extends Application {
             try {
                 bufferedReader.close();
             } catch (IOException e) {
-                logger.warning("Error on file close");
+                logger.warning(e.toString());
             }
 
         } catch (FileNotFoundException e) {
-            logger.warning("File not found");
+            logger.warning(e.toString());
         } catch (ClassNotFoundException e) {
-            logger.warning("Class not found");
+            logger.warning(e.toString());
         }
     }
 

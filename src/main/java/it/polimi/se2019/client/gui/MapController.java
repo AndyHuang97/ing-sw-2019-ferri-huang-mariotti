@@ -3,10 +3,8 @@ package it.polimi.se2019.client.gui;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.NamedImage;
 import it.polimi.se2019.client.util.Util;
-import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.KillShotTrack;
-import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -108,8 +106,7 @@ public class MapController {
             showWeaponCrates();
 
         } catch (IllegalArgumentException e) {
-            logger.warning("Invalid map.");
-            e.printStackTrace();
+            logger.warning(e.toString());
         }
     }
 
@@ -136,7 +133,6 @@ public class MapController {
                 button.setStyle("");
                 button.setDisable(true);
                 BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-                GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
                 Util.ifFirstSelection(root, progressBar);
                 Util.updateCircle(progressBar);
@@ -183,7 +179,6 @@ public class MapController {
                     anchorPane.setDisable(true);
                     anchorPane.setOpacity(0.6);
                     BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-                    GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
                     Util.ifFirstSelection(root, progressBar);
                     Util.updateCircle(progressBar);
@@ -211,7 +206,6 @@ public class MapController {
     public void initPlayerGrid(Tile[][] tileMap, int x, int y) {
 
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-        GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
         playerGrid.setDisable(true);
         if (tileMap[x][y] != null) {
@@ -222,7 +216,7 @@ public class MapController {
                     .filter(row -> !row.getChildren().isEmpty())
                     .forEach(row -> row.getChildren().stream()
                             .map(n -> (Circle) n)
-                            .forEach(c -> {
+                            .forEach(c ->
                                 c.setOnMouseClicked(event -> {
                                     c.setDisable(true);
                                     c.setOpacity(0.6);
@@ -235,8 +229,7 @@ public class MapController {
                                     }
 
                                     handlePlayerSelected(c.getFill().toString());
-                                });
-                            })
+                                }))
                     );
         }
     }
@@ -248,7 +241,6 @@ public class MapController {
     public void initWeaponCrates() {
 
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-        GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
         weaponCrateList.stream()
                 .forEach(wc -> {
@@ -285,7 +277,6 @@ public class MapController {
                         .filter(x -> tileMap[x][y] != null)
                         .filter(x -> tileMap[x][y].isSpawnTile())
                         .forEach(x -> {
-                            //System.out.println(x + "," + y);
                             String roomColor = tileMap[x][y].getRoomColor().getColor();
                             Optional<GridPane> optGrid = weaponCrateList.stream()
                                     .filter(wc -> wc.getId().split("Weapons")[0].equalsIgnoreCase(roomColor))
@@ -296,7 +287,6 @@ public class MapController {
                                         .forEach(i -> {
                                             ImageView iv = (ImageView) actualGrid.getChildren().get(i);
                                             String weaponID = tileMap[x][y].getWeaponCrate().get(i).getName();
-                                            //System.out.println(Constants.WEAPON_PATH+weaponID+".png");
                                             iv.setImage(new NamedImage(Constants.WEAPON_PATH+weaponID+".png", Constants.WEAPON_PATH));
                                         });
                             }
@@ -322,7 +312,7 @@ public class MapController {
                     EnumMap<PlayerColor, Integer> colorIntegerEnumMap = kt.getDeathTrack().get(i-offset);
                     if (i < kt.getKillCounter() + offset) { //shows player tokens
                         Optional<PlayerColor> optPc= Arrays.stream(PlayerColor.values())
-                                .filter(pc -> colorIntegerEnumMap.containsKey(pc))
+                                .filter(colorIntegerEnumMap::containsKey)
                                 .findFirst();
                         if (optPc.isPresent()) {
                             iv.setImage(Util.getPlayerToken(optPc.get()));
@@ -381,7 +371,7 @@ public class MapController {
                             addPlayerCircle(secondRow, p);
                         }
                     } catch (TileNotFoundException e) {
-                        e.printStackTrace();
+                        logger.warning(e.toString());
                     }
                 });
     }
