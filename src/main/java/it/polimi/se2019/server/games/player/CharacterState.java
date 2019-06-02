@@ -220,6 +220,7 @@ public class CharacterState {
 
 		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
 			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
+			// first attack bonus
 			if(message.getDamageBar().get(0) == playerColor) {
 				score += 1;
 			}
@@ -228,6 +229,9 @@ public class CharacterState {
 			int rank = message.rankedAttackers().indexOf(playerColor);
 			if (deaths+rank < message.getValueBar().length) {
 				score += message.getValueBar()[deaths+rank];
+			}
+			else {
+				score++;
 			}
 		}
 	}

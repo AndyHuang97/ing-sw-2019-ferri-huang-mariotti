@@ -10,11 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 
-public class KillshotTrackTest {
+public class KillShotTrackTest {
 
-    KillshotTrack kt;
+    KillShotTrack kt;
     Player p1, p2, p3, p4 ,p5;
     PlayerColor pc1, pc3, pc4;
     List<PlayerColor> damageBar;
@@ -32,7 +33,7 @@ public class KillshotTrackTest {
         damageBar = new ArrayList<>(Arrays.asList(pc3,pc3,pc3,pc4,pc4,pc3,pc3,pc4,pc4,pc3,pc1));
         p2.getCharacterState().setDamageBar(damageBar);
         p5.getCharacterState().setDamageBar(damageBar);
-        kt = new KillshotTrack(new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5)));
+        kt = new KillShotTrack(new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5)));
     }
 
     @After
@@ -52,23 +53,23 @@ public class KillshotTrackTest {
     @Test
     public void testCreation() {
 
-        EnumMap<TrackState, EnumMap<PlayerColor, Integer>> existingDeathTrack = new EnumMap<>(TrackState.class);
+        Map<Integer, EnumMap<PlayerColor, Integer>> existingDeathTrack = new HashMap<>();
         List<Player>  playerList = new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5));
 
-        kt = new KillshotTrack(existingDeathTrack, playerList, TrackState.FIRSTKILL);
+        kt = new KillShotTrack(existingDeathTrack, playerList, 0);
 
         Assert.assertEquals(existingDeathTrack, kt.getDeathTrack());
-        Assert.assertEquals(TrackState.FIRSTKILL, kt.getTrackState());
+        Assert.assertEquals(0, kt.getKillCounter().intValue());
     }
 
     @Test
     public void testAddDeath_NoOverkill() {
 
-        kt.setTrackState(TrackState.FIFTHKILL);
+        kt.setKillCounter(0);
         kt.addDeath(p2,false);
 
-        Map<TrackState, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
-        Map<PlayerColor, Integer> deathSlot = deathTrack.get(TrackState.FIFTHKILL);
+        Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
+        Map<PlayerColor, Integer> deathSlot = deathTrack.get(0);
         Integer deathValue = deathSlot.get(p2.getColor());
 
         Assert.assertEquals(1, deathValue.intValue());
@@ -77,11 +78,11 @@ public class KillshotTrackTest {
     @Test
     public void testAddDeath_Overkill() {
 
-        kt.setTrackState(TrackState.SECONDKILL);
+        kt.setKillCounter(1);
         kt.addDeath(p2, true);
 
-        Map<TrackState, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
-        Map<PlayerColor, Integer> deathSlot = deathTrack.get(TrackState.SECONDKILL);
+        Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
+        Map<PlayerColor, Integer> deathSlot = deathTrack.get(1);
         Integer deathValue = deathSlot.get(p2.getColor());
 
         Assert.assertEquals(2, deathValue.intValue());
@@ -90,13 +91,13 @@ public class KillshotTrackTest {
     @Test
     public void testAddDeath_FinalFrenzy() {
 
-        kt.setTrackState(TrackState.EIGTHFRENZY);
+        kt.setKillCounter(kt.getKillsForFrenzy()-1);
         kt.addDeath(p2, false);
         kt.addDeath(p2, true);
         kt.addDeath(p5, true);
 
-        Map<TrackState, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
-        Map<PlayerColor, Integer> trackSlot = deathTrack.get(TrackState.EIGTHFRENZY);
+        Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
+        Map<PlayerColor, Integer> trackSlot = deathTrack.get(kt.getKillsForFrenzy()-1);
         Integer p2DeathValue = trackSlot.get(p2.getColor());
         Integer p5DeathValue = trackSlot.get(p5.getColor());
 
@@ -105,29 +106,26 @@ public class KillshotTrackTest {
     }
 
     @Test
-    public void testNextState() {
+    public void testUpdateKillCounter() {
 
-        kt.nextState();
-        Assert.assertEquals(TrackState.SECONDKILL, kt.getTrackState());
-        kt.nextState();
-        Assert.assertEquals(TrackState.THIRDKILL, kt.getTrackState());
-        kt.nextState();
-        Assert.assertEquals(TrackState.FOURTHKILL, kt.getTrackState());
-        kt.nextState();
-        Assert.assertEquals(TrackState.FIFTHKILL, kt.getTrackState());
-        kt.nextState();
-        Assert.assertEquals(TrackState.SIXTHKILL, kt.getTrackState());
-        kt.nextState();
-        Assert.assertEquals(TrackState.SEVENTHKILL, kt.getTrackState());
-        kt.nextState();
-        Assert.assertEquals(TrackState.EIGTHFRENZY, kt.getTrackState());
-        kt.nextState();
-        Assert.assertEquals(TrackState.EIGTHFRENZY, kt.getTrackState());
+        kt.setKillCounter(0);
+
+        IntStream.range(0, 10)
+                .forEach(i -> {
+                    if (i < kt.getKillsForFrenzy()) {
+                        Assert.assertEquals(i, kt.getKillCounter().intValue());
+                    }
+                    else {
+                        Assert.assertEquals(7, kt.getKillCounter().intValue());
+                    }
+                    kt.updateCounter();
+                });
+
     }
 
     @Test
     public void testSetDeathTrack() {
-        EnumMap<TrackState, EnumMap<PlayerColor, Integer>> expectedDeathTrack = new EnumMap<>(TrackState.class);
+        Map<Integer, EnumMap<PlayerColor, Integer>> expectedDeathTrack = new HashMap<>();
 
         kt.setDeathTrack(expectedDeathTrack);
 
@@ -136,8 +134,8 @@ public class KillshotTrackTest {
 
     @Test
     public void testSetTrackState() {
-        kt.setTrackState(TrackState.SECONDKILL);
+        kt.setKillCounter(1);
 
-        Assert.assertEquals(TrackState.SECONDKILL, kt.getTrackState());
+        Assert.assertEquals(1, kt.getKillCounter().intValue());
     }
 }

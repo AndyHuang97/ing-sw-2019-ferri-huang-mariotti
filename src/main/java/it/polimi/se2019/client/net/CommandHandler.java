@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.net;
 
 import it.polimi.se2019.client.gui.MainApp;
+import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.util.Response;
 
 import java.io.BufferedReader;
@@ -23,6 +24,11 @@ public class CommandHandler implements Runnable {
                 Response request = (Response) new Response(null, false, "").deserialize(inputLine);
                 if (request.getSuccess()) {
                     mainApp.setGame(request.getGame());
+                    try {
+                        mainApp.setPlayerColor(request.getGame().getPlayerByNickname(mainApp.getNickname()).getColor());
+                    } catch (PlayerNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     mainApp.boardDeserialize();
                     mainApp.initRootLayout();
                     mainApp.showGameBoard();

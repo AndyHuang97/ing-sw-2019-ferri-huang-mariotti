@@ -2,9 +2,11 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -25,11 +27,11 @@ public class LoginController {
     private TextField ip;
 
     private Stage loginStage;
+    private Stage waitingStage;
     private MainApp mainApp;
 
     @FXML
     public void initialize() {
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %5$s%6$s%n");
         try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
             Properties prop = new Properties();
             prop.load(input);
@@ -44,6 +46,7 @@ public class LoginController {
     public void setLoginStage(Stage stage) {
         this.loginStage = stage;
     }
+
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
@@ -75,8 +78,10 @@ public class LoginController {
             if (ip.getText().equals("")) { throw new IpNotFound("Ip not found"); }
             if (connectType.getValue() == null) { throw new ConnectionTypeNotSelected("Connection type not selected"); }
 
+            mainApp.setNickname(nickname.getText());
             mainApp.connect(nickname.getText(), ip.getText(), (String) connectType.getValue());
             loginStage.close();
+            //showWaiting();
         } catch (NicknameNotFound e) {
             showNoSelectionAlert("nickname");
         } catch (IpNotFound e) {
@@ -104,5 +109,25 @@ public class LoginController {
         alert.setHeaderText("Port must be an integer.");
         alert.setContentText("Please input an integer.");
         alert.showAndWait();
+    }
+    public void showWaiting() {
+
+        Label waitingLabel = new Label("Waiting for other players to connect ...");
+        Button enterButton = new Button("Enter");
+        enterButton.setOnAction(event -> waitingStage.close());
+        enterButton.setVisible(false);
+
+        HBox hbox = new HBox(waitingLabel, enterButton);
+        hbox.setAlignment(Pos.CENTER);
+        Scene waitingScene = new Scene(new BorderPane(hbox),600.0,400.0);
+
+        waitingStage = new Stage();
+        waitingStage.setScene(waitingScene);
+        waitingStage.showAndWait();
+    }
+
+    public void stopWating() {
+
+        waitingStage.close();
     }
 }

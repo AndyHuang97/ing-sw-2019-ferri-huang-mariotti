@@ -20,7 +20,7 @@ public class Game extends Observable<Response> implements Serializable {
 	private List<Player> playerList;
 	private Player currentPlayer;
 	private Board board;
-	private Integer killshotTrack;
+	private KillShotTrack killshotTrack;
 	private Deck<Weapon> weaponDeck;
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
@@ -33,7 +33,7 @@ public class Game extends Observable<Response> implements Serializable {
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
 		this.board = new Board();
-		this.killshotTrack = 0;
+		this.killshotTrack = new KillShotTrack(playerList);
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
@@ -46,13 +46,13 @@ public class Game extends Observable<Response> implements Serializable {
 		this.playerList = playerList;
 		this.currentPlayer = playerList.get(0);
 		this.board = new Board();
-		this.killshotTrack = 0;
+		this.killshotTrack = new KillShotTrack(playerList);
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 	}
 
-	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, Integer killshotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerupDeck, Deck<AmmoCrate> ammoCrateDeck) {
+	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killshotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerupDeck, Deck<AmmoCrate> ammoCrateDeck) {
 		// use this one to resume? a current one
 		this.startDate = startDate;
 		this.playerList = playerList;
@@ -112,9 +112,16 @@ public class Game extends Observable<Response> implements Serializable {
 	 * @return
 	 */
 	public Player getPlayerByColor(PlayerColor color) {
-		return getPlayerList().stream()
+		Optional<Player> optPlayer = getPlayerList().stream()
 				.filter(p -> p.getColor() == color)
-				.collect(Collectors.toList()).get(0);
+				.findFirst();
+		return optPlayer.orElse(null);
+	}
+
+	public List<PlayerColor> getActiveColors() {
+		return getPlayerList().stream()
+				.map(p -> p.getColor())
+				.collect(Collectors.toList());
 	}
 
 	public Board getBoard() {
@@ -135,11 +142,11 @@ public class Game extends Observable<Response> implements Serializable {
         throw new PlayerNotFoundException();
     }
 
-	public Integer getKillshotTrack() {
+	public KillShotTrack getKillshotTrack() {
 		return killshotTrack;
 	}
 
-	public void setKillshotTrack(Integer killshotTrack) {
+	public void setKillshotTrack(KillShotTrack killshotTrack) {
 		this.killshotTrack = killshotTrack;
 	}
 

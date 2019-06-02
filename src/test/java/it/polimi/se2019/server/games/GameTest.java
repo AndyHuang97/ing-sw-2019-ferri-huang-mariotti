@@ -99,11 +99,11 @@ public class GameTest {
     @Test
     public void testSetKillshotTrack() {
 
-        Integer killshots = 1;
+        Integer killShots = 1;
 
-        game.setKillshotTrack(killshots);
+        game.getKillshotTrack().setKillCounter(killShots);
 
-        Assert.assertEquals(killshots, game.getKillshotTrack());
+        Assert.assertEquals(killShots, game.getKillshotTrack().getKillCounter());
     }
 
     @Test
