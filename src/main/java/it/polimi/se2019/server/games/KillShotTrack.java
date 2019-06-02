@@ -52,7 +52,7 @@ public class KillShotTrack extends Observable<PlayerDeath> {
         try(InputStream input = new FileInputStream("src/main/resources/config.properties")){
             Properties prop = new Properties();
             prop.load(input);
-            killsForFrenzy = Integer.parseInt(prop.getProperty("game.killsForFrenzy"));
+            killsForFrenzy = Integer.parseInt(prop.getProperty("game.kills_for_frenzy"));
 
         }catch (IOException e) {
             logger.warning(e.toString());

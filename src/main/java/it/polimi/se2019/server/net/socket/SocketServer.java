@@ -30,10 +30,6 @@ public class SocketServer {
         }
     }
 
-    public void stop() throws IOException {
-        serverSocket.close();
-    }
-
     public static class ClientHandler extends Thread {
         private Socket clientSocket;
         private PrintWriter out;
@@ -51,10 +47,6 @@ public class SocketServer {
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 commandHandler = new CommandHandler(this);
 
-                //String nickname = in.readLine();
-                //System.out.println(nickname);
-
-                //out.println("Copy and paste this input for test: {\"message\":{},\"nickname\":\"Jon Snow\"}");
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     Request request = (Request) new Request(null, null).deserialize(inputLine);

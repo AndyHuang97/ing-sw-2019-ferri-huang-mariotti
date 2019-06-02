@@ -104,7 +104,11 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
          * Response on move done
          */
         //showMessage(response.serialize());
-        clientHandler.asyncSend(response.serialize());
+        try {
+            clientHandler.asyncSend(response.serialize());
+        } catch (Exception e) {
+            logger.info(e.getLocalizedMessage());
+        }
 
     }
 

@@ -11,15 +11,18 @@ import it.polimi.se2019.util.ErrorResponse;
 import java.util.List;
 
 public class GrabPlayerAction extends PlayerAction {
+
+    private static final int WEAPONPOSITION = 0;
+    private static final String errorMessage = "Grab action failed";
+
     private Weapon weaponToGrab;
-    private final String errorMessage = "Grab action failed";
 
     public GrabPlayerAction(Game game, Player player) { super(game, player); }
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
         try {
-            weaponToGrab = (Weapon) params.get(0);
+            weaponToGrab = (Weapon) params.get(WEAPONPOSITION);
         } catch (ClassCastException e) {
             throw new UnpackingException();
         }
@@ -53,6 +56,8 @@ public class GrabPlayerAction extends PlayerAction {
 
     @Override
     public void run() {
+        Player player = getGame().getCurrentPlayer();
 
+        player.getCharacterState().addWeapon(weaponToGrab);
     }
 }

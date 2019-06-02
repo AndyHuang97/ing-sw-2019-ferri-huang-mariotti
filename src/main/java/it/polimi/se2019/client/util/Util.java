@@ -76,7 +76,7 @@ public class Util {
                 .filter(Node::isVisible)
                 .allMatch(c -> c.getFill() == Paint.valueOf("green"));
     }
-    
+
     public static Player getPlayerByColor(Game game, PlayerColor playerColor) {
         System.out.println(playerColor.getColor());
         return  game.getPlayerList().stream()

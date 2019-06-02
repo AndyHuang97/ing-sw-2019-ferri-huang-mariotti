@@ -62,7 +62,7 @@ public class GameManagerTest {
         Properties prop = new Properties();
         // load a properties file
         prop.load(input);
-        int waitingListMaxSize = Integer.parseInt(prop.getProperty("gamemanager.waitinglistmaxsize"));
+        int waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
             gameManager.addUserToWaitingList(user, new CommandHandler());
@@ -76,7 +76,7 @@ public class GameManagerTest {
         Properties prop = new Properties();
         // load a properties file
         prop.load(input);
-        int waitingListMaxSize = Integer.parseInt(prop.getProperty("gamemanager.waitinglistmaxsize"));
+        int waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
         for (int i = 0; i <= 2 * waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
             gameManager.addUserToWaitingList(user, new CommandHandler());
