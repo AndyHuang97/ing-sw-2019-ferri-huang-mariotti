@@ -1,9 +1,12 @@
 package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.NamedImage;
 import it.polimi.se2019.client.util.Util;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.KillShotTrack;
+import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -11,18 +14,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class MapController {
@@ -176,7 +176,7 @@ public class MapController {
                 ImageView iv = (ImageView) anchorPane.getChildren().get(0);
                 String id = mainApp.getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
                 //TODO separate the image loading form the setup, no need to iterate the mouse click behavior
-                iv.setImage(new Image(Constants.AMMO_PATH + id + ".png"));
+                iv.setImage(new NamedImage(Constants.AMMO_PATH + id + ".png", Constants.AMMO_PATH));
                 iv.setVisible(true);
 
                 iv.setOnMouseClicked(event -> {
@@ -194,7 +194,8 @@ public class MapController {
                             .filter(ap -> ap.getChildren().get(0).isVisible())
                             .forEach(ap -> ap.setStyle(""));
 
-                    handleAmmoCrateSelected(x, y);
+                    NamedImage image = (NamedImage) iv.getImage();
+                    handleAmmoCrateSelected(image.getName());
                 });
             }
         }
@@ -253,10 +254,11 @@ public class MapController {
                 .forEach(wc -> {
                     wc.setDisable(true);
                     wc.getChildren().stream()
-                            .forEach(n ->
-                                    n.setOnMouseClicked(event -> {
-                                        n.setDisable(true);
-                                        n.setOpacity(0.6);
+                            .map(n -> (ImageView) n)
+                            .forEach(w ->
+                                    w.setOnMouseClicked(event -> {
+                                        w.setDisable(true);
+                                        w.setOpacity(0.6);
 
                                         Util.ifFirstSelection(root, progressBar);
                                         Util.updateCircle(progressBar);
@@ -265,7 +267,8 @@ public class MapController {
                                             wc.setDisable(true);
                                         }
 
-                                        handleWeaponSelected(1,1);
+                                        NamedImage image = (NamedImage) w.getImage();
+                                        handleWeaponInCrateSelected(image.getName());
                                     })
                             );
                 });
@@ -294,7 +297,7 @@ public class MapController {
                                             ImageView iv = (ImageView) actualGrid.getChildren().get(i);
                                             String weaponID = tileMap[x][y].getWeaponCrate().get(i).getName();
                                             //System.out.println(Constants.WEAPON_PATH+weaponID+".png");
-                                            iv.setImage(new Image(Constants.WEAPON_PATH+weaponID+".png"));
+                                            iv.setImage(new NamedImage(Constants.WEAPON_PATH+weaponID+".png", Constants.WEAPON_PATH));
                                         });
                             }
                         })
@@ -411,46 +414,39 @@ public class MapController {
      */
     public void handleTileSelected(int x, int y) {
         System.out.println("Tile selected: " + x + "," + y);
-        mainApp.getInput(x,y);
-
+        mainApp.getGameBoardController().addInput(Constants.TILE, String.valueOf(Util.convertToIndex(x,y)));
     }
 
     /**
-     * Handles the selection of a card.
-     *
-     * @param id
-     */
-    public void handleCardSelected(int id) {
-        mainApp.handleCardSelection();
-    }
-
-    /**
-     * Handles the selection of a weapon card.
+     * Handles the selection of a weapon card from a weapon crate.
      *
      */
-    public void handleWeaponSelected(int x, int y) {
-        System.out.println("Weapon selected: " + x + "," + y);
-        handleCardSelected(x);
+    public void handleWeaponInCrateSelected(String id) {
+        System.out.println("Weapon selected: " + id);
+        mainApp.getGameBoardController().addInput(Constants.CARD, id);
     }
 
     /**
      * Handles the selection of an ammo card from ammo tile grid.
      *
-     * @param x is the x coordinate in the grid.
-     * @param y is the y coordinate in the grid.
      */
-    public void handleAmmoCrateSelected(int x, int y) {
-        System.out.println("Ammocrate selected: "+Util.convertToIndex(x, y));
-        handleCardSelected(x);
+    public void handleAmmoCrateSelected(String id) {
+        System.out.println("Ammocrate selected: "+ id);
+        mainApp.getGameBoardController().addInput(Constants.CARD, id);
     }
 
     /**
      * Handles the selection of a button from player grid.
      *
-     * @param id
+     * @param color
      */
-    public void handlePlayerSelected(String id) {
-        System.out.println("Selected player: " + id);
+    public void handlePlayerSelected(String color) {
+        System.out.println("Selected player: " + color);
+        String id = mainApp.getGame().getPlayerList().stream()
+                .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
+                .collect(Collectors.toList()).get(0).getId();
+        System.out.println(color + " " + id);
+        mainApp.getGameBoardController().addInput(Constants.PLAYER, id);
     }
 
     /**
@@ -459,8 +455,8 @@ public class MapController {
     public void resetGrids() {
         resetTileGridStyle();
         resetAmmoGridStyle();
-        showPlayers();
         resetPlayerGridStyle();
+        showPlayers();
         tileGrid.setVisible(false);
         ammoGrid.setDisable(true);
         playerGrid.setDisable(true);
@@ -515,6 +511,7 @@ public class MapController {
                                 .map(n -> (Circle) n)
                                 .filter(Node::isVisible)
                                 .forEach(c -> {
+                                    c.setVisible(false);
                                     c.setOpacity(1.0);
                                     if (!c.getStyleClass().isEmpty()) {
                                         c.getStyleClass().remove(0);

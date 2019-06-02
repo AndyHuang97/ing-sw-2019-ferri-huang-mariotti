@@ -5,7 +5,10 @@ import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.graphs.Graph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Board {
@@ -88,6 +91,22 @@ public class Board {
         }
 
         return graph;
+    }
+
+    public List<Tile> tileMapToList() {
+        List<Tile> list = new ArrayList<>();
+        for (Tile[] array : tileMap){
+            list.addAll(Arrays.asList(array));
+        }
+        return list;
+    }
+
+    public Tile getSpawnTile(RoomColor roomColor) {
+        return tileMapToList().stream()
+                .filter(Objects::nonNull)
+                .filter(Tile::isSpawnTile)
+                .filter(t -> t.getRoomColor() == roomColor)
+                .collect(Collectors.toList()).get(0);
     }
 
     public Graph<Tile> getTileTree() {

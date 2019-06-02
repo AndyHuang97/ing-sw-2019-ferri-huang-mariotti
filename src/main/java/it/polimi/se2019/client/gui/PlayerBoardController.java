@@ -8,6 +8,7 @@ import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -94,6 +95,7 @@ public class PlayerBoardController {
 
         iv.setImage(getPlayerBoardImage(player.getColor(), Util.getCorrectPlayerBoardMode(player)));
 
+        // in frenzy mode, the damage bar needs some resizing and repositioning
         if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
             damageBar.setPrefWidth(315);
             damageBar.setLayoutX(47);

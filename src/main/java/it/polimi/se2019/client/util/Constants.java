@@ -22,4 +22,9 @@ public class Constants {
     public static final String GUI = "GUI";
     public static final String CLI = "CLI";
     public static final String PROGRESS_BAR = "#progressBar";
+    public static final String CARD = "Card";
+    public static final String TILE = "Tile";
+    public static final String PLAYER = "Player";
+    public static final String SHOOT = "Shoot";
+    public static final String RELOAD = "Reload";
 }

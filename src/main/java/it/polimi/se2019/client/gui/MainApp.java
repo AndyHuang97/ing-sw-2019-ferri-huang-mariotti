@@ -29,7 +29,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.concurrent.Task;
 import javafx.application.Platform;
 
 import java.io.*;
@@ -44,7 +43,8 @@ public class MainApp extends Application {
 
     private static final Logger logger = Logger.getLogger(MainApp.class.getName());
 
-    private Map<String, String> playerInput;
+    private Map<String, List<String>> playerInput = new HashMap<>();
+    private List<Runnable> inputRequested = new ArrayList<>();
 
     private Game game;
     private PlayerColor playerColor;
@@ -53,6 +53,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private LoginController loginController;
+    private GameBoardController gameBoardController;
     private BorderPane rootlayout;
 
     public static void main(String[] args) {
@@ -64,21 +65,21 @@ public class MainApp extends Application {
 
         setPlayerColor(PlayerColor.GREEN);
         // TODO the game should be deserialized from the network, and should be already completely initialized
-        //initGame();
+        initGame();
 
         actionNumber = 1;
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        showLogin();
+        //showLogin();
 
-        //initRootLayout();
-        //showGameBoard();
+        initRootLayout();
+        showGameBoard();
 
-        //primaryStage.setResizable(false);
-        //primaryStage.setFullScreen(true);
-        //primaryStage.sizeToScene();
-        //primaryStage.show();
+        primaryStage.setResizable(false);
+        primaryStage.setFullScreen(true);
+        primaryStage.sizeToScene();
+        primaryStage.show();
 
     }
 
@@ -110,6 +111,7 @@ public class MainApp extends Application {
             AnchorPane gameBoard = (AnchorPane) gbLoader.load();
             GameBoardController gbController = gbLoader.getController();
             gbController.setMainApp(this);
+            setGameBoardController(gbController);
 
             // Set the scene containing the root layout
             rootlayout.setCenter(gameBoard);
@@ -184,9 +186,10 @@ public class MainApp extends Application {
 
     }
 
-    @FXML
-    public void getInput(int x, int y) {
-
+    public void getInput() {
+        if (!getInputRequested().isEmpty()) {
+            getInputRequested().remove(0).run();
+        }
     }
 
     /**
@@ -196,15 +199,20 @@ public class MainApp extends Application {
 
     }
 
-    public void handleCardSelection() {
-
+    public void addInput(String key, String id) {
+        getPlayerInput().putIfAbsent(key, new ArrayList<>());
+        getPlayerInput().get(key).add(id);
+        System.out.println("Added: " + key + " " + id);
     }
 
     /**
      * Sends input via network.
      */
     public void sendInput(){
-
+        //TODO send input via network
+        // ...
+        System.out.println(">>> Sending: " + getPlayerInput());
+        getPlayerInput().clear();
     }
 
     public String getNickname() {
@@ -256,8 +264,12 @@ public class MainApp extends Application {
         }
     }
 
-    public Map<String, String> getPlayerInput() {
+    public Map<String, List<String>> getPlayerInput() {
         return playerInput;
+    }
+
+    public void setPlayerInput(Map<String, List<String>> playerInput) {
+        this.playerInput = playerInput;
     }
 
     public int getActionNumber() {
@@ -274,19 +286,19 @@ public class MainApp extends Application {
 
     public void initGame() {
         game = new Game();
-        game.setFrenzy(false);
+        game.setFrenzy(true);
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
-        p1.getCharacterState().setTile(game.getBoard().getTile(2,0));
+        p1.getCharacterState().setTile(game.getBoard().getTile(0,0));
         Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Mista"), new CharacterState(), PlayerColor.BLUE);
-        p2.getCharacterState().setTile(game.getBoard().getTile(2,0));
+        p2.getCharacterState().setTile(game.getBoard().getTile(0,0));
         Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Narancia"), new CharacterState(), PlayerColor.YELLOW);
-        p3.getCharacterState().setTile(game.getBoard().getTile(2,0));
+        p3.getCharacterState().setTile(game.getBoard().getTile(1,1));
         Player p4 = new Player(UUID.randomUUID().toString(), true, new UserData("Bucciarati"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(game.getBoard().getTile(2,0));
         Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Abbacchio"), new CharacterState(), PlayerColor.PURPLE);
-        p5.getCharacterState().setTile(game.getBoard().getTile(2,0));
+        p5.getCharacterState().setTile(game.getBoard().getTile(2,2));
         game.setPlayerList(Arrays.asList(p1,p2,p3,p4));
         game.setCurrentPlayer(p1);
         Weapon w1 = new Weapon(null, "0216", null
@@ -430,4 +442,19 @@ public class MainApp extends Application {
     }
 
 
+    public List<Runnable> getInputRequested() {
+        return inputRequested;
+    }
+
+    public void setInputRequested(List<Runnable> inputRequested) {
+        this.inputRequested = inputRequested;
+    }
+
+    public GameBoardController getGameBoardController() {
+        return gameBoardController;
+    }
+
+    public void setGameBoardController(GameBoardController gameBoardController) {
+        this.gameBoardController = gameBoardController;
+    }
 }

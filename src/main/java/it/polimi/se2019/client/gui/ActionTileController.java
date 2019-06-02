@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.gui;
 
+import com.sun.tools.internal.jxc.ap.Const;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
@@ -31,6 +32,7 @@ public class ActionTileController {
     private Label infoText;
     private GridPane progressBar;
     private Button cancelButton;
+    private Button confirmButton;
     private List<GridPane> weaponCrateList;
     private GridPane myWeapons;
     private GridPane myPowerups;
@@ -43,6 +45,16 @@ public class ActionTileController {
     private Button s;
     @FXML
     private Button r;
+    @FXML
+    private Button mrs;
+    @FXML
+    private Button mmmm;
+    @FXML
+    private Button mmg;
+    @FXML
+    private Button mmrs;
+    @FXML
+    private Button mmmg;
 
     public void initialize() {
 
@@ -91,13 +103,45 @@ public class ActionTileController {
 
         progressBar = (GridPane) root.getCenter().lookup(Constants.PROGRESS_BAR);
 
-        //confirmButton = (Button) root.getCenter().lookup("#confirmButton");
+        confirmButton = (Button) root.getCenter().lookup("#confirmButton");
         cancelButton = (Button) root.getCenter().lookup("#cancelButton");
 
 
     }
 
     @FXML
+    public void handleM() {
+        mainApp.getInputRequested().add(() -> handleMove());
+        mainApp.getInput();
+    }
+
+    @FXML
+    public void handleMG() {
+        mainApp.getInputRequested().add(() -> handleMove());
+        mainApp.getInputRequested().add(() -> handleGrab());
+        mainApp.getInput();
+    }
+
+    @FXML
+    public void handleS() {
+        mainApp.getInputRequested().add(() -> handleShoot());
+        mainApp.getInput();
+    }
+
+    @FXML
+    public void handleR() {
+        mainApp.getInputRequested().add(() -> handleReload());
+        mainApp.getInput();
+    }
+
+    @FXML
+    public void handleMRS() {
+        mainApp.getInputRequested().add(() -> handleMove());
+        mainApp.getInputRequested().add(() -> handleReload());
+        mainApp.getInputRequested().add(() -> handleShoot());
+        mainApp.getInput();
+    }
+
     public void handleMove(){
 
         disableActionButtons();
@@ -108,10 +152,9 @@ public class ActionTileController {
         infoText.setText("Select 1 tile ");
         cancelButton.setDisable(false);
 
-        setUpProgressBar(3);
+        setUpProgressBar(1);
     }
 
-    @FXML
     public void handleGrab() {
 
         disableActionButtons();
@@ -123,7 +166,6 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
-    @FXML
     public void handleShoot() {
 
         disableActionButtons();
@@ -137,22 +179,22 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
-    @FXML
     public void handleReload() {
 
         disableActionButtons();
         infoText.setText("Select 1 card ");
         cancelButton.setDisable(false);
+        confirmButton.setDisable(false);
 
         myWeapons.setDisable(false);
         myWeapons.getStyleClass().add("my-node");
         showMyUnloadedWeapons();
+        mainApp.getGameBoardController().addInput(Constants.RELOAD, null);
 
         setUpProgressBar(3);
 
     }
 
-    @FXML
     public void handleTarget() {
         System.out.println("target");
         disableActionButtons();
@@ -192,10 +234,19 @@ public class ActionTileController {
      *
      */
     public void disableActionButtons() {
-        mmm.setDisable(true);
-        mg.setDisable(true);
-        s.setDisable(true);
-        r.setDisable(true);
+        if (mainApp.getGame().isFrenzy()) {
+            mrs.setDisable(true);
+            mmmm.setDisable(true);
+            mmg.setDisable(true);
+            mmrs.setDisable(true);
+            mmmg.setDisable(true);
+        }
+        else {
+            mmm.setDisable(true);
+            mg.setDisable(true);
+            s.setDisable(true);
+            r.setDisable(true);
+        }
     }
 
     /**
@@ -213,8 +264,19 @@ public class ActionTileController {
      *
      */
     public void showGrabbableCards() {
-        Tile t  = mainApp.getGame().getCurrentPlayer().getCharacterState().getTile();
-        System.out.println(t);
+        Tile t = null;
+        if (mainApp.getPlayerInput().isEmpty()){
+            System.out.println(1);
+            t  = mainApp.getGame().getCurrentPlayer().getCharacterState().getTile();
+        }
+        else {
+            System.out.println(2);
+            System.out.println(mainApp.getPlayerInput().keySet());
+            int[] coords = Util.convertToCoords(Integer.parseInt(mainApp.getPlayerInput().get(Constants.TILE).get(0)));
+            t = mainApp.getGame().getBoard().getTile(coords[0], coords[1]);
+        }
+
+        System.out.println("Grab: "+t);
         try {
             int[] coords = mainApp.getGame().getBoard().getTilePosition(t);
             if (t.isSpawnTile()) {
@@ -260,10 +322,12 @@ public class ActionTileController {
                     if (!myWeaponsModel.get(i).isLoaded()) {
                         iv.setOpacity(1.0);
                         iv.setDisable(false);
+                        iv.setVisible(true);
                     }
                     else {
                         iv.setVisible(false);
                     }
+
                 });
     }
 
@@ -277,6 +341,7 @@ public class ActionTileController {
                 .collect(Collectors.toList()).get(0).getCharacterState();
         List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
+        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
 
         IntStream.range(0, myWeaponsModel.size())
                 .forEach(i -> {
@@ -286,10 +351,32 @@ public class ActionTileController {
                         iv.setVisible(false);
                     }
                     else {
+                        iv.setVisible(true);
                         iv.setOpacity(1.0);
                         iv.setDisable(false);
                     }
+
                 });
     }
+
+    /*
+    public void setShootSelectionBehavior(ImageView iv, BorderPane root) {
+        iv.setOnMouseClicked(event -> {
+            iv.setOpacity(0.6);
+
+            Util.ifFirstSelection(root, progressBar);
+            Util.updateCircle(progressBar);
+
+            if(Util.isLastSelection(progressBar)) {
+                myWeapons.setDisable(true);
+            }
+            NamedImage image = (NamedImage) iv.getImage();
+
+            mainApp.addInput(Constants.CARD, image.getName());
+        });
+    }
+
+     */
+
 
 }
