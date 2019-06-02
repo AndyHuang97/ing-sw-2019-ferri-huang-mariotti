@@ -9,6 +9,7 @@ import it.polimi.se2019.util.Request;
 import it.polimi.se2019.util.Response;
 
 import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Logger;
@@ -21,11 +22,11 @@ public class RmiServer {
         try {
             // bind the object
             System.setProperty("java.rmi.server.hostname", host);
-            Naming.rebind(String.format("rmi://localhost:%d/rmi", port), new RmiServerWorker());
-            logger.info("RMI server was bound CORRECTLY");
-        }catch (Exception e) {
+            LocateRegistry.createRegistry(port);
+            Naming.rebind("rmi://localhost:" + port + "/RmiServerWorker", new RmiServerWorker());
+        } catch (Exception e) {
             // catch it
-            logger.info("RMI server was bound INCORRECTLY");
+            logger.info(e.getMessage());
         }
     }
 
@@ -35,8 +36,8 @@ public class RmiServer {
         }
 
         @Override
-        public NetMsg send(NetMsg request) throws RemoteException {
-            return  new Response(new Game(), true, "Hello from rmi.");
+        public void send(NetMsg request) throws RemoteException {
+            new Response(new Game(), true, "Hello from rmi.");
             //return new CommandHandler().handle((Request) request);
         }
     }
