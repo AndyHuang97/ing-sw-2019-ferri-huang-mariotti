@@ -33,6 +33,7 @@ public class GameBoardController {
     private MainApp mainApp;
     private List<PlayerBoardController> pbControllerList;
     private MapController mapController;
+    private ActionTileController actionTileController;
     private Map<String, List<String>> intermediateInput = new HashMap<>();
 
     private GridPane progressBar;
@@ -213,7 +214,9 @@ public class GameBoardController {
                                     }
                                     NamedImage image = (NamedImage) c.getImage();
 
-                                    addInput(Constants.CARD, image.getName());
+                                    addInput(Constants.SHOOT, image.getName());
+
+
                                 });
                             });
                 });
@@ -326,13 +329,15 @@ public class GameBoardController {
                 ms.setPrefSize(30.0, 16.0);
 
                 mmg.setOnAction(event -> {
-                    mainApp.getInputRequested().add(() -> System.out.println(mmg));
+                    mainApp.getInputRequested().add(actionTileController::getTile);
+                    mainApp.getInputRequested().add(actionTileController::getCard);
                     mainApp.getInput();
 
                 });
 
                 ms.setOnAction(event -> {
-                    mainApp.getInputRequested().add(() -> System.out.println(ms));
+                    mainApp.getInputRequested().add(actionTileController::getTile);
+                    mainApp.getInputRequested().add(actionTileController::getShoot);
                     mainApp.getInput();
 
                 });
@@ -439,6 +444,7 @@ public class GameBoardController {
      */
     @FXML
     public void handleCancel() {
+        System.out.println(">>> Input new action:");
         handleReset();
         mainApp.getInputRequested().clear();
         intermediateInput.clear();
@@ -564,5 +570,29 @@ public class GameBoardController {
         intermediateInput.putIfAbsent(key, new ArrayList<>());
         intermediateInput.get(key).add(id);
         System.out.println("Added: " + key + " " + id);
+    }
+
+    public void setCardSelectionBehavior(ImageView iv, GridPane myCards, String action) {
+        iv.setOnMouseClicked(event -> {
+            iv.setOpacity(0.6);
+
+            Util.ifFirstSelection((BorderPane) mainApp.getPrimaryStage().getScene().getRoot(), progressBar);
+            Util.updateCircle(progressBar);
+
+            if(Util.isLastSelection(progressBar)) {
+                myCards.setDisable(true);
+            }
+
+            NamedImage image = (NamedImage) iv.getImage();
+            mainApp.getGameBoardController().addInput(action, image.getName());
+        });
+    }
+
+    public ActionTileController getActionTileController() {
+        return actionTileController;
+    }
+
+    public void setActionTileController(ActionTileController actionTileController) {
+        this.actionTileController = actionTileController;
     }
 }

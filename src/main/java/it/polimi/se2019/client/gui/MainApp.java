@@ -290,7 +290,7 @@ public class MainApp extends Application {
         w1.setLoaded(true);
         Weapon w2 = new Weapon(null, "0217", null
                 , null, null);
-        w2.setLoaded(true);
+        w2.setLoaded(false);
         Weapon w3 = new Weapon(null, "0218", null
                 , null, null);
         w3.setLoaded(true);
@@ -380,8 +380,8 @@ public class MainApp extends Application {
 
         Board board = null;
 
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
@@ -394,8 +394,7 @@ public class MainApp extends Application {
                                 if (tileMap[x][y] != null) {
                                     if (!tileMap[x][y].isSpawnTile()) {
                                         tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "042"));
-                                    }
-                                    else {
+                                    } else {
                                         tileMap[x][y].setWeaponCrate(
                                                 Arrays.asList(
                                                         new Weapon(null, "026", null
@@ -407,15 +406,7 @@ public class MainApp extends Application {
                                     }
                                 }
                             }));
-            try {
-                bufferedReader.close();
-            } catch (IOException e) {
-                logger.warning(e.toString());
-            }
-
-        } catch (FileNotFoundException e) {
-            logger.warning(e.toString());
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             logger.warning(e.toString());
         }
     }

@@ -66,6 +66,7 @@ public class ActionTileController {
     }
 
     public void init() {
+        mainApp.getGameBoardController().setActionTileController(this);
         initGrids();
         initInfo();
     }
@@ -112,38 +113,38 @@ public class ActionTileController {
 
     @FXML
     public void handleM() {
-        mainApp.getInputRequested().add(this::handleMove);
+        mainApp.getInputRequested().add(this::getTile);
         mainApp.getInput();
     }
 
     @FXML
     public void handleMG() {
-        mainApp.getInputRequested().add(this::handleMove);
-        mainApp.getInputRequested().add(this::handleGrab);
+        mainApp.getInputRequested().add(this::getTile);
+        mainApp.getInputRequested().add(this::getCard);
         mainApp.getInput();
     }
 
     @FXML
     public void handleS() {
-        mainApp.getInputRequested().add(this::handleShoot);
+        mainApp.getInputRequested().add(this::getShoot);
         mainApp.getInput();
     }
 
     @FXML
     public void handleR() {
-        mainApp.getInputRequested().add(this::handleReload);
+        mainApp.getInputRequested().add(this::getReload);
         mainApp.getInput();
     }
 
     @FXML
     public void handleMRS() {
-        mainApp.getInputRequested().add(this::handleMove);
-        mainApp.getInputRequested().add(this::handleReload);
-        mainApp.getInputRequested().add(this::handleShoot);
+        mainApp.getInputRequested().add(this::getTile);
+        mainApp.getInputRequested().add(this::getReload);
+        mainApp.getInputRequested().add(this::getShoot);
         mainApp.getInput();
     }
 
-    public void handleMove(){
+    public void getTile(){
 
         disableActionButtons();
         tileGrid.toFront();
@@ -156,7 +157,7 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
-    public void handleGrab() {
+    public void getCard() {
 
         disableActionButtons();
 
@@ -167,7 +168,7 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
-    public void handleShoot() {
+    public void getShoot() {
 
         disableActionButtons();
         infoText.setText("Select 1 card ");
@@ -180,7 +181,14 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
-    public void handleReload() {
+    public void getActionUnit() {
+
+        disableActionButtons();
+
+
+    }
+
+    public void getReload() {
 
         disableActionButtons();
         infoText.setText("Select 1 card ");
@@ -190,13 +198,13 @@ public class ActionTileController {
         myWeapons.setDisable(false);
         myWeapons.getStyleClass().add("my-node");
         showMyUnloadedWeapons();
-        mainApp.getGameBoardController().addInput(Constants.RELOAD, null);
+        mainApp.getGameBoardController().getIntermediateInput().putIfAbsent(Constants.RELOAD, new ArrayList<>());
 
         setUpProgressBar(3);
 
     }
 
-    public void handleTarget() {
+    public void getTarget() {
         System.out.println("target");
         disableActionButtons();
         playerGrid.toFront();
@@ -221,7 +229,7 @@ public class ActionTileController {
                                         c.getStyleClass().add("my-shape");
                                     }
                                     else {
-                                        c.setVisible(false);
+                                        c.setDisable(true);
                                     }
                                 })
                         )
@@ -267,12 +275,9 @@ public class ActionTileController {
     public void showGrabbableCards() {
         Tile t = null;
         if (mainApp.getPlayerInput().isEmpty()){
-            System.out.println(1);
             t  = mainApp.getGame().getCurrentPlayer().getCharacterState().getTile();
         }
         else {
-            System.out.println(2);
-            System.out.println(mainApp.getPlayerInput().keySet());
             int[] coords = Util.convertToCoords(Integer.parseInt(mainApp.getPlayerInput().get(Constants.TILE).get(0)));
             t = mainApp.getGame().getBoard().getTile(coords[0], coords[1]);
         }
@@ -328,6 +333,7 @@ public class ActionTileController {
                         iv.setVisible(false);
                     }
 
+                    mainApp.getGameBoardController().setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD);
                 });
     }
 
@@ -355,8 +361,11 @@ public class ActionTileController {
                         iv.setDisable(false);
                     }
 
+                    mainApp.getGameBoardController().setCardSelectionBehavior(iv, myWeapons, Constants.SHOOT);
                 });
     }
+
+
 
 
 }

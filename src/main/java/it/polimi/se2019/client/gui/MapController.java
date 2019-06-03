@@ -183,11 +183,14 @@ public class MapController {
                     Util.ifFirstSelection(root, progressBar);
                     Util.updateCircle(progressBar);
 
-                    ammoGrid.getChildren().stream()
+                    //iv.setStyle("");
+                    /*ammoGrid.getChildren().stream()
                             .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
                             .filter(ap -> ap != anchorPane)
                             .filter(ap -> ap.getChildren().get(0).isVisible())
                             .forEach(ap -> ap.setStyle(""));
+
+                     */
 
                     NamedImage image = (NamedImage) iv.getImage();
                     handleAmmoCrateSelected(image.getName());
@@ -248,20 +251,7 @@ public class MapController {
                     wc.getChildren().stream()
                             .map(n -> (ImageView) n)
                             .forEach(w ->
-                                    w.setOnMouseClicked(event -> {
-                                        w.setDisable(true);
-                                        w.setOpacity(0.6);
-
-                                        Util.ifFirstSelection(root, progressBar);
-                                        Util.updateCircle(progressBar);
-
-                                        if (Util.isLastSelection(progressBar)) {
-                                            wc.setDisable(true);
-                                        }
-
-                                        NamedImage image = (NamedImage) w.getImage();
-                                        handleWeaponInCrateSelected(image.getName());
-                                    })
+                                    mainApp.getGameBoardController().setCardSelectionBehavior(w, wc, Constants.GRAB)
                             );
                 });
     }
@@ -413,7 +403,7 @@ public class MapController {
      */
     public void handleWeaponInCrateSelected(String id) {
         System.out.println("Weapon selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.CARD, id);
+        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
     }
 
     /**
@@ -422,7 +412,7 @@ public class MapController {
      */
     public void handleAmmoCrateSelected(String id) {
         System.out.println("Ammocrate selected: "+ id);
-        mainApp.getGameBoardController().addInput(Constants.CARD, id);
+        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
     }
 
     /**
