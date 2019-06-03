@@ -36,6 +36,8 @@ public class ControllerTest {
     private static final String TESTNICK1 = "testNick1";
     private static final String MOVEPLAYERACTION = "it.polimi.se2019.server.playerActions.MovePlayerAction";;
     private static final String SHOOTPLAYERACTION = "it.polimi.se2019.server.playerActions.ShootPlayerAction";
+    private static final String GRABPLAYERACTION = "it.polimi.se2019.server.playerActions.GrabPlayerAction";
+    private static final String RELOADPLAYERACTION = "it.polimi.se2019.server.playerActions.ReloadPlayerAction";
 
     private GameManager gameManager = new GameManager();
     private Controller controller;
@@ -70,7 +72,7 @@ public class ControllerTest {
         // Board init
         tileMap = new Tile[2][3];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
-        tileMap[0][0] = new NormalTile(RoomColor.RED, links00, null);
+        tileMap[0][0] = new SpawnTile(RoomColor.RED, links00, null);
         LinkType[] links01 = {LinkType.DOOR, LinkType.DOOR, LinkType.OPEN, LinkType.WALL};
         tileMap[0][1] = new NormalTile(RoomColor.YELLOW, links01, null);
         LinkType[] links10 = {LinkType.WALL, LinkType.WALL, LinkType.OPEN, LinkType.DOOR};
@@ -119,13 +121,7 @@ public class ControllerTest {
 
         // add weapon to testNick0
         player0.getCharacterState().addWeapon(weapon);
-
-        Map<AmmoColor, Integer> ammo = new HashMap<>();
-        ammo.put(AmmoColor.BLUE, 3);
-        ammo.put(AmmoColor.RED, 3);
-        ammo.put(AmmoColor.YELLOW, 3);
-
-        player0.getCharacterState().addAmmo(ammo);
+        player0.getCharacterState().addAmmo(getAmmoBag(3));
 
         // Set testNick0 as current player
         game.setCurrentPlayer(player0);
@@ -179,5 +175,88 @@ public class ControllerTest {
         damageBar.add(PlayerColor.BLUE);
         damageBar.add(PlayerColor.BLUE);
         Assert.assertEquals(player1.getCharacterState().getDamageBar(), damageBar);
+    }
+
+    @Test
+    public void testGrabPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        // add weapon to tileMap[0][0] SpawnTile
+        List<Weapon> weaponList = new ArrayList<>();
+        weaponList.add(weapon);
+
+        tileMap[0][0].setWeaponCrate(weaponList);
+
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        player0.getCharacterState().addAmmo(getAmmoBag(3));
+
+        List<Targetable> targetableList = new ArrayList<>();
+        targetableList.add(weapon);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(GRABPLAYERACTION, targetableList);
+
+        InternalMessage message = new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        player0.getCharacterState().addAmmo(getAmmoBag(3));
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        // assert player have two weapons
+        Assert.assertEquals(2, player0.getCharacterState().getWeapoonBag().size());
+
+        player0.getCharacterState().setAmmoBag(getAmmoBag(0));
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        // assert player still have two weapons (unable to pay pickup cost)
+        Assert.assertEquals(2, player0.getCharacterState().getWeapoonBag().size());
+
+        player0.getCharacterState().addAmmo(getAmmoBag(3));
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        // assert player have tree weapons
+        Assert.assertEquals(3, player0.getCharacterState().getWeapoonBag().size());
+
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        // assert player still have tree weapons (bag full)
+        Assert.assertEquals(3, player0.getCharacterState().getWeapoonBag().size());
+        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.BLUE));
+        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW));
+    }
+
+    @Test
+    public void testReloadPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        player0.getCharacterState().addAmmo(getAmmoBag(3));
+
+        List<Targetable> targetableList = new ArrayList<>();
+        targetableList.add(weapon);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.putIfAbsent(RELOADPLAYERACTION, targetableList);
+
+        weapon.setLoaded(false);
+
+        Assert.assertFalse(player0.getCharacterState().getWeapoonBag().get(0).isLoaded());
+
+        Map<AmmoColor, Integer> ammoBag = player0.getCharacterState().getAmmoBag();
+
+        Assert.assertTrue(ammoBag.get(AmmoColor.BLUE) >= weapon.getReloadCostAsMap().get(AmmoColor.BLUE));
+        Assert.assertTrue(ammoBag.get(AmmoColor.YELLOW) >= weapon.getReloadCostAsMap().get(AmmoColor.YELLOW));
+
+        InternalMessage message = new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        Assert.assertTrue(player0.getCharacterState().getWeapoonBag().get(0).isLoaded());
+    }
+
+    private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {
+        Map<AmmoColor, Integer> ammo = new HashMap<>();
+        ammo.put(AmmoColor.BLUE, amountOfAmmoPerColor);
+        ammo.put(AmmoColor.RED, amountOfAmmoPerColor);
+        ammo.put(AmmoColor.YELLOW, amountOfAmmoPerColor);
+
+        return ammo;
     }
 }
