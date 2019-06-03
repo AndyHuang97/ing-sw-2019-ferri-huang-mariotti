@@ -5,10 +5,12 @@ import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.SpawnTile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public class GrabPlayerAction extends PlayerAction {
 
@@ -54,6 +56,20 @@ public class GrabPlayerAction extends PlayerAction {
                 return false;
             }
 
+            // pickup cost
+            Map<AmmoColor, Integer> pickupCost = weaponToGrab.getPickupCostAsMap();
+            Map<AmmoColor, Integer> availableAmmo = getPlayer().getCharacterState().getAmmoBag();
+
+            for (Map.Entry<AmmoColor, Integer> cost : pickupCost.entrySet()) {
+                try {
+                    if (cost.getValue() > availableAmmo.get(cost.getKey())) {
+                        return false;
+                    }
+                } catch (NullPointerException e) {
+                    return false;
+                }
+            }
+
             return isWeaponAvailable;
 
         } catch (ClassCastException e) {
@@ -71,5 +87,8 @@ public class GrabPlayerAction extends PlayerAction {
         Player player = getGame().getCurrentPlayer();
 
         player.getCharacterState().addWeapon(weaponToGrab);
+
+        // pay pickup cost
+        player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap());
     }
 }

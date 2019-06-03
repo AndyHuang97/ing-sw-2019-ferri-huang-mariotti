@@ -8,22 +8,23 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ErrorResponse;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ReloadPlayerAction extends PlayerAction {
 
-    private static final int WEAPONLISTPOSITION = 0;
-
-    private List<Weapon> weaponToReload;
+    private List<Weapon> weaponToReload = new ArrayList<>();
 
     public ReloadPlayerAction(Game game, Player player) { super(game, player); }
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
         try {
-            weaponToReload = (List<Weapon>) params.get(WEAPONLISTPOSITION);
+            for (Targetable weapon : params) {
+                weaponToReload.add((Weapon) weapon);
+            }
         } catch (ClassCastException e) {
             throw new UnpackingException();
         }
@@ -32,7 +33,7 @@ public class ReloadPlayerAction extends PlayerAction {
     @Override
     public void run() {
         for (Weapon weapon : weaponToReload) {
-            Map<AmmoColor, Integer> reloadCost = convert(weapon.getReloadCost());
+            Map<AmmoColor, Integer> reloadCost = weapon.getReloadCostAsMap();
 
             getPlayer().getCharacterState().consumeAmmo(reloadCost);
 
@@ -80,20 +81,5 @@ public class ReloadPlayerAction extends PlayerAction {
     @Override
     public ErrorResponse getErrorMessage() {
         return null;
-    }
-
-    private Map<AmmoColor, Integer> convert(List<AmmoColor> ammo) {
-
-        Map<AmmoColor, Integer> convertedAmmo = new HashMap<>();
-
-        for (AmmoColor ammoColor : ammo) {
-            // initialize to zero if absent
-            convertedAmmo.putIfAbsent(ammoColor, 0);
-
-            // +1
-            convertedAmmo.put(ammoColor, convertedAmmo.get(ammoColor) + 1);
-        }
-
-        return convertedAmmo;
     }
 }

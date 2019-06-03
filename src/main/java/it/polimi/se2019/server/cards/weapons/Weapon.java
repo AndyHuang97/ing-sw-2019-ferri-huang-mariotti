@@ -4,7 +4,9 @@ import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.games.player.AmmoColor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Weapon extends Card {
@@ -54,4 +56,23 @@ public class Weapon extends Card {
 	public void setOptionalEffectList(List<ActionUnit> optionalEffectList) {
 		this.optionalEffectList = optionalEffectList;
 	}
+
+	public Map<AmmoColor, Integer> getPickupCostAsMap() { return  convert(this.pickUpCost); }
+
+	public Map<AmmoColor, Integer> getReloadCostAsMap() { return  convert(this.reloadCost); }
+
+    private Map<AmmoColor, Integer> convert(List<AmmoColor> ammo) {
+
+        Map<AmmoColor, Integer> convertedAmmo = new HashMap<>();
+
+        for (AmmoColor ammoColor : ammo) {
+            // initialize to zero if absent
+            convertedAmmo.putIfAbsent(ammoColor, 0);
+
+            // +1
+            convertedAmmo.put(ammoColor, convertedAmmo.get(ammoColor) + 1);
+        }
+
+        return convertedAmmo;
+    }
 }
