@@ -2,22 +2,18 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
-import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 
 import java.io.IOException;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -94,6 +90,7 @@ public class PlayerBoardController {
 
         iv.setImage(getPlayerBoardImage(player.getColor(), Util.getCorrectPlayerBoardMode(player)));
 
+        // in frenzy mode, the damage bar needs some resizing and repositioning
         if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
             damageBar.setPrefWidth(315);
             damageBar.setLayoutX(47);
@@ -116,12 +113,12 @@ public class PlayerBoardController {
      */
     public void showDamageBar(Player player) {
 
-        List<PlayerColor> damageBar = player.getCharacterState().getDamageBar();
+        List<PlayerColor> damageBarModel = player.getCharacterState().getDamageBar();
 
-        IntStream.range(0, damageBar.size())
+        IntStream.range(0, damageBarModel.size())
                 .forEach(i -> {
                     ImageView iv = (ImageView) this.damageBar.getChildren().get(i);
-                    Image token = Util.getPlayerToken(damageBar.get(i));
+                    Image token = Util.getPlayerToken(damageBarModel.get(i));
                     iv.setImage(token);
                 });
     }
@@ -204,31 +201,6 @@ public class PlayerBoardController {
     public void handleResetMarker() {
         markerLabel.getChildren().stream()
                 .forEach(n -> ((Label) n).setText("x0"));
-    }
-
-    /**
-     * Adds the buttons to the action tile according to player's color and
-     * game's current mode.
-     * @param playerColor is the color of the player.
-     * @param mode is the game's current mode.
-     */
-    public void addActionTileButtons(PlayerColor playerColor, String mode) {
-
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/ActionTile" + mode + ".fxml"));
-            AnchorPane buttonedPane = loader.load();
-            ActionTileController atController = loader.getController();
-            atController.setMainApp(mainApp);
-            atController.init();
-
-            ImageView iv = (ImageView) buttonedPane.getChildren().get(0);
-            iv.setImage(new Image(Constants.ACTION_TILE +playerColor.getColor()+"_"+mode+".png"));
-            actionTile.getChildren().add(buttonedPane);
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.warning("Could not find resource.");
-        }
     }
 
     /**

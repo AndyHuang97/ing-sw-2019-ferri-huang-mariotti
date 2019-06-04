@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.NamedImage;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.KillShotTrack;
@@ -11,18 +12,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class MapController {
@@ -40,6 +38,8 @@ public class MapController {
     private GridPane frenzyPane;
     @FXML
     private GridPane tileGrid;
+    @FXML
+    private GridPane shootTileGrid;
     @FXML
     private GridPane ammoGrid;
     @FXML
@@ -99,7 +99,8 @@ public class MapController {
                                 initPlayerGrid(tileMap, x, y);
                             }));
 
-            resetTileGridStyle();
+            resetTileGridStyle(tileGrid);
+            resetTileGridStyle(shootTileGrid);
             tileGrid.setVisible(false);
             ammoGrid.setDisable(true);
             showKillShotTrack();
@@ -108,8 +109,7 @@ public class MapController {
             showWeaponCrates();
 
         } catch (IllegalArgumentException e) {
-            logger.warning("Invalid map.");
-            e.printStackTrace();
+            logger.warning(e.toString());
         }
     }
 
@@ -125,38 +125,47 @@ public class MapController {
 
         if (tileMap[x][y] != null) {
             AnchorPane anchorPane = (AnchorPane) tileGrid.getChildren().get(Util.convertToIndex(x,y));
+            AnchorPane shootAncorPane = (AnchorPane) shootTileGrid.getChildren().get(Util.convertToIndex(x,y));
             Button button = new Button("");
-            button.setOpacity(0.4);
-            AnchorPane.setTopAnchor(button, 0.0);
-            AnchorPane.setRightAnchor(button, 0.0);
-            AnchorPane.setBottomAnchor(button, 0.0);
-            AnchorPane.setLeftAnchor(button, 0.0);
+            Button shootButton = new Button("");
 
-            button.setOnAction(event -> {
-                button.setStyle("");
-                button.setDisable(true);
-                BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-                GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
-
-                Util.ifFirstSelection(root, progressBar);
-                Util.updateCircle(progressBar);
-
-                if (Util.isLastSelection(progressBar)) {
-                    // if its the last element that needs to be selected it disables visibility of all other
-                    // buttons
-                    tileGrid.getChildren().stream()
-                            .map(n -> (AnchorPane) n)
-                            .filter(ap -> !ap.getChildren().isEmpty())
-                            .map(ap -> (Button) ap.getChildren().get(0))
-                            .filter(b -> !b.isDisable())
-                            .forEach(b -> b.setVisible(false));
-                }
-
-                handleTileSelected(x,y);
-            });
+            setButtonTile(tileGrid, button, () -> handleTileSelected(Util.convertToIndex(x,y)));
+            setButtonTile(shootTileGrid, shootButton, () -> handleShootTileSelected(Util.convertToIndex(x,y)));
 
             anchorPane.getChildren().add(button);
+            shootAncorPane.getChildren().add(shootButton);
+
         }
+    }
+
+    public void setButtonTile(GridPane gridPane, Button button, Runnable handleAction) {
+        button.setOpacity(0.4);
+        AnchorPane.setTopAnchor(button, 0.0);
+        AnchorPane.setRightAnchor(button, 0.0);
+        AnchorPane.setBottomAnchor(button, 0.0);
+        AnchorPane.setLeftAnchor(button, 0.0);
+
+        button.setOnAction(event -> {
+            button.setStyle("");
+            button.setDisable(true);
+            BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+
+            Util.ifFirstSelection(root, progressBar);
+            Util.updateCircle(progressBar);
+
+            if (Util.isLastSelection(progressBar)) {
+                // if its the last element that needs to be selected it disables visibility of all other
+                // buttons
+                gridPane.getChildren().stream()
+                        .map(n -> (AnchorPane) n)
+                        .filter(ap -> !ap.getChildren().isEmpty())
+                        .map(ap -> (Button) ap.getChildren().get(0))
+                        .filter(b -> !b.isDisable())
+                        .forEach(b -> b.setVisible(false));
+            }
+
+            handleAction.run();
+        });
     }
 
     /**
@@ -176,25 +185,29 @@ public class MapController {
                 ImageView iv = (ImageView) anchorPane.getChildren().get(0);
                 String id = mainApp.getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
                 //TODO separate the image loading form the setup, no need to iterate the mouse click behavior
-                iv.setImage(new Image(Constants.AMMO_PATH + id + ".png"));
+                iv.setImage(new NamedImage(Constants.AMMO_PATH + id + ".png", Constants.AMMO_PATH));
                 iv.setVisible(true);
+                iv.setDisable(true);
 
                 iv.setOnMouseClicked(event -> {
                     anchorPane.setDisable(true);
                     anchorPane.setOpacity(0.6);
                     BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-                    GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
                     Util.ifFirstSelection(root, progressBar);
                     Util.updateCircle(progressBar);
 
-                    ammoGrid.getChildren().stream()
+                    //iv.setStyle("");
+                    /*ammoGrid.getChildren().stream()
                             .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
                             .filter(ap -> ap != anchorPane)
                             .filter(ap -> ap.getChildren().get(0).isVisible())
                             .forEach(ap -> ap.setStyle(""));
 
-                    handleAmmoCrateSelected(x, y);
+                     */
+
+                    NamedImage image = (NamedImage) iv.getImage();
+                    handleAmmoCrateSelected(image.getName());
                 });
             }
         }
@@ -210,7 +223,6 @@ public class MapController {
     public void initPlayerGrid(Tile[][] tileMap, int x, int y) {
 
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-        GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
         playerGrid.setDisable(true);
         if (tileMap[x][y] != null) {
@@ -221,7 +233,7 @@ public class MapController {
                     .filter(row -> !row.getChildren().isEmpty())
                     .forEach(row -> row.getChildren().stream()
                             .map(n -> (Circle) n)
-                            .forEach(c -> {
+                            .forEach(c ->
                                 c.setOnMouseClicked(event -> {
                                     c.setDisable(true);
                                     c.setOpacity(0.6);
@@ -234,8 +246,7 @@ public class MapController {
                                     }
 
                                     handlePlayerSelected(c.getFill().toString());
-                                });
-                            })
+                                }))
                     );
         }
     }
@@ -247,26 +258,14 @@ public class MapController {
     public void initWeaponCrates() {
 
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-        GridPane progressBar = (GridPane) (root.getCenter()).lookup(Constants.PROGRESS_BAR);
 
         weaponCrateList.stream()
                 .forEach(wc -> {
                     wc.setDisable(true);
                     wc.getChildren().stream()
-                            .forEach(n ->
-                                    n.setOnMouseClicked(event -> {
-                                        n.setDisable(true);
-                                        n.setOpacity(0.6);
-
-                                        Util.ifFirstSelection(root, progressBar);
-                                        Util.updateCircle(progressBar);
-
-                                        if (Util.isLastSelection(progressBar)) {
-                                            wc.setDisable(true);
-                                        }
-
-                                        handleWeaponSelected(1,1);
-                                    })
+                            .map(n -> (ImageView) n)
+                            .forEach(w ->
+                                    mainApp.getGameBoardController().setCardSelectionBehavior(w, wc, Constants.GRAB)
                             );
                 });
     }
@@ -282,7 +281,6 @@ public class MapController {
                         .filter(x -> tileMap[x][y] != null)
                         .filter(x -> tileMap[x][y].isSpawnTile())
                         .forEach(x -> {
-                            //System.out.println(x + "," + y);
                             String roomColor = tileMap[x][y].getRoomColor().getColor();
                             Optional<GridPane> optGrid = weaponCrateList.stream()
                                     .filter(wc -> wc.getId().split("Weapons")[0].equalsIgnoreCase(roomColor))
@@ -293,8 +291,7 @@ public class MapController {
                                         .forEach(i -> {
                                             ImageView iv = (ImageView) actualGrid.getChildren().get(i);
                                             String weaponID = tileMap[x][y].getWeaponCrate().get(i).getName();
-                                            //System.out.println(Constants.WEAPON_PATH+weaponID+".png");
-                                            iv.setImage(new Image(Constants.WEAPON_PATH+weaponID+".png"));
+                                            iv.setImage(new NamedImage(Constants.WEAPON_PATH+weaponID+".png", Constants.WEAPON_PATH));
                                         });
                             }
                         })
@@ -319,7 +316,7 @@ public class MapController {
                     EnumMap<PlayerColor, Integer> colorIntegerEnumMap = kt.getDeathTrack().get(i-offset);
                     if (i < kt.getKillCounter() + offset) { //shows player tokens
                         Optional<PlayerColor> optPc= Arrays.stream(PlayerColor.values())
-                                .filter(pc -> colorIntegerEnumMap.containsKey(pc))
+                                .filter(colorIntegerEnumMap::containsKey)
                                 .findFirst();
                         if (optPc.isPresent()) {
                             iv.setImage(Util.getPlayerToken(optPc.get()));
@@ -378,7 +375,7 @@ public class MapController {
                             addPlayerCircle(secondRow, p);
                         }
                     } catch (TileNotFoundException e) {
-                        e.printStackTrace();
+                        logger.warning(e.toString());
                     }
                 });
     }
@@ -406,62 +403,61 @@ public class MapController {
     /**
      * Handles the selection of a button from tile grid.
      *
-     * @param x is the x coordinate in the grid.
-     * @param y is the y coordinate in the grid.
+     * @param id is the id/position in the list of tiles.
      */
-    public void handleTileSelected(int x, int y) {
-        System.out.println("Tile selected: " + x + "," + y);
-        mainApp.getInput(x,y);
+    public void handleTileSelected(int id) {
+        System.out.println("Tile selected: " + id);
+        mainApp.getGameBoardController().addInput(Constants.MOVE, String.valueOf(id));
+    }
 
+    public void handleShootTileSelected(int id) {
+        System.out.println("Tile selected: " + id);
+        mainApp.getGameBoardController().addInput(Constants.SHOOT, String.valueOf(id));
     }
 
     /**
-     * Handles the selection of a card.
-     *
-     * @param id
-     */
-    public void handleCardSelected(int id) {
-        mainApp.handleCardSelection();
-    }
-
-    /**
-     * Handles the selection of a weapon card.
+     * Handles the selection of a weapon card from a weapon crate.
      *
      */
-    public void handleWeaponSelected(int x, int y) {
-        System.out.println("Weapon selected: " + x + "," + y);
-        handleCardSelected(x);
+    public void handleWeaponInCrateSelected(String id) {
+        System.out.println("Weapon selected: " + id);
+        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
     }
 
     /**
      * Handles the selection of an ammo card from ammo tile grid.
      *
-     * @param x is the x coordinate in the grid.
-     * @param y is the y coordinate in the grid.
      */
-    public void handleAmmoCrateSelected(int x, int y) {
-        System.out.println("Ammocrate selected: "+Util.convertToIndex(x, y));
-        handleCardSelected(x);
+    public void handleAmmoCrateSelected(String id) {
+        System.out.println("Ammocrate selected: "+ id);
+        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
     }
 
     /**
      * Handles the selection of a button from player grid.
      *
-     * @param id
+     * @param color
      */
-    public void handlePlayerSelected(String id) {
-        System.out.println("Selected player: " + id);
+    public void handlePlayerSelected(String color) {
+        System.out.println("Selected player: " + color);
+        String id = mainApp.getGame().getPlayerList().stream()
+                .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
+                .collect(Collectors.toList()).get(0).getId();
+        System.out.println(color + " " + id);
+        mainApp.getGameBoardController().addInput(Constants.SHOOT, id);
     }
 
     /**
      * Disables and resets all grids.
      */
     public void resetGrids() {
-        resetTileGridStyle();
+        resetTileGridStyle(tileGrid);
+        resetTileGridStyle(shootTileGrid);
         resetAmmoGridStyle();
-        showPlayers();
         resetPlayerGridStyle();
+        showPlayers();
         tileGrid.setVisible(false);
+        shootTileGrid.setVisible(false);
         ammoGrid.setDisable(true);
         playerGrid.setDisable(true);
         resetWeaponCratesStyle();
@@ -472,8 +468,8 @@ public class MapController {
      * Resets the tile grid's buttons to the player's color.
      *
      */
-    public void resetTileGridStyle() {
-        tileGrid.getChildren().stream()
+    public void resetTileGridStyle(GridPane gridPane) {
+        gridPane.getChildren().stream()
                 .map(n -> (AnchorPane) n) // gets the anchorpane
                 .filter(ap -> !ap.getChildren().isEmpty())
                 .map(ap -> (Button) ap.getChildren().get(0))
@@ -515,6 +511,7 @@ public class MapController {
                                 .map(n -> (Circle) n)
                                 .filter(Node::isVisible)
                                 .forEach(c -> {
+                                    c.setVisible(false);
                                     c.setOpacity(1.0);
                                     if (!c.getStyleClass().isEmpty()) {
                                         c.getStyleClass().remove(0);

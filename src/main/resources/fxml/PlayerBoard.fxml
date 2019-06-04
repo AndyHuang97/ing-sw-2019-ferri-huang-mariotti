@@ -18,7 +18,7 @@
             <Image url="@../images/playerBoards/PlayerBoard_Blue_Normal.png" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="117.0" prefWidth="37.5">
+      <AnchorPane fx:id="actionTile" maxWidth="37.5" prefHeight="117.0" prefWidth="45.0">
          <children>
             <ImageView fitHeight="117.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
          </children></AnchorPane>

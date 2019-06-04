@@ -1,6 +1,7 @@
 package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.client.util.NamedImage;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
@@ -20,10 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -35,6 +33,8 @@ public class GameBoardController {
     private MainApp mainApp;
     private List<PlayerBoardController> pbControllerList;
     private MapController mapController;
+    private ActionTileController actionTileController;
+    private Map<String, List<String>> intermediateInput = new HashMap<>();
 
     private GridPane progressBar;
 
@@ -63,13 +63,13 @@ public class GameBoardController {
     @FXML
     private GridPane myWeapons;
     @FXML
-    private GridPane unloadedWeapons;
-    @FXML
     private GridPane myPowerUps;
     @FXML
     private AnchorPane actionButtons;
     @FXML
     private GridPane rankingGrid;
+    @FXML
+    private FlowPane actionUnitPane;
 
     /**
      * The main game board initializer which is called when the GameBoard.fxml file is loaded.
@@ -99,7 +99,7 @@ public class GameBoardController {
         initMyCards();
 
         showMyCards();
-        //showRaking();
+        //showRanking();
     }
 
     /**
@@ -165,7 +165,7 @@ public class GameBoardController {
                     i++;
                 }else {
                     playerBoardPane = playerBoard;
-                    showActionButtons();
+                    showActionButtons(player);
 
                     showName(player, myName);
                     showAmmo(player, myAmmo);
@@ -197,10 +197,12 @@ public class GameBoardController {
      */
     public void initMyCards() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+
         Arrays.asList(myPowerUps,myWeapons).stream()
                 .forEach(myCards -> {
                     myCards.setDisable(true);
                     myCards.getChildren().stream()
+                            .map(n -> (ImageView) n)
                             .forEach(c -> {
                                 c.setVisible(false);
                                 c.setOnMouseClicked(event -> {
@@ -212,8 +214,11 @@ public class GameBoardController {
                                     if(Util.isLastSelection(progressBar)) {
                                         myCards.setDisable(true);
                                     }
+                                    NamedImage image = (NamedImage) c.getImage();
 
-                                    mainApp.handleCardSelection();
+                                    addInput(Constants.SHOOT, image.getName());
+
+
                                 });
                             });
                 });
@@ -225,7 +230,6 @@ public class GameBoardController {
      */
     public void setInfoPaneStyle() {
         infoPane.getStyleClass().add("info-pane");
-        //rankingGrid.getStyleClass().add("info-pane");
     }
 
     /**
@@ -293,7 +297,7 @@ public class GameBoardController {
      * game's current mode.
      *
      */
-    public void showActionButtons() {
+    public void showActionButtons(Player player) {
         try {
             AnchorPane buttonedPane = null;
             FXMLLoader loader = new FXMLLoader();
@@ -307,6 +311,45 @@ public class GameBoardController {
             atController.init();
 
             actionButtons.getChildren().add(buttonedPane);
+            ((GridPane) buttonedPane.getChildren().get(0)).getChildren().stream()
+                    .map(n -> (Button) n)
+                    .forEach(b -> b.setMaxSize(31.0, 1.0));
+
+            // shows adrenaline buttons
+            if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.NORMAL)) {
+                Button mmg = new Button("");
+                Button ms = new Button("");
+
+                mmg.setOpacity(0.45);
+                mmg.setLayoutX(98);
+                mmg.setLayoutY(20);
+                mmg.setPrefSize(30.0, 16.0);
+
+                ms.setOpacity(0.45);
+                ms.setLayoutX(178);
+                ms.setLayoutY(20);
+                ms.setPrefSize(30.0, 16.0);
+
+                mmg.setOnAction(event -> {
+                    handleCancel();
+                    mainApp.getInputRequested().add(actionTileController::getTile);
+                    mainApp.getInputRequested().add(actionTileController::getCard);
+                    mainApp.getInput();
+
+                });
+
+                ms.setOnAction(event -> {
+                    handleCancel();
+                    mainApp.getInputRequested().add(actionTileController::getTile);
+                    mainApp.getInputRequested().add(actionTileController::getShoot);
+                    mainApp.getInput();
+
+                });
+
+                actionButtons.getChildren().add(mmg);
+                actionButtons.getChildren().add(ms);
+            }
+
         }catch (IOException e) {
             logger.warning(e.toString());
         }
@@ -323,6 +366,7 @@ public class GameBoardController {
         List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
+        myWeapons.setDisable(true);
         if (!myWeapons.getStyleClass().isEmpty()) {
             myWeapons.getStyleClass().remove(0);
         }
@@ -338,17 +382,27 @@ public class GameBoardController {
                         iv.setOpacity(1.0);
                         iv.setDisable(false);
                     }
-                    iv.setImage(new Image(Constants.WEAPON_PATH + myWeaponsModel.get(i).getName() + ".png"));
+                    iv.setImage(new NamedImage(Constants.WEAPON_PATH + myWeaponsModel.get(i).getName() + ".png",
+                            Constants.WEAPON_PATH));
                     iv.setVisible(true);
                 });
 
+        myPowerUps.setDisable(true);
+        if (!myPowerUps.getStyleClass().isEmpty()) {
+            myPowerUps.getStyleClass().remove(0);
+        }
         IntStream.range(0, myPowerUpsModel.size())
                 .forEach(i -> {
                     ImageView iv = (ImageView) myPowerUps.getChildren().get(i);
-                    iv.setImage(new Image(Constants.POWERUP_PATH+myPowerUpsModel.get(i).getName()+".png"));
+                    iv.setImage(new NamedImage(Constants.POWERUP_PATH+myPowerUpsModel.get(i).getName()+".png",
+                            Constants.POWERUP_PATH));
                     iv.setVisible(true);
                     iv.setOpacity(1.0);
                 });
+    }
+
+    public void showActionUnits(){
+
     }
 
     /**
@@ -377,9 +431,18 @@ public class GameBoardController {
      */
     @FXML
     public void handleConfirm() {
-        // TODO add input to a list
-        mainApp.nextInput();
-        handleCancel();
+        intermediateInput.keySet().stream()
+                .forEach(k -> mainApp.getPlayerInput().put(k, intermediateInput.get(k)));
+        if (mainApp.getInputRequested().isEmpty())
+        {
+            mainApp.sendInput();
+            handleCancel();
+        }
+        else {
+            handleReset();
+            mainApp.getInput();
+
+        }
     }
 
     /**
@@ -389,6 +452,13 @@ public class GameBoardController {
      */
     @FXML
     public void handleCancel() {
+        System.out.println(">>> Input new action:");
+        handleReset();
+        mainApp.getInputRequested().clear();
+        intermediateInput.clear();
+    }
+
+    public void handleReset() {
         progressBar.getChildren().stream()
                 .map(n -> (Circle) n)
                 .forEach(c -> {
@@ -396,35 +466,12 @@ public class GameBoardController {
                     c.setVisible(false);
                 });
         infoText.setText("Select an action("+mainApp.getActionNumber()+")");
+        actionButtons.setDisable(false);
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
+        actionUnitPane.setVisible(false);
 
         showMyCards();
-        /*
-        Arrays.asList(myPowerUps).stream()
-                .forEach(myCards -> {
-                    if (!myCards.getStyleClass().isEmpty()) {
-                        myCards.getStyleClass().remove(0);
-                    }
-                    myCards.getChildren().stream()
-                            .forEach(w ->
-                                    w.setOpacity(1.0)
-                            );
-                });
-
-        Arrays.asList(myWeapons).stream()
-                .forEach(myCards -> {
-                    if (!myCards.getStyleClass().isEmpty()) {
-                        myCards.getStyleClass().remove(0);
-                    }
-                    myCards.getChildren().stream()
-                            .filter(w -> !new Double(w.getOpacity()).equals(0.6))
-                            .forEach(w ->
-                                    w.setOpacity(1.0)
-                            );
-                });
-
-         */
 
         enableActionButtons();
         mapController.resetGrids();
@@ -437,10 +484,19 @@ public class GameBoardController {
     public void enableActionButtons() {
         BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
         // if it's not necessary to control specific buttons, it is wiser to get their container
-        root.getCenter().lookup("#mmm").setDisable(false);
-        root.getCenter().lookup("#mg").setDisable(false);
-        root.getCenter().lookup("#s").setDisable(false);
-        root.getCenter().lookup("#r").setDisable(false);
+        if (mainApp.getGame().isFrenzy()) {
+            root.getCenter().lookup("#mrs").setDisable(false);
+            root.getCenter().lookup("#mmmm").setDisable(false);
+            root.getCenter().lookup("#mmg").setDisable(false);
+            root.getCenter().lookup("#mmrs").setDisable(false);
+            root.getCenter().lookup("#mmmg").setDisable(false);
+        }
+        else {
+            root.getCenter().lookup("#mmm").setDisable(false);
+            root.getCenter().lookup("#mg").setDisable(false);
+            root.getCenter().lookup("#s").setDisable(false);
+            root.getCenter().lookup("#r").setDisable(false);
+        }
     }
 
     /**
@@ -509,5 +565,44 @@ public class GameBoardController {
                 .findFirst();
 
         return optional.orElse(null);
+    }
+
+
+    public Map<String, List<String>> getIntermediateInput() {
+        return intermediateInput;
+    }
+
+    public void setIntermediateInput(Map<String, List<String>> intermediateInput) {
+        this.intermediateInput = intermediateInput;
+    }
+
+    public void addInput(String key, String id) {
+        intermediateInput.putIfAbsent(key, new ArrayList<>());
+        intermediateInput.get(key).add(id);
+        System.out.println("Added: " + key + " " + id);
+    }
+
+    public void setCardSelectionBehavior(ImageView iv, GridPane myCards, String action) {
+        iv.setOnMouseClicked(event -> {
+            iv.setOpacity(0.6);
+
+            Util.ifFirstSelection((BorderPane) mainApp.getPrimaryStage().getScene().getRoot(), progressBar);
+            Util.updateCircle(progressBar);
+
+            if(Util.isLastSelection(progressBar)) {
+                myCards.setDisable(true);
+            }
+
+            NamedImage image = (NamedImage) iv.getImage();
+            mainApp.getGameBoardController().addInput(action, image.getName());
+        });
+    }
+
+    public ActionTileController getActionTileController() {
+        return actionTileController;
+    }
+
+    public void setActionTileController(ActionTileController actionTileController) {
+        this.actionTileController = actionTileController;
     }
 }

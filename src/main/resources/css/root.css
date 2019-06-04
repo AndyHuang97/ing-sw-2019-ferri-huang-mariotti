@@ -21,6 +21,6 @@
     -fx-font-size: 13;
 }
 
-.background {
-    -fx-background-image: url("../images/gui nera.png");
+.button {
+    -fx-font-size: 10;
 }

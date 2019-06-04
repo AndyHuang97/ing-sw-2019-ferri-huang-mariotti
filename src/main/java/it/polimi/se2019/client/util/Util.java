@@ -99,29 +99,12 @@ public class Util {
     }
 
     /**
-     * NamedImage extends the base Image class by adding a string type member
-     * variable to store the name of the image.
-     */
-    public static class NamedImage extends Image {
-
-        private String name;
-
-        public NamedImage(String url) {
-            super(url);
-            name = url.split(Constants.TOKEN_PATH)[1].split(".png")[0];
-        }
-        public String getName() {
-            return name;
-        }
-    }
-
-    /**
      * Gets the correct color token to add in damage and/or marker bar.
      * @param color is the player color.
      * @return an image of the player color token.
      */
     public static Image getPlayerToken(PlayerColor color) {
         String path = Constants.TOKEN_PATH + color.getColor().toLowerCase() + ".png";
-        return new NamedImage(path);
+        return new NamedImage(path, Constants.TOKEN_PATH);
     }
 }
