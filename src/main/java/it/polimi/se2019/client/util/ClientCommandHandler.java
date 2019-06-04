@@ -17,6 +17,9 @@ public class ClientCommandHandler {
     }
 
     private void internalHandle(Response request) {
+        if (request.getMessage().equals("ping")) {
+            return;
+        }
         if (request.getSuccess()) {
             this.mainApp.setGame(request.getGame());
             try {

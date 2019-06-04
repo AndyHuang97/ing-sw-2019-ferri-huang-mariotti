@@ -27,6 +27,7 @@ public class CharacterState {
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
 	private Integer score;
+	private boolean connected;
 
 	/**
 	 * Default constructor
@@ -43,6 +44,7 @@ public class CharacterState {
 		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
 		this.score = 0;
+		this.connected = true;
 	}
 
 	/**
@@ -54,9 +56,11 @@ public class CharacterState {
 	 * @param tile
 	 * @param score
 	 */
-	public CharacterState(List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
+	public CharacterState(int deaths, int[] valueBar, List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
 						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weapoonBag,
-						  List<PowerUp> powerUpBag, Tile tile, Integer score) {
+						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected) {
+		this.deaths = deaths;
+		this.valueBar = valueBar;
 		this.damageBar = damageBar;
 		this.markerBar = markerBar;
 		this.ammoBag = ammoBag;
@@ -64,6 +68,7 @@ public class CharacterState {
 		this.powerUpBag = powerUpBag;
 		this.tile = tile;
 		this.score = score;
+		this.connected = connected;
 	}
 
 
@@ -274,5 +279,13 @@ public class CharacterState {
 
 	public void setDeaths(int deaths) {
 		this.deaths = deaths;
+	}
+
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
 	}
 }

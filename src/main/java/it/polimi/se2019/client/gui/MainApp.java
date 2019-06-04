@@ -21,6 +21,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.NetMessage;
 import it.polimi.se2019.util.Request;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -73,15 +74,15 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        //showLogin();
+        showLogin();
 
-        initRootLayout();
-        showGameBoard();
+        //initRootLayout();
+        //showGameBoard();
 
-        primaryStage.setResizable(false);
-        primaryStage.setFullScreen(true);
-        primaryStage.sizeToScene();
-        primaryStage.show();
+        //primaryStage.setResizable(false);
+        //primaryStage.setFullScreen(true);
+        //primaryStage.sizeToScene();
+        //primaryStage.show();
 
     }
 
@@ -158,14 +159,18 @@ public class MainApp extends Application {
                 // connect via rmi
                 RmiClient rmiClient = new RmiClient(nickname, ip);
                 rmiClient.start(this);
-                rmiClient.send(new Request(nickname));
+                Map<String, List<String>> rmiPayload = new HashMap<>();
+                rmiPayload.put("connect", new ArrayList<>());
+                rmiClient.send(new Request(new NetMessage(rmiPayload), nickname));
                 break;
             case Constants.SOCKET:
                 // connect via socket
                 SocketClient socketClient = new SocketClient(nickname, ip);
                 socketClient.start(this);
                 // starting thread that redraws stuffs
-                socketClient.send(new Request(nickname));
+                Map<String, List<String>> socketPayload = new HashMap<>();
+                socketPayload.put("connect", new ArrayList<>());
+                socketClient.send(new Request(new NetMessage(socketPayload), nickname));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + connectionType);

@@ -2,7 +2,6 @@ package it.polimi.se2019.client.net;
 
 import it.polimi.se2019.client.gui.MainApp;
 import it.polimi.se2019.client.util.ClientCommandHandler;
-import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.util.*;
 
 import java.io.*;
