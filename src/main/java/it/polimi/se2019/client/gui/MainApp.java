@@ -6,6 +6,7 @@ import it.polimi.se2019.client.net.CommandHandler;
 import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
@@ -270,7 +271,7 @@ public class MainApp extends Application {
 
     public void initGame() {
         game = new Game();
-        game.setFrenzy(true);
+        game.setFrenzy(false);
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
@@ -302,6 +303,17 @@ public class MainApp extends Application {
         p3.getCharacterState().setWeapoonBag(Arrays.asList(w1,w4,w3));
         p4.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
         p5.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
+
+        List<ActionUnit> actionUnitList = new ArrayList<>();
+        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null, 2,2,true));
+        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null, 2,1,false));
+        List<ActionUnit> optionalEffectList = new ArrayList<>();
+        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null, 2,2,true));
+        p1.getCharacterState().getWeapoonBag().stream()
+                .forEach(w -> {
+                    w.setActionUnitList(actionUnitList);
+                    w.setOptionalEffectList(optionalEffectList);
+                });
 
         p1.getCharacterState().setPowerUpBag(Arrays.asList(
                 new PowerUp(null, "026"),

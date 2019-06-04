@@ -2,10 +2,12 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.CharacterState;
+import it.polimi.se2019.server.games.player.Player;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -28,15 +30,18 @@ public class ActionTileController {
 
     private MainApp mainApp;
     private GridPane tileGrid;
+    private GridPane shootTileGrid;
     private GridPane ammoGrid;
     private GridPane playerGrid;
     private Label infoText;
     private GridPane progressBar;
+    private AnchorPane actionButtons;
     private Button cancelButton;
     private Button confirmButton;
     private List<GridPane> weaponCrateList;
     private GridPane myWeapons;
     private GridPane myPowerups;
+    private FlowPane actionUnitPane;
 
     @FXML
     private Button mmm;
@@ -80,6 +85,7 @@ public class ActionTileController {
         AnchorPane map = (AnchorPane) vBox.getChildren().get(0);
 
         tileGrid = (GridPane) map.lookup("#tileGrid");
+        shootTileGrid = (GridPane) map.lookup("#shootTileGrid");
         ammoGrid = (GridPane) map.lookup("#ammoGrid");
         playerGrid = (GridPane) map.lookup("#playerGrid");
 
@@ -105,20 +111,24 @@ public class ActionTileController {
 
         progressBar = (GridPane) root.getCenter().lookup(Constants.PROGRESS_BAR);
 
+        actionButtons = (AnchorPane) root.getCenter().lookup("actionButtons");
         confirmButton = (Button) root.getCenter().lookup("#confirmButton");
         cancelButton = (Button) root.getCenter().lookup("#cancelButton");
+        actionUnitPane = (FlowPane) root.getCenter().lookup("#actionUnitPane");
 
 
     }
 
     @FXML
     public void handleM() {
+        mainApp.getGameBoardController().handleCancel();
         mainApp.getInputRequested().add(this::getTile);
         mainApp.getInput();
     }
 
     @FXML
     public void handleMG() {
+        mainApp.getGameBoardController().handleCancel();
         mainApp.getInputRequested().add(this::getTile);
         mainApp.getInputRequested().add(this::getCard);
         mainApp.getInput();
@@ -126,18 +136,23 @@ public class ActionTileController {
 
     @FXML
     public void handleS() {
+        mainApp.getGameBoardController().handleCancel();
+        mainApp.getGameBoardController().getIntermediateInput().clear();
         mainApp.getInputRequested().add(this::getShoot);
         mainApp.getInput();
     }
 
     @FXML
     public void handleR() {
+        mainApp.getGameBoardController().handleCancel();
+        mainApp.getGameBoardController().getIntermediateInput().clear();
         mainApp.getInputRequested().add(this::getReload);
         mainApp.getInput();
     }
 
     @FXML
     public void handleMRS() {
+        mainApp.getGameBoardController().handleCancel();
         mainApp.getInputRequested().add(this::getTile);
         mainApp.getInputRequested().add(this::getReload);
         mainApp.getInputRequested().add(this::getShoot);
@@ -146,7 +161,7 @@ public class ActionTileController {
 
     public void getTile(){
 
-        disableActionButtons();
+        //disableActionButtons();
         tileGrid.toFront();
         tileGrid.setDisable(false);
         tileGrid.setVisible(true);
@@ -157,9 +172,22 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
+    public void getShootTile(int amount) {
+
+        shootTileGrid.toFront();
+        shootTileGrid.setDisable(false);
+        shootTileGrid.setVisible(true);
+
+        infoText.setText("Select 1 tile ");
+        cancelButton.setDisable(false);
+
+        setUpProgressBar(1);
+
+    }
+
     public void getCard() {
 
-        disableActionButtons();
+        //disableActionButtons();
 
         infoText.setText("Select 1 card ");
         cancelButton.setDisable(false);
@@ -170,27 +198,66 @@ public class ActionTileController {
 
     public void getShoot() {
 
-        disableActionButtons();
+        //disableActionButtons();
         infoText.setText("Select 1 card ");
         cancelButton.setDisable(false);
 
         myWeapons.setDisable(false);
         myWeapons.getStyleClass().add("my-node");
         showMyLoadedWeapons();
+        mainApp.getInputRequested().add(this::getActionUnit);
 
         setUpProgressBar(1);
     }
 
     public void getActionUnit() {
 
-        disableActionButtons();
+        //disableActionButtons();
+        infoText.setText("Select 1 action unit: ");
+        cancelButton.setDisable(false);
 
+        Player player = mainApp.getGame().getPlayerByColor(mainApp.getPlayerColor());
+        Weapon weapon = player.getCharacterState().getWeapoonBag().stream()
+                .filter(w -> w.getName().equals(mainApp.getPlayerInput().get(Constants.SHOOT).get(0)))
+                .findFirst().orElse(null);
 
+        actionUnitPane.setVisible(true);
+        IntStream.range(0, weapon.getActionUnitList().size()+weapon.getOptionalEffectList().size())
+                .forEach(i -> {
+                    Button b = (Button) actionUnitPane.getChildren().get(i);
+
+                    b.setVisible(true);
+                    if (i<weapon.getActionUnitList().size()) {
+                        b.setText(weapon.getActionUnitList().get(i).getName());
+
+                        setActionUnitButton(b, weapon.getActionUnitList(), i);
+
+                    }else {
+                        b.setText(weapon.getOptionalEffectList().get(i-weapon.getActionUnitList().size()).getName());
+
+                        setActionUnitButton(b, weapon.getOptionalEffectList(), i);
+                    }
+
+                    System.out.println(b);
+
+                });
+    }
+
+    public void setActionUnitButton(Button b, List<ActionUnit> actionUnitList, int i) {
+        b.setOnAction(event -> {
+            // adds the action unit in the input list
+            mainApp.getGameBoardController().getIntermediateInput().get(Constants.SHOOT).add(b.getText());
+
+            mainApp.getInputRequested().add(() -> getTarget(actionUnitList.get(i).getNumPlayerTargets()));
+            mainApp.getInputRequested().add(() -> getShootTile(actionUnitList.get(i).getNumTileTargets()));
+
+            mainApp.getInput();
+        });
     }
 
     public void getReload() {
 
-        disableActionButtons();
+        //disableActionButtons();
         infoText.setText("Select 1 card ");
         cancelButton.setDisable(false);
         confirmButton.setDisable(false);
@@ -204,9 +271,9 @@ public class ActionTileController {
 
     }
 
-    public void getTarget() {
+    public void getTarget(int amount) {
         System.out.println("target");
-        disableActionButtons();
+        //disableActionButtons();
         playerGrid.toFront();
         playerGrid.setDisable(false);
         playerGrid.setVisible(true);
@@ -235,7 +302,7 @@ public class ActionTileController {
                         )
                 );
 
-        setUpProgressBar(3);
+        setUpProgressBar(amount);
     }
 
     /**
@@ -278,7 +345,7 @@ public class ActionTileController {
             t  = mainApp.getGame().getCurrentPlayer().getCharacterState().getTile();
         }
         else {
-            int[] coords = Util.convertToCoords(Integer.parseInt(mainApp.getPlayerInput().get(Constants.TILE).get(0)));
+            int[] coords = Util.convertToCoords(Integer.parseInt(mainApp.getPlayerInput().get(Constants.MOVE).get(0)));
             t = mainApp.getGame().getBoard().getTile(coords[0], coords[1]);
         }
 
@@ -303,6 +370,8 @@ public class ActionTileController {
                 ammoGrid.setVisible(true);
                 HBox hBox = (HBox) ammoGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
                 Node n = hBox.getChildren().get(0);
+                ((AnchorPane) n).getChildren().get(0).setDisable(false);
+
                 n.getStyleClass().add("my-node");
             }
         } catch (TileNotFoundException e) {
@@ -364,7 +433,6 @@ public class ActionTileController {
                     mainApp.getGameBoardController().setCardSelectionBehavior(iv, myWeapons, Constants.SHOOT);
                 });
     }
-
 
 
 

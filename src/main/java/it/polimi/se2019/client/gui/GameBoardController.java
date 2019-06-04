@@ -68,6 +68,8 @@ public class GameBoardController {
     private AnchorPane actionButtons;
     @FXML
     private GridPane rankingGrid;
+    @FXML
+    private FlowPane actionUnitPane;
 
     /**
      * The main game board initializer which is called when the GameBoard.fxml file is loaded.
@@ -329,6 +331,7 @@ public class GameBoardController {
                 ms.setPrefSize(30.0, 16.0);
 
                 mmg.setOnAction(event -> {
+                    handleCancel();
                     mainApp.getInputRequested().add(actionTileController::getTile);
                     mainApp.getInputRequested().add(actionTileController::getCard);
                     mainApp.getInput();
@@ -336,6 +339,7 @@ public class GameBoardController {
                 });
 
                 ms.setOnAction(event -> {
+                    handleCancel();
                     mainApp.getInputRequested().add(actionTileController::getTile);
                     mainApp.getInputRequested().add(actionTileController::getShoot);
                     mainApp.getInput();
@@ -395,6 +399,10 @@ public class GameBoardController {
                     iv.setVisible(true);
                     iv.setOpacity(1.0);
                 });
+    }
+
+    public void showActionUnits(){
+
     }
 
     /**
@@ -458,8 +466,10 @@ public class GameBoardController {
                     c.setVisible(false);
                 });
         infoText.setText("Select an action("+mainApp.getActionNumber()+")");
+        actionButtons.setDisable(false);
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
+        actionUnitPane.setVisible(false);
 
         showMyCards();
 
