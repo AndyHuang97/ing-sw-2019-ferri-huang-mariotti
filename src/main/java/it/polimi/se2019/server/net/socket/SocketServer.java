@@ -64,7 +64,7 @@ public class SocketServer {
             }
         }
 
-        public void asyncSend(String message) {
+        public void send(String message) {
             out.println(message);
         }
     }

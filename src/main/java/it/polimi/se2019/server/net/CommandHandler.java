@@ -24,14 +24,23 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
 
-    private SocketServer.ClientHandler clientHandler;
+    private boolean socketTrueRmiFalse;
+    private SocketServer.ClientHandler socketClientHandler;
+    private RmiClientInterface rmiClientWorker;
+
 
     // just for tests
     public CommandHandler() {
     }
 
     public CommandHandler(SocketServer.ClientHandler clientHandler) {
-        this.clientHandler = clientHandler;
+        this.socketTrueRmiFalse = true;
+        this.socketClientHandler = clientHandler;
+    }
+
+    public CommandHandler(RmiClientInterface clientWorker) {
+        this.socketTrueRmiFalse = false;
+        this.rmiClientWorker = clientWorker;
     }
 
     public class TargetableNotFoundException extends RuntimeException {
@@ -105,15 +114,15 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
          */
         //showMessage(response.serialize());
         try {
-            clientHandler.asyncSend(response.serialize());
+            if (this.socketTrueRmiFalse) {
+                socketClientHandler.send(response.serialize());
+            } else {
+                rmiClientWorker.send(response.serialize());
+            }
         } catch (Exception e) {
             logger.info(e.getLocalizedMessage());
         }
 
-    }
-
-    public void showMessage(String message) {
-        clientHandler.asyncSend(message);
     }
 
     public void reportError(ErrorResponse errorResponse) {

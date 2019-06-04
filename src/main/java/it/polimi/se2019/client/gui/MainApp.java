@@ -2,7 +2,6 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.se2019.client.net.CommandHandler;
 import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
@@ -61,6 +60,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // this next line is really important to make everything work
+        Platform.setImplicitExit(false);
 
         setPlayerColor(PlayerColor.GREEN);
         // TODO the game should be deserialized from the network, and should be already completely initialized
@@ -153,15 +154,16 @@ public class MainApp extends Application {
         switch (connectionType) {
             case Constants.RMI:
                 // connect via rmi
-                new RmiClient(nickname, ip);
+                RmiClient rmiClient = new RmiClient(nickname, ip);
+                rmiClient.start(this);
+                rmiClient.send(new Request(nickname));
                 break;
             case Constants.SOCKET:
                 // connect via socket
-                SocketClient client = new SocketClient(nickname, ip);
-                client.start();
+                SocketClient socketClient = new SocketClient(nickname, ip);
+                socketClient.start(this);
                 // starting thread that redraws stuffs
-                client.send(new Request(nickname).serialize());
-                Platform.runLater(new CommandHandler(client.getIn(), this));
+                socketClient.send(new Request(nickname));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + connectionType);
