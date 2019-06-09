@@ -2,10 +2,10 @@ package it.polimi.se2019.client.gui;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.se2019.client.net.CommandHandler;
 import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
@@ -21,6 +21,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.NetMessage;
 import it.polimi.se2019.util.Request;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -62,6 +63,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // this next line is really important to make everything work
+        Platform.setImplicitExit(false);
 
         setPlayerColor(PlayerColor.GREEN);
         // TODO the game should be deserialized from the network, and should be already completely initialized
@@ -71,15 +74,15 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Adrenaline");
 
-        //showLogin();
+        showLogin();
 
-        initRootLayout();
-        showGameBoard();
+        //initRootLayout();
+        //showGameBoard();
 
-        primaryStage.setResizable(false);
-        primaryStage.setFullScreen(true);
-        primaryStage.sizeToScene();
-        primaryStage.show();
+        //primaryStage.setResizable(false);
+        //primaryStage.setFullScreen(true);
+        //primaryStage.sizeToScene();
+        //primaryStage.show();
 
     }
 
@@ -154,15 +157,20 @@ public class MainApp extends Application {
         switch (connectionType) {
             case Constants.RMI:
                 // connect via rmi
-                new RmiClient(nickname, ip);
+                RmiClient rmiClient = new RmiClient(nickname, ip);
+                rmiClient.start(this);
+                Map<String, List<String>> rmiPayload = new HashMap<>();
+                rmiPayload.put("connect", new ArrayList<>());
+                rmiClient.send(new Request(new NetMessage(rmiPayload), nickname));
                 break;
             case Constants.SOCKET:
                 // connect via socket
-                SocketClient client = new SocketClient(nickname, ip);
-                client.start();
+                SocketClient socketClient = new SocketClient(nickname, ip);
+                socketClient.start(this);
                 // starting thread that redraws stuffs
-                client.send(new Request(nickname).serialize());
-                Platform.runLater(new CommandHandler(client.getIn(), this));
+                Map<String, List<String>> socketPayload = new HashMap<>();
+                socketPayload.put("connect", new ArrayList<>());
+                socketClient.send(new Request(new NetMessage(socketPayload), nickname));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + connectionType);
@@ -270,7 +278,7 @@ public class MainApp extends Application {
 
     public void initGame() {
         game = new Game();
-        game.setFrenzy(true);
+        game.setFrenzy(false);
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
@@ -290,7 +298,7 @@ public class MainApp extends Application {
         w1.setLoaded(true);
         Weapon w2 = new Weapon(null, "0217", null
                 , null, null);
-        w2.setLoaded(true);
+        w2.setLoaded(false);
         Weapon w3 = new Weapon(null, "0218", null
                 , null, null);
         w3.setLoaded(true);
@@ -302,6 +310,17 @@ public class MainApp extends Application {
         p3.getCharacterState().setWeapoonBag(Arrays.asList(w1,w4,w3));
         p4.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
         p5.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
+
+        List<ActionUnit> actionUnitList = new ArrayList<>();
+        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null, 2,2,true));
+        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null, 2,1,false));
+        List<ActionUnit> optionalEffectList = new ArrayList<>();
+        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null, 2,2,true));
+        p1.getCharacterState().getWeapoonBag().stream()
+                .forEach(w -> {
+                    w.setActionUnitList(actionUnitList);
+                    w.setOptionalEffectList(optionalEffectList);
+                });
 
         p1.getCharacterState().setPowerUpBag(Arrays.asList(
                 new PowerUp(null, "026"),
@@ -380,8 +399,8 @@ public class MainApp extends Application {
 
         Board board = null;
 
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
 
@@ -394,8 +413,7 @@ public class MainApp extends Application {
                                 if (tileMap[x][y] != null) {
                                     if (!tileMap[x][y].isSpawnTile()) {
                                         tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "042"));
-                                    }
-                                    else {
+                                    } else {
                                         tileMap[x][y].setWeaponCrate(
                                                 Arrays.asList(
                                                         new Weapon(null, "026", null
@@ -407,15 +425,7 @@ public class MainApp extends Application {
                                     }
                                 }
                             }));
-            try {
-                bufferedReader.close();
-            } catch (IOException e) {
-                logger.warning(e.toString());
-            }
-
-        } catch (FileNotFoundException e) {
-            logger.warning(e.toString());
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             logger.warning(e.toString());
         }
     }

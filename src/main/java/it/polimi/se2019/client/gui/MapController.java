@@ -39,6 +39,8 @@ public class MapController {
     @FXML
     private GridPane tileGrid;
     @FXML
+    private GridPane shootTileGrid;
+    @FXML
     private GridPane ammoGrid;
     @FXML
     private GridPane playerGrid;
@@ -97,7 +99,8 @@ public class MapController {
                                 initPlayerGrid(tileMap, x, y);
                             }));
 
-            resetTileGridStyle();
+            resetTileGridStyle(tileGrid);
+            resetTileGridStyle(shootTileGrid);
             tileGrid.setVisible(false);
             ammoGrid.setDisable(true);
             showKillShotTrack();
@@ -122,37 +125,47 @@ public class MapController {
 
         if (tileMap[x][y] != null) {
             AnchorPane anchorPane = (AnchorPane) tileGrid.getChildren().get(Util.convertToIndex(x,y));
+            AnchorPane shootAncorPane = (AnchorPane) shootTileGrid.getChildren().get(Util.convertToIndex(x,y));
             Button button = new Button("");
-            button.setOpacity(0.4);
-            AnchorPane.setTopAnchor(button, 0.0);
-            AnchorPane.setRightAnchor(button, 0.0);
-            AnchorPane.setBottomAnchor(button, 0.0);
-            AnchorPane.setLeftAnchor(button, 0.0);
+            Button shootButton = new Button("");
 
-            button.setOnAction(event -> {
-                button.setStyle("");
-                button.setDisable(true);
-                BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-
-                Util.ifFirstSelection(root, progressBar);
-                Util.updateCircle(progressBar);
-
-                if (Util.isLastSelection(progressBar)) {
-                    // if its the last element that needs to be selected it disables visibility of all other
-                    // buttons
-                    tileGrid.getChildren().stream()
-                            .map(n -> (AnchorPane) n)
-                            .filter(ap -> !ap.getChildren().isEmpty())
-                            .map(ap -> (Button) ap.getChildren().get(0))
-                            .filter(b -> !b.isDisable())
-                            .forEach(b -> b.setVisible(false));
-                }
-
-                handleTileSelected(x,y);
-            });
+            setButtonTile(tileGrid, button, () -> handleTileSelected(Util.convertToIndex(x,y)));
+            setButtonTile(shootTileGrid, shootButton, () -> handleShootTileSelected(Util.convertToIndex(x,y)));
 
             anchorPane.getChildren().add(button);
+            shootAncorPane.getChildren().add(shootButton);
+
         }
+    }
+
+    public void setButtonTile(GridPane gridPane, Button button, Runnable handleAction) {
+        button.setOpacity(0.4);
+        AnchorPane.setTopAnchor(button, 0.0);
+        AnchorPane.setRightAnchor(button, 0.0);
+        AnchorPane.setBottomAnchor(button, 0.0);
+        AnchorPane.setLeftAnchor(button, 0.0);
+
+        button.setOnAction(event -> {
+            button.setStyle("");
+            button.setDisable(true);
+            BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+
+            Util.ifFirstSelection(root, progressBar);
+            Util.updateCircle(progressBar);
+
+            if (Util.isLastSelection(progressBar)) {
+                // if its the last element that needs to be selected it disables visibility of all other
+                // buttons
+                gridPane.getChildren().stream()
+                        .map(n -> (AnchorPane) n)
+                        .filter(ap -> !ap.getChildren().isEmpty())
+                        .map(ap -> (Button) ap.getChildren().get(0))
+                        .filter(b -> !b.isDisable())
+                        .forEach(b -> b.setVisible(false));
+            }
+
+            handleAction.run();
+        });
     }
 
     /**
@@ -174,6 +187,7 @@ public class MapController {
                 //TODO separate the image loading form the setup, no need to iterate the mouse click behavior
                 iv.setImage(new NamedImage(Constants.AMMO_PATH + id + ".png", Constants.AMMO_PATH));
                 iv.setVisible(true);
+                iv.setDisable(true);
 
                 iv.setOnMouseClicked(event -> {
                     anchorPane.setDisable(true);
@@ -183,11 +197,14 @@ public class MapController {
                     Util.ifFirstSelection(root, progressBar);
                     Util.updateCircle(progressBar);
 
-                    ammoGrid.getChildren().stream()
+                    //iv.setStyle("");
+                    /*ammoGrid.getChildren().stream()
                             .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
                             .filter(ap -> ap != anchorPane)
                             .filter(ap -> ap.getChildren().get(0).isVisible())
                             .forEach(ap -> ap.setStyle(""));
+
+                     */
 
                     NamedImage image = (NamedImage) iv.getImage();
                     handleAmmoCrateSelected(image.getName());
@@ -248,20 +265,7 @@ public class MapController {
                     wc.getChildren().stream()
                             .map(n -> (ImageView) n)
                             .forEach(w ->
-                                    w.setOnMouseClicked(event -> {
-                                        w.setDisable(true);
-                                        w.setOpacity(0.6);
-
-                                        Util.ifFirstSelection(root, progressBar);
-                                        Util.updateCircle(progressBar);
-
-                                        if (Util.isLastSelection(progressBar)) {
-                                            wc.setDisable(true);
-                                        }
-
-                                        NamedImage image = (NamedImage) w.getImage();
-                                        handleWeaponInCrateSelected(image.getName());
-                                    })
+                                    mainApp.getGameBoardController().setCardSelectionBehavior(w, wc, Constants.GRAB)
                             );
                 });
     }
@@ -399,12 +403,16 @@ public class MapController {
     /**
      * Handles the selection of a button from tile grid.
      *
-     * @param x is the x coordinate in the grid.
-     * @param y is the y coordinate in the grid.
+     * @param id is the id/position in the list of tiles.
      */
-    public void handleTileSelected(int x, int y) {
-        System.out.println("Tile selected: " + x + "," + y);
-        mainApp.getGameBoardController().addInput(Constants.TILE, String.valueOf(Util.convertToIndex(x,y)));
+    public void handleTileSelected(int id) {
+        System.out.println("Tile selected: " + id);
+        mainApp.getGameBoardController().addInput(Constants.MOVE, String.valueOf(id));
+    }
+
+    public void handleShootTileSelected(int id) {
+        System.out.println("Tile selected: " + id);
+        mainApp.getGameBoardController().addInput(Constants.SHOOT, String.valueOf(id));
     }
 
     /**
@@ -413,7 +421,7 @@ public class MapController {
      */
     public void handleWeaponInCrateSelected(String id) {
         System.out.println("Weapon selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.CARD, id);
+        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
     }
 
     /**
@@ -422,7 +430,7 @@ public class MapController {
      */
     public void handleAmmoCrateSelected(String id) {
         System.out.println("Ammocrate selected: "+ id);
-        mainApp.getGameBoardController().addInput(Constants.CARD, id);
+        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
     }
 
     /**
@@ -436,18 +444,20 @@ public class MapController {
                 .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
                 .collect(Collectors.toList()).get(0).getId();
         System.out.println(color + " " + id);
-        mainApp.getGameBoardController().addInput(Constants.PLAYER, id);
+        mainApp.getGameBoardController().addInput(Constants.SHOOT, id);
     }
 
     /**
      * Disables and resets all grids.
      */
     public void resetGrids() {
-        resetTileGridStyle();
+        resetTileGridStyle(tileGrid);
+        resetTileGridStyle(shootTileGrid);
         resetAmmoGridStyle();
         resetPlayerGridStyle();
         showPlayers();
         tileGrid.setVisible(false);
+        shootTileGrid.setVisible(false);
         ammoGrid.setDisable(true);
         playerGrid.setDisable(true);
         resetWeaponCratesStyle();
@@ -458,8 +468,8 @@ public class MapController {
      * Resets the tile grid's buttons to the player's color.
      *
      */
-    public void resetTileGridStyle() {
-        tileGrid.getChildren().stream()
+    public void resetTileGridStyle(GridPane gridPane) {
+        gridPane.getChildren().stream()
                 .map(n -> (AnchorPane) n) // gets the anchorpane
                 .filter(ap -> !ap.getChildren().isEmpty())
                 .map(ap -> (Button) ap.getChildren().get(0))

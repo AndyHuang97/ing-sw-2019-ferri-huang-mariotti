@@ -2,7 +2,9 @@ package it.polimi.se2019.server.net.socket;
 
 import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.util.NetMessage;
 import it.polimi.se2019.util.Request;
+import it.polimi.se2019.util.Response;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,6 +37,7 @@ public class SocketServer {
         private PrintWriter out;
         private BufferedReader in;
         private CommandHandler commandHandler;
+        private Boolean echo;
 
         private ClientHandler(Socket socket) {
             this.clientSocket = socket;
@@ -45,15 +48,15 @@ public class SocketServer {
             try {
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                commandHandler = new CommandHandler(this);
+                this.commandHandler = new CommandHandler(this);
 
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
-                    Request request = (Request) new Request(null, null).deserialize(inputLine);
-                    //out.println(new CommandHandler().handle(request).serialize());
-
-                    // handle(request)
-                    commandHandler.handle(request);
+                    Request request = (Request) new Request(new NetMessage(null), null).deserialize(inputLine);
+                    if (request.getNetMessage().getCommands().containsKey("pong")) {
+                        this.echo = true;
+                    }
+                    this.commandHandler.handle(request);
                 }
 
                 in.close();
@@ -64,8 +67,23 @@ public class SocketServer {
             }
         }
 
-        public void asyncSend(String message) {
+        public void send(String message) throws IOException {
             out.println(message);
+            Response response = (Response) new Response(null, false, "").deserialize(message);
+            if (response.getMessage().equals("ping")) {
+                long startTime = System.currentTimeMillis();
+                this.echo = false;
+                while (!this.echo && (System.currentTimeMillis() - startTime) < 1000 ) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        // useless
+                    }
+                }
+                if (!this.echo) {
+                    throw new IOException("dwe");
+                }
+            }
         }
     }
 }
