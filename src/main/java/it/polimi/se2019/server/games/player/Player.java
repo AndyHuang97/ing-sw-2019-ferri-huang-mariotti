@@ -9,7 +9,7 @@ import it.polimi.se2019.util.Observer;
 /**
  * 
  */
-public class Player implements Observer<PlayerDeath>, Targetable {
+public class Player implements Observer<PlayerDeath>,	 Targetable {
 
 	private boolean active;
 	private UserData userData;

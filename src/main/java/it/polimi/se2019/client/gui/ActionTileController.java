@@ -220,27 +220,27 @@ public class ActionTileController {
         Weapon weapon = player.getCharacterState().getWeapoonBag().stream()
                 .filter(w -> w.getName().equals(mainApp.getPlayerInput().get(Constants.SHOOT).get(0)))
                 .findFirst().orElse(null);
+        if (weapon != null) {
+            actionUnitPane.setVisible(true);
+            IntStream.range(0, weapon.getActionUnitList().size() + weapon.getOptionalEffectList().size())
+                    .forEach(i -> {
+                        Button b = (Button) actionUnitPane.getChildren().get(i);
 
-        actionUnitPane.setVisible(true);
-        IntStream.range(0, weapon.getActionUnitList().size()+weapon.getOptionalEffectList().size())
-                .forEach(i -> {
-                    Button b = (Button) actionUnitPane.getChildren().get(i);
+                        b.setVisible(true);
+                        if (i < weapon.getActionUnitList().size()) {
+                            b.setText(weapon.getActionUnitList().get(i).getName());
 
-                    b.setVisible(true);
-                    if (i<weapon.getActionUnitList().size()) {
-                        b.setText(weapon.getActionUnitList().get(i).getName());
+                            setActionUnitButton(b, weapon.getActionUnitList(), i);
 
-                        setActionUnitButton(b, weapon.getActionUnitList(), i);
+                        } else {
+                            b.setText(weapon.getOptionalEffectList().get(i - weapon.getActionUnitList().size()).getName());
 
-                    }else {
-                        b.setText(weapon.getOptionalEffectList().get(i-weapon.getActionUnitList().size()).getName());
+                            setActionUnitButton(b, weapon.getOptionalEffectList(), i);
+                        }
 
-                        setActionUnitButton(b, weapon.getOptionalEffectList(), i);
-                    }
-
-                    System.out.println(b);
-
-                });
+                        System.out.println(b);
+                    });
+        }
     }
 
     public void setActionUnitButton(Button b, List<ActionUnit> actionUnitList, int i) {
