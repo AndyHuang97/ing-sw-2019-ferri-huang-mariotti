@@ -277,7 +277,7 @@ public class GameBoardController {
      */
     public void showOpponentUnloadedWeapons(Player player, int i) {
         GridPane unloadedWeapons = (GridPane)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(0);
-        List<Weapon> weaponBag =player.getCharacterState().getWeapoonBag();
+        List<Weapon> weaponBag =player.getCharacterState().getWeaponBag();
         IntStream.range(0, weaponBag.size())
                 .forEach(x -> {
                     if (weaponBag.get(x) != null) {
@@ -363,7 +363,7 @@ public class GameBoardController {
         CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
                 .filter(p -> p.getColor() == mainApp.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
-        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeaponBag();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
         myWeapons.setDisable(true);

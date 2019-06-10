@@ -1,29 +1,35 @@
 package it.polimi.se2019.server.games.player;
 
+import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
+import it.polimi.se2019.server.dataupdate.PlayerEventListener;
+import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.users.UserData;
-import it.polimi.se2019.util.Observer;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Response;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
  */
-public class Player implements Observer<PlayerDeath>, Targetable {
+public class Player extends Observable<Response> implements Targetable, PlayerEventListener {
 
 	private boolean active;
 	private UserData userData;
 	private CharacterState characterState;
 	private PlayerColor color;
 	private String id;
-
-	// ----------------------------------------------------
-	// The following class variable is not present in UML.
 	private Tile tile;
+
+
 	public Player(String name) {
 		this.userData = new UserData(name);
 	}
-	// ----------------------------------------------------
+
 	/**
 	 * Default constructor
 	 * @param active
@@ -49,7 +55,7 @@ public class Player implements Observer<PlayerDeath>, Targetable {
 	}
 
 	/**
-	 * @return
+	 * @return true if the player is active, false otherwise
 	 */
 	public boolean getActive() {
 		return active;
@@ -99,37 +105,19 @@ public class Player implements Observer<PlayerDeath>, Targetable {
 	}
 
 
-	// ------------------- Player actions ------------------
-	/*public void moveTo(Tile tile) {
-		System.out.println("[Player " + userData.getNickname() + "] moves to " +
-				"(" + tile.getX() + ", " + tile.getY() + ")");
-	}
+    @Override
+    public void onCharacterStateUpdate(CharacterStateUpdate characterStateUpdate) {
+	    // Send a Response to the Game telling that CharacterState of this Player changed
+        List<StateUpdate> updateList = new ArrayList<>();
+        characterStateUpdate.setPlayer(this);
+        updateList.add(characterStateUpdate);
+        Response response = new Response(updateList);
 
-	public void grab(String card) {
-		System.out.println("[Player " + userData.getNickname() + "] grabs " + card);
-	}
+        notify(response);
+    }
 
-	public void shoot(Player targetPlayer) {
-		System.out.println("[Player " + userData.getNickname() + "] shoots " + targetPlayer);
-	}
-
-	public Tile getTile() {
-		return tile;
-	}
-
-	public void setTile(Tile tile) {
-		this.tile = tile;
-	}
-
-	 */
-
-	// ------------------------------------------------------
-
-
-	@Override
-	public void update(PlayerDeath message) {
-		characterState.updateScore(message, color);
-	}
-
-
+    @Override
+    public void onPlayerDeath(PlayerDeath playerDeath) {
+	    characterState.updateScore(playerDeath, color);
+    }
 }

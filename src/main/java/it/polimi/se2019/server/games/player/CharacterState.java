@@ -2,18 +2,23 @@ package it.polimi.se2019.server.games.player;
 
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
+import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.util.Observable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 
+ * This class contains the information about a character, it's meant to be serialized.
+ * A read-only copy of this object should be stored in the client (view).
  */
-public class CharacterState {
+public class CharacterState extends Observable<StateUpdate> implements Serializable {
 
 	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
 	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
@@ -23,15 +28,11 @@ public class CharacterState {
 	private List<PlayerColor> damageBar;
 	private Map<PlayerColor, Integer> markerBar;
 	private Map<AmmoColor, Integer> ammoBag;
-	private List<Weapon> weapoonBag;
+	private List<Weapon> weaponBag;
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
 	private Integer score;
 
-	/**
-	 * Default constructor
-	 *
-	 */
 
 	public CharacterState() {
 		this.deaths = 0;
@@ -39,7 +40,7 @@ public class CharacterState {
 		this.damageBar = new ArrayList<>();
 		this.markerBar = initMarkerBar();
 		this.ammoBag = initAmmoBag();
-		this.weapoonBag = new ArrayList<>();
+		this.weaponBag = new ArrayList<>();
 		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
 		this.score = 0;
@@ -49,18 +50,18 @@ public class CharacterState {
 	 * @param damageBar
 	 * @param markerBar
 	 * @param ammoBag
-	 * @param weapoonBag
+	 * @param weaponBag
 	 * @param powerUpBag
 	 * @param tile
 	 * @param score
 	 */
 	public CharacterState(List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
-						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weapoonBag,
+						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weaponBag,
 						  List<PowerUp> powerUpBag, Tile tile, Integer score) {
 		this.damageBar = damageBar;
 		this.markerBar = markerBar;
 		this.ammoBag = ammoBag;
-		this.weapoonBag = weapoonBag;
+		this.weaponBag = weaponBag;
 		this.powerUpBag = powerUpBag;
 		this.tile = tile;
 		this.score = score;
@@ -172,7 +173,7 @@ public class CharacterState {
 	 * @param ammoToAdd is a map containing the amount of each ammo color to add to the player's ammoBag.
 	 */
 	public void addAmmo(Map<AmmoColor, Integer> ammoToAdd) {
-		ammoToAdd.keySet().stream()
+		ammoToAdd.keySet()
 				.forEach(k -> {
 					if (ammoBag.get(k) + ammoToAdd.get(k) > 3) {
 						ammoBag.put(k, 3);
@@ -188,7 +189,7 @@ public class CharacterState {
 	 * @param ammoToConsume is a map containing the amount of each ammo color to consume from the player's ammoBag.
 	 */
 	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume) {
-		ammoToConsume.keySet().stream()
+		ammoToConsume.keySet()
 				.forEach(k -> ammoBag.put(k, ammoBag.get(k) - ammoToConsume.get(k)));
 	}
 
@@ -236,16 +237,18 @@ public class CharacterState {
 		}
 	}
 
-	public List<Weapon> getWeapoonBag() {
-		return weapoonBag;
+	public List<Weapon> getWeaponBag() {
+		return weaponBag;
 	}
 
 	public void addWeapon(Weapon weapon) {
-		weapoonBag.add(weapon);
+		weaponBag.add(weapon);
+		notifyCharaterStateChange();
 	}
 
-	public void setWeapoonBag(List<Weapon> weapoonBag) {
-		this.weapoonBag = weapoonBag;
+	public void setWeaponBag(List<Weapon> weaponBag) {
+		this.weaponBag = weaponBag;
+		notifyCharaterStateChange();
 	}
 
 	public List<PowerUp> getPowerUpBag() {
@@ -254,10 +257,12 @@ public class CharacterState {
 
 	public void addPowerUp(PowerUp powerUp) {
 		powerUpBag.add(powerUp);
+		notifyCharaterStateChange();
 	}
 
 	public void setPowerUpBag(List<PowerUp> powerUpBag) {
 		this.powerUpBag = powerUpBag;
+		notifyCharaterStateChange();
 	}
 
 	public int[] getValueBar() {
@@ -266,6 +271,7 @@ public class CharacterState {
 
 	public void setValueBar(int[] valueBar) {
 		this.valueBar = valueBar;
+		notifyCharaterStateChange();
 	}
 
 	public int getDeaths() {
@@ -274,5 +280,12 @@ public class CharacterState {
 
 	public void setDeaths(int deaths) {
 		this.deaths = deaths;
+		notifyCharaterStateChange();
 	}
+
+	private void notifyCharaterStateChange() {
+	    StateUpdate stateUpdate = new CharacterStateUpdate(this);
+
+		notify(stateUpdate);
+    }
 }

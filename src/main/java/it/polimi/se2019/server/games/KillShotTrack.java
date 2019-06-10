@@ -1,8 +1,8 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.dataupdate.PlayerEventListenable;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
-import it.polimi.se2019.util.Observable;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Logger;
 
-public class KillShotTrack extends Observable<PlayerDeath> {
+public class KillShotTrack extends PlayerEventListenable {
 
     private static final Logger logger = Logger.getLogger(KillShotTrack.class.getName());
 
@@ -92,7 +92,7 @@ public class KillShotTrack extends Observable<PlayerDeath> {
         }
 
         updateCounter();
-        notify(playerDeath);
+        notifyPlayerDeath(playerDeath);
     }
 
 

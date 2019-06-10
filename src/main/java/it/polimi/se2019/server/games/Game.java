@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Game extends Observable<Response> implements Serializable {
+public class Game extends Observable<Response> implements it.polimi.se2019.util.Observer<Response>, Serializable {
 
 	private Date startDate;
 	private List<Player> playerList;
@@ -175,7 +175,6 @@ public class Game extends Observable<Response> implements Serializable {
 	}
 
 	public void performMove(String action) {
-
 		Response response = new Response(new Game(), true, "");
 		notify(response);
 
@@ -187,5 +186,9 @@ public class Game extends Observable<Response> implements Serializable {
 
 	public void setFrenzy(boolean frenzy) {
 		this.frenzy = frenzy;
+	}
+
+	@Override
+	public void update(Response response) {
 	}
 }

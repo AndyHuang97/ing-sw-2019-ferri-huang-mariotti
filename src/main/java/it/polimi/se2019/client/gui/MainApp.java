@@ -23,7 +23,6 @@ import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.Request;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -300,18 +299,18 @@ public class MainApp extends Application {
         Weapon w4 = new Weapon(null, "0219", null
                 , null, null);
         w4.setLoaded(false);
-        p1.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w3));
-        p2.getCharacterState().setWeapoonBag(Arrays.asList(w4,w2,w3));
-        p3.getCharacterState().setWeapoonBag(Arrays.asList(w1,w4,w3));
-        p4.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
-        p5.getCharacterState().setWeapoonBag(Arrays.asList(w1,w2,w4));
+        p1.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w3));
+        p2.getCharacterState().setWeaponBag(Arrays.asList(w4,w2,w3));
+        p3.getCharacterState().setWeaponBag(Arrays.asList(w1,w4,w3));
+        p4.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w4));
+        p5.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w4));
 
         List<ActionUnit> actionUnitList = new ArrayList<>();
         actionUnitList.add(new ActionUnit(true,"Basic mode", null, null, 2,2,true));
         actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null, 2,1,false));
         List<ActionUnit> optionalEffectList = new ArrayList<>();
         optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null, 2,2,true));
-        p1.getCharacterState().getWeapoonBag().stream()
+        p1.getCharacterState().getWeaponBag().stream()
                 .forEach(w -> {
                     w.setActionUnitList(actionUnitList);
                     w.setOptionalEffectList(optionalEffectList);
