@@ -14,8 +14,13 @@ import it.polimi.se2019.util.Response;
 
 import java.util.List;
 
-public abstract class View extends Observable implements Observer<Response>, LocalModel {
-    private Game game;
+public abstract class View extends Observable implements Observer<Response> {
+
+    private LocalModel model;
+
+    public View() {
+        model = new Model();
+    }
 
     public List<Action> getPossibleAction() {
         return null;
@@ -30,7 +35,7 @@ public abstract class View extends Observable implements Observer<Response>, Loc
         List<StateUpdate> updateList = response.getUpdateData();
 
         for (StateUpdate stateUpdate : updateList) {
-            stateUpdate.updateData(this);
+            stateUpdate.updateData(model);
         }
     }
 
@@ -38,25 +43,8 @@ public abstract class View extends Observable implements Observer<Response>, Loc
 
     public abstract void sendInput();
 
-    @Override
-    public void setCharacterState(CharacterState characterState, Player player) {
-        String playerNickname = player.getUserData().getNickname();
-
-        Player localPlayer;
-        try {
-            localPlayer = game.getPlayerByNickname(playerNickname);
-            localPlayer.setCharacterState(characterState);
-        } catch (PlayerNotFoundException e) {
-            // Throw appropriate exception
-        }
+    public LocalModel getModel() {
+        return model;
     }
 
-    @Override
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public Game getGame() {
-        return game;
-    }
 }

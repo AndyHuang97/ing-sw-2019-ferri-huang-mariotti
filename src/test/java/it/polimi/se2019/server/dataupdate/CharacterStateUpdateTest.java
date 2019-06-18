@@ -41,7 +41,7 @@ public class CharacterStateUpdateTest {
 
         game.setPlayerList(playerList);
 
-        view.setGame(game);
+        view.getModel().setGame(game);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class CharacterStateUpdateTest {
         view.update(response);
 
         // Check if the CharacterState of the view has been updated
-        Integer score = view.getGame().getPlayerByNickname(PLAYERNICK).getCharacterState().getScore();
+        Integer score = view.getModel().getGame().getPlayerByNickname(PLAYERNICK).getCharacterState().getScore();
 
         Assert.assertEquals((Integer) 42, score);
     }

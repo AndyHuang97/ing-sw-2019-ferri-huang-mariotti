@@ -7,4 +7,5 @@ import it.polimi.se2019.server.games.player.Player;
 public interface LocalModel {
     void setCharacterState(CharacterState characterState, Player player);
     void setGame(Game game);
+    Game getGame();
 }
