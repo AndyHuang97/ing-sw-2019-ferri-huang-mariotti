@@ -3,10 +3,9 @@ package it.polimi.se2019.server.games.player;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
-import it.polimi.se2019.server.dataupdate.StateUpdate;
+import it.polimi.se2019.server.dataupdate.PlayerEventListenable;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
-import it.polimi.se2019.util.Observable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.Map;
  * This class contains the information about a character, it's meant to be serialized.
  * A read-only copy of this object should be stored in the client (view).
  */
-public class CharacterState extends Observable<StateUpdate> implements Serializable {
+public class CharacterState extends PlayerEventListenable implements Serializable {
 
 	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
 	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
@@ -284,8 +283,8 @@ public class CharacterState extends Observable<StateUpdate> implements Serializa
 	}
 
 	private void notifyCharaterStateChange() {
-	    StateUpdate stateUpdate = new CharacterStateUpdate(this);
+	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
-		notify(stateUpdate);
+	    notifyCharacterStateUpdate(stateUpdate);
     }
 }
