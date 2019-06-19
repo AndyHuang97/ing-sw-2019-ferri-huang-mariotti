@@ -24,7 +24,6 @@ import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.NetMessage;
 import it.polimi.se2019.util.Request;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -38,7 +37,7 @@ import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 /**
- * This is the main class of the GUI.
+ * This is the main class that starts the javafx application.
  */
 public class MainApp extends Application {
 
@@ -54,7 +53,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private LoginController loginController;
-    private GameBoardController gameBoardController;
+    private GUIController GUIController;
     private BorderPane rootlayout;
 
     public static void main(String[] args) {
@@ -112,9 +111,9 @@ public class MainApp extends Application {
             FXMLLoader gbLoader = new FXMLLoader();
             gbLoader.setLocation(MainApp.class.getResource("/fxml/GameBoard.fxml"));
             AnchorPane gameBoard = (AnchorPane) gbLoader.load();
-            GameBoardController gbController = gbLoader.getController();
+            GUIController gbController = gbLoader.getController();
             gbController.setMainApp(this);
-            setGameBoardController(gbController);
+            setGUIController(gbController);
 
             // Set the scene containing the root layout
             rootlayout.setCenter(gameBoard);
@@ -443,11 +442,11 @@ public class MainApp extends Application {
         this.inputRequested = inputRequested;
     }
 
-    public GameBoardController getGameBoardController() {
-        return gameBoardController;
+    public GUIController getGUIController() {
+        return GUIController;
     }
 
-    public void setGameBoardController(GameBoardController gameBoardController) {
-        this.gameBoardController = gameBoardController;
+    public void setGUIController(GUIController GUIController) {
+        this.GUIController = GUIController;
     }
 }

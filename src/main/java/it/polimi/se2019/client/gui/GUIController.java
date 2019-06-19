@@ -26,9 +26,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class GameBoardController {
+public class GUIController {
 
-    private static final Logger logger = Logger.getLogger(GameBoardController.class.getName());
+    private static final Logger logger = Logger.getLogger(GUIController.class.getName());
 
     private MainApp mainApp;
     private List<PlayerBoardController> pbControllerList;
@@ -594,7 +594,7 @@ public class GameBoardController {
             }
 
             NamedImage image = (NamedImage) iv.getImage();
-            mainApp.getGameBoardController().addInput(action, image.getName());
+            mainApp.getGUIController().addInput(action, image.getName());
         });
     }
 

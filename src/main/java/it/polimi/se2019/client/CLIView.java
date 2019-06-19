@@ -11,4 +11,14 @@ public class CLIView extends View {
     public void sendInput() {
 
     }
+
+    @Override
+    public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void reportError(String error) {
+
+    }
 }
