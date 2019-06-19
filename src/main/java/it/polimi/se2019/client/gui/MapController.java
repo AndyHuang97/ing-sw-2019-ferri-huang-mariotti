@@ -86,6 +86,7 @@ public class MapController {
     @FXML
     public void handleMapLoading() {
 
+        // recognizes the board from its id.
         mapImage.setImage(new Image(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png"));
 
         try {
@@ -111,12 +112,14 @@ public class MapController {
 
         } catch (IllegalArgumentException e) {
             logger.warning(e.toString());
+            e.printStackTrace();
         }
     }
 
 
     /**
-     * Adds a button to every tile of the map.
+     * Adds a button to every tile of the map. There are two tile grids, one relative to the move,
+     * and the other to the shoot action. The differentiation is needed for the effects of the weapons.
      *
      * @param tileMap is the tile map.
      * @param x is the x coordinate of the tile.
@@ -186,14 +189,14 @@ public class MapController {
                 AnchorPane anchorPane = (AnchorPane) ((HBox) ammoGrid.getChildren().get(Util.convertToIndex(x, y))).getChildren().get(0);
                 ImageView iv = (ImageView) anchorPane.getChildren().get(0);
                 String id = view.getModel().getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
-                //TODO separate the image loading form the setup, no need to iterate the mouse click behavior
+                //TODO separate the image loading from the setup, no need to iterate the mouse click behavior
                 iv.setImage(new NamedImage(Constants.AMMO_PATH + id + ".png", Constants.AMMO_PATH));
                 iv.setVisible(true);
                 iv.setDisable(true);
 
                 iv.setOnMouseClicked(event -> {
                     anchorPane.setDisable(true);
-                    anchorPane.setOpacity(0.6);
+                    anchorPane.setOpacity(Constants.onClickedOpacity);
 
                     BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
                     Button confirmButton = (Button) root.lookup("#confirmButton");
@@ -216,8 +219,6 @@ public class MapController {
      */
     public void initPlayerGrid(Tile[][] tileMap, int x, int y) {
 
-
-
         playerGrid.setDisable(true);
         if (tileMap[x][y] != null) {
             VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(x, y));
@@ -230,7 +231,7 @@ public class MapController {
                             .forEach(c ->
                                 c.setOnMouseClicked(event -> {
                                     c.setDisable(true);
-                                    c.setOpacity(0.6);
+                                    c.setOpacity(Constants.onClickedOpacity);
 
                                     BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
                                     Button confirmButton = (Button) root.lookup("#confirmButton");
@@ -396,18 +397,27 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a button from tile grid.
+     * Handles the selection of a button from normal tile grid.
      *
      * @param id is the id/position in the list of tiles.
      */
     public void handleTileSelected(int id) {
         System.out.println("Tile selected: " + id);
-        ((GUIView) view).getGuiController().addInput(Constants.MOVE, String.valueOf(id));
+        int[] coords = Util.convertToCoords(id);
+        Tile tile = view.getModel().getGame().getBoard().getTile(coords[0], coords[1]);
+        ((GUIView) view).getGuiController().addInput(Constants.MOVE, tile.getId());
     }
 
+    /**
+     * Handles the selection of a button from shoot tile grid.
+     *
+     * @param id is the id/position in the list of tiles.
+     */
     public void handleShootTileSelected(int id) {
-        System.out.println("Tile selected: " + id);
-        ((GUIView) view).getGuiController().addInput(Constants.SHOOT, String.valueOf(id));
+        System.out.println("Shoot Tile selected: " + id);
+        int[] coords = Util.convertToCoords(id);
+        Tile tile = view.getModel().getGame().getBoard().getTile(coords[0], coords[1]);
+        ((GUIView) view).getGuiController().addInput(Constants.SHOOT, tile.getId());
     }
 
     /**

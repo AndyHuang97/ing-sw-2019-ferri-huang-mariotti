@@ -208,7 +208,7 @@ public class GUIController {
                             .forEach(c -> {
                                 c.setVisible(false);
                                 c.setOnMouseClicked(event -> {
-                                    c.setOpacity(0.6);
+                                    c.setOpacity(Constants.onClickedOpacity);
 
                                     Util.ifFirstSelection(confirmButton, progressBar);
                                     Util.updateCircle(progressBar);
@@ -313,21 +313,37 @@ public class GUIController {
             atController.init();
 
             actionButtons.getChildren().add(buttonedPane);
+            /*
             ((GridPane) buttonedPane.getChildren().get(0)).getChildren().stream()
                     .map(n -> (Button) n)
                     .forEach(b -> b.setMaxSize(31.0, 1.0));
+
+             */
 
             // shows adrenaline buttons
             if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.NORMAL)) {
                 Button mmg = new Button("");
                 Button ms = new Button("");
 
-                mmg.setOpacity(0.45);
+                if (player.getCharacterState().getDamageBar().size() > 1 && player.getCharacterState().getDamageBar().size() < 5){
+                    mmg.setVisible(true);
+                    ms.setVisible(false);
+                }
+                else if (player.getCharacterState().getDamageBar().size() >= 5){
+                    mmg.setVisible(true);
+                    ms.setVisible(true);
+                }
+                else {
+                    mmg.setVisible(false);
+                    ms.setVisible(false);
+                }
+
+                mmg.setOpacity(Constants.buttonOpacity);
                 mmg.setLayoutX(98);
                 mmg.setLayoutY(20);
                 mmg.setPrefSize(30.0, 16.0);
 
-                ms.setOpacity(0.45);
+                ms.setOpacity(Constants.buttonOpacity);
                 ms.setLayoutX(178);
                 ms.setLayoutY(20);
                 ms.setPrefSize(30.0, 16.0);
@@ -379,7 +395,7 @@ public class GUIController {
                     ImageView iv = null;
                     iv = (ImageView) myWeapons.getChildren().get(i);
                     if (!myWeaponsModel.get(i).isLoaded()) {
-                        iv.setOpacity(0.6);
+                        iv.setOpacity(Constants.onClickedOpacity);
                         iv.setDisable(true);
                     }
                     else {
@@ -403,10 +419,6 @@ public class GUIController {
                     iv.setVisible(true);
                     iv.setOpacity(1.0);
                 });
-    }
-
-    public void showActionUnits(){
-
     }
 
     /**
@@ -476,37 +488,8 @@ public class GUIController {
 
         showMyCards();
 
-        enableActionButtons();
-        mapController.resetGrids();
-    }
-
-    /**
-     * Enables the selection of the action buttons.
-     *
-     */
-    public void enableActionButtons() {
-        // TODO maybe solve this with a default showButtons, or just disable the container
-
         actionButtons.setDisable(false);
-
-        /*BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
-        // if it's not necessary to control specific buttons, it is wiser to get their container
-
-        if (view.getModel().getGame().isFrenzy()) {
-            root.getCenter().lookup("#mrs").setDisable(false);
-            root.getCenter().lookup("#mmmm").setDisable(false);
-            root.getCenter().lookup("#mmg").setDisable(false);
-            root.getCenter().lookup("#mmrs").setDisable(false);
-            root.getCenter().lookup("#mmmg").setDisable(false);
-        }
-        else {
-            root.getCenter().lookup("#mmm").setDisable(false);
-            root.getCenter().lookup("#mg").setDisable(false);
-            root.getCenter().lookup("#s").setDisable(false);
-            root.getCenter().lookup("#r").setDisable(false);
-        }
-
-         */
+        mapController.resetGrids();
     }
 
     /**
@@ -589,7 +572,7 @@ public class GUIController {
 
     public void setCardSelectionBehavior(ImageView iv, GridPane myCards, String action) {
         iv.setOnMouseClicked(event -> {
-            iv.setOpacity(0.6);
+            iv.setOpacity(Constants.onClickedOpacity);
 
             Util.ifFirstSelection(confirmButton, progressBar);
             Util.updateCircle(progressBar);

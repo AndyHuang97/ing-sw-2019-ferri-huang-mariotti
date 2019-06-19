@@ -7,11 +7,6 @@ public class CLIView extends View {
     }
 
     @Override
-    public void sendInput() {
-
-    }
-
-    @Override
     public void askInput() {
 
     }

@@ -2,7 +2,7 @@
   "weaponDeck": [
     {
       "type": "weapon",
-      "name": "Lock Rifle",
+      "name": "Lock_Rifle",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["BLUE", "BLUE"],
       "actions": [
@@ -100,7 +100,7 @@
     },
     {
       "type": "weapon",
-      "name": "Machine Gun",
+      "name": "Machine_Gun",
       "pickUpCost": ["RED"],
       "reloadCost": ["BLUE", "RED"],
       "actions": [
@@ -239,7 +239,7 @@
     },
     {
       "type": "weapon",
-      "name": "T.H.O.R",
+      "name": "THOR",
       "pickUpCost": ["RED"],
       "reloadCost": ["BLUE", "RED"],
       "actions": [
@@ -378,7 +378,7 @@
     },
     {
       "type": "weapon",
-      "name": "Plasma Gun",
+      "name": "Plasma_Gun",
       "pickUpCost": ["YELLOW"],
       "reloadCost": ["BLUE", "YELLOW"],
       "actions": [
@@ -612,7 +612,7 @@
     },
     {
       "type": "weapon",
-      "name": "Tractor Beam",
+      "name": "Tractor_Beam",
       "pickUpCost": [],
       "reloadCost": ["BLUE"],
       "actions": [
@@ -716,7 +716,7 @@
     },
     {
       "type": "weapon",
-      "name": "Vortex Cannon",
+      "name": "Vortex_Cannon",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["RED", "BLUE"],
       "actions": [
@@ -1138,7 +1138,7 @@
     },
     {
       "type": "weapon",
-      "name": "Grenade Launcher",
+      "name": "Grenade_Launcher",
       "pickUpCost": [],
       "reloadCost": ["RED"],
       "actions": [
@@ -1222,7 +1222,7 @@
     },
     {
       "type": "weapon",
-      "name": "Rocket Launcher",
+      "name": "Rocket_Launcher",
       "pickUpCost": ["RED"],
       "reloadCost": ["RED", "RED"],
       "actions": [
@@ -1649,7 +1649,7 @@
     },
     {
       "type": "weapon",
-      "name": "Power Glove",
+      "name": "Power_Glove",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["YELLOW", "BLUE"],
       "actions": [

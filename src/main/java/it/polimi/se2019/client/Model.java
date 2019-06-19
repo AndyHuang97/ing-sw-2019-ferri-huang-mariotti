@@ -74,16 +74,16 @@ public class Model implements LocalModel {
         p5.getCharacterState().setTile(game.getBoard().getTile(2,2));
         game.setPlayerList(Arrays.asList(p1,p2,p3,p4));
         game.setCurrentPlayer(p1);
-        Weapon w1 = new Weapon(null, "0216", null
+        Weapon w1 = new Weapon(null, "SledgeHammer", null
                 , null, null);
         w1.setLoaded(true);
-        Weapon w2 = new Weapon(null, "0217", null
+        Weapon w2 = new Weapon(null, "Cyberblade", null
                 , null, null);
         w2.setLoaded(false);
-        Weapon w3 = new Weapon(null, "0218", null
+        Weapon w3 = new Weapon(null, "Furnace", null
                 , null, null);
         w3.setLoaded(true);
-        Weapon w4 = new Weapon(null, "0219", null
+        Weapon w4 = new Weapon(null, "Railgun", null
                 , null, null);
         w4.setLoaded(false);
         p1.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w3));
@@ -104,9 +104,9 @@ public class Model implements LocalModel {
                 });
 
         p1.getCharacterState().setPowerUpBag(Arrays.asList(
-                new PowerUp(null, "026"),
-                new PowerUp(null, "027"),
-                new PowerUp(null, "028")));
+                new PowerUp(null, "Blue_Newton"),
+                new PowerUp(null, "Red_Newton"),
+                new PowerUp(null, "Yellow_Teleporter")));
 
         p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
         p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));
@@ -193,15 +193,15 @@ public class Model implements LocalModel {
                             .forEach(x -> {
                                 if (tileMap[x][y] != null) {
                                     if (!tileMap[x][y].isSpawnTile()) {
-                                        tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "042"));
+                                        tileMap[x][y].setAmmoCrate(new AmmoCrate(null, "1_Red_2_Yellow"));
                                     } else {
                                         tileMap[x][y].setWeaponCrate(
                                                 Arrays.asList(
-                                                        new Weapon(null, "026", null
+                                                        new Weapon(null, "ZX-2", null
                                                                 , null, null),
-                                                        new Weapon(null, "027", null
+                                                        new Weapon(null, "Plasma_Gun", null
                                                                 , null, null),
-                                                        new Weapon(null, "028", null
+                                                        new Weapon(null, "Heatseeker", null
                                                                 , null, null)));
                                     }
                                 }

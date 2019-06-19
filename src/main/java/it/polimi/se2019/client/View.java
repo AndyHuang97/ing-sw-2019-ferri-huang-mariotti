@@ -1,5 +1,6 @@
 package it.polimi.se2019.client;
 
+import it.polimi.se2019.client.net.NetworkClient;
 import it.polimi.se2019.client.net.RmiClient;
 import it.polimi.se2019.client.net.SocketClient;
 import it.polimi.se2019.client.util.Constants;
@@ -18,6 +19,7 @@ public abstract class View extends Observable implements Observer<Response> {
     private LocalModel model;
     private String nickname;
     private PlayerColor playerColor;
+    private NetworkClient networkClient;
 
     private Map<String, List<String>> playerInput = new HashMap<>();
     private List<Runnable> inputRequested = new ArrayList<>();
@@ -35,38 +37,39 @@ public abstract class View extends Observable implements Observer<Response> {
         }
     }
 
-    public void connect(String nickname, String ip, String connectionType) {
+    /**
+     * The connect method initializes a connection to the server sending its nickname.
+     * @param nickname is the client's nickname.
+     * @param ip is the server's ip address.
+     * @param connectionType is the connection type, either RMI or socket.
+     */
+    public void connect(String nickname, String ip, String connectionType, String map) {
 
         switch (connectionType) {
             case Constants.RMI:
                 // connect via rmi
-                RmiClient rmiClient = new RmiClient(nickname, ip);
-                rmiClient.start(this);
-                Map<String, List<String>> rmiPayload = new HashMap<>();
-                rmiPayload.put("connect", new ArrayList<>());
-                rmiClient.send(new Request(new NetMessage(rmiPayload), nickname));
+                networkClient = new RmiClient(nickname, ip);
                 break;
             case Constants.SOCKET:
                 // connect via socket
-                SocketClient socketClient = new SocketClient(nickname, ip);
-                socketClient.start(this);
-                // starting thread that redraws stuffs
-                Map<String, List<String>> socketPayload = new HashMap<>();
-                socketPayload.put("connect", new ArrayList<>());
-                socketClient.send(new Request(new NetMessage(socketPayload), nickname));
+                networkClient = new SocketClient(nickname, ip);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + connectionType);
         }
+
+        networkClient.start(this);
+        Map<String, List<String>> payload = new HashMap<>();
+        payload.put("connect", new ArrayList<>());
+        networkClient.send(new Request(new NetMessage(payload), nickname));
     }
 
     /**
      * The sendInput method sends an input message to the server.
      */
     public void sendInput() {
-        //TODO send input via network
-        // ...
         System.out.println(">>> Sending: " + getPlayerInput());
+        networkClient.send(new Request(new NetMessage(playerInput), nickname));
         getPlayerInput().clear();
     }
 

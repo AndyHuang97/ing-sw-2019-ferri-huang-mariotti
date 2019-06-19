@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.*;
 import java.util.logging.Logger;
 
-public class SocketClient {
+public class SocketClient implements NetworkClient {
     private static final Logger logger = Logger.getLogger(SocketClient.class.getName());
     private String nickname;
     private String serverHost;
@@ -23,6 +23,7 @@ public class SocketClient {
         this.serverHost = serverHost;
     }
 
+    @Override
     public void start(View view) {
         try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
             Properties prop = new Properties();
@@ -38,6 +39,7 @@ public class SocketClient {
         }
     }
 
+    @Override
     public void send(Request request) {
         this.out.println(request.serialize());
     }

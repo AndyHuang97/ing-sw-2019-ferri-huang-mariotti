@@ -40,16 +40,10 @@ public class ClientGui extends Application {
 
         showLogin();
 
-
-        /*
-        initRootLayout();
-        showGameBoard();
-
-        primaryStage.setResizable(false);
-        primaryStage.setFullScreen(true);
-        primaryStage.sizeToScene();
-        primaryStage.show();
-        */
+        //testing
+        //view.setPlayerColor(PlayerColor.GREEN);
+        //((Model)view.getModel()).initGame();
+        //view.showGame();
 
     }
 

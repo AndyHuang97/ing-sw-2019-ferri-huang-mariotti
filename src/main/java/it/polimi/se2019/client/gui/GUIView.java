@@ -21,6 +21,40 @@ public class GUIView extends View {
         this.primaryStage = primaryStage;
     }
 
+    @Override
+    public void askInput() {
+        if (!getInputRequested().isEmpty()) {
+            getInputRequested().remove(0).run();
+        }
+    }
+
+    @Override
+    public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void reportError(String error) {
+
+    }
+
+    @Override
+    public void showGame() {
+
+        // the next line is used only for testing purposes only.
+        ((Model)super.getModel()).boardDeserialize();
+
+        this.initRootLayout();
+        this.showGameBoard();
+
+        this.getPrimaryStage().setResizable(false);
+        this.getPrimaryStage().setFullScreen(true);
+        this.getPrimaryStage().sizeToScene();
+        this.getPrimaryStage().show();
+        // TODO: redraw gameboard
+
+    }
+
     public void initRootLayout() {
         try{
             // Load root layout from fxml file
@@ -58,47 +92,6 @@ public class GUIView extends View {
         } catch(IOException e) {
             Logger.getGlobal().warning(e.toString());
         }
-    }
-
-    @Override
-    public void sendInput() {
-
-    }
-
-    @Override
-    public void askInput() {
-        if (!getInputRequested().isEmpty()) {
-            getInputRequested().remove(0).run();
-        }
-    }
-
-    @Override
-    public void showMessage(String message) {
-
-    }
-
-    @Override
-    public void reportError(String error) {
-
-    }
-
-    @Override
-    public void showGame() {
-
-        ((Model)super.getModel()).boardDeserialize();
-
-        initRootLayout();
-        showGameBoard();
-
-        this.initRootLayout();
-        this.showGameBoard();
-
-        this.getPrimaryStage().setResizable(false);
-        this.getPrimaryStage().setFullScreen(true);
-        this.getPrimaryStage().sizeToScene();
-        this.getPrimaryStage().show();
-        // TODO: redraw gameboard
-
     }
 
     public String getBackgroundColor() {

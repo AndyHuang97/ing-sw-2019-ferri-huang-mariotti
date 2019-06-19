@@ -171,17 +171,17 @@
                                              <children>
                                                 <ImageView fitHeight="130.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../images/weapons/AD_weapons_IT_022.png" />
+                                                      <Image url="@../images/weapons/Sledgehammer.png" />
                                                    </image>
                                                 </ImageView>
                                                 <ImageView fitHeight="130.0" fitWidth="65.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                                    <image>
-                                                      <Image url="@../images/weapons/AD_weapons_IT_022.png" />
+                                                      <Image url="@../images/weapons/Sledgehammer.png" />
                                                    </image>
                                                 </ImageView>
                                                 <ImageView fitHeight="130.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                                    <image>
-                                                      <Image url="@../images/weapons/AD_weapons_IT_022.png" />
+                                                      <Image url="@../images/weapons/Sledgehammer.png" />
                                                    </image>
                                                 </ImageView>
                                              </children>
@@ -198,7 +198,7 @@
                                              <children>
                                                 <ImageView fitHeight="110.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../images/powerups/AD_powerups_IT_022.png" />
+                                                      <Image url="@../images/powerups/Blue_Tagback_Grenade.png" />
                                                    </image>
                                                    <GridPane.margin>
                                                       <Insets left="11.0" />
@@ -206,12 +206,12 @@
                                                 </ImageView>
                                                 <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                                    <image>
-                                                      <Image url="@../images/powerups/AD_powerups_IT_022.png" />
+                                                      <Image url="@../images/powerups/Blue_Tagback_Grenade.png" />
                                                    </image>
                                                 </ImageView>
                                                 <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                                    <image>
-                                                      <Image url="@../images/powerups/AD_powerups_IT_022.png" />
+                                                      <Image url="@../images/powerups/Blue_Tagback_Grenade.png" />
                                                    </image>
                                                 </ImageView>
                                              </children>
@@ -247,17 +247,17 @@
                                  <children>
                                     <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -327,17 +327,17 @@
                                  <children>
                                     <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -404,17 +404,17 @@
                                  <children>
                                     <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -481,17 +481,17 @@
                                  <children>
                                     <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                        <image>
-                                          <Image url="@../images/weapons/AD_weapons_IT_0218.png" />
+                                          <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
                                  </children>

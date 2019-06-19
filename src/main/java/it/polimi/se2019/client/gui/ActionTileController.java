@@ -112,7 +112,7 @@ public class ActionTileController {
 
         progressBar = (GridPane) root.getCenter().lookup(Constants.PROGRESS_BAR);
 
-        actionButtons = (AnchorPane) root.getCenter().lookup("actionButtons");
+        actionButtons = (AnchorPane) root.getCenter().lookup("#actionButtons");
         confirmButton = (Button) root.getCenter().lookup("#confirmButton");
         cancelButton = (Button) root.getCenter().lookup("#cancelButton");
         actionUnitPane = (FlowPane) root.getCenter().lookup("#actionUnitPane");

@@ -2,6 +2,7 @@ package it.polimi.se2019.server.games.board;
 
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 
+@Deprecated
 public class NormalTile extends Tile {
 
     private AmmoCrate ammoCrate;

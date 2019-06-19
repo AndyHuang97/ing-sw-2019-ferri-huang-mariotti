@@ -12,7 +12,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class RmiClient {
+public class RmiClient implements NetworkClient {
     private static final Logger logger = Logger.getLogger(RmiClient.class.getName());
     private String nickname;
     private String serverHost;
@@ -25,6 +25,7 @@ public class RmiClient {
         this.serverHost = serverHost;
     }
 
+    @Override
     public void start(View view) {
         try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
             Properties prop = new Properties();
@@ -39,6 +40,7 @@ public class RmiClient {
         }
     }
 
+    @Override
     public void send(Request request) {
         try {
             this.server.send(request.serialize(), this.uuid);

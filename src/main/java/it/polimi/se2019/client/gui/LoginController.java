@@ -23,6 +23,8 @@ public class LoginController {
     @FXML
     private ChoiceBox connectType;
     @FXML
+    private ChoiceBox map;
+    @FXML
     private TextField nickname;
     @FXML
     private TextField ip;
@@ -39,6 +41,10 @@ public class LoginController {
             ip.setText(prop.getProperty("server.host"));
             connectType.getItems().add(Constants.RMI);
             connectType.getItems().add(Constants.SOCKET);
+            map.getItems().add(Constants.map0);
+            map.getItems().add(Constants.map1);
+            map.getItems().add(Constants.map2);
+            map.getItems().add(Constants.map3);
         } catch(IOException e) {
             logger.info(e.toString());
         }
@@ -64,8 +70,8 @@ public class LoginController {
         }
     }
 
-    public class ConnectionTypeNotSelected extends Exception {
-        public ConnectionTypeNotSelected(String errorMessage) {
+    public class ChoiceNotSelected extends Exception {
+        public ChoiceNotSelected(String errorMessage) {
             super(errorMessage);
         }
     }
@@ -76,10 +82,10 @@ public class LoginController {
 
             if (nickname.getText().equals("")) { throw new NicknameNotFound("Nickname not found"); }
             if (ip.getText().equals("")) { throw new IpNotFound("Ip not found"); }
-            if (connectType.getValue() == null) { throw new ConnectionTypeNotSelected("Connection type not selected"); }
-
+            if (connectType.getValue() == null) { throw new ChoiceNotSelected("connection type"); }
+            if (map.getValue() == null) { throw new ChoiceNotSelected("map"); }
             view.setNickname(nickname.getText());
-            view.connect(nickname.getText(), ip.getText(), (String) connectType.getValue());
+            view.connect(nickname.getText(), ip.getText(), (String) connectType.getValue(), (String) map.getValue());
             loginStage.close();
         } catch (NicknameNotFound e) {
             showNoSelectionAlert("nickname");
@@ -87,14 +93,14 @@ public class LoginController {
             showNoSelectionAlert("ip");
         } catch (NumberFormatException e) {
             showWrongFormatAlert();
-        } catch (ConnectionTypeNotSelected e) {
-            showNoSelectionAlert("connection type");
+        } catch (ChoiceNotSelected e) {
+            showNoSelectionAlert(e.getMessage());
         }
     }
 
     public void showNoSelectionAlert(String textField) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(((GUIView) view).getPrimaryStage());
+        //alert.initOwner(((GUIView) view).getPrimaryStage());
         alert.setTitle("No Selection");
         alert.setHeaderText("No " + textField + " selected.");
         alert.setContentText("Please input a " + textField + ".");
@@ -103,7 +109,7 @@ public class LoginController {
 
     public void showWrongFormatAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(((GUIView) view).getPrimaryStage());
+        //alert.initOwner(((GUIView) view).getPrimaryStage());
         alert.setTitle("Format error");
         alert.setHeaderText("Port must be an integer.");
         alert.setContentText("Please input an integer.");
