@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.dataupdate;
 
+import it.polimi.se2019.client.CLIView;
 import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.gui.GUIView;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
@@ -25,7 +26,7 @@ public class CharacterStateUpdateTest {
     @Before
     public void setUp() {
         // Initialize the view
-        view = new GUIView();
+        view = new CLIView();
 
         // Initialize Game and Player
         Game game = new Game();

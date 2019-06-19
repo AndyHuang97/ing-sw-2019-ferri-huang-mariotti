@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -42,17 +43,17 @@ public class Util {
 
     /**
      * Checks whether the selections is the first in th sequence, if true it enables the confirm button.
-     * @param root is the root node.
+     * @param confirmButton is the confirm button.
      * @param progressBar is the progress bar.
      */
-    public static void ifFirstSelection(BorderPane root, GridPane progressBar) {
+    public static void ifFirstSelection(Button confirmButton, GridPane progressBar) {
         boolean first = progressBar.getChildren().stream()
                 .map(n -> (Circle) n)
                 .filter(Node::isVisible)
                 .allMatch(c -> c.getFill() == Paint.valueOf("white"));
 
         if (first) {
-            root.getCenter().lookup("#confirmButton").setDisable(false);
+            confirmButton.setDisable(false);
         }
     }
 

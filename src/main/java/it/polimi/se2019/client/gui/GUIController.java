@@ -1,10 +1,12 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.NamedImage;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
@@ -30,7 +32,7 @@ public class GUIController {
 
     private static final Logger logger = Logger.getLogger(GUIController.class.getName());
 
-    private MainApp mainApp;
+    private View view;
     private List<PlayerBoardController> pbControllerList;
     private MapController mapController;
     private ActionTileController actionTileController;
@@ -82,10 +84,10 @@ public class GUIController {
     /**
      *  Is called by the main application to set itself.
      *
-     * @param mainApp
+     * @param view
      */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setView(View view) {
+        this.view = view;
     }
 
     /**
@@ -113,7 +115,7 @@ public class GUIController {
             mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
             AnchorPane decoratedMap = (AnchorPane) mloader.load();
             mapController = mloader.getController();
-            mapController.setMainApp(mainApp);
+            mapController.setView(view);
 
             // removes the old anchor and adds the new one
             leftVBox.getChildren().remove(0);
@@ -133,9 +135,10 @@ public class GUIController {
     public void initPlayerBoards(Player player) {
         Font.loadFont(PlayerBoardController.class.getResource("/css/sofachromerg.ttf").toExternalForm(),10);
 
+        Game game = view.getModel().getGame();
         AnchorPane playerBoardPane;
         int i = 0;
-        for (PlayerColor pc : mainApp.getGame().getActiveColors()) {
+        for (PlayerColor pc : game.getActiveColors()) {
             try {
                 FXMLLoader playerLoader = new FXMLLoader();
                 playerLoader.setLocation(getClass().getResource("/fxml/PlayerBoard.fxml"));
@@ -144,7 +147,7 @@ public class GUIController {
 
                 PlayerBoardController playerController = playerLoader.getController();
                 pbControllerList.add(playerController);
-                playerController.setMainApp(mainApp);
+                playerController.setView(view);
                 playerController.setPlayerColor(pc);
                 playerController.initMarkerPane(pc);
 
@@ -158,10 +161,10 @@ public class GUIController {
                     HBox nameBox = (HBox)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(3);
                     GridPane ammoPane = (GridPane)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(4);
 
-                    showName(mainApp.getGame().getPlayerByColor(pc), (Label) nameBox.getChildren().get(0));
-                    showScore(mainApp.getGame().getPlayerByColor(pc),(Label) scoreBox.getChildren().get(0));
-                    showAmmo(mainApp.getGame().getPlayerByColor(pc), ammoPane);
-                    showOpponentUnloadedWeapons(mainApp.getGame().getPlayerByColor(pc), i);
+                    showName(game.getPlayerByColor(pc), (Label) nameBox.getChildren().get(0));
+                    showScore(game.getPlayerByColor(pc),(Label) scoreBox.getChildren().get(0));
+                    showAmmo(game.getPlayerByColor(pc), ammoPane);
+                    showOpponentUnloadedWeapons(game.getPlayerByColor(pc), i);
                     i++;
                 }else {
                     playerBoardPane = playerBoard;
@@ -177,11 +180,11 @@ public class GUIController {
                 playerBoardPane.getChildren().add(decoratedPane);
 
 
-                playerController.showPlayerBoard(mainApp.getGame().getPlayerByColor(pc));
-                playerController.showDamageBar(mainApp.getGame().getPlayerByColor(pc));
-                playerController.showMarkerBar(mainApp.getGame().getPlayerByColor(pc));
-                playerController.showSkullBar(mainApp.getGame().getPlayerByColor(pc));
-                playerController.showActionTile(mainApp.getGame().getPlayerByColor(pc));
+                playerController.showPlayerBoard(game.getPlayerByColor(pc));
+                playerController.showDamageBar(game.getPlayerByColor(pc));
+                playerController.showMarkerBar(game.getPlayerByColor(pc));
+                playerController.showSkullBar(game.getPlayerByColor(pc));
+                playerController.showActionTile(game.getPlayerByColor(pc));
 
 
             }
@@ -196,7 +199,6 @@ public class GUIController {
      *
      */
     public void initMyCards() {
-        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
 
         Arrays.asList(myPowerUps,myWeapons).stream()
                 .forEach(myCards -> {
@@ -208,7 +210,7 @@ public class GUIController {
                                 c.setOnMouseClicked(event -> {
                                     c.setOpacity(0.6);
 
-                                    Util.ifFirstSelection(root, progressBar);
+                                    Util.ifFirstSelection(confirmButton, progressBar);
                                     Util.updateCircle(progressBar);
 
                                     if(Util.isLastSelection(progressBar)) {
@@ -301,13 +303,13 @@ public class GUIController {
         try {
             AnchorPane buttonedPane = null;
             FXMLLoader loader = new FXMLLoader();
-            String gameMode = mainApp.getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
+            String gameMode = view.getModel().getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
 
             loader.setLocation(getClass().getResource(Constants.ACTION_BUTTONS + gameMode.split("_")[1] + ".fxml"));
             buttonedPane = loader.load();
 
             ActionTileController atController = loader.getController();
-            atController.setMainApp(mainApp);
+            atController.setView(view);
             atController.init();
 
             actionButtons.getChildren().add(buttonedPane);
@@ -332,17 +334,19 @@ public class GUIController {
 
                 mmg.setOnAction(event -> {
                     handleCancel();
-                    mainApp.getInputRequested().add(actionTileController::getTile);
-                    mainApp.getInputRequested().add(actionTileController::getCard);
-                    mainApp.getInput();
+                    actionButtons.setDisable(true);
+                    view.getInputRequested().add(actionTileController::getTile);
+                    view.getInputRequested().add(actionTileController::getCard);
+                    view.askInput();
 
                 });
 
                 ms.setOnAction(event -> {
                     handleCancel();
-                    mainApp.getInputRequested().add(actionTileController::getTile);
-                    mainApp.getInputRequested().add(actionTileController::getShoot);
-                    mainApp.getInput();
+                    actionButtons.setDisable(true);
+                    view.getInputRequested().add(actionTileController::getTile);
+                    view.getInputRequested().add(actionTileController::getShoot);
+                    view.askInput();
 
                 });
 
@@ -360,8 +364,8 @@ public class GUIController {
      *
      */
     public void showMyCards() {
-        CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
-                .filter(p -> p.getColor() == mainApp.getPlayerColor())
+        CharacterState myCharacterState =  view.getModel().getGame().getPlayerList().stream()
+                .filter(p -> p.getColor() == view.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
         List<Weapon> myWeaponsModel = myCharacterState.getWeaponBag();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
@@ -410,7 +414,7 @@ public class GUIController {
      *
      */
     public void showRanking() {
-        List<Player> ranking = mainApp.getGame().getRanking();
+        List<Player> ranking = view.getModel().getGame().getRanking();
         rankingGrid.getChildren().removeAll(rankingGrid.getChildren());
         ranking.stream()
                 .forEach(p -> {
@@ -432,16 +436,15 @@ public class GUIController {
     @FXML
     public void handleConfirm() {
         intermediateInput.keySet().stream()
-                .forEach(k -> mainApp.getPlayerInput().put(k, intermediateInput.get(k)));
-        if (mainApp.getInputRequested().isEmpty())
+                .forEach(k -> view.getPlayerInput().put(k, intermediateInput.get(k)));
+        if (view.getInputRequested().isEmpty())
         {
-            mainApp.sendInput();
+            view.sendInput();
             handleCancel();
         }
         else {
             handleReset();
-            mainApp.getInput();
-
+            view.askInput();
         }
     }
 
@@ -454,7 +457,7 @@ public class GUIController {
     public void handleCancel() {
         System.out.println(">>> Input new action:");
         handleReset();
-        mainApp.getInputRequested().clear();
+        view.getInputRequested().clear();
         intermediateInput.clear();
     }
 
@@ -465,7 +468,7 @@ public class GUIController {
                     c.setFill(Paint.valueOf("white"));
                     c.setVisible(false);
                 });
-        infoText.setText("Select an action("+mainApp.getActionNumber()+")");
+        infoText.setText("Select an action");
         actionButtons.setDisable(false);
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
@@ -482,9 +485,14 @@ public class GUIController {
      *
      */
     public void enableActionButtons() {
-        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        // TODO maybe solve this with a default showButtons, or just disable the container
+
+        actionButtons.setDisable(false);
+
+        /*BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
         // if it's not necessary to control specific buttons, it is wiser to get their container
-        if (mainApp.getGame().isFrenzy()) {
+
+        if (view.getModel().getGame().isFrenzy()) {
             root.getCenter().lookup("#mrs").setDisable(false);
             root.getCenter().lookup("#mmmm").setDisable(false);
             root.getCenter().lookup("#mmg").setDisable(false);
@@ -497,6 +505,8 @@ public class GUIController {
             root.getCenter().lookup("#s").setDisable(false);
             root.getCenter().lookup("#r").setDisable(false);
         }
+
+         */
     }
 
     /**
@@ -576,17 +586,12 @@ public class GUIController {
         this.intermediateInput = intermediateInput;
     }
 
-    public void addInput(String key, String id) {
-        intermediateInput.putIfAbsent(key, new ArrayList<>());
-        intermediateInput.get(key).add(id);
-        System.out.println("Added: " + key + " " + id);
-    }
 
     public void setCardSelectionBehavior(ImageView iv, GridPane myCards, String action) {
         iv.setOnMouseClicked(event -> {
             iv.setOpacity(0.6);
 
-            Util.ifFirstSelection((BorderPane) mainApp.getPrimaryStage().getScene().getRoot(), progressBar);
+            Util.ifFirstSelection(confirmButton, progressBar);
             Util.updateCircle(progressBar);
 
             if(Util.isLastSelection(progressBar)) {
@@ -594,8 +599,13 @@ public class GUIController {
             }
 
             NamedImage image = (NamedImage) iv.getImage();
-            mainApp.getGUIController().addInput(action, image.getName());
+            addInput(action, image.getName());
         });
+    }
+    public void addInput(String key, String id) {
+        intermediateInput.putIfAbsent(key, new ArrayList<>());
+        intermediateInput.get(key).add(id);
+        System.out.println("Added: " + key + " " + id);
     }
 
     public ActionTileController getActionTileController() {

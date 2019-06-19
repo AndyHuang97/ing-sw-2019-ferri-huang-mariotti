@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -28,7 +29,7 @@ public class LoginController {
 
     private Stage loginStage;
     private Stage waitingStage;
-    private MainApp mainApp;
+    private View view;
 
     @FXML
     public void initialize() {
@@ -47,8 +48,8 @@ public class LoginController {
         this.loginStage = stage;
     }
 
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setView(View view) {
+        this.view = view;
     }
 
     public class NicknameNotFound extends Exception {
@@ -77,8 +78,8 @@ public class LoginController {
             if (ip.getText().equals("")) { throw new IpNotFound("Ip not found"); }
             if (connectType.getValue() == null) { throw new ConnectionTypeNotSelected("Connection type not selected"); }
 
-            mainApp.setNickname(nickname.getText());
-            mainApp.connect(nickname.getText(), ip.getText(), (String) connectType.getValue());
+            view.setNickname(nickname.getText());
+            view.connect(nickname.getText(), ip.getText(), (String) connectType.getValue());
             loginStage.close();
         } catch (NicknameNotFound e) {
             showNoSelectionAlert("nickname");
@@ -93,7 +94,7 @@ public class LoginController {
 
     public void showNoSelectionAlert(String textField) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(mainApp.getPrimaryStage());
+        alert.initOwner(((GUIView) view).getPrimaryStage());
         alert.setTitle("No Selection");
         alert.setHeaderText("No " + textField + " selected.");
         alert.setContentText("Please input a " + textField + ".");
@@ -102,7 +103,7 @@ public class LoginController {
 
     public void showWrongFormatAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(mainApp.getPrimaryStage());
+        alert.initOwner(((GUIView) view).getPrimaryStage());
         alert.setTitle("Format error");
         alert.setHeaderText("Port must be an integer.");
         alert.setContentText("Please input an integer.");

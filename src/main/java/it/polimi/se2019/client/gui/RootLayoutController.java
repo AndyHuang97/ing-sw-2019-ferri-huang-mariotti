@@ -10,15 +10,15 @@ import java.io.File;
  */
 public class RootLayoutController {
 
-    private MainApp mainApp;
+    private ClientGui clientGui;
 
     /**
      *  Is called by the main application to set itself.
      *
-     * @param mainApp
+     * @param clientGui
      */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setClientGui(ClientGui clientGui) {
+        this.clientGui = clientGui;
     }
 
     /**
@@ -32,10 +32,10 @@ public class RootLayoutController {
                 "board images (*.png)", "*.png");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
+        File file = fileChooser.showOpenDialog(clientGui.getPrimaryStage());
 
         if (file != null) {
-            //mainApp.selectGameBoard(file);
+            //clientGui.selectGameBoard(file);
         }
     }
 

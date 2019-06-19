@@ -1,5 +1,4 @@
 package it.polimi.se2019.server.net;
-import it.polimi.se2019.client.gui.MainApp;
 import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
@@ -13,10 +12,6 @@ import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.logging.Logger;
 

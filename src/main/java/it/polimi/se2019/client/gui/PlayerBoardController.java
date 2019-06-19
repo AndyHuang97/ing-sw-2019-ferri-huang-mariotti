@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.games.player.Player;
@@ -23,7 +24,8 @@ import java.util.stream.IntStream;
 public class PlayerBoardController {
 
     private static final Logger logger = Logger.getLogger(PlayerBoardController.class.getName());
-    private MainApp mainApp;
+
+    private View view;
     private PlayerColor playerColor;
 
     @FXML
@@ -58,10 +60,10 @@ public class PlayerBoardController {
     /**
      *  Is called by the main application to set itself.
      *
-     * @param mainApp
+     * @param view
      */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setView(View view) {
+        this.view = view;
     }
 
     /**
@@ -104,7 +106,7 @@ public class PlayerBoardController {
      */
     public void showActionTile(Player player) {
         ImageView iv = (ImageView) actionTile.getChildren().get(0);
-        String gameMode = mainApp.getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
+        String gameMode = view.getModel().getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
         iv.setImage(new Image(Constants.ACTION_TILE+player.getColor().getColor()+gameMode+".png"));
     }
 
