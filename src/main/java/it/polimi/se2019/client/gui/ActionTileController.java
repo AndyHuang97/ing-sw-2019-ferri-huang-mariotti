@@ -217,7 +217,7 @@ public class ActionTileController {
         cancelButton.setDisable(false);
 
         Player player = mainApp.getGame().getPlayerByColor(mainApp.getPlayerColor());
-        Weapon weapon = player.getCharacterState().getWeapoonBag().stream()
+        Weapon weapon = player.getCharacterState().getWeaponBag().stream()
                 .filter(w -> w.getName().equals(mainApp.getPlayerInput().get(Constants.SHOOT).get(0)))
                 .findFirst().orElse(null);
         if (weapon != null) {
@@ -387,7 +387,7 @@ public class ActionTileController {
         CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
                 .filter(p -> p.getColor() == mainApp.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
-        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeaponBag();
 
         IntStream.range(0, myWeaponsModel.size())
                 .forEach(i -> {
@@ -414,7 +414,7 @@ public class ActionTileController {
         CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
                 .filter(p -> p.getColor() == mainApp.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
-        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeaponBag();
 
 
         IntStream.range(0, myWeaponsModel.size())

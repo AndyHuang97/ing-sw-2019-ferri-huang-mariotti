@@ -201,24 +201,24 @@ public class ControllerTest {
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player have two weapons
-        Assert.assertEquals(2, player0.getCharacterState().getWeapoonBag().size());
+        Assert.assertEquals(2, player0.getCharacterState().getWeaponBag().size());
 
         player0.getCharacterState().setAmmoBag(getAmmoBag(0));
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player still have two weapons (unable to pay pickup cost)
-        Assert.assertEquals(2, player0.getCharacterState().getWeapoonBag().size());
+        Assert.assertEquals(2, player0.getCharacterState().getWeaponBag().size());
 
         player0.getCharacterState().addAmmo(getAmmoBag(3));
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player have tree weapons
-        Assert.assertEquals(3, player0.getCharacterState().getWeapoonBag().size());
+        Assert.assertEquals(3, player0.getCharacterState().getWeaponBag().size());
 
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player still have tree weapons (bag full)
-        Assert.assertEquals(3, player0.getCharacterState().getWeapoonBag().size());
+        Assert.assertEquals(3, player0.getCharacterState().getWeaponBag().size());
         Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.BLUE));
         Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW));
     }
@@ -236,7 +236,7 @@ public class ControllerTest {
 
         weapon.setLoaded(false);
 
-        Assert.assertFalse(player0.getCharacterState().getWeapoonBag().get(0).isLoaded());
+        Assert.assertFalse(player0.getCharacterState().getWeaponBag().get(0).isLoaded());
 
         Map<AmmoColor, Integer> ammoBag = player0.getCharacterState().getAmmoBag();
 
@@ -248,7 +248,7 @@ public class ControllerTest {
 
         actualPlayerCommandHandler.handleLocalRequest(request);
 
-        Assert.assertTrue(player0.getCharacterState().getWeapoonBag().get(0).isLoaded());
+        Assert.assertTrue(player0.getCharacterState().getWeaponBag().get(0).isLoaded());
     }
 
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {

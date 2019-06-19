@@ -52,7 +52,7 @@ public class GrabPlayerAction extends PlayerAction {
             }
 
             // assert that player have 2 or less weapon
-            if (getPlayer().getCharacterState().getWeapoonBag().size() >= MAXWEAPONINBAG) {
+            if (getPlayer().getCharacterState().getWeaponBag().size() >= MAXWEAPONINBAG) {
                 return false;
             }
 

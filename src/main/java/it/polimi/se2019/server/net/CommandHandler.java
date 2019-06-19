@@ -121,7 +121,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         // here it needs to parse the message!
         notify(request);
 
-        // TODO update shouldn't be called from here, but from the model with its notify, and it should receive a Response
+        // TODO update shouldn't be called from here, but from the Model with its notify, and it should receive a Response
         //update(new Response(new Game(), true, request.getNickname()));
 
         // TODO: refactor, some tests do not use ServerApp

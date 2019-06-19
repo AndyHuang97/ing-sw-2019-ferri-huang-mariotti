@@ -2,12 +2,21 @@ package it.polimi.se2019.client;
 
 import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.dataupdate.StateUpdate;
+import it.polimi.se2019.util.LocalModel;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
+import it.polimi.se2019.util.Response;
 
 import java.util.List;
 
-public abstract class View extends Observable implements Observer {
+public abstract class View extends Observable implements Observer<Response> {
+
+    private LocalModel model;
+
+    public View() {
+        model = new Model();
+    }
 
     public List<Action> getPossibleAction() {
         return null;
@@ -18,8 +27,12 @@ public abstract class View extends Observable implements Observer {
     }
 
     @Override
-    public void update(Object message) {
+    public void update(Response response) {
+        List<StateUpdate> updateList = response.getUpdateData();
 
+        for (StateUpdate stateUpdate : updateList) {
+            stateUpdate.updateData(model);
+        }
     }
 
     /**
@@ -31,6 +44,11 @@ public abstract class View extends Observable implements Observer {
      * The sendInput method sends an input to the
      */
     public abstract void sendInput();
+
+    public LocalModel getModel() {
+        return model;
+    }
+
 
     /**
      * The showMessage method shows a message received as response from the server
