@@ -5,15 +5,14 @@ import it.polimi.se2019.client.gui.MainApp;
 import it.polimi.se2019.client.util.ClientCommandHandler;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Targetable;
+import it.polimi.se2019.util.NetMessage;
 import it.polimi.se2019.util.Request;
 import it.polimi.se2019.util.Response;
 import javafx.application.Platform;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -37,7 +36,7 @@ public class SocketClient {
             this.out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             ClientCommandHandler commandHandler = new ClientCommandHandler(mainApp);
-            new SocketClientWorker(commandHandler, in).start();
+            new SocketClientWorker(commandHandler, in, this.out, this.nickname).start();
         } catch (IOException e) {
             logger.info(e.getMessage());
         }
@@ -50,10 +49,14 @@ public class SocketClient {
     public static class SocketClientWorker extends Thread {
         ClientCommandHandler commandHandler;
         BufferedReader in;
+        PrintWriter out;
+        String nickname;
 
-        public SocketClientWorker(ClientCommandHandler commandHandler, BufferedReader in) {
+        public SocketClientWorker(ClientCommandHandler commandHandler, BufferedReader in, PrintWriter out, String nickname) {
             this.commandHandler = commandHandler;
             this.in = in;
+            this.out = out;
+            this.nickname = nickname;
         }
 
         public void run(){
@@ -61,6 +64,12 @@ public class SocketClient {
                 String inputLine;
                 while ((inputLine = this.in.readLine()) != null) {
                     Response request = (Response) new Response(null, false, "").deserialize(inputLine);
+                    // custom code to handle ping pong socket sequence
+                    if (request.getMessage().equals("ping")) {
+                        Map<String, List<String>> socketPayload = new HashMap<>();
+                        socketPayload.put("pong", new ArrayList<>());
+                        this.out.println(new Request(new NetMessage(socketPayload), this.nickname).serialize());
+                    }
                     commandHandler.handle(request);
                 }
             } catch (IOException e) {

@@ -21,7 +21,11 @@ public abstract class Observable<T> {
     protected void notify(T message){
         synchronized (observers) {
             for(Observer<T> observer : observers){
-                observer.update(message);
+                try {
+                    observer.update(message);
+                } catch (Observer.CommunicationError e) {
+                    // do nothing
+                }
             }
         }
     }

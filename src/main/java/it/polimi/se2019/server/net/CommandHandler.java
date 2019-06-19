@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.net;
+import it.polimi.se2019.client.gui.MainApp;
 import it.polimi.se2019.server.ServerApp;
+import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.games.Targetable;
@@ -8,11 +10,14 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.socket.SocketServer;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.*;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Observer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.rmi.RemoteException;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -76,15 +81,36 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         // log request
         NetMessage message = request.getNetMessage();
         String nickname = request.getNickname();
-        try {
-            Game game = ServerApp.gameManager.retrieveGame(nickname);
-            request.setInternalMessage(convertNetMessage(message, game));
-        } catch (GameManager.GameNotFoundException | TargetableNotFoundException e1) {
+        if (message.getCommands().containsKey("connect")) {
             try {
-                logger.info(nickname);
-                ServerApp.gameManager.addUserToWaitingList(new UserData(nickname), this);
-            } catch (GameManager.AlreadyPlayingException e2) {
-                logger.info("User " + nickname + " tried to join multiple times");
+                if (ServerApp.gameManager.isUserInGameList(nickname)) {
+                    if (!ServerApp.gameManager.retrieveGame(nickname).getPlayerByNickname(nickname).getCharacterState().isConnected()) {
+                        logger.info("User " + nickname + " reconnected");
+                        try {
+                            update(new Response(ServerApp.gameManager.retrieveGame(nickname), true, "welcome back"));
+                        } catch (CommunicationError e) {
+                            logger.info(e.getMessage());
+                        }
+                    } else {
+                        logger.info("User " + nickname + " already connected");
+                    }
+                } else if (!ServerApp.gameManager.isUserInWaitingList(nickname)) {
+                    ServerApp.gameManager.addUserToWaitingList(new UserData(nickname), this);
+                } else {
+                    logger.info("User " + nickname + " tried to join queue multiple times");
+                }
+            } catch (GameManager.GameNotFoundException | GameManager.AlreadyPlayingException | PlayerNotFoundException e) {
+                logger.info(e.getMessage());
+            }
+        } else if (message.getCommands().containsKey("pong")) {
+            // do nothing?
+        } else {
+            try {
+                Game game = ServerApp.gameManager.retrieveGame(nickname);
+                request.setInternalMessage(convertNetMessage(message, game));
+                // TODO: process command
+            } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
+                logger.info(e.getMessage());
             }
         }
     }
@@ -107,7 +133,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     }
 
     @Override
-    public void update(Response response) {
+    public synchronized void update(Response response) throws CommunicationError {
         //System.out.println("update works");
         /**
          * Response on move done
@@ -116,13 +142,15 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         try {
             if (this.socketTrueRmiFalse) {
                 socketClientHandler.send(response.serialize());
+                if (response.getMessage().equals("ping")) {
+
+                }
             } else {
                 rmiClientWorker.send(response.serialize());
             }
         } catch (Exception e) {
-            logger.info(e.getLocalizedMessage());
+            throw new CommunicationError(e.getMessage());
         }
-
     }
 
     public void reportError(ErrorResponse errorResponse) {

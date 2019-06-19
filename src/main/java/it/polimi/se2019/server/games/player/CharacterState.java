@@ -31,7 +31,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
 	private Integer score;
+	private boolean connected;
 
+	/**
+	 * Default constructor
+	 *
+	 */
 
 	public CharacterState() {
 		this.deaths = 0;
@@ -43,6 +48,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
 		this.score = 0;
+		this.connected = true;
 	}
 
 	/**
@@ -54,16 +60,19 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 * @param tile
 	 * @param score
 	 */
-	public CharacterState(List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
+	public CharacterState(int deaths, int[] valueBar, List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
 						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weaponBag,
-						  List<PowerUp> powerUpBag, Tile tile, Integer score) {
-		this.damageBar = damageBar;
+						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected) {
+        this.deaths = deaths;
+        this.valueBar = valueBar;
+	    this.damageBar = damageBar;
 		this.markerBar = markerBar;
 		this.ammoBag = ammoBag;
 		this.weaponBag = weaponBag;
 		this.powerUpBag = powerUpBag;
 		this.tile = tile;
 		this.score = score;
+		this.connected = connected;
 	}
 
 
@@ -280,6 +289,14 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	public void setDeaths(int deaths) {
 		this.deaths = deaths;
 		notifyCharaterStateChange();
+	}
+
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
 	}
 
 	private void notifyCharaterStateChange() {

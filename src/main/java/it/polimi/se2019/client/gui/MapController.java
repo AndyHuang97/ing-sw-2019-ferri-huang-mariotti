@@ -265,7 +265,7 @@ public class MapController {
                     wc.getChildren().stream()
                             .map(n -> (ImageView) n)
                             .forEach(w ->
-                                    mainApp.getGameBoardController().setCardSelectionBehavior(w, wc, Constants.GRAB)
+                                    mainApp.getGUIController().setCardSelectionBehavior(w, wc, Constants.GRAB)
                             );
                 });
     }
@@ -407,12 +407,12 @@ public class MapController {
      */
     public void handleTileSelected(int id) {
         System.out.println("Tile selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.MOVE, String.valueOf(id));
+        mainApp.getGUIController().addInput(Constants.MOVE, String.valueOf(id));
     }
 
     public void handleShootTileSelected(int id) {
         System.out.println("Tile selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.SHOOT, String.valueOf(id));
+        mainApp.getGUIController().addInput(Constants.SHOOT, String.valueOf(id));
     }
 
     /**
@@ -421,7 +421,7 @@ public class MapController {
      */
     public void handleWeaponInCrateSelected(String id) {
         System.out.println("Weapon selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
+        mainApp.getGUIController().addInput(Constants.GRAB, id);
     }
 
     /**
@@ -430,7 +430,7 @@ public class MapController {
      */
     public void handleAmmoCrateSelected(String id) {
         System.out.println("Ammocrate selected: "+ id);
-        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
+        mainApp.getGUIController().addInput(Constants.GRAB, id);
     }
 
     /**
@@ -444,7 +444,7 @@ public class MapController {
                 .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
                 .collect(Collectors.toList()).get(0).getId();
         System.out.println(color + " " + id);
-        mainApp.getGameBoardController().addInput(Constants.SHOOT, id);
+        mainApp.getGUIController().addInput(Constants.SHOOT, id);
     }
 
     /**
