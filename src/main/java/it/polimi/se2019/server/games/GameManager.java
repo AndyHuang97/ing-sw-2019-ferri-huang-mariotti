@@ -143,7 +143,7 @@ public class GameManager {
 	private void delayedGameCreation(int previousGameListSize) throws IndexOutOfBoundsException {
 		logger.info("Starting game creation countdown (" + this.startTimerSeconds + "s)...");
 		try {
-			Thread.sleep(this.startTimerSeconds * 1000);
+			Thread.sleep((long) this.startTimerSeconds * 1000);
 		} catch(InterruptedException e) {
 			logger.info(e.toString());
 			Thread.currentThread().interrupt();
