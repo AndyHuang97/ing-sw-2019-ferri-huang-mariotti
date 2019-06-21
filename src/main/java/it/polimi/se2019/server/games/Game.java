@@ -3,6 +3,8 @@ package it.polimi.se2019.server.games;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
+import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.player.Player;
@@ -14,6 +16,11 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class contains data and logic of a game. In the MVC pattern this class implements a big chunk of the
+ * Model, the Observer pattern is used to communicate data updates to the view. This class also forwards the changes
+ * of other parts of the model lo the view.
+ */
 public class Game extends Observable<Response> implements it.polimi.se2019.util.Observer<Response>, Serializable {
 
 	private Date startDate;
@@ -148,6 +155,15 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setKillshotTrack(KillShotTrack killshotTrack) {
 		this.killshotTrack = killshotTrack;
+
+		// notify killshot track change
+        KillShotTrackUpdate killShotTrackUpdate = new KillShotTrackUpdate(killshotTrack);
+
+        List<StateUpdate> updateList = new ArrayList<>();
+        updateList.add(killShotTrackUpdate);
+
+        Response response = new Response(updateList);
+        notify(response);
 	}
 
 	public Deck<Weapon> getWeaponDeck() {
@@ -188,7 +204,12 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.frenzy = frenzy;
 	}
 
+	/**
+     * This method is used to forward changes from other parts of the Model to the View.
+     * @param response change request from other classes of the model.
+	 */
 	@Override
 	public void update(Response response) {
+        notify(response);
 	}
 }

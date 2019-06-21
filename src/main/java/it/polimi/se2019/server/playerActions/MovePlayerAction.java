@@ -15,8 +15,8 @@ import java.util.List;
 public class MovePlayerAction extends PlayerAction {
 
     private List<Tile> moveList = new ArrayList<>();
-    private final String errorMessage = "Move action failed";
-    private final int steps = 1;
+    private static final String ERRORMESSAGE = "Move action failed";
+    private static final int steps = 1;
 
     public MovePlayerAction(Game game, Player player) {
         super(game, player);
@@ -57,7 +57,7 @@ public class MovePlayerAction extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(errorMessage);
+        return new ErrorResponse(ERRORMESSAGE);
     }
 
     public List<Tile> getMoveList() {

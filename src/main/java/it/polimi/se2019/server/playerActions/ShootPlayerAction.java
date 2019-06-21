@@ -23,7 +23,7 @@ public class ShootPlayerAction extends PlayerAction {
     private static final int TILEPOSITIONINPARAMS = 3;
     private static final int EFFECTTILEPOSITIONINPARAMS = 4;
 
-    private final String errorMessage = "Shoot action failed";
+    private static final String ERRORMESSAGE = "Shoot action failed";
     private Player target;
     private Weapon chosenWeapon;
     private ActionUnit chosenActionUnit;
@@ -102,6 +102,6 @@ public class ShootPlayerAction extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return null;
+        return new ErrorResponse(ERRORMESSAGE);
     }
 }

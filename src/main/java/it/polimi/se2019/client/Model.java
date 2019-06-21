@@ -2,6 +2,7 @@ package it.polimi.se2019.client;
 
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.LocalModel;
@@ -27,6 +28,12 @@ public class Model implements LocalModel {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    @Override
+    public void setKillShotTrack(KillShotTrack killShotTrack) {
+        this.game.setKillshotTrack(killShotTrack);
+    }
+
     @Override
     public Game getGame() {
         return game;
