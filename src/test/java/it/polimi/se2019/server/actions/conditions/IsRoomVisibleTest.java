@@ -7,14 +7,13 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class IsRoomVisibleTest {
 
@@ -24,24 +23,25 @@ public class IsRoomVisibleTest {
     Game game;
     Player p1, p2, p3, p4;
     Map<String, List<Targetable>> targets = new HashMap<>();
-    List<Targetable> list;
+    List<Targetable> targetableList
+            ;
 
     @Before
     public void setUp() {
         game = new Game();
         tileMap = new Tile[2][3];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
-        tileMap[0][0] = new NormalTile(RoomColor.RED, links00, null);
+        tileMap[0][0] = new Tile(RoomColor.RED, links00, null);
         LinkType[] links01 = {LinkType.DOOR, LinkType.DOOR, LinkType.OPEN, LinkType.WALL};
-        tileMap[0][1] = new NormalTile(RoomColor.YELLOW, links01, null);
+        tileMap[0][1] = new Tile(RoomColor.YELLOW, links01, null);
         LinkType[] links10 = {LinkType.WALL, LinkType.WALL, LinkType.OPEN, LinkType.DOOR};
-        tileMap[1][0] = new NormalTile(RoomColor.BLUE, links10, null);
+        tileMap[1][0] = new Tile(RoomColor.BLUE, links10, null);
         LinkType[] links11 = {LinkType.OPEN, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][1] = new NormalTile(RoomColor.BLUE, links11, null);
+        tileMap[1][1] = new Tile(RoomColor.BLUE, links11, null);
         LinkType[] links02 = {LinkType.OPEN, LinkType.DOOR, LinkType.WALL, LinkType.WALL};
-        tileMap[0][2] = new NormalTile(RoomColor.YELLOW, links02, null);
+        tileMap[0][2] = new Tile(RoomColor.YELLOW, links02, null);
         LinkType[] links12 = {LinkType.WALL, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][2] = new NormalTile(RoomColor.WHITE, links12, null);
+        tileMap[1][2] = new Tile(RoomColor.WHITE, links12, null);
         board = new Board("",tileMap);
         game.setBoard(board);
 
@@ -56,7 +56,7 @@ public class IsRoomVisibleTest {
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
 
-        list = new ArrayList<>();
+        targetableList = new ArrayList<>();
 
     }
 
@@ -71,14 +71,14 @@ public class IsRoomVisibleTest {
         p3 =null;
         p4 = null;
         targets = null;
-        list = null;
+        targetableList = null;
     }
 
     @Test
     public void testRoomVisible() {
         Condition condition = new IsRoomVisible();
-        list.add(RoomColor.RED);
-        targets.put("roomColor", list);
+        targetableList.add(tileMap[0][0]);
+        targets.put(CommandConstants.TILELIST, targetableList);
 
         game.setCurrentPlayer(p1);
         Assert.assertEquals(true, condition.check(game, targets));

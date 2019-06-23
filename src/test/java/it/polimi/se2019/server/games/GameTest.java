@@ -46,12 +46,18 @@ public class GameTest {
     @Test
     public void testSetCurrentPlayer_NotActivePlayer() {
 
-        Player nextPlayer = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
-        Player currPlayer = game.getCurrentPlayer();
+        Player p1 = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
+        p1.setActive(true);
 
-        game.setCurrentPlayer(nextPlayer);
+        game.setCurrentPlayer(p1);
 
-        Assert.assertEquals(currPlayer, game.getCurrentPlayer());
+        Assert.assertEquals(p1, game.getCurrentPlayer());
+
+        Player p2 = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
+        p2.setActive(false);
+        game.setCurrentPlayer(p1);
+        Assert.assertEquals(p1, game.getCurrentPlayer());
+
     }
 
     @Test

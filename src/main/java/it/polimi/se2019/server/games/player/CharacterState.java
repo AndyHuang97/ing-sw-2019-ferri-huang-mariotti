@@ -92,6 +92,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addDamage(PlayerColor playerColor, Integer amount) {
 		//TODO need to limit the damgeBar length to 12 as maximum.
+		// and handle markers...
 		for(int i = 0; i < amount; i++) {
 			if(damageBar.size() < 12) {
 				damageBar.add(playerColor);
@@ -142,8 +143,13 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		}
 	}
 
+	/**
+	 * Resets all key's values to 0.
+	 *
+	 */
 	public void resetMarkerBar() {
-		markerBar.clear();
+		markerBar.keySet()
+				.forEach(k -> markerBar.put(k, 0));
 	}
 
 	/**
@@ -251,12 +257,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addWeapon(Weapon weapon) {
 		weaponBag.add(weapon);
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public void setWeaponBag(List<Weapon> weaponBag) {
 		this.weaponBag = weaponBag;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public List<PowerUp> getPowerUpBag() {
@@ -265,12 +271,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addPowerUp(PowerUp powerUp) {
 		powerUpBag.add(powerUp);
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public void setPowerUpBag(List<PowerUp> powerUpBag) {
 		this.powerUpBag = powerUpBag;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public int[] getValueBar() {
@@ -279,7 +285,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setValueBar(int[] valueBar) {
 		this.valueBar = valueBar;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public int getDeaths() {
@@ -288,7 +294,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setDeaths(int deaths) {
 		this.deaths = deaths;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public boolean isConnected() {
@@ -299,7 +305,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.connected = connected;
 	}
 
-	private void notifyCharaterStateChange() {
+	private void notifyCharacterStateChange() {
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
 	    notifyCharacterStateUpdate(stateUpdate);

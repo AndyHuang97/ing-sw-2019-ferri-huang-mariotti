@@ -13,17 +13,36 @@ public class DamageTile extends Damage {
 
     private static final int TILEPOSITION = 0;
 
-    public DamageTile(Integer amount) {
-        super(amount);
+    private boolean self;
+    private Integer tileIndex;
+
+    protected DamageTile(Integer amount, String actionUnitName, boolean self) {
+        super(amount, actionUnitName);
+        this.self = self;
     }
 
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
-        Tile tile = (Tile) targets.get(CommandConstants.TILE).get(TILEPOSITION);
+        Tile tile;
+        if (actionUnitName == null) {
+            if (tileIndex == null) {
+                if (self) {
+                    tile = game.getCurrentPlayer().getCharacterState().getTile();
+                } else {
+                    tile = (Tile) targets.get(CommandConstants.TILELIST).get(TILEPOSITION);
+                }
+            } else {
+                tile = (Tile) targets.get(CommandConstants.TILELIST).get(tileIndex);
+            }
+        } else {
+            tile = (Tile) game.getActionUnit(actionUnitName).getCommands()
+                    .get(CommandConstants.OLDTILELIST).get(TILEPOSITION);
+        }
 
         List<Player> targetList = tile.getPlayers(game);
 
         targetList.stream()
+                .filter(p -> !p.equals(game.getCurrentPlayer()))
                 .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount));
 
     }

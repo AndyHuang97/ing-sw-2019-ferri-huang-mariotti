@@ -16,19 +16,17 @@ public class DamageRoom extends Damage {
     private static final int TILEPOSITION = 0;
 
     public DamageRoom(Integer amount) {
-        super(amount);
+        super(amount, null);
     }
 
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
-        Tile tile = (Tile) targets.get(CommandConstants.TILE).get(TILEPOSITION);
-        RoomColor roomColor = tile.getRoomColor();
+        Tile tile = (Tile) targets.get(CommandConstants.TILELIST).get(TILEPOSITION);
+        List<Tile> room = tile.getRoom(game.getBoard());
 
-        List<Player> targetList = game.getPlayerList().stream()
-                .filter(p -> p.getCharacterState().getTile().getRoomColor() == roomColor && p != game.getCurrentPlayer())
-                .collect(Collectors.toList());
-
-        targetList.stream()
-                .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount));
+        room.stream()
+                .forEach(t -> t.getPlayers(game).stream()
+                        .filter(p -> !p.equals(game.getCurrentPlayer()))
+                        .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount)));
     }
 }

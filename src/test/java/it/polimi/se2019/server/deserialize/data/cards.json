@@ -9,15 +9,15 @@
       "available": true,
       "effectList": [
         {
-          "name": "Damage Target x2",
-          "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+          "name": "Damage Target List x3",
+          "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
           "params": {
             "amount": 2
           }
         },
         {
-          "name": "Mark Target x1",
-          "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+          "name": "Mark Target List x1",
+          "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
           "params": {
             "amount": 1
           }
@@ -25,16 +25,19 @@
       ],
       "conditionList": [
         {
-          "name": "Target Visible",
-          "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+          "name": "Target List Visible",
+          "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
           "params": {
           }
         },
         {
-          "name": "Distance x1",
-          "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+          "name": "Min Distance x2",
+          "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
           "params": {
-            "amount": 1
+            "amount": 1,
+            "self": true,
+            "initialIsTile": true,
+            "finalIsTile": false
           }
         }
       ],

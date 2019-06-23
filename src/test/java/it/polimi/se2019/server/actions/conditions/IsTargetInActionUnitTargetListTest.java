@@ -1,5 +1,6 @@
-package it.polimi.se2019.server.actions.effects;
+package it.polimi.se2019.server.actions.conditions;
 
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
@@ -7,6 +8,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,19 +17,18 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class MarkTargetTest {
+public class IsTargetInActionUnitTargetListTest {
 
     Tile tile;
     Tile[][] tileMap;
     Board board;
     Game game;
     Player p1, p2, p3, p4;
-    Map<String, List<Targetable>> targets;
+    Map<String, List<Targetable>> targets = new HashMap<>();
     List<Targetable> list;
 
     @Before
     public void setUp() {
-        targets = new HashMap<>();
         game = new Game();
         tileMap = new Tile[2][3];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
@@ -45,6 +46,7 @@ public class MarkTargetTest {
         board = new Board("",tileMap);
         game.setBoard(board);
 
+
         p1 = new Player(UUID.randomUUID().toString(), true, new UserData("A"), new CharacterState(), PlayerColor.BLUE);
         p1.getCharacterState().setTile(tileMap[1][0]);
         p2 = new Player(UUID.randomUUID().toString(), true, new UserData("B"), new CharacterState(), PlayerColor.GREEN);
@@ -54,6 +56,8 @@ public class MarkTargetTest {
         p4 = new Player(UUID.randomUUID().toString(), true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
+
+        list = new ArrayList<>();
 
     }
 
@@ -72,18 +76,17 @@ public class MarkTargetTest {
     }
 
     @Test
-    public void testMarkTarget() {
-        Effect effect = new MarkTarget(2);
-        List<Targetable> target = new ArrayList<>();
-        targets.put("target", target);
+    public void testIsTargetInActionUnitTargetList() {
+        Condition condition = new IsTargetInActionUnitTargetList("Basic Mode");
+
+        list.add(p2);
+        targets.put(CommandConstants.TARGETLIST, list);
         game.setCurrentPlayer(p1);
 
-        target.add(p2);
-        effect.run(game, targets);
-        assertEquals(0, p1.getCharacterState().getMarkerBar().get(p1.getColor()).intValue());
-        assertEquals(2, p2.getCharacterState().getMarkerBar().get(p1.getColor()).intValue());
-        assertEquals(0, p3.getCharacterState().getMarkerBar().get(p1.getColor()).intValue());
-        assertEquals(0, p4.getCharacterState().getMarkerBar().get(p1.getColor()).intValue());
+        ActionUnit actionUnit = new ActionUnit(true,"Basic Mode", null, null, 0,0,true);
+        actionUnit.setCommands(targets);
+        game.getCurrentActionUnitsList().add(actionUnit);
 
+        assertTrue(condition.check(game, targets));
     }
 }

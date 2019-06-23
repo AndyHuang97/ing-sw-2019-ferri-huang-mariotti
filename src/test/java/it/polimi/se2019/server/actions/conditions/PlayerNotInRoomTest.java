@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,16 +77,16 @@ public class PlayerNotInRoomTest {
     @Test
     public void testPlayerNotInRoom() {
         Condition condition = new PlayerNotInRoom();
-        List<Targetable> roomColor = new ArrayList<>();
-        targets.put("roomColor", roomColor);
+        List<Targetable> room = new ArrayList<>();
+        targets.put(CommandConstants.TILELIST, room);
 
         game.setCurrentPlayer(p1);
-        roomColor.add(RoomColor.BLUE);
+        room.add(tileMap[1][0]);
         assertFalse(condition.check(game, targets));
-        roomColor.clear();
+        room.clear();
 
-        roomColor.add(RoomColor.WHITE);
+        room.add(tileMap[1][2]);
         assertTrue(condition.check(game, targets));
-        roomColor.clear();
+        room.clear();
     }
 }

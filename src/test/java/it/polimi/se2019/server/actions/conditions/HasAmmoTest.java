@@ -78,22 +78,22 @@ public class HasAmmoTest {
     public void testHasAmmo() {
         Condition condition;
         game.setCurrentPlayer(p1);
-        EnumMap<AmmoColor, Integer> ammoMap = new EnumMap<>(AmmoColor.class);
-        ammoMap.putIfAbsent(AmmoColor.BLUE, 3);
-        ammoMap.putIfAbsent(AmmoColor.RED, 3);
-        ammoMap.putIfAbsent(AmmoColor.YELLOW, 3);
+        EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
+        ammoBag.putIfAbsent(AmmoColor.BLUE, 3);
+        ammoBag.putIfAbsent(AmmoColor.RED, 3);
+        ammoBag.putIfAbsent(AmmoColor.YELLOW, 3);
 
         EnumMap<AmmoColor, Integer> ammoNeeded = new EnumMap<>(AmmoColor.class);
         ammoNeeded.putIfAbsent(AmmoColor.BLUE, 1);
         ammoNeeded.putIfAbsent(AmmoColor.RED, 1);
         ammoNeeded.putIfAbsent(AmmoColor.YELLOW, 2);
 
-        p1.getCharacterState().setAmmoBag(ammoMap);
+        p1.getCharacterState().setAmmoBag(ammoBag);
         condition = new HasAmmo(ammoNeeded);
         Assert.assertEquals(true, condition.check(game, targets));
 
         p1.getCharacterState().setAmmoBag(ammoNeeded);
-        condition = new HasAmmo(ammoMap);
+        condition = new HasAmmo(ammoBag);
         Assert.assertEquals(false, condition.check(game, targets));
 
     }

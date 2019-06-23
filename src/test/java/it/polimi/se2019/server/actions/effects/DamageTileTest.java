@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,9 +74,9 @@ public class DamageTileTest {
 
     @Test
     public void testDamageTile() {
-        Effect effect = new DamageTile(2);
+        Effect effect = new DamageTile(2,null, false);
         List<Targetable> tile = new ArrayList<>();
-        targets.put("tile", tile);
+        targets.put(CommandConstants.TILELIST, tile);
         game.setCurrentPlayer(p1);
 
         tile.add(tileMap[1][1]);

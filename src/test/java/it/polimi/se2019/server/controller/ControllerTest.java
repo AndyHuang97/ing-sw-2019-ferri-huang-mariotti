@@ -174,7 +174,7 @@ public class ControllerTest {
         List<PlayerColor> damageBar = new ArrayList<>();
         damageBar.add(PlayerColor.BLUE);
         damageBar.add(PlayerColor.BLUE);
-        Assert.assertEquals(player1.getCharacterState().getDamageBar(), damageBar);
+        Assert.assertEquals(damageBar, player1.getCharacterState().getDamageBar());
     }
 
     @Test

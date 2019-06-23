@@ -118,14 +118,15 @@ public class TileTest {
     public void testGetVisibleTiles() {
 
         List<Tile> visibleTiles = new ArrayList<>(Arrays.asList(tileMap[1][0], tileMap[1][1], tileMap[0][1]));
-
+        tile = tileMap[1][1];
         Assert.assertEquals(visibleTiles, tile.getVisibleTiles(board));
     }
 
     @Test
     public void testGetVisibleTargets() {
-        List<Player> expectedList = Arrays.asList(p1, p3, p4);
-
+        List<Player> expectedList = Arrays.asList(p1, p2, p3, p4);
+        p4.getCharacterState().setTile(tileMap[1][1]);
+        tile = tileMap[1][1];
         Assert.assertEquals(expectedList, tile.getVisibleTargets(game));
     }
 }

@@ -10,16 +10,25 @@ import java.util.Map;
 
 public class DamageTargetList extends Damage {
 
-    public DamageTargetList(Integer amount) {
-        super(amount);
+    public DamageTargetList(Integer amount, String actionUnitName) {
+        super(amount, actionUnitName);
     }
 
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
-        List<Targetable> targetList = targets.get(CommandConstants.TARGETLIST);
+        List<Targetable> targetList;
+        if (super.actionUnitName == null) {
+            targetList = targets.get(CommandConstants.TARGETLIST);
+        } else {
+            targetList = game.getActionUnitTargetList(super.actionUnitName);
+        }
 
         targetList.stream()
-                .forEach(p -> ((Player) p).getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount));
+                .forEach(p -> {
+                    ((Player) p).getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount);
+                    game.getCumulativeTargetList().add(p);
+                    game.getCumulativeDamageTargetList().add(p);
+                });
 
     }
 }

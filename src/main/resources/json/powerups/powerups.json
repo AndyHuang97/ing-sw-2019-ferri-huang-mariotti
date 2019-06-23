@@ -9,8 +9,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -63,8 +63,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target Listx1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -117,8 +117,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target Listx1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -171,7 +171,7 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target (",
+              "name": "Move target ",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
               }
@@ -349,7 +349,7 @@
           "effectList": [
             {
               "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 1
               }
@@ -358,7 +358,7 @@
           "conditionList": [
             {
               "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }
@@ -396,7 +396,7 @@
           "effectList": [
             {
               "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 1
               }
@@ -405,7 +405,7 @@
           "conditionList": [
             {
               "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }
@@ -443,7 +443,7 @@
           "effectList": [
             {
               "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 1
               }
@@ -452,7 +452,7 @@
           "conditionList": [
             {
               "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }

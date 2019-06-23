@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.actions.conditions;
 
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
@@ -7,6 +8,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class IsTileVisibleTest {
+public class IsTargetNotInActionUnitTargetListTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -74,32 +76,17 @@ public class IsTileVisibleTest {
     }
 
     @Test
-    public void check() {
-        Condition condition = new IsTileVisible();
-        List<Targetable> tile = new ArrayList<>();
-        targets.put("tile", tile);
+    public void testIsTargetNotInActionUnitTargetList() {
+        Condition condition = new IsTargetNotInActionUnitTargetList("Basic Mode");
 
+        list.add(p2);
+        targets.put(CommandConstants.TARGETLIST, list);
         game.setCurrentPlayer(p1);
-        tile.add(tileMap[0][0]);
-        assertTrue(condition.check(game, targets));
-        tile.clear();
-        // checking tile where the attacker is currently at.
-        tile.add(tileMap[1][0]);
-        assertTrue(condition.check(game, targets));
-        tile.clear();
 
-        tile.add(tileMap[1][2]);
+        ActionUnit actionUnit = new ActionUnit(true,"Basic Mode", null, null, 0,0,true);
+        actionUnit.setCommands(targets);
+        game.getCurrentActionUnitsList().add(actionUnit);
+
         assertFalse(condition.check(game, targets));
-        tile.clear();
-
-
-        game.setCurrentPlayer(p2);
-        tile.add(tileMap[0][2]);
-        assertTrue(condition.check(game, targets));
-        tile.clear();
-
-        tile.add(tileMap[0][0]);
-        assertFalse(condition.check(game, targets));
-        tile.clear();
     }
 }

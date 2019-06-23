@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class WeaponTest {
+public class WeaponClassTest {
 
     Weapon w;
 

@@ -11,17 +11,31 @@ import java.util.Map;
 
 public class MarkTile implements Effect {
 
-    private static final int TILEPOSITION = 0;
+    private static final int POSITION = 0;
 
     private Integer amount;
+    private boolean self;
+    private boolean isTile;
 
-    public MarkTile(Integer amount) {
+    public MarkTile(Integer amount, boolean self, boolean isTile) {
         this.amount = amount;
+        this.self = self;
+        this.isTile = isTile;
     }
 
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
-        Tile tile = (Tile) targets.get(CommandConstants.TILE).get(TILEPOSITION);
+        Tile tile;
+        if (isTile) {
+            if (self) {
+                tile = game.getCurrentPlayer().getCharacterState().getTile();
+            } else {
+                tile = (Tile) targets.get(CommandConstants.TILELIST).get(POSITION);
+            }
+        } else {
+            tile = ((Player)targets.get(CommandConstants.TARGETLIST).get(POSITION))
+                    .getCharacterState().getTile();
+        }
 
         List<Player> targetList = tile.getPlayers(game);
 

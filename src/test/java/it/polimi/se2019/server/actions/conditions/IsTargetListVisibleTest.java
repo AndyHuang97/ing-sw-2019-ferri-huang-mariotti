@@ -74,7 +74,7 @@ public class IsTargetListVisibleTest {
 
     @Test
     public void testIsTargetListVisible() {
-        Condition condition = new IsTargetListVisible();
+        Condition condition = new IsTargetListVisible(null);
         List<Targetable> targetList = new ArrayList<>();
         targets.put("targetList", targetList);
 

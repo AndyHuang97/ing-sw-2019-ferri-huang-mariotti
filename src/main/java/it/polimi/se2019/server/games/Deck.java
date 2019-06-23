@@ -14,7 +14,10 @@ public class Deck<T> {
 
     public T drawCard()
     {
-        return deck.remove(0);
+        if (!deck.isEmpty()) {
+            return deck.remove(0);
+        }
+        return null;
     }
 
     public void shuffle()

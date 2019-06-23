@@ -75,7 +75,7 @@ public class MinDistanceTest {
 
     @Test
     public void testMinDistance() {
-        Condition condition = new MinDistance(1);
+        Condition condition = new MinDistance(1, false, true,  true, null);
         List<Targetable> tileList = new ArrayList<>();
         targets.put("tileList", tileList);
 

@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +15,9 @@ import org.junit.Test;
 
 import java.util.*;
 
-public class MaxTargetListTest {
+import static org.junit.Assert.*;
+
+public class IsTargetInTargetListTest {
 
     Tile tile;
     Tile[][] tileMap;
@@ -73,22 +76,20 @@ public class MaxTargetListTest {
     }
 
     @Test
-    public void testMaxTargetList() {
-        Condition condition = new MaxTargetList(3);
-        List<Targetable> targetList = new ArrayList<>();
-        targets.put("targetList", targetList);
+    public void testIsTargetInTargetList() {
+        Condition condition = new IsTargetInTargetList();
+        game.getCumulativeTargetList().addAll(Arrays.asList(p2, p3,p4));
+        //targets.put("cumulativeTargetList", cumulativeTargetList);
+        list.add(p2);
+        targets.put(CommandConstants.TARGETLIST, list);
+        game.setCurrentPlayer(p1);
 
-        targetList.addAll(Arrays.asList(p2, p3, p4));
-        Assert.assertTrue(condition.check(game, targets));
-        targetList.clear();
+        game.getCumulativeTargetList().addAll(Arrays.asList(p2, p3,p4));
+        assertTrue(condition.check(game, targets));
+        game.getCumulativeTargetList().clear();
 
-        targetList.addAll(Arrays.asList(p1, p2));
-        Assert.assertTrue(condition.check(game, targets));
-        targetList.clear();
-
-        condition = new MaxTargetList(2);
-        targetList.addAll(Arrays.asList(p1, p2, p3));
-        Assert.assertFalse(condition.check(game, targets));
-        targetList.clear();
+        game.getCumulativeTargetList().addAll(Arrays.asList(p3,p4));
+        assertFalse(condition.check(game, targets));
+        game.getCumulativeTargetList().clear();
     }
 }
