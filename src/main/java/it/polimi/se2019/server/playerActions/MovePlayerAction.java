@@ -15,12 +15,11 @@ import java.util.List;
 public class MovePlayerAction extends PlayerAction {
 
     private List<Tile> moveList = new ArrayList<>();
-    private final String errorMessage = "Move action failed";
-    private int steps;
+    private static final String ERRORMESSAGE = "Move action failed";
+    private static final int steps = 1;
 
-    public MovePlayerAction(Game game, Player player, int steps) {
+    public MovePlayerAction(Game game, Player player) {
         super(game, player);
-        this.steps = steps;
     }
 
     /**
@@ -45,7 +44,7 @@ public class MovePlayerAction extends PlayerAction {
     }
 
     @Override
-    public boolean check() {//TODO change check into something always true
+    public boolean check() {
         Board board = getGame().getBoard();
 
         Tile arrivalTile = moveList.get(0);
@@ -58,7 +57,7 @@ public class MovePlayerAction extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(errorMessage);
+        return new ErrorResponse(ERRORMESSAGE);
     }
 
     public List<Tile> getMoveList() {

@@ -1,7 +1,6 @@
 package it.polimi.se2019.server.games;
 
 import com.google.gson.Gson;
-import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -162,7 +161,7 @@ public class GameManager {
 	private void delayedGameCreation(int previousGameListSize) throws IndexOutOfBoundsException {
 		logger.info("Starting game creation countdown (" + this.startTimerSeconds + "s)...");
 		try {
-			Thread.sleep(this.startTimerSeconds * 1000);
+			Thread.sleep((long) this.startTimerSeconds * 1000);
 		} catch(InterruptedException e) {
 			logger.info(e.toString());
 			Thread.currentThread().interrupt();

@@ -15,6 +15,7 @@ import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
+import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -49,6 +50,12 @@ public class Model implements LocalModel {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    @Override
+    public void setKillShotTrack(KillShotTrack killShotTrack) {
+        this.game.setKillshotTrack(killShotTrack);
+    }
+
     @Override
     public Game getGame() {
         return game;

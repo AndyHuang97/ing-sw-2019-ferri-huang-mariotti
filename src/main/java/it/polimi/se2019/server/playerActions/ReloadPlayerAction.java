@@ -15,6 +15,8 @@ import java.util.Map;
 
 public class ReloadPlayerAction extends PlayerAction {
 
+    private static final String ERRORMESSAGE = "Reload action failed";
+
     private List<Weapon> weaponToReload = new ArrayList<>();
 
     public ReloadPlayerAction(Game game, Player player) { super(game, player); }
@@ -80,6 +82,6 @@ public class ReloadPlayerAction extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return null;
+        return new ErrorResponse(ERRORMESSAGE);
     }
 }
