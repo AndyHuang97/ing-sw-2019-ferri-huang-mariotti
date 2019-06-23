@@ -16,7 +16,7 @@ public class GrabPlayerAction extends PlayerAction {
 
     private static final int WEAPONPOSITION = 0;
     private static final int MAXWEAPONINBAG = 3;
-    private static final String errorMessage = "Grab action failed";
+    private static final String ERRORMESSAGE = "Grab action failed";
 
     private Weapon weaponToGrab;
 
@@ -79,7 +79,7 @@ public class GrabPlayerAction extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(errorMessage);
+        return new ErrorResponse(ERRORMESSAGE);
     }
 
     @Override
