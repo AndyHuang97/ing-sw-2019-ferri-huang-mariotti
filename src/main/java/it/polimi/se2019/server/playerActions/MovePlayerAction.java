@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovePlayerAction extends PlayerAction {
-
-    private List<Tile> moveList = new ArrayList<>();
     private static final String ERRORMESSAGE = "Move action failed";
     private static final int steps = 1;
+
+    private List<Tile> moveList = new ArrayList<>();
 
     public MovePlayerAction(Game game, Player player) {
         super(game, player);

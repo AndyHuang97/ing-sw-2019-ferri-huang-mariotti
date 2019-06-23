@@ -87,6 +87,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setCurrentPlayer(Player currentPlayer) {
 		if(currentPlayer.getActive()) this.currentPlayer = currentPlayer;
+
+		currentActionUnitsList = new ArrayList<>();
 	}
 
 	public Date getStartDate() {

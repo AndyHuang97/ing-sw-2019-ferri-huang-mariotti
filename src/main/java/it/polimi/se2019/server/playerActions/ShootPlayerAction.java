@@ -22,8 +22,8 @@ public class ShootPlayerAction extends PlayerAction {
     private static final int ACTIONUNITPOSITIONINPARAMS = 2;
     private static final int TILEPOSITIONINPARAMS = 3;
     private static final int EFFECTTILEPOSITIONINPARAMS = 4;
-
     private static final String ERRORMESSAGE = "Shoot action failed";
+
     private Player target;
     private Weapon chosenWeapon;
     private ActionUnit chosenActionUnit;
@@ -53,12 +53,6 @@ public class ShootPlayerAction extends PlayerAction {
 
     @Override
     public boolean check() {
-        /**
-         * Check that target is in Player view
-         * Check that Player is using a valid weapon (and has ammo)
-         *  - check that target position matches the weapon requirement
-         */
-
         // Is weapon loaded?
         if (!chosenWeapon.isLoaded()) {
             System.out.println("lol");
