@@ -1,13 +1,18 @@
 package it.polimi.se2019.server.games.board;
 
 import com.google.gson.Gson;
+import it.polimi.se2019.server.actions.Direction;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
+import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.graphs.Graph;
+import it.polimi.se2019.server.graphs.Vertex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -113,8 +118,62 @@ public class Board {
         return tileTree;
     }
 
-    public void setTileTree(Graph<Tile> tileTree) {
-        this.tileTree = tileTree;
+    public Direction getDirection(Tile firstTile, Tile secondTile) {
+        try {
+            int[] pos1 = this.getTilePosition(firstTile);
+            int[] pos2 = this.getTilePosition(secondTile);
+
+            if ((pos1[0] - pos2[0] == 0) && (pos1[1] - pos2[1] > 0)) {
+                return Direction.NORTH;
+            }
+            if ((pos1[0] - pos2[0] < 0) && (pos1[1] - pos2[1] == 0)) {
+                return Direction.EAST;
+            }
+            if ((pos1[0] - pos2[0] == 0) && (pos1[1] - pos2[1] < 0)) {
+                return Direction.SOUTH;
+            }
+            if ((pos1[0] - pos2[0] > 0) && (pos1[1] - pos2[1] == 0)) {
+                return Direction.WEST;
+            }
+        } catch(TileNotFoundException e) {
+            Logger.getGlobal().warning(e.toString());
+        }
+        throw new IllegalStateException(); // diagonal case
+    }
+
+    private static final int FIRST_TILE = 0;
+    public boolean isOneDirectionList(Direction dir, Tile tile, List<Tile> tileList) {
+
+        try {
+            if (!tileList.isEmpty()) {
+                Tile secondTile = tileList.get(FIRST_TILE);
+                if (dir.equals(this.getDirection(tile, secondTile))) {
+                    return isOneDirectionList(dir, secondTile, tileList.subList(1,tileList.size()));
+                }
+                return false;
+            }
+            return true;
+        } catch (IllegalStateException e) {
+            return false;
+        }
+    }
+
+    public List<Tile> getTilesAtDistance(Tile baseTile, Integer distance) {
+        return getTileList().stream()
+                .filter(t -> getTileTree().distance(baseTile,t).equals(distance))
+                .collect(Collectors.toList());
+    }
+
+    public List<Player> getPlayersAtDistance(Game game, Tile baseTile, Integer distance) {
+        List<Tile> tileList = new ArrayList<>(this.getTilesAtDistance(baseTile, distance));
+
+        List<Player> targetList = new ArrayList<>();
+        tileList.stream()
+                .map(t -> t.getPlayers(game).stream()
+                        .filter(p -> !p.equals(game.getCurrentPlayer()))
+                        .collect(Collectors.toList()))
+                .forEach(targetList::addAll);
+        return targetList;
     }
 
     @Override

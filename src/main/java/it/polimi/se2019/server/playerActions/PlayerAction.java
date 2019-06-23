@@ -11,7 +11,7 @@ import it.polimi.se2019.util.ErrorResponse;
 import java.util.List;
 
 /**
- * PlayerAction objects are used by the Controller to modify the model after
+ * PlayerAction objects are used by the Controller to modify the Model after
  * the View sends a valid Request
  */
 public abstract class PlayerAction {

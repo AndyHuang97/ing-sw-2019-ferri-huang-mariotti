@@ -1,12 +1,15 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.command.Command;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Response;
 
@@ -14,7 +17,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Game extends Observable<Response> implements Serializable {
+public class Game extends Observable<Response> implements it.polimi.se2019.util.Observer<Response>, Serializable {
 
 	private Date startDate;
 	private List<Player> playerList;
@@ -24,7 +27,9 @@ public class Game extends Observable<Response> implements Serializable {
 	private Deck<Weapon> weaponDeck;
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
-	private List<String> currentActionUnitsList;
+	private List<ActionUnit> currentActionUnitsList;
+	private List<Targetable> cumulativeDamageTargetList;
+	private List<Targetable> cumulativeTargetList;
 	private boolean frenzy;
 
 	public Game() {
@@ -37,6 +42,9 @@ public class Game extends Observable<Response> implements Serializable {
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
+		this.currentActionUnitsList = new ArrayList<>();
+		this.cumulativeDamageTargetList = new ArrayList<>();
+		this.cumulativeTargetList = new ArrayList<>();
 		this.frenzy = false;
 	}
 
@@ -50,10 +58,14 @@ public class Game extends Observable<Response> implements Serializable {
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
+		this.currentActionUnitsList = new ArrayList<>();
+		this.cumulativeDamageTargetList = new ArrayList<>();
+		this.cumulativeTargetList = new ArrayList<>();
+		this.frenzy = false;
 	}
 
 	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killshotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerupDeck, Deck<AmmoCrate> ammoCrateDeck) {
-		// use this one to resume? a current one
+		// use this one to resume a current one ?
 		this.startDate = startDate;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
@@ -62,6 +74,9 @@ public class Game extends Observable<Response> implements Serializable {
 		this.weaponDeck = weaponDeck;
 		this.powerupDeck = powerupDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
+		this.currentActionUnitsList = new ArrayList<>();
+		this.cumulativeDamageTargetList = new ArrayList<>();
+		this.cumulativeTargetList = new ArrayList<>();
 	}
 
 	public GameData generateGameData() {
@@ -79,7 +94,8 @@ public class Game extends Observable<Response> implements Serializable {
 	}
 
 	public void setCurrentPlayer(Player currentPlayer) {
-		if(currentPlayer.getActive()) this.currentPlayer = currentPlayer;
+		if(currentPlayer.getActive()) {this.currentPlayer = currentPlayer;}
+		else {throw new IllegalStateException();}
 	}
 
 	public Date getStartDate() {
@@ -166,16 +182,15 @@ public class Game extends Observable<Response> implements Serializable {
 		this.powerupDeck = powerupDeck;
 	}
 
-	public List<String> getCurrentActionUnitsList() {
+	public List<ActionUnit> getCurrentActionUnitsList() {
 		return currentActionUnitsList;
 	}
 
-	public void setCurrentActionUnitsList(List<String> currentActionUnitsList) {
+	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
 		this.currentActionUnitsList = currentActionUnitsList;
 	}
 
 	public void performMove(String action) {
-
 		Response response = new Response(new Game(), true, "");
 		notify(response);
 
@@ -187,5 +202,39 @@ public class Game extends Observable<Response> implements Serializable {
 
 	public void setFrenzy(boolean frenzy) {
 		this.frenzy = frenzy;
+	}
+
+	@Override
+	public void update(Response response) {
+
+	}
+
+	public List<Targetable> getActionUnitTargetList(String actionUnitName) {
+		return getCurrentActionUnitsList().stream()
+				.filter(au -> au.getName().equals(actionUnitName))
+				.map(au -> au.getCommands().get(CommandConstants.TARGETLIST))
+				.findFirst().orElseThrow(IllegalStateException::new);
+	}
+
+	public ActionUnit getActionUnit(String actionUnitName) {
+		return getCurrentActionUnitsList().stream()
+				.filter(au -> au.getName().equals(actionUnitName))
+				.findFirst().orElseThrow(IllegalStateException::new);
+	}
+
+	public List<Targetable> getCumulativeDamageTargetList() {
+		return cumulativeDamageTargetList;
+	}
+
+	public void setCumulativeDamageTargetList(List<Targetable> cumulativeDamageTargetList) {
+		this.cumulativeDamageTargetList = cumulativeDamageTargetList;
+	}
+
+	public List<Targetable> getCumulativeTargetList() {
+		return cumulativeTargetList;
+	}
+
+	public void setCumulativeTargetList(List<Targetable> cumulativeTargetList) {
+		this.cumulativeTargetList = cumulativeTargetList;
 	}
 }

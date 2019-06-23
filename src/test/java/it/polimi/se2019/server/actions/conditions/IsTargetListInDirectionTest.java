@@ -8,6 +8,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -78,13 +79,18 @@ public class IsTargetListInDirectionTest {
     @Test
     public void testIsTargetListInDirection() {
         Condition condition = new IsTargetListInDirection();
-        List<Targetable> targetList = Arrays.asList(p2,p3);
-        targets.put("targetList", targetList);
+        List<Targetable> targetList = new ArrayList<>();
+        p1.getCharacterState().setTile(tileMap[0][0]);
+        p2.getCharacterState().setTile(tileMap[0][1]);
+        p3.getCharacterState().setTile(tileMap[0][2]);
+        targetList.add(p2);
+        targetList.add(p3);
+        targets.put(CommandConstants.TARGETLIST, targetList);
 
-        List<Targetable> direction = Arrays.asList(Direction.SOUTH);
-        targets.put("direction", direction);
+        targets.put(CommandConstants.TILELIST, Arrays.asList(tileMap[0][1]));
         Assert.assertEquals(true, condition.check(game, targets));
 
+        /*
         direction = Arrays.asList(Direction.NORTH);
         targets.put("direction", direction);
         Assert.assertEquals(false, condition.check(game, targets));
@@ -135,12 +141,14 @@ public class IsTargetListInDirectionTest {
         targets.put("direction", direction);
         Assert.assertEquals(false, condition.check(game, targets));
 
-        /* swapping the targets position won't change the result */
+        //swapping the targets position won't change the result
         targetList = Arrays.asList(p2, p1);
         targets.put("targetList", targetList);
         direction = Arrays.asList(Direction.NORTH);
         targets.put("direction", direction);
         Assert.assertEquals(true, condition.check(game, targets));
+
+         */
 
     }
 }

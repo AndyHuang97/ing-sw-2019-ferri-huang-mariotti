@@ -23,7 +23,7 @@ public class OneDirectionMovement implements Condition {
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        Tile targetTile = (Tile) targets.get(CommandConstants.TILE).get(TARGETTILEPOSITION);
+        Tile targetTile = (Tile) targets.get(CommandConstants.TILELIST).get(TARGETTILEPOSITION);
         Tile attackerTile = game.getCurrentPlayer().getCharacterState().getTile();
         boolean result = false;
 
@@ -37,6 +37,7 @@ public class OneDirectionMovement implements Condition {
                 }
             } catch (TileNotFoundException e) {
                 logger.info("Tile not found");
+                return false;
             }
         }
         return result ;

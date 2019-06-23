@@ -3,12 +3,8 @@ package it.polimi.se2019.server.deserialize;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2019.server.actions.ActionUnit;
-import it.polimi.se2019.server.actions.conditions.Condition;
-import it.polimi.se2019.server.actions.conditions.Distance;
-import it.polimi.se2019.server.actions.conditions.IsTargetVisible;
-import it.polimi.se2019.server.actions.effects.DamageTarget;
-import it.polimi.se2019.server.actions.effects.Effect;
-import it.polimi.se2019.server.actions.effects.MarkTarget;
+import it.polimi.se2019.server.actions.conditions.*;
+import it.polimi.se2019.server.actions.effects.*;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import org.junit.After;
@@ -67,10 +63,10 @@ public class WeaponDeserializerTest {
             expectedWeapon.setPickUpCost(Arrays.asList(AmmoColor.BLUE, AmmoColor.YELLOW));
             expectedWeapon.setReloadCost(Arrays.asList(AmmoColor.BLUE, AmmoColor.BLUE, AmmoColor.YELLOW));
             expectedWeapon.setOptionalEffectList(Arrays.asList());
-            List<Effect> effectList = Arrays.asList(new DamageTarget( 2),
-                    new MarkTarget(1));
-            List<Condition> conditionList = Arrays.asList(new IsTargetVisible(),
-                    new Distance(2));
+            List<Effect> effectList = Arrays.asList(new DamageTargetList( 2, null),
+                    new MarkTargetList(1));
+            List<Condition> conditionList = Arrays.asList(new IsTargetListVisible(null),
+                    new MinDistance(2, true, true, true, path));
             expectedWeapon.setActionUnitList(Arrays.asList(
                     new ActionUnit(true, "Basic Mode", effectList,conditionList, 0, 0, false)));
             /*

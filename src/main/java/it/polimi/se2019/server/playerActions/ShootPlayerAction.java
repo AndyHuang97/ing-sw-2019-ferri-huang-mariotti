@@ -83,7 +83,7 @@ public class ShootPlayerAction extends PlayerAction {
         List<Targetable> targetList = new ArrayList<>();
         targetList.add(target);
 
-        commandDict.put(CommandConstants.TARGET, targetList);
+        commandDict.put(CommandConstants.TARGETLIST, targetList);
 
         List<Targetable> chosenTileList = new ArrayList<>();
         chosenTileList.add(chosenTile);

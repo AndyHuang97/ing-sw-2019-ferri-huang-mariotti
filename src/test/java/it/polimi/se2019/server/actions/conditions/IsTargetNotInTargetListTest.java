@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -77,18 +78,18 @@ public class IsTargetNotInTargetListTest {
     @Test
     public void testIsTargetNotInTargetList() {
         Condition condition = new IsTargetNotInTargetList();
-        List<Targetable> cumulativeTargetList = new ArrayList<>();
-        targets.put("cumulativeTargetList", cumulativeTargetList);
+        game.getCumulativeTargetList().addAll(Arrays.asList(p2, p3,p4));
+        //targets.put("cumulativeTargetList", cumulativeTargetList);
         list.add(p2);
-        targets.put("target", list);
+        targets.put(CommandConstants.TARGETLIST, list);
         game.setCurrentPlayer(p1);
 
-        cumulativeTargetList.addAll(Arrays.asList(p2, p3,p4));
-        Assert.assertEquals(false, condition.check(game, targets));
-        cumulativeTargetList.clear();
+        game.getCumulativeTargetList().addAll(Arrays.asList(p2, p3,p4));
+        assertFalse(condition.check(game, targets));
+        game.getCumulativeTargetList().clear();
 
-        cumulativeTargetList.addAll(Arrays.asList(p3,p4));
-        Assert.assertEquals(true, condition.check(game, targets));
-        cumulativeTargetList.clear();
+        game.getCumulativeTargetList().addAll(Arrays.asList(p3,p4));
+        assertTrue(condition.check(game, targets));
+        game.getCumulativeTargetList().clear();
     }
 }

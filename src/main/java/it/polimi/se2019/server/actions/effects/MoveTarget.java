@@ -14,10 +14,30 @@ public class MoveTarget implements Effect {
     private static final int TILEPOSITION = 0;
     private static final int TARGETPOSITION = 0;
 
+    private boolean self;
+    private boolean isTile;
+
+    public MoveTarget(boolean self, boolean isTile) {
+        this.self = self;
+        this.isTile = isTile;
+    }
+
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
-        Player target = (Player) targets.get(CommandConstants.TARGET).get(TARGETPOSITION);
-        Tile tile = (Tile) targets.get(CommandConstants.TILE).get(TILEPOSITION);
+        Player target;
+        if (self) {
+            target = game.getCurrentPlayer();
+        }
+        else {
+            target = (Player) targets.get(CommandConstants.TARGETLIST).get(TARGETPOSITION);
+        }
+        Tile tile;
+        if (isTile) {
+            tile = (Tile) targets.get(CommandConstants.TILELIST).get(TILEPOSITION);
+        } else {
+            tile = ((Player) targets.get(CommandConstants.TARGETLIST).get(TARGETPOSITION))
+                    .getCharacterState().getTile();
+        }
 
         target.getCharacterState().setTile(tile);
     }

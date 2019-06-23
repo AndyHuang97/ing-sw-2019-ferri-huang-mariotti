@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.actions.ActionUnit;
@@ -28,7 +29,7 @@ public class ActionTileController {
 
     private static final Logger logger = Logger.getLogger(ActionTileController.class.getName());
 
-    private MainApp mainApp;
+    private View view;
     private GridPane tileGrid;
     private GridPane shootTileGrid;
     private GridPane ammoGrid;
@@ -66,12 +67,12 @@ public class ActionTileController {
         // do nothing
     }
 
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setView(View view) {
+        this.view = view;
     }
 
     public void init() {
-        mainApp.getGameBoardController().setActionTileController(this);
+        ((GUIView)view).getGuiController().setActionTileController(this);
         initGrids();
         initInfo();
     }
@@ -80,7 +81,7 @@ public class ActionTileController {
      * Gets the references of grids for maps and cards.
      */
     public void initGrids() {
-        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        BorderPane root = (BorderPane) ((GUIView)view).getPrimaryStage().getScene().getRoot();
         VBox vBox = (VBox) (root.getCenter()).lookup("#leftVBox");
         AnchorPane map = (AnchorPane) vBox.getChildren().get(0);
 
@@ -104,14 +105,14 @@ public class ActionTileController {
      *
      */
     public void initInfo() {
-        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+        BorderPane root = (BorderPane) ((GUIView)view).getPrimaryStage().getScene().getRoot();
 
         infoText = (Label) root.getCenter().lookup("#infoText");
         infoText.setText("Select an action(1)");
 
         progressBar = (GridPane) root.getCenter().lookup(Constants.PROGRESS_BAR);
 
-        actionButtons = (AnchorPane) root.getCenter().lookup("actionButtons");
+        actionButtons = (AnchorPane) root.getCenter().lookup("#actionButtons");
         confirmButton = (Button) root.getCenter().lookup("#confirmButton");
         cancelButton = (Button) root.getCenter().lookup("#cancelButton");
         actionUnitPane = (FlowPane) root.getCenter().lookup("#actionUnitPane");
@@ -121,42 +122,47 @@ public class ActionTileController {
 
     @FXML
     public void handleM() {
-        mainApp.getGameBoardController().handleCancel();
-        mainApp.getInputRequested().add(this::getTile);
-        mainApp.getInput();
+        ((GUIView)view).getGuiController().handleCancel();
+        actionButtons.setDisable(true);
+        view.getInputRequested().add(this::getTile);
+        view.askInput();
     }
 
     @FXML
     public void handleMG() {
-        mainApp.getGameBoardController().handleCancel();
-        mainApp.getInputRequested().add(this::getTile);
-        mainApp.getInputRequested().add(this::getCard);
-        mainApp.getInput();
+        ((GUIView)view).getGuiController().handleCancel();
+        actionButtons.setDisable(true);
+        view.getInputRequested().add(this::getTile);
+        view.getInputRequested().add(this::getCard);
+        view.askInput();
     }
 
     @FXML
     public void handleS() {
-        mainApp.getGameBoardController().handleCancel();
-        mainApp.getGameBoardController().getIntermediateInput().clear();
-        mainApp.getInputRequested().add(this::getShoot);
-        mainApp.getInput();
+        ((GUIView)view).getGuiController().handleCancel();
+        actionButtons.setDisable(true);
+        ((GUIView)view).getGuiController().getIntermediateInput().clear();
+        view.getInputRequested().add(this::getShoot);
+        view.askInput();
     }
 
     @FXML
     public void handleR() {
-        mainApp.getGameBoardController().handleCancel();
-        mainApp.getGameBoardController().getIntermediateInput().clear();
-        mainApp.getInputRequested().add(this::getReload);
-        mainApp.getInput();
+        ((GUIView)view).getGuiController().handleCancel();
+        actionButtons.setDisable(true);
+        ((GUIView)view).getGuiController().getIntermediateInput().clear();
+        view.getInputRequested().add(this::getReload);
+        view.askInput();
     }
 
     @FXML
     public void handleMRS() {
-        mainApp.getGameBoardController().handleCancel();
-        mainApp.getInputRequested().add(this::getTile);
-        mainApp.getInputRequested().add(this::getReload);
-        mainApp.getInputRequested().add(this::getShoot);
-        mainApp.getInput();
+        ((GUIView)view).getGuiController().handleCancel();
+        actionButtons.setDisable(true);
+        view.getInputRequested().add(this::getTile);
+        view.getInputRequested().add(this::getReload);
+        view.getInputRequested().add(this::getShoot);
+        view.askInput();
     }
 
     public void getTile(){
@@ -205,7 +211,7 @@ public class ActionTileController {
         myWeapons.setDisable(false);
         myWeapons.getStyleClass().add("my-node");
         showMyLoadedWeapons();
-        mainApp.getInputRequested().add(this::getActionUnit);
+        view.getInputRequested().add(this::getActionUnit);
 
         setUpProgressBar(1);
     }
@@ -216,9 +222,9 @@ public class ActionTileController {
         infoText.setText("Select 1 action unit: ");
         cancelButton.setDisable(false);
 
-        Player player = mainApp.getGame().getPlayerByColor(mainApp.getPlayerColor());
-        Weapon weapon = player.getCharacterState().getWeapoonBag().stream()
-                .filter(w -> w.getName().equals(mainApp.getPlayerInput().get(Constants.SHOOT).get(0)))
+        Player player = view.getModel().getGame().getPlayerByColor((view.getPlayerColor()));
+        Weapon weapon = player.getCharacterState().getWeaponBag().stream()
+                .filter(w -> w.getName().equals(view.getPlayerInput().get(Constants.SHOOT).get(0)))
                 .findFirst().orElse(null);
         if (weapon != null) {
             actionUnitPane.setVisible(true);
@@ -246,12 +252,12 @@ public class ActionTileController {
     public void setActionUnitButton(Button b, List<ActionUnit> actionUnitList, int i) {
         b.setOnAction(event -> {
             // adds the action unit in the input list
-            mainApp.getGameBoardController().getIntermediateInput().get(Constants.SHOOT).add(b.getText());
+            ((GUIView)view).getGuiController().getIntermediateInput().get(Constants.SHOOT).add(b.getText());
 
-            mainApp.getInputRequested().add(() -> getTarget(actionUnitList.get(i).getNumPlayerTargets()));
-            mainApp.getInputRequested().add(() -> getShootTile(actionUnitList.get(i).getNumTileTargets()));
+            view.getInputRequested().add(() -> getTarget(actionUnitList.get(i).getNumPlayerTargets()));
+            view.getInputRequested().add(() -> getShootTile(actionUnitList.get(i).getNumTileTargets()));
 
-            mainApp.getInput();
+            view.askInput();
         });
     }
 
@@ -265,7 +271,7 @@ public class ActionTileController {
         myWeapons.setDisable(false);
         myWeapons.getStyleClass().add("my-node");
         showMyUnloadedWeapons();
-        mainApp.getGameBoardController().getIntermediateInput().putIfAbsent(Constants.RELOAD, new ArrayList<>());
+        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RELOAD, new ArrayList<>());
 
         setUpProgressBar(3);
 
@@ -291,7 +297,7 @@ public class ActionTileController {
                                 .map(n -> (Circle) n)
                                 .filter(Node::isVisible)
                                 .forEach(c -> {
-                                    if (c.getFill() != Paint.valueOf(mainApp.getPlayerColor().getColor())){
+                                    if (c.getFill() != Paint.valueOf(view.getPlayerColor().getColor())){
                                         c.setDisable(false);
                                         c.getStyleClass().add("my-shape");
                                     }
@@ -310,7 +316,7 @@ public class ActionTileController {
      *
      */
     public void disableActionButtons() {
-        if (mainApp.getGame().isFrenzy()) {
+        if (view.getModel().getGame().isFrenzy()) {
             mrs.setDisable(true);
             mmmm.setDisable(true);
             mmg.setDisable(true);
@@ -341,17 +347,17 @@ public class ActionTileController {
      */
     public void showGrabbableCards() {
         Tile t = null;
-        if (mainApp.getPlayerInput().isEmpty()){
-            t  = mainApp.getGame().getCurrentPlayer().getCharacterState().getTile();
+        if (view.getPlayerInput().isEmpty()){
+            t  = view.getModel().getGame().getCurrentPlayer().getCharacterState().getTile();
         }
         else {
-            int[] coords = Util.convertToCoords(Integer.parseInt(mainApp.getPlayerInput().get(Constants.MOVE).get(0)));
-            t = mainApp.getGame().getBoard().getTile(coords[0], coords[1]);
+            int[] coords = Util.convertToCoords(Integer.parseInt(view.getPlayerInput().get(Constants.MOVE).get(0)));
+            t = view.getModel().getGame().getBoard().getTile(coords[0], coords[1]);
         }
 
         System.out.println("Grab: "+t);
         try {
-            int[] coords = mainApp.getGame().getBoard().getTilePosition(t);
+            int[] coords = view.getModel().getGame().getBoard().getTilePosition(t);
             if (t.isSpawnTile()) {
                 System.out.println("spawn tile");
                 String roomColor = t.getRoomColor().getColor();
@@ -384,10 +390,10 @@ public class ActionTileController {
      *
      */
     public void showMyUnloadedWeapons() {
-        CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
-                .filter(p -> p.getColor() == mainApp.getPlayerColor())
+        CharacterState myCharacterState =  view.getModel().getGame().getPlayerList().stream()
+                .filter(p -> p.getColor() == view.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
-        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeaponBag();
 
         IntStream.range(0, myWeaponsModel.size())
                 .forEach(i -> {
@@ -402,7 +408,7 @@ public class ActionTileController {
                         iv.setVisible(false);
                     }
 
-                    mainApp.getGameBoardController().setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD);
+                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD);
                 });
     }
 
@@ -411,10 +417,10 @@ public class ActionTileController {
      *
      */
     public void showMyLoadedWeapons() {
-        CharacterState myCharacterState =  mainApp.getGame().getPlayerList().stream()
-                .filter(p -> p.getColor() == mainApp.getPlayerColor())
+        CharacterState myCharacterState =  view.getModel().getGame().getPlayerList().stream()
+                .filter(p -> p.getColor() == view.getPlayerColor())
                 .collect(Collectors.toList()).get(0).getCharacterState();
-        List<Weapon> myWeaponsModel = myCharacterState.getWeapoonBag();
+        List<Weapon> myWeaponsModel = myCharacterState.getWeaponBag();
 
 
         IntStream.range(0, myWeaponsModel.size())
@@ -430,7 +436,7 @@ public class ActionTileController {
                         iv.setDisable(false);
                     }
 
-                    mainApp.getGameBoardController().setCardSelectionBehavior(iv, myWeapons, Constants.SHOOT);
+                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myWeapons, Constants.SHOOT);
                 });
     }
 

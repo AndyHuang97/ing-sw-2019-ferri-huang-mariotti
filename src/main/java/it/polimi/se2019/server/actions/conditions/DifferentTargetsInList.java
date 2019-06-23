@@ -7,6 +7,7 @@ import it.polimi.se2019.util.CommandConstants;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This condition checks whether the target selected by the attacker are all different.
@@ -17,6 +18,7 @@ public class DifferentTargetsInList implements Condition {
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         List<Targetable> targetList = targets.get(CommandConstants.TARGETLIST);
 
+        Logger.getGlobal().info("DifferentTargetsInList: "+targetList.stream().allMatch(new HashSet<>()::add));
         return targetList.stream().allMatch(new HashSet<>()::add);
     }
 }

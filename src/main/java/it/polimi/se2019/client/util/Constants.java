@@ -6,10 +6,10 @@ public class Constants {
         throw new IllegalStateException("Constans class");
     }
 
-    public static final String WEAPON_PATH = "/images/weapons/AD_weapons_IT_";
-    public static final String POWERUP_PATH = "/images/powerups/AD_powerups_IT_";
+    public static final String WEAPON_PATH = "/images/weapons/";
+    public static final String POWERUP_PATH = "/images/powerups/";
     public static final String ACTION_TILE = "/images/playerBoards/ActionTile_";
-    public static final String AMMO_PATH = "/images/ammo/AD_ammo_";
+    public static final String AMMO_PATH = "/images/ammo/";
     public static final String MAP_IMAGE = "/images/maps/map";
     public static final String TOKEN_PATH = "/images/tokens/";
     public static final String SKULL_PATH = "/images/redSkull.png";
@@ -27,4 +27,10 @@ public class Constants {
     public static final String PLAYER = "Player";
     public static final String SHOOT = "Shoot";
     public static final String RELOAD = "Reload";
+    public static final double buttonOpacity = 0.45;
+    public static final double onClickedOpacity = 0.6;
+    public static final String map0 = "0";
+    public static final String map1 = "1";
+    public static final String map2 = "2";
+    public static final String map3 = "3";
 }

@@ -10,24 +10,20 @@ import it.polimi.se2019.util.CommandConstants;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class PlayerNotInRoom implements Condition {
 
-    private static final int ROOMCOLORPOSITION = 0;
-
-    private Player attacker;
-    private String Color;
+    private static final int TILE_POSITION = 0;
 
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
-        Player attacker = (Player) game.getCurrentPlayer();
-        RoomColor roomColor = (RoomColor) targets.get(CommandConstants.ROOMCOLOR).get(ROOMCOLORPOSITION);
-        Tile[][] tileMap = game.getBoard().getTileMap();
+        Player attacker =  game.getCurrentPlayer();
+        List<Tile> room = ((Tile)(targets.get(CommandConstants.TILELIST)
+                .get(TILE_POSITION))).getRoom(game.getBoard());
 
-        return Arrays.stream(tileMap)
-                .allMatch(row -> Arrays.stream(row)
-                        .filter(t -> t.getRoomColor() == roomColor)
-                        .map(t -> t.getPlayers(game))
-                        .noneMatch(lst -> lst.contains(attacker)));
+        Logger.getGlobal().info("PlayerNotInRoom: "+
+                !room.contains(attacker.getCharacterState().getTile()));
+        return !room.contains(attacker.getCharacterState().getTile());
     }
 }

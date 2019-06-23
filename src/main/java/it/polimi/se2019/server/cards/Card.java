@@ -42,7 +42,7 @@ public abstract class Card implements Targetable {
 
 	@Override
 	public String getId() {
-		return id;
+		return name;
 	}
 
 	public void setId(String id) {

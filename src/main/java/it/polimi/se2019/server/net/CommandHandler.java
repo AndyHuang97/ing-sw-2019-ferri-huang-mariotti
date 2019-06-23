@@ -1,5 +1,4 @@
 package it.polimi.se2019.server.net;
-import it.polimi.se2019.client.gui.MainApp;
 import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
@@ -13,10 +12,6 @@ import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.rmi.RemoteException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -56,9 +51,10 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     public InternalMessage convertNetMessage(NetMessage netMessage, Game game) throws TargetableNotFoundException {
         Map<String, List<Targetable>> newCommands = new HashMap<>();
-        List<Targetable> newValues = new ArrayList<>();
         netMessage.getCommands().forEach((key, values) -> {
+            List<Targetable> newValues = new ArrayList<>(); // moved it inside the for each, must be a new reference each time
             values.forEach((value) -> {
+
                 Player playerTarget = game.getPlayerList().stream().filter(player -> player.getId().equals(value)).findAny().orElse(null);
                 if (playerTarget != null) {
                     newValues.add(playerTarget);
@@ -109,6 +105,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 Game game = ServerApp.gameManager.retrieveGame(nickname);
                 request.setInternalMessage(convertNetMessage(message, game));
                 // TODO: process command
+
             } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
                 logger.info(e.getMessage());
             }
@@ -121,7 +118,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         // here it needs to parse the message!
         notify(request);
 
-        // TODO update shouldn't be called from here, but from the model with its notify, and it should receive a Response
+        // TODO update shouldn't be called from here, but from the Model with its notify, and it should receive a Response
         //update(new Response(new Game(), true, request.getNickname()));
 
         // TODO: refactor, some tests do not use ServerApp

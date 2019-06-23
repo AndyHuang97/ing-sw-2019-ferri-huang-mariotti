@@ -2,13 +2,27 @@ package it.polimi.se2019.client;
 
 public class CLIView extends View {
 
-    @Override
-    public void getInput() {
+    public CLIView() {
 
     }
 
     @Override
-    public void sendInput() {
+    public void askInput() {
+
+    }
+
+    @Override
+    public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void reportError(String error) {
+
+    }
+
+    @Override
+    public void showGame() {
 
     }
 }

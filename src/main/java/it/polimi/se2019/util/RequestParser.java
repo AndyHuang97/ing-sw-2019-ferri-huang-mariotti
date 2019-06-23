@@ -22,8 +22,6 @@ public class RequestParser {
         String nickname = request.getNickname();
         Game game = gameManager.retrieveGame(nickname);
 
-        System.out.println(game.getPlayerList());
-
         Optional<Player> optPlayer = game.getPlayerList().stream()
                 .filter(p -> p.getUserData().getNickname().equals(nickname))
                 .findFirst();

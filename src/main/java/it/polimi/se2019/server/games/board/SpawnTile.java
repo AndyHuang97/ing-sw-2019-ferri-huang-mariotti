@@ -4,6 +4,7 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 
 import java.util.List;
 
+@Deprecated
 public class SpawnTile extends Tile {
 
     private List<Weapon> weaponCrate;

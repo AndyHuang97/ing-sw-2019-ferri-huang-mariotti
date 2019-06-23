@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,11 +74,15 @@ public class MoveTargetTest {
 
     @Test
     public void testMoveTarget() {
-        Effect effect = new MoveTarget();
+        Effect effect = new MoveTarget(false, true);
+        p1.getCharacterState().setTile(tileMap[1][0]);
+        p2.getCharacterState().setTile(tileMap[1][1]);
+        p3.getCharacterState().setTile(tileMap[1][2]);
+        p4.getCharacterState().setTile(tileMap[0][1]);
         List<Targetable> tile = new ArrayList<>();
         List<Targetable> target = new ArrayList<>();
-        targets.put("tile", tile);
-        targets.put("target", target);
+        targets.put(CommandConstants.TILELIST, tile);
+        targets.put(CommandConstants.TARGETLIST, target);
         game.setCurrentPlayer(p1);
 
         tile.add(tileMap[0][2]);

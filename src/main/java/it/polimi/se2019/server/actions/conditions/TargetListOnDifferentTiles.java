@@ -9,6 +9,7 @@ import it.polimi.se2019.util.CommandConstants;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class TargetListOnDifferentTiles implements Condition {
@@ -20,6 +21,8 @@ public class TargetListOnDifferentTiles implements Condition {
                         .map(t -> ((Player)t).getCharacterState().getTile())
                         .collect(Collectors.toList());
 
+        Logger.getGlobal().info("TargetListOnDifferentTiles: "+
+                tileList.stream().allMatch(new HashSet<>()::add));
         return tileList.stream().allMatch(new HashSet<>()::add);
     }
 }

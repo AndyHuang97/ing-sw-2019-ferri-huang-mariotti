@@ -16,10 +16,11 @@ public class MovePlayerAction extends PlayerAction {
 
     private List<Tile> moveList = new ArrayList<>();
     private final String errorMessage = "Move action failed";
-    private final int steps = 1;
+    private int steps;
 
-    public MovePlayerAction(Game game, Player player) {
+    public MovePlayerAction(Game game, Player player, int steps) {
         super(game, player);
+        this.steps = steps;
     }
 
     /**
@@ -44,7 +45,7 @@ public class MovePlayerAction extends PlayerAction {
     }
 
     @Override
-    public boolean check() {
+    public boolean check() {//TODO change check into something always true
         Board board = getGame().getBoard();
 
         Tile arrivalTile = moveList.get(0);

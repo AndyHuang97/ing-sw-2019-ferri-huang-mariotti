@@ -73,7 +73,7 @@ public class DistanceTest {
 
     @Test
     public void testDistance() {
-        Condition condition = new Distance(1);
+        Condition condition = new Distance(1, true, true, true, null);
         list.add(tileMap[0][0]);
         targets.put("tileList", list);
 
