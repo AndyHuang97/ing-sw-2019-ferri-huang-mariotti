@@ -42,7 +42,7 @@ public class GUIView extends View {
     public void showGame() {
 
         // the next line is used only for testing purposes only.
-        ((Model)super.getModel()).boardDeserialize();
+        //((Model)super.getModel()).boardDeserialize();
 
         this.initRootLayout();
         this.showGameBoard();

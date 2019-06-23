@@ -51,9 +51,10 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     public InternalMessage convertNetMessage(NetMessage netMessage, Game game) throws TargetableNotFoundException {
         Map<String, List<Targetable>> newCommands = new HashMap<>();
-        List<Targetable> newValues = new ArrayList<>();
         netMessage.getCommands().forEach((key, values) -> {
+            List<Targetable> newValues = new ArrayList<>(); // moved it inside the for each, must be a new reference each time
             values.forEach((value) -> {
+
                 Player playerTarget = game.getPlayerList().stream().filter(player -> player.getId().equals(value)).findAny().orElse(null);
                 if (playerTarget != null) {
                     newValues.add(playerTarget);
@@ -104,6 +105,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 Game game = ServerApp.gameManager.retrieveGame(nickname);
                 request.setInternalMessage(convertNetMessage(message, game));
                 // TODO: process command
+
             } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
                 logger.info(e.getMessage());
             }
