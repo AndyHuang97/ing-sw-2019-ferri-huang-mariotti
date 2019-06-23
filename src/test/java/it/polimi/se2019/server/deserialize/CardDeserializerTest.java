@@ -8,6 +8,7 @@ import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Deck;
+import it.polimi.se2019.server.games.board.Board;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -85,5 +86,54 @@ public class CardDeserializerTest {
         } catch (ClassNotFoundException f) {
             Assert.fail("Class not found.");
         }
+    }
+
+    @Test
+    public void testDirectDeserializers() {
+        new DirectDeserializers();
+        Board board = DirectDeserializers.deserializeBoard("0");
+        Deck<Weapon> weaponDeck = DirectDeserializers.deserialzerWeaponDeck();
+        Deck<PowerUp> powerUpDeck = DirectDeserializers.deserialzerPowerUpDeck();
+        Deck<AmmoCrate> ammoCrateDeck = DirectDeserializers.deserializeAmmoCrate();
+
+        assertNotNull(board);
+        assertNotNull(weaponDeck);
+        assertNotNull(powerUpDeck);
+        assertNotNull(ammoCrateDeck);
+
+        assertEquals("0", board.getId());
+        System.out.println("BoardId: "+board.getId());
+        System.out.println("Board:" + board);
+        System.out.println("Weapon:"+weaponDeck);
+        Weapon w;
+        int i = 0;
+        while((w = weaponDeck.drawCard()) != null) {
+            System.out.println(w.getName());
+             i++;
+        }
+        assertEquals(21, i);
+        System.out.println();
+        System.out.println("PowerUp:"+powerUpDeck);
+        powerUpDeck.shuffle();
+        PowerUp pU;
+        i = 0;
+        while((pU = powerUpDeck.drawCard()) != null) {
+            System.out.println(pU.getName());
+            i++;
+        }
+        assertEquals(24, i);
+        System.out.println();
+        System.out.println("AmmoCrate:"+ammoCrateDeck);
+        ammoCrateDeck.shuffle();
+        AmmoCrate aC;
+        i = 0;
+        while((aC = ammoCrateDeck.drawCard()) != null) {
+            System.out.println(aC.getName());
+            i++;
+        }
+        assertEquals(36,i);
+
+
+
     }
 }

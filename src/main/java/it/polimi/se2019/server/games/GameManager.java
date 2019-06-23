@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.games;
 
 import com.google.gson.Gson;
+import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -12,6 +13,7 @@ import it.polimi.se2019.util.Response;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GameManager {
@@ -21,6 +23,7 @@ public class GameManager {
 	private int waitingListStartTimerSize;
 	private int startTimerSeconds;
 	private List<Tuple> waitingList;
+	private List<String> mapPreference;
 	private String dumpName;
 	private int pingIntervalMilliseconds;
 
@@ -34,8 +37,9 @@ public class GameManager {
 	}
 
 	public GameManager() {
-		gameList = new ArrayList<>();
-		waitingList = new ArrayList<>();
+		this.gameList = new ArrayList<>();
+		this.waitingList = new ArrayList<>();
+		this.mapPreference = new ArrayList<>();
 	}
 
 	public void init(String dumpName) {
@@ -134,6 +138,16 @@ public class GameManager {
 			newGame.register(tuple.commandHandler);
 		});
 		newGame.setPlayerList(playerList);
+
+		//TODO read mapIndex from players' preference
+		Map<String, Long> occurrences =
+				mapPreference.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting()));
+		Map.Entry<String, Long> max = occurrences.entrySet()
+				.stream()
+				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);
+		Logger.getGlobal().warning("Map: "+max.getKey());
+		newGame.initGameObjects(max.getKey());
+
 		this.waitingList.forEach(tuple -> {
 			try {
 				tuple.commandHandler.update(new Response(newGame, true, ""));
@@ -207,6 +221,10 @@ public class GameManager {
 	public List<Tuple> getWaitingList() {
 		// TODO: is that method useful? Other classes cannot use Tuple type! ANSWER: No it is not useful for anybody
 		return waitingList;
+	}
+
+	public List<String> getMapPreference() {
+		return mapPreference;
 	}
 
 	public List<Game> getGameList() {

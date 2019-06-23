@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.games.board.NormalTile;
 import it.polimi.se2019.server.games.board.SpawnTile;
 import it.polimi.se2019.server.games.board.Tile;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class TileDeserializer implements RandomDeserializer {
@@ -33,8 +35,10 @@ public class TileDeserializer implements RandomDeserializer {
             if (name.equals("NormalTile")) {
                 // TODO: maybe edit data so that NoTitle has a param field
                 tile.setSpawnTile(false);
+                tile.setWeaponCrate(new ArrayList<>());
             } else if (name.equals("SpawnTile")) {
                 tile.setSpawnTile(true);
+                tile.setWeaponCrate(new ArrayList<>());
             }
             else throw new ClassNotFoundException();
         }

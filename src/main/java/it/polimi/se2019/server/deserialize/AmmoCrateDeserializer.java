@@ -29,6 +29,7 @@ public class AmmoCrateDeserializer implements RandomDeserializer {
         for(JsonElement ammoCrateElement : jsonAmmoCrateArray) {
             JsonObject jsonAmmoCrate = ammoCrateElement.getAsJsonObject();
             String name = jsonAmmoCrate.get("name").getAsString();
+            int amount = jsonAmmoCrate.get("amount").getAsInt();
             AmmoCrate ammoCrate = null;
 
             try {
@@ -38,8 +39,10 @@ public class AmmoCrateDeserializer implements RandomDeserializer {
                 throw e;
             }
 
-            ammoCrate = new AmmoCrate(actions, name);
-            ammoCrateList.add(ammoCrate);
+            for (int i = 0; i< amount; i++) {
+                ammoCrate = new AmmoCrate(actions, name);
+                ammoCrateList.add(ammoCrate);
+            }
         }
 
         return new Deck(ammoCrateList);

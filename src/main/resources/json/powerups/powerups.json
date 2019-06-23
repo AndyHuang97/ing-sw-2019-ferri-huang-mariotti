@@ -2,7 +2,7 @@
   "powerupDeck": [
     {
       "name": "Blue_Targeting_Scope",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -56,7 +56,7 @@
     },
     {
       "name": "Red_Targeting_Scope",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -110,7 +110,7 @@
     },
     {
       "name": "Yellow_Targeting_Scope",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -164,7 +164,7 @@
     },
     {
       "name": "Blue_Newton",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -223,7 +223,7 @@
     },
     {
       "name": "Red_Newton",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -282,7 +282,7 @@
     },
     {
       "name": "Yellow_Newton",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -341,7 +341,7 @@
     },
     {
       "name": "Blue_Tagback_Grenade",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -388,7 +388,7 @@
     },
     {
       "name": "Red_Tagback_Grenade",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -435,7 +435,7 @@
     },
     {
       "name": "Yellow_Tagback_Grenade",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -482,7 +482,7 @@
     },
     {
       "name": "Blue_Teleporter",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -528,7 +528,7 @@
     },
     {
       "name": "Red_Teleporter",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -574,7 +574,7 @@
     },
     {
       "name": "Yellow_Teleporter",
-      "amount": 1,
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",

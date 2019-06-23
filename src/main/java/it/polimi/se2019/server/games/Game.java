@@ -4,9 +4,9 @@ import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
-import it.polimi.se2019.server.games.command.Command;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.CommandConstants;
@@ -81,6 +81,51 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public GameData generateGameData() {
 		return new GameData(getStartDate());
+	}
+
+	//TODO initialize the board
+	public void initGameObjects(String mapIndex) {
+		new DirectDeserializers();
+		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
+		System.out.println(getBoard().getId());
+		this.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrate());
+		this.setWeaponDeck(DirectDeserializers.deserialzerWeaponDeck());
+		this.setPowerupDeck(DirectDeserializers.deserialzerPowerUpDeck());
+		this.getWeaponDeck().shuffle();
+		this.getAmmoCrateDeck().shuffle();
+		this.getPowerupDeck().shuffle();
+
+		initBoard();
+		initPlayerPowerUps();
+	}
+
+	public void initBoard() {
+		this.getBoard().getTileList().stream()
+				.filter(Objects::nonNull)
+				.filter(t -> t.isSpawnTile())
+				.forEach(t -> {
+					for (int i=0; i<3; i++) {
+						t.getWeaponCrate().add(weaponDeck.drawCard());
+					}
+				});
+		this.getBoard().getTileList().stream()
+				.filter(Objects::nonNull)
+				.filter(t-> !t.isSpawnTile())
+				.forEach(t -> t.setAmmoCrate(ammoCrateDeck.drawCard()));
+	}
+
+	public void initPlayerPowerUps() {
+		this.getPlayerList().stream()
+				.forEach(p -> {
+					for (int i=0; i<2; i++) {
+						givePowerUpToPlayer(p);
+					}
+				});
+
+	}
+
+	public void givePowerUpToPlayer(Player player) {
+		player.getCharacterState().getPowerUpBag().add(powerupDeck.drawCard());
 	}
 
 	public void updateTurn() {
@@ -236,5 +281,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setCumulativeTargetList(List<Targetable> cumulativeTargetList) {
 		this.cumulativeTargetList = cumulativeTargetList;
+	}
+
+	public Deck<AmmoCrate> getAmmoCrateDeck() {
+		return ammoCrateDeck;
+	}
+
+	public void setAmmoCrateDeck(Deck<AmmoCrate> ammoCrateDeck) {
+		this.ammoCrateDeck = ammoCrateDeck;
 	}
 }

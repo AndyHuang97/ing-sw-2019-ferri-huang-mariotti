@@ -8,11 +8,10 @@ import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.*;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Observer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class View extends Observable implements Observer<Response> {
 
@@ -60,7 +59,8 @@ public abstract class View extends Observable implements Observer<Response> {
 
         networkClient.start(this);
         Map<String, List<String>> payload = new HashMap<>();
-        payload.put("connect", new ArrayList<>());
+        payload.put("connect", Arrays.asList(map));
+        System.out.println(payload.get("connect").get(0));
         networkClient.send(new Request(new NetMessage(payload), nickname));
     }
 

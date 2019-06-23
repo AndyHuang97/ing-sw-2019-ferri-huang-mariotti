@@ -92,6 +92,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     }
                 } else if (!ServerApp.gameManager.isUserInWaitingList(nickname)) {
                     ServerApp.gameManager.addUserToWaitingList(new UserData(nickname), this);
+                    ServerApp.gameManager.getMapPreference().add(message.getCommands().get("connect").get(0));
                 } else {
                     logger.info("User " + nickname + " tried to join queue multiple times");
                 }
