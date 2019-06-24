@@ -80,6 +80,13 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.connected = connected;
 	}
 
+	/**
+	 * The getPossibleActions returns the list of actions that a player can perform according to their damage bar
+	 * and the mode of the game(normal or frenzy).
+	 * @param isFrenzy is a boolean that indicates the game mode.
+	 * @return the list of allowed actions.
+	 */
+	//TODO could be deserialized (?)
 	public List<CompositeAction> getPossibleActions(boolean isFrenzy) {
 		List<CompositeAction> possibleActions = new ArrayList<>();
 		possibleActions.add(new CompositeAction(new GrabPlayerAction(0)));
@@ -116,6 +123,11 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	}
 
 
+	/**
+	 * The swapValueBar method swaps out the current value bar of the player with the correct one according to
+	 * the game mode.
+	 * @param isFrenzy is a boolean that indicates the game mode.
+	 */
 	public void swapValueBar(boolean isFrenzy) {
 		if (isFrenzy) {
 			if (this.getDamageBar().size() == 0) {

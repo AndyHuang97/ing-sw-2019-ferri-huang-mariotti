@@ -37,6 +37,11 @@ public abstract class PlayerAction implements Targetable {
         this.player = player;
     }
 
+    /**
+     * This constructor is only used to build nameplate instances of the object, designed for the MovePlayerAction in particular.
+     * The instances are mainly used to retrieve the Id of the different sublclasses and the distance for a MovePlayerAction.
+     * @param amount is the parameter that indicates the distance.
+     */
     public PlayerAction(int amount) {
         this.amount = amount;
     }

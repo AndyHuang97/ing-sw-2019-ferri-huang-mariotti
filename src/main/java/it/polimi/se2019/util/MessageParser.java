@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/setUp them.
+ * The order of the key parsing is determined by the keyOrder key of the message's commands.
  */
 public class MessageParser {
 

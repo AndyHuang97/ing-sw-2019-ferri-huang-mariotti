@@ -87,7 +87,7 @@ public class GUIView extends View {
 
             // initialization of the map must precede the initialization of the player boards
 
-            guiController.init(super.getModel().getGame().getPlayerByColor(super.getPlayerColor()));
+            guiController.init(getModel().getGame().getPlayerByColor(getPlayerColor()));
 
         } catch(IOException e) {
             Logger.getGlobal().warning(e.toString());

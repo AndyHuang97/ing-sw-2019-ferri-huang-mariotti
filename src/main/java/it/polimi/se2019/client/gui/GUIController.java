@@ -28,15 +28,19 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static it.polimi.se2019.client.util.Constants.SOFACHROMERG_FONT;
+
 public class GUIController {
 
     private static final Logger logger = Logger.getLogger(GUIController.class.getName());
 
     private View view;
+    private Map<PlayerColor, PlayerBoardController> playerBoardControllerMap;
     private List<PlayerBoardController> pbControllerList;
     private MapController mapController;
     private ActionTileController actionTileController;
     private Map<String, List<String>> intermediateInput = new HashMap<>();
+    private boolean initialized;
 
     private GridPane progressBar;
 
@@ -78,7 +82,9 @@ public class GUIController {
      */
     @FXML
     private void initialize() {
+        playerBoardControllerMap = new HashMap<>();
         pbControllerList = new ArrayList<>();
+        initialized = false;
     }
 
     /**
@@ -101,6 +107,7 @@ public class GUIController {
         initMyCards();
 
         showMyCards();
+        initialized = false;
         //showRanking();
     }
 
@@ -110,20 +117,22 @@ public class GUIController {
      */
     public void initMap() {
 
-        try {
-            FXMLLoader mloader = new FXMLLoader();
-            mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
-            AnchorPane decoratedMap = (AnchorPane) mloader.load();
-            mapController = mloader.getController();
-            mapController.setView(view);
+        if (!initialized) {
+            try {
+                FXMLLoader mloader = new FXMLLoader();
+                mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
+                AnchorPane decoratedMap = (AnchorPane) mloader.load();
+                mapController = mloader.getController();
+                mapController.setView(view);
 
-            // removes the old anchor and adds the new one
-            leftVBox.getChildren().remove(0);
-            leftVBox.getChildren().add(0, decoratedMap);
-            mapController.handleMapLoading();
-            progressBar = mapController.getProgressBar();
-        } catch (IOException e) {
-            logger.warning("Error loading map.");
+                // removes the old anchor and adds the new one
+                leftVBox.getChildren().remove(0);
+                leftVBox.getChildren().add(0, decoratedMap);
+                mapController.handleMapLoading();
+                progressBar = mapController.getProgressBar();
+            } catch (IOException e) {
+                logger.warning("Error loading map.");
+            }
         }
     }
 
@@ -133,7 +142,7 @@ public class GUIController {
      * @param player is the client.
      */
     public void initPlayerBoards(Player player) {
-        Font.loadFont(PlayerBoardController.class.getResource("/css/sofachromerg.ttf").toExternalForm(),10);
+        Font.loadFont(PlayerBoardController.class.getResource(SOFACHROMERG_FONT).toExternalForm(),10);
 
         Game game = view.getModel().getGame();
         AnchorPane playerBoardPane;
@@ -146,7 +155,7 @@ public class GUIController {
                 AnchorPane decoratedPane = playerLoader.load();
 
                 PlayerBoardController playerController = playerLoader.getController();
-                pbControllerList.add(playerController);
+                playerBoardControllerMap.put(pc, playerController);
                 playerController.setView(view);
                 playerController.setPlayerColor(pc);
                 playerController.initMarkerPane(pc);
@@ -179,7 +188,7 @@ public class GUIController {
                 playerBoardPane.getChildren().remove(0);
                 playerBoardPane.getChildren().add(decoratedPane);
 
-
+                playerController = playerBoardControllerMap.get(pc);
                 playerController.showPlayerBoard(game.getPlayerByColor(pc));
                 playerController.showDamageBar(game.getPlayerByColor(pc));
                 playerController.showMarkerBar(game.getPlayerByColor(pc));
@@ -192,6 +201,17 @@ public class GUIController {
                 logger.warning(e.toString());
             }
         }
+    }
+
+    public void showPlayerBoards() {
+        Game game = view.getModel().getGame();
+        AnchorPane playerBoardPane;
+        int i = 0;
+        for (PlayerColor pc : game.getActiveColors()) {
+            PlayerBoardController playerBoardController = playerBoardControllerMap.get(pc);
+        }
+
+
     }
 
     /**
