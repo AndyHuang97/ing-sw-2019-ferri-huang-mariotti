@@ -21,6 +21,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
 	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
+	private static final int FIRST_ATTACKER = 0;
 
 	private int deaths;
 	private int[] valueBar;
@@ -236,7 +237,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
 			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
 			// first attack bonus
-			if(message.getDamageBar().get(0) == playerColor) {
+			if(message.getDamageBar().get(FIRST_ATTACKER) == playerColor) {
 				score += 1;
 			}
 

@@ -140,12 +140,13 @@ public class GameManager {
 
 		//TODO read mapIndex from players' preference
 		Map<String, Long> occurrences =
-				mapPreference.stream().collect(Collectors.groupingBy(w -> w, Collectors.counting()));
+				mapPreference.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
 		Map.Entry<String, Long> max = occurrences.entrySet()
 				.stream()
 				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);
-		Logger.getGlobal().warning("Map: "+max.getKey());
+		Logger.getGlobal().info("Map: "+max.getKey());
 		newGame.initGameObjects(max.getKey());
+		mapPreference = new ArrayList<>();
 
 		this.waitingList.forEach(tuple -> {
 			try {

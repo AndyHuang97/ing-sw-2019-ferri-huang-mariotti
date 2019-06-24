@@ -15,6 +15,7 @@ public class ClientCommandHandler {
     }
 
     public void handle(Response request) {
+        //TODO change it so that also the CLIView can handle it
         Platform.runLater(() -> internalHandle(request));
     }
 

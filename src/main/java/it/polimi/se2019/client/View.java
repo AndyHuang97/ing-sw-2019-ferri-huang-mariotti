@@ -60,7 +60,6 @@ public abstract class View extends Observable implements Observer<Response> {
         networkClient.start(this);
         Map<String, List<String>> payload = new HashMap<>();
         payload.put("connect", Arrays.asList(map));
-        System.out.println(payload.get("connect").get(0));
         networkClient.send(new Request(new NetMessage(payload), nickname));
     }
 
