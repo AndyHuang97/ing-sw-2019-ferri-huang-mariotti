@@ -183,7 +183,7 @@ public class Tile implements Targetable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-
+		builder.append(this.getId()).append(") ");
 		builder.append(roomColor.getColor());
 		builder.append(": ");
 		for (LinkType l : links) {

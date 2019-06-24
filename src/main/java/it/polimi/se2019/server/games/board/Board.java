@@ -20,7 +20,7 @@ public class Board {
 
     private String id;
     private Tile[][] tileMap;
-    private Graph<Tile> tileTree;
+    private transient Graph<Tile> tileTree;
 
     public Board() {
     }

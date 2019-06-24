@@ -55,7 +55,7 @@ public class ControllerTest {
         // GameManager and Game init
         ServerApp serverApp = new ServerApp();
         gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
-
+        gameManager.getMapPreference().add("0");
         int waitingListMaxSize = 5;
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);

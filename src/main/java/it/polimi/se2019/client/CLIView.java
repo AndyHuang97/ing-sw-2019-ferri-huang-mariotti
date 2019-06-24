@@ -18,14 +18,16 @@ public class CLIView extends View {
         this.out = out;
         this.active = true;
         this.connected = false;
+        /*
         try(Scanner in = new Scanner(System.in)) {
             this.in = in;
             while (isActive()) {
-                askInput();
+                //askInput();
                 String input = in.nextLine();
                 CLIView.this.notify(input);
             }
         }
+        */
 
     }
 

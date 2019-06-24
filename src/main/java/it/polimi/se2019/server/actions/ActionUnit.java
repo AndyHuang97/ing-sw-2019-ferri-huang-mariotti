@@ -6,6 +6,7 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.util.CommandConstants;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +18,9 @@ public class ActionUnit implements Targetable {
 	private boolean available;
 	private String name;
 	private String description;
-	private List<Effect> effectList;
-	private List<Condition> conditionList;
-	private Map<String, List<Targetable>> commands;
+	private transient List<Effect> effectList;
+	private transient List<Condition> conditionList;
+	private transient Map<String, List<Targetable>> commands;
 	private int numPlayerTargets;
 	private int numTileTargets;
 	private boolean playerSelectionFirst;

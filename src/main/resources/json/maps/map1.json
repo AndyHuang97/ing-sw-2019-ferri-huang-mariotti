@@ -56,7 +56,7 @@
         0
       ],
       "params": {
-        "roomColor": "Green",
+        "roomColor": "GREEN",
         "links": [
           "WALL",
           "WALL",

@@ -65,8 +65,10 @@ public class GameManagerTest {
         int waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
+            gameManager.getMapPreference().add("0");
             gameManager.addUserToWaitingList(user, new CommandHandler());
         }
+        System.out.println(gameManager.getGameList());
         Assert.assertEquals(1, gameManager.getGameList().size());
     }
 
@@ -79,8 +81,10 @@ public class GameManagerTest {
         int waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
         for (int i = 0; i <= 2 * waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
+            gameManager.getMapPreference().add("0");
             gameManager.addUserToWaitingList(user, new CommandHandler());
         }
         Assert.assertNotEquals(gameManager.retrieveGame("testNick0"), gameManager.retrieveGame("testNick" + 2 * waitingListMaxSize));
+        gameManager.getGameList().clear();
     }
 }
