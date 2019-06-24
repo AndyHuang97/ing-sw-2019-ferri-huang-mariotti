@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.server.actions.Action;
+import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -15,6 +16,7 @@ import java.util.List;
  * the View sends a valid Request
  */
 public abstract class PlayerAction {
+    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_MAIN_ACTIONS};
 
     private Game game;
     private Player player;
@@ -67,5 +69,15 @@ public abstract class PlayerAction {
     // TODO: remove setActionNumber
     public void setAction(Action action) {
         this.action = action;
+    }
+
+    public boolean isAvailable(TurnPhase turnPhase) {
+        for (TurnPhase allowedTurnPhase : ALLOWED_IN) {
+            if (allowedTurnPhase == turnPhase) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

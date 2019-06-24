@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -14,7 +15,8 @@ import java.util.List;
 
 public class MovePlayerAction extends PlayerAction {
     private static final String ERRORMESSAGE = "Move action failed";
-    private static final int steps = 1;
+    private static final int STEPS = 1;
+    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_EFFECTS, TurnPhase.WAITING_FOR_MAIN_ACTIONS};
 
     private List<Tile> moveList = new ArrayList<>();
 
@@ -52,7 +54,7 @@ public class MovePlayerAction extends PlayerAction {
 
         Graph<Tile> graph = board.generateGraph();
 
-        return graph.isReachable(arrivalTile, startingTile, steps);
+        return graph.isReachable(arrivalTile, startingTile, STEPS);
     }
 
     @Override

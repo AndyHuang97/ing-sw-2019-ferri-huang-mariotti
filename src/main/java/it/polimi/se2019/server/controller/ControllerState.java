@@ -10,7 +10,7 @@ interface ControllerState {
      * @return a List<PlayerAction> containing the actions allowed during the specific turn phase represented
      *         by the Controller State
      */
-    List<PlayerAction> getAllowedPlayerAction(List<PlayerAction> playerActions);
+    List<PlayerAction> getAllowedPlayerActions(List<PlayerAction> playerActions);
 
     /**
      * This method must be run after running the allowed player actions, and it's meant to be used

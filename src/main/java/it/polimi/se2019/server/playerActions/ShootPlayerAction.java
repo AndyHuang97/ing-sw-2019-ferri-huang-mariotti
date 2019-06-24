@@ -2,6 +2,7 @@ package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -23,6 +24,7 @@ public class ShootPlayerAction extends PlayerAction {
     private static final int TILEPOSITIONINPARAMS = 3;
     private static final int EFFECTTILEPOSITIONINPARAMS = 4;
     private static final String ERRORMESSAGE = "Shoot action failed";
+    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_MAIN_ACTIONS, TurnPhase.WAITING_FOR_EFFECTS};
 
     private Player target;
     private Weapon chosenWeapon;
@@ -61,7 +63,6 @@ public class ShootPlayerAction extends PlayerAction {
 
         // Is chosenActionUnit in chosenWeapon?
         if (chosenWeapon.getActionUnitList().stream().noneMatch(availableActionUnit -> availableActionUnit == chosenActionUnit)) {
-            System.out.println("asd");
             return false;
         }
 

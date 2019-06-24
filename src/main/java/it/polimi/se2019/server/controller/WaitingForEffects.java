@@ -4,7 +4,7 @@ import it.polimi.se2019.server.playerActions.PlayerAction;
 
 import java.util.List;
 
-public class WaitingForRespawn implements ControllerState {
+public class WaitingForEffects implements ControllerState {
     @Override
     public List<PlayerAction> getAllowedPlayerActions(List<PlayerAction> playerActions) {
         return null;
