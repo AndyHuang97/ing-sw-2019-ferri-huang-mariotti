@@ -40,12 +40,12 @@ public class ClientGui extends Application {
 
         view = new GUIView(primaryStage);
 
-        showLogin();
+        //showLogin();
 
         //testing
-        //view.setPlayerColor(PlayerColor.GREEN);
-        //((Model)view.getModel()).initGame();
-        //view.showGame();
+        view.setPlayerColor(PlayerColor.GREEN);
+        ((Model)view.getModel()).initGame();
+        view.showGame();
 
     }
 

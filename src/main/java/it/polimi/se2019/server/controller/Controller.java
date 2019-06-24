@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.controller;
 
 
+import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.exceptions.MessageParseException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.GameManager;
@@ -39,6 +40,7 @@ public class Controller implements Observer<Request> {
             boolean runnable = true;
 
             for (PlayerAction playerAction : playerActionList) {
+                System.out.println(playerAction.getId());
                 if (!playerAction.check()) {
                     CommandHandler commandHandler = requestParser.getCommandHandler();
                     commandHandler.reportError(playerAction.getErrorMessage());
@@ -53,6 +55,8 @@ public class Controller implements Observer<Request> {
             }
         } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
 
+        } catch (IllegalPlayerActionException e) {
+            System.out.println("Send illegal action error...");
         }
     }
 

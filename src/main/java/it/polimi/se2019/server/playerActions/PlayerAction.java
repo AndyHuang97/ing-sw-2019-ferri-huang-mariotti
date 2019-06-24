@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -14,11 +15,12 @@ import java.util.List;
  * PlayerAction objects are used by the Controller to modify the Model after
  * the View sends a valid Request
  */
-public abstract class PlayerAction {
+public abstract class PlayerAction implements Targetable {
 
     private Game game;
     private Player player;
     private CommandHandler commandHandler;
+    private int amount;
 
     @Deprecated
     private Action action;
@@ -33,6 +35,10 @@ public abstract class PlayerAction {
     public PlayerAction(Game game, Player player) {
         this.game = game;
         this.player = player;
+    }
+
+    public PlayerAction(int amount) {
+        this.amount = amount;
     }
 
     public abstract void unpack(List<Targetable> params) throws UnpackingException;
@@ -67,5 +73,9 @@ public abstract class PlayerAction {
     // TODO: remove setActionNumber
     public void setAction(Action action) {
         this.action = action;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 }

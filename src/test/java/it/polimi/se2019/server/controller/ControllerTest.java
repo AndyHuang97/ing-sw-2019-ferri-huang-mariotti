@@ -2,9 +2,11 @@ package it.polimi.se2019.server.controller;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.*;
+import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
@@ -14,6 +16,7 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.server.playerActions.*;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.InternalMessage;
 import it.polimi.se2019.util.Request;
@@ -25,10 +28,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ControllerTest {
 
@@ -140,6 +140,7 @@ public class ControllerTest {
         targetableList.add(tileMap[0][1]);
 
         Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new MovePlayerAction(0)));
         command.put(MOVEPLAYERACTION, targetableList);
 
         InternalMessage message =  new InternalMessage(command);
@@ -164,6 +165,7 @@ public class ControllerTest {
         targetableList.add(null);
 
         Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new ShootPlayerAction(0)));
         command.put(SHOOTPLAYERACTION, targetableList);
 
         InternalMessage message = new InternalMessage(command);
@@ -192,6 +194,7 @@ public class ControllerTest {
         targetableList.add(weapon);
 
         Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
         command.put(GRABPLAYERACTION, targetableList);
 
         InternalMessage message = new InternalMessage(command);
@@ -232,6 +235,7 @@ public class ControllerTest {
         targetableList.add(weapon);
 
         Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new ReloadPlayerAction(0)));
         command.putIfAbsent(RELOADPLAYERACTION, targetableList);
 
         weapon.setLoaded(false);
@@ -249,6 +253,30 @@ public class ControllerTest {
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         Assert.assertTrue(player0.getCharacterState().getWeaponBag().get(0).isLoaded());
+    }
+
+    @Test
+    public void testActionAvailability() throws GameManager.GameNotFoundException, PlayerNotFoundException, IllegalPlayerActionException {
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        player0.getCharacterState().getDamageBar().clear();
+
+        List<Targetable> targetableList = new ArrayList<>();
+        targetableList.add(tileMap[1][1]);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new MovePlayerAction(0), new GrabPlayerAction(0)));
+        command.put(MOVEPLAYERACTION, targetableList);
+        targetableList = new ArrayList<>();
+        targetableList.add(weapon);
+        command.put(GRABPLAYERACTION, targetableList);
+
+        InternalMessage message =  new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        actualPlayerCommandHandler.handleLocalRequest(request);
+        // not available action, so no move performed
+        Assert.assertSame(player0.getCharacterState().getTile(), tileMap[0][0]);
+
     }
 
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {

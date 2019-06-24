@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -21,6 +22,7 @@ public class MovePlayerAction extends PlayerAction {
     public MovePlayerAction(Game game, Player player) {
         super(game, player);
     }
+    public MovePlayerAction(int amount) { super(amount);}
 
     /**
      * @param params: list param containing Targetable object that can be cast to Tile
@@ -45,6 +47,7 @@ public class MovePlayerAction extends PlayerAction {
 
     @Override
     public boolean check() {
+        /*
         Board board = getGame().getBoard();
 
         Tile arrivalTile = moveList.get(0);
@@ -53,6 +56,9 @@ public class MovePlayerAction extends PlayerAction {
         Graph<Tile> graph = board.generateGraph();
 
         return graph.isReachable(arrivalTile, startingTile, steps);
+
+         */
+        return true;
     }
 
     @Override
@@ -62,5 +68,10 @@ public class MovePlayerAction extends PlayerAction {
 
     public List<Tile> getMoveList() {
         return moveList;
+    }
+
+    @Override
+    public String getId() {
+        return Constants.MOVE;
     }
 }

@@ -4,8 +4,10 @@ import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
 import it.polimi.se2019.server.dataupdate.PlayerEventListenable;
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.playerActions.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	private Tile tile;
 	private Integer score;
 	private boolean connected;
+
+	private boolean beforeFrenzyActivator;
 
 	/**
 	 * Default constructor
@@ -74,6 +78,52 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.tile = tile;
 		this.score = score;
 		this.connected = connected;
+	}
+
+	public List<CompositeAction> getPossibleActions(boolean isFrenzy) {
+		List<CompositeAction> possibleActions = new ArrayList<>();
+		possibleActions.add(new CompositeAction(new GrabPlayerAction(0)));
+		possibleActions.add(new CompositeAction(new ShootPlayerAction(0)));
+		if (isFrenzy) {
+			possibleActions.add(new CompositeAction(new ReloadPlayerAction( 0),
+					new ShootPlayerAction(0)));
+			if (beforeFrenzyActivator) {
+				possibleActions.add(new CompositeAction(new MovePlayerAction(1), new ReloadPlayerAction( 0),
+						new ShootPlayerAction(0)));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(4)));
+				possibleActions.add(new CompositeAction(
+						new MovePlayerAction(2), new GrabPlayerAction(0)));
+			} else {
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), new ReloadPlayerAction(0),
+						new ShootPlayerAction(0)));
+				possibleActions.add(new CompositeAction(
+						new MovePlayerAction(3), new GrabPlayerAction(0)));
+			}
+		} else {
+			possibleActions.add(new CompositeAction(new MovePlayerAction(3)));
+			possibleActions.add(new CompositeAction(
+					new MovePlayerAction(1), new GrabPlayerAction(0)));
+			possibleActions.add(new CompositeAction(new ReloadPlayerAction(0)));
+			if (this.getDamageBar().size()>=2) {
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), new GrabPlayerAction(0)));
+				if (this.getDamageBar().size()>=5) {
+					possibleActions.add(new CompositeAction(new MovePlayerAction(1), new ShootPlayerAction(0)));
+				}
+			}
+		}
+
+		return possibleActions;
+	}
+
+
+	public void swapValueBar(boolean isFrenzy) {
+		if (isFrenzy) {
+			if (this.getDamageBar().size() == 0) {
+				valueBar = FRENZY_VALUE_BAR;
+			} else {
+				valueBar = NORMAL_VALUE_BAR;
+			}
+		}
 	}
 
 
@@ -306,9 +356,19 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.connected = connected;
 	}
 
+
+	public void setBeforeFrenzyActivator(boolean beforeFrenzyActivator) {
+		this.beforeFrenzyActivator = beforeFrenzyActivator;
+	}
+
+	public boolean isBeforeFrenzyActivator() {
+		return beforeFrenzyActivator;
+	}
+
 	private void notifyCharacterStateChange() {
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
 	    notifyCharacterStateUpdate(stateUpdate);
     }
+
 }

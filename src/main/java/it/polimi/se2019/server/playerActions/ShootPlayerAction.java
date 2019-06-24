@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
@@ -32,6 +33,7 @@ public class ShootPlayerAction extends PlayerAction {
 
 
     public ShootPlayerAction(Game game, Player player) { super(game, player); }
+    public ShootPlayerAction(int amount) { super(amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
@@ -103,5 +105,10 @@ public class ShootPlayerAction extends PlayerAction {
     @Override
     public ErrorResponse getErrorMessage() {
         return new ErrorResponse(ERRORMESSAGE);
+    }
+
+    @Override
+    public String getId() {
+        return Constants.SHOOT;
     }
 }

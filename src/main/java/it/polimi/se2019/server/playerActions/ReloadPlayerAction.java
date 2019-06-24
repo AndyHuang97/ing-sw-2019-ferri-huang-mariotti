@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -20,6 +21,7 @@ public class ReloadPlayerAction extends PlayerAction {
     private List<Weapon> weaponToReload = new ArrayList<>();
 
     public ReloadPlayerAction(Game game, Player player) { super(game, player); }
+    public ReloadPlayerAction(int amount) { super(amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
@@ -83,5 +85,10 @@ public class ReloadPlayerAction extends PlayerAction {
     @Override
     public ErrorResponse getErrorMessage() {
         return new ErrorResponse(ERRORMESSAGE);
+    }
+
+    @Override
+    public String getId() {
+        return Constants.RELOAD;
     }
 }

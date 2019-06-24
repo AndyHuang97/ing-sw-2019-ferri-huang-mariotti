@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -21,6 +22,7 @@ public class GrabPlayerAction extends PlayerAction {
     private Weapon weaponToGrab;
 
     public GrabPlayerAction(Game game, Player player) { super(game, player); }
+    public GrabPlayerAction(int amount) { super(amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
@@ -90,5 +92,10 @@ public class GrabPlayerAction extends PlayerAction {
 
         // pay pickup cost
         player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap());
+    }
+
+    @Override
+    public String getId() {
+        return Constants.GRAB;
     }
 }

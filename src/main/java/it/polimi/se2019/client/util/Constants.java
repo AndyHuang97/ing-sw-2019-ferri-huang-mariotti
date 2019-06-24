@@ -29,6 +29,7 @@ public class Constants {
     public static final String RELOAD = "Reload";
     public static final double buttonOpacity = 0.45;
     public static final double onClickedOpacity = 0.6;
+    public static final String KEY_ORDER = "keyOrder";
     public static final String map0 = "0";
     public static final String map1 = "1";
     public static final String map2 = "2";

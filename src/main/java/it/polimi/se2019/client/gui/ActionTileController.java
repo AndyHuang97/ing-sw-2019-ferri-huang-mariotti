@@ -20,6 +20,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -167,6 +168,15 @@ public class ActionTileController {
 
     public void getTile(){
 
+        Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
+        if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
+            List<String> lst = new ArrayList<>();
+            lst.add(Constants.MOVE);
+            intermediateInput.put(Constants.KEY_ORDER, lst);
+        } else {
+            intermediateInput.get(Constants.KEY_ORDER).add(Constants.MOVE);
+        }
+
         //disableActionButtons();
         tileGrid.toFront();
         tileGrid.setDisable(false);
@@ -193,6 +203,15 @@ public class ActionTileController {
 
     public void getCard() {
 
+        Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
+        if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
+            List<String> lst = new ArrayList<>();
+            lst.add(Constants.GRAB);
+            intermediateInput.put(Constants.KEY_ORDER, lst);
+        } else {
+            intermediateInput.get(Constants.KEY_ORDER).add(Constants.GRAB);
+        }
+
         //disableActionButtons();
 
         infoText.setText("Select 1 card ");
@@ -203,6 +222,15 @@ public class ActionTileController {
     }
 
     public void getShoot() {
+
+        Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
+        if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
+            List<String> lst = new ArrayList<>();
+            lst.add(Constants.SHOOT);
+            intermediateInput.put(Constants.KEY_ORDER, lst);
+        } else {
+            intermediateInput.get(Constants.KEY_ORDER).add(Constants.SHOOT);
+        }
 
         //disableActionButtons();
         infoText.setText("Select 1 card ");
@@ -262,6 +290,15 @@ public class ActionTileController {
     }
 
     public void getReload() {
+
+        Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
+        if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
+            List<String> lst = new ArrayList<>();
+            lst.add(Constants.RELOAD);
+            intermediateInput.put(Constants.KEY_ORDER, lst);
+        } else {
+            intermediateInput.get(Constants.KEY_ORDER).add(Constants.RELOAD);
+        }
 
         //disableActionButtons();
         infoText.setText("Select 1 card ");

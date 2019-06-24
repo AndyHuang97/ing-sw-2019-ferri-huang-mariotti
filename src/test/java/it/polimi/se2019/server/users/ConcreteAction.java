@@ -32,4 +32,9 @@ public class ConcreteAction extends PlayerAction {
     public ErrorResponse getErrorMessage() {
         return null;
     }
+
+    @Override
+    public String getId() {
+        return null;
+    }
 }
