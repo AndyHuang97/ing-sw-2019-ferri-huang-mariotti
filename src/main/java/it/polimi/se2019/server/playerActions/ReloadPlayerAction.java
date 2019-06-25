@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ReloadPlayerAction extends PlayerAction {
-
     private static final String ERRORMESSAGE = "Reload action failed";
 
     private List<Weapon> weaponToReload = new ArrayList<>();
