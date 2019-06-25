@@ -2,6 +2,7 @@ package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -18,6 +19,7 @@ public class GrabPlayerAction extends PlayerAction {
     private static final int WEAPONPOSITION = 0;
     private static final int MAXWEAPONINBAG = 3;
     private static final String ERRORMESSAGE = "Grab action failed";
+    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_GRAB};
 
     private Weapon weaponToGrab;
 

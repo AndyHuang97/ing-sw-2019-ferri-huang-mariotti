@@ -3,13 +3,14 @@ package it.polimi.se2019.server.controller;
 /**
  * The TurnHandler is the class that defines a turn's logic.
  */
+@Deprecated
 public abstract class TurnHandler {
 
     private BattleHandler battleHandler;
     private TurnPhase turnPhase;
 
     public TurnHandler() {
-        this.turnPhase = TurnPhase.FIRSTSPAWN;
+        this.turnPhase = TurnPhase.WAITING_FOR_RESPAWN;
     }
 
     public TurnHandler(BattleHandler battleHandler, TurnPhase turnPhase) {

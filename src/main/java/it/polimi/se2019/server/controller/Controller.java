@@ -12,6 +12,7 @@ import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Request;
 import it.polimi.se2019.util.RequestParser;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ import java.util.Map;
 public class Controller implements Observer<Request> {
 
     private GameManager gameManager;
-    private Map<Game, ControllerState> controllerStateMap;
+    private Map<Game, ControllerState> controllerStateMap = new HashMap<>();
 
     public Controller(GameManager activeGames) {
         this.gameManager = activeGames;
@@ -52,7 +53,7 @@ public class Controller implements Observer<Request> {
 
             ControllerState controllerState = getStateFromGame(game);
 
-            List <PlayerAction> checkablePlayerActionList = controllerState.getAllowedPlayerAction(playerActionList);
+            List <PlayerAction> checkablePlayerActionList = controllerState.getAllowedPlayerActions(playerActionList);
 
             boolean runnable = true;
 
@@ -69,7 +70,7 @@ public class Controller implements Observer<Request> {
                     applyAction(playerAction);
                 }
 
-                // next turn phase
+                // allowed PlayerActions have been run, time for next turn phase
                 setControllerStateForGame(game, controllerState.nextState());
             }
         } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
