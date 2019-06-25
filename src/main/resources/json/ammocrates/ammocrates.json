@@ -1,7 +1,7 @@
 {
   "ammocrateDeck": [
     {
-      "name": "1 yellow, 2 blue ammocrate",
+      "name": "1_Yellow_2_Blue",
       "amount": 3,
       "actions": [
         {
@@ -34,7 +34,7 @@
       "image": ""
     },
     {
-      "name": "1 yellow, 2 red ammocrate",
+      "name": "1_Yellow_2_Blue",
       "amount": 3,
       "actions": [
         {
@@ -67,7 +67,7 @@
       "image": ""
     },
     {
-      "name": "1 red, 2 blue ammocrate",
+      "name": "1_Red_2_Blue",
       "amount": 3,
       "actions": [
         {
@@ -100,7 +100,7 @@
       "image": ""
     },
     {
-      "name": "1 red, 2 yellow ammocrate",
+      "name": "1_Red_2_Yellow",
       "amount": 3,
       "actions": [
         {
@@ -133,7 +133,7 @@
       "image": ""
     },
     {
-      "name": "1 blue, 2 yellow ammocrate",
+      "name": "1_Blue_2_Yellow",
       "amount": 3,
       "actions": [
         {
@@ -166,7 +166,7 @@
       "image": ""
     },
     {
-      "name": "1 blue, 2 red ammocrate",
+      "name": "1_Blue_2_Red",
       "amount": 3,
       "actions": [
         {
@@ -199,7 +199,7 @@
       "image": ""
     },
     {
-      "name": "1 powerup, 2 yellow ammocrate",
+      "name": "1_PowerUp_2_Yellow",
       "amount": 2,
       "actions": [
         {
@@ -230,7 +230,7 @@
       "image": ""
     },
     {
-      "name": "1 powerup, 2 red ammocrate",
+      "name": "1_PowerUp_2_Red",
       "amount": 2,
       "actions": [
         {
@@ -261,7 +261,7 @@
       "image": ""
     },
     {
-      "name": "1 powerup, 2 blue ammocrate",
+      "name": "1_PowerUp_2_Blue",
       "amount": 2,
       "actions": [
         {
@@ -292,7 +292,7 @@
       "image": ""
     },
     {
-      "name": "1 powerup, 1 yellow, 1 red ammocrate",
+      "name": "1_PowerUp_1_Yellow_1_Red",
       "amount": 4,
       "actions": [
         {
@@ -331,7 +331,7 @@
       "image": ""
     },
     {
-      "name": "1 powerup, 1 yellow, 1 blue ammocrate",
+      "name": "1_PowerUp_1_Yellow_1_Blue",
       "amount": 4,
       "actions": [
         {
@@ -370,7 +370,7 @@
       "image": ""
     },
     {
-      "name": "1 powerup, 1 red, 1 blue ammocrate",
+      "name": "1_PowerUp_1_Red_1_Blue",
       "amount": 4,
       "actions": [
         {

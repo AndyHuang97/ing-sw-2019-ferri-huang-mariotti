@@ -6,16 +6,14 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.UUID;
 
 public class GameManager {
 	private static final Logger logger = Logger.getLogger(GameManager.class.getName());
@@ -24,7 +22,9 @@ public class GameManager {
 	private int waitingListStartTimerSize;
 	private int startTimerSeconds;
 	private List<Tuple> waitingList;
+	private List<String> mapPreference;
 	private String dumpName;
+	private int pingIntervalMilliseconds;
 
 	public class Tuple<X, Y> {
 		public final UserData userData;
@@ -36,8 +36,9 @@ public class GameManager {
 	}
 
 	public GameManager() {
-		gameList = new ArrayList<>();
-		waitingList = new ArrayList<>();
+		this.gameList = new ArrayList<>();
+		this.waitingList = new ArrayList<>();
+		this.mapPreference = new ArrayList<>();
 	}
 
 	public void init(String dumpName) {
@@ -45,9 +46,10 @@ public class GameManager {
 			Properties prop = new Properties();
 			// load a properties file
 			prop.load(input);
-			waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
-			waitingListStartTimerSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_start_timer_size"));
-			startTimerSeconds = Integer.parseInt(prop.getProperty("game_manager.start_timer_seconds"));
+			this.waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
+			this.waitingListStartTimerSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_start_timer_size"));
+			this.startTimerSeconds = Integer.parseInt(prop.getProperty("game_manager.start_timer_seconds"));
+			this.pingIntervalMilliseconds = Integer.parseInt(prop.getProperty("game_manager.ping_interval_milliseconds"));
 		} catch (IOException ex) {
 			logger.info(ex.toString());
 		}
@@ -128,13 +130,30 @@ public class GameManager {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
 			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
-			playerList.add(new Player(UUID.randomUUID().toString(), true, tuple.userData, new CharacterState(), color));
+			// TODO: initialize character state or it is fine?
+			CharacterState characterState = new CharacterState();
+			playerList.add(new Player(UUID.randomUUID().toString(), true, tuple.userData, characterState, color));
 			// register all players
 			newGame.register(tuple.commandHandler);
 		});
 		newGame.setPlayerList(playerList);
+
+		//TODO read mapIndex from players' preference
+		Map<String, Long> occurrences =
+				mapPreference.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+		Map.Entry<String, Long> max = occurrences.entrySet()
+				.stream()
+				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);
+		Logger.getGlobal().info("Map: "+max.getKey());
+		newGame.initGameObjects(max.getKey());
+		mapPreference = new ArrayList<>();
+
 		this.waitingList.forEach(tuple -> {
-			tuple.commandHandler.update(new Response(newGame, true, ""));
+			try {
+				tuple.commandHandler.update(new Response(newGame, true, ""));
+			} catch (Observer.CommunicationError e) {
+				logger.info(e.getMessage());
+			}
 		});
 		this.gameList.add(newGame);
 		this.waitingList = new ArrayList<>();
@@ -154,6 +173,29 @@ public class GameManager {
 	}
 
 
+	public class IsClientAlive extends TimerTask {
+		private String nickname;
+		private CommandHandler commandHandler;
+		private Timer timer;
+
+		public IsClientAlive(String nickname, CommandHandler commandHandler, Timer timer) {
+			this.nickname = nickname;
+			this.commandHandler = commandHandler;
+			this.timer = timer;
+		}
+
+		public void run(){
+			try {
+				this.commandHandler.update(new Response(null, true, "ping"));
+			} catch (Observer.CommunicationError e) {
+				logger.info("User " + this.nickname + " disconnected");
+				//TODO: handle disconnection
+				this.timer.cancel();
+				this.timer.purge();
+			}
+		}
+	}
+
 
 	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		// add user to waiting list / game (used by view)
@@ -161,6 +203,12 @@ public class GameManager {
 			throw new AlreadyPlayingException("User " + newUser.getNickname() + "is already playing or waiting!");
 		}
 		this.waitingList.add(new Tuple(newUser, currentCommandHandler));
+		try {
+			Timer timer = new Timer();
+			timer.schedule(new IsClientAlive(newUser.getNickname(), currentCommandHandler, timer), 0, this.pingIntervalMilliseconds);
+		} catch (IllegalArgumentException e) {
+			logger.info(e.getMessage());
+		}
 		logger.info("Added user " + newUser.getNickname() + " to the waiting list, current waiting list size is " + this.waitingList.size() + " players");
 		if (this.waitingList.size() == waitingListStartTimerSize) {
 			new Thread(() -> delayedGameCreation(this.gameList.size())).start();
@@ -173,6 +221,10 @@ public class GameManager {
 	public List<Tuple> getWaitingList() {
 		// TODO: is that method useful? Other classes cannot use Tuple type! ANSWER: No it is not useful for anybody
 		return waitingList;
+	}
+
+	public List<String> getMapPreference() {
+		return mapPreference;
 	}
 
 	public List<Game> getGameList() {

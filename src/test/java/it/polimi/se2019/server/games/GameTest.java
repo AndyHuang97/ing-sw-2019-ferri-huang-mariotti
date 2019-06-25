@@ -12,10 +12,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class GameTest {
 
@@ -24,6 +23,10 @@ public class GameTest {
     @Before
     public void setUp() {
         game = new Game();
+        Player p1 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
+        Player p2 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick2"), new CharacterState(), PlayerColor.GREEN);
+        Player p3 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick3"), new CharacterState(), PlayerColor.PURPLE);
+        game.getPlayerList().addAll(Arrays.asList(p1,p2,p3));
     }
 
     @After
@@ -36,8 +39,31 @@ public class GameTest {
 
         GameData gameData = game.generateGameData();
 
-        Assert.assertEquals(game.getStartDate(), gameData.getStartDate());
+        assertEquals(game.getStartDate(), gameData.getStartDate());
     }
+
+    @Test
+    public void testInitGameObjects() {
+        game.initGameObjects("0");
+        assertEquals("0", game.getBoard().getId());
+        game.getPlayerList()
+                .forEach(p -> assertEquals(2, p.getCharacterState().getPowerUpBag().size()));
+        game.getBoard().getTileList().stream()
+                .filter(Objects::nonNull)
+                .filter(t -> t.isSpawnTile())
+                .forEach(t -> {
+                    assertTrue(t.getAmmoCrate() == null);
+                    assertEquals(3, t.getWeaponCrate().size());
+                });
+        game.getBoard().getTileList().stream()
+                .filter(Objects::nonNull)
+                .filter(t -> !t.isSpawnTile())
+                .forEach(t -> {
+                    assertTrue(t.getAmmoCrate() != null);
+                    assertEquals(0, t.getWeaponCrate().size());
+                });
+    }
+
 
     @Test
     public void testUpdateTurn() {
@@ -46,12 +72,18 @@ public class GameTest {
     @Test
     public void testSetCurrentPlayer_NotActivePlayer() {
 
-        Player nextPlayer = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
-        Player currPlayer = game.getCurrentPlayer();
+        Player p1 = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
+        p1.setActive(true);
 
-        game.setCurrentPlayer(nextPlayer);
+        game.setCurrentPlayer(p1);
 
-        Assert.assertEquals(currPlayer, game.getCurrentPlayer());
+        assertEquals(p1, game.getCurrentPlayer());
+
+        Player p2 = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
+        p2.setActive(false);
+        game.setCurrentPlayer(p1);
+        assertEquals(p1, game.getCurrentPlayer());
+
     }
 
     @Test
@@ -61,7 +93,7 @@ public class GameTest {
 
         game.setCurrentPlayer(nextPlayer);
 
-        Assert.assertEquals(nextPlayer, game.getCurrentPlayer());
+        assertEquals(nextPlayer, game.getCurrentPlayer());
     }
 
     @Test
@@ -71,7 +103,7 @@ public class GameTest {
 
         game.setStartDate(newDate);
 
-        Assert.assertEquals(newDate, game.getStartDate());
+        assertEquals(newDate, game.getStartDate());
     }
 
     @Test
@@ -83,7 +115,7 @@ public class GameTest {
 
         game.setPlayerList(playerList);
 
-        Assert.assertEquals(playerList, game.getPlayerList());
+        assertEquals(playerList, game.getPlayerList());
     }
 
     @Test
@@ -93,7 +125,7 @@ public class GameTest {
 
         game.setBoard(board);
 
-        Assert.assertEquals(board, game.getBoard());
+        assertEquals(board, game.getBoard());
     }
 
     @Test
@@ -103,7 +135,7 @@ public class GameTest {
 
         game.getKillshotTrack().setKillCounter(killShots);
 
-        Assert.assertEquals(killShots, game.getKillshotTrack().getKillCounter());
+        assertEquals(killShots, game.getKillshotTrack().getKillCounter());
     }
 
     @Test
@@ -113,7 +145,7 @@ public class GameTest {
 
         game.setWeaponDeck(weaponDeck);
 
-        Assert.assertEquals(weaponDeck, game.getWeaponDeck());
+        assertEquals(weaponDeck, game.getWeaponDeck());
     }
 
     @Test
@@ -123,6 +155,6 @@ public class GameTest {
 
         game.setPowerupDeck(powerupDeck);
 
-        Assert.assertEquals(powerupDeck, game.getPowerupDeck());
+        assertEquals(powerupDeck, game.getPowerupDeck());
     }
 }

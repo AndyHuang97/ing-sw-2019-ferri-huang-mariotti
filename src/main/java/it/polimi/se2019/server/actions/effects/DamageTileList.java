@@ -11,7 +11,7 @@ import java.util.Map;
 public class DamageTileList extends Damage {
 
     public DamageTileList(Integer amount) {
-        super(amount);
+        super(amount, null);
     }
 
     @Override

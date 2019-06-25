@@ -4,6 +4,7 @@ import it.polimi.se2019.server.actions.conditions.Condition;
 import it.polimi.se2019.server.actions.effects.Effect;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
+import it.polimi.se2019.util.CommandConstants;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class ActionUnit implements Targetable {
 	private String description;
 	private List<Effect> effectList;
 	private List<Condition> conditionList;
+	private Map<String, List<Targetable>> commands;
 	private int numPlayerTargets;
 	private int numTileTargets;
 	private boolean playerSelectionFirst;
@@ -53,7 +55,6 @@ public class ActionUnit implements Targetable {
 		        return false;
             }
         }
-
         return true;
 	}
 
@@ -61,11 +62,10 @@ public class ActionUnit implements Targetable {
 		for (Effect e : effectList) {
 		    e.run(game, commands);
         }
+		this.setCommands(commands);
+		game.getCurrentActionUnitsList().add(this);
 	}
 
-	public void getRequiredInputs() {
-
-	}
 
 	public boolean isAvailable() {
 		return available;
@@ -131,8 +131,18 @@ public class ActionUnit implements Targetable {
 		this.playerSelectionFirst = playerSelectionFirst;
 	}
 
+	public Map<String, List<Targetable>> getCommands() {
+		return commands;
+	}
+
+	public void setCommands(Map<String, List<Targetable>> commands) {
+		this.commands = commands;
+	}
+
 	@Override
 	public String getId() {
 		return name;
 	}
+
+
 }

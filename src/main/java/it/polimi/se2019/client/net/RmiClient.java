@@ -1,8 +1,7 @@
 package it.polimi.se2019.client.net;
 
-import it.polimi.se2019.client.gui.MainApp;
+import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.ClientCommandHandler;
-import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.util.*;
 
 import java.io.*;
@@ -13,7 +12,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class RmiClient {
+public class RmiClient implements NetworkClient {
     private static final Logger logger = Logger.getLogger(RmiClient.class.getName());
     private String nickname;
     private String serverHost;
@@ -26,13 +25,14 @@ public class RmiClient {
         this.serverHost = serverHost;
     }
 
-    public void start(MainApp mainApp) {
+    @Override
+    public void start(View view) {
         try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
             Properties prop = new Properties();
             prop.load(input);
             int rmiPort = Integer.parseInt(prop.getProperty("rmi.port"));
             this.server = (RmiServerInterface) Naming.lookup("rmi://" + serverHost + ":" + rmiPort + "/adrenalina");
-            ClientCommandHandler commandHandler = new ClientCommandHandler(mainApp);
+            ClientCommandHandler commandHandler = new ClientCommandHandler(view);
             RmiClientWorker worker = new RmiClientWorker(commandHandler);
             this.uuid = this.server.register(worker);
         } catch (NotBoundException | IOException e) {
@@ -40,6 +40,7 @@ public class RmiClient {
         }
     }
 
+    @Override
     public void send(Request request) {
         try {
             this.server.send(request.serialize(), this.uuid);

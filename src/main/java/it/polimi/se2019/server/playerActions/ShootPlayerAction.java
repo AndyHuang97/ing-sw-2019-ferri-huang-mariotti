@@ -24,7 +24,7 @@ public class ShootPlayerAction extends PlayerAction {
     private static final int TILEPOSITIONINPARAMS = 3;
     private static final int EFFECTTILEPOSITIONINPARAMS = 4;
     private static final String ERRORMESSAGE = "Shoot action failed";
-    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_MAIN_ACTIONS, TurnPhase.WAITING_FOR_EFFECTS};
+    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_SHOOT, TurnPhase.WAITING_FOR_EFFECTS};
 
     private Player target;
     private Weapon chosenWeapon;
@@ -78,7 +78,7 @@ public class ShootPlayerAction extends PlayerAction {
         List<Targetable> targetList = new ArrayList<>();
         targetList.add(target);
 
-        commandDict.put(CommandConstants.TARGET, targetList);
+        commandDict.put(CommandConstants.TARGETLIST, targetList);
 
         List<Targetable> chosenTileList = new ArrayList<>();
         chosenTileList.add(chosenTile);

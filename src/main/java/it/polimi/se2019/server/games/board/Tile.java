@@ -151,8 +151,7 @@ public class Tile implements Targetable {
 		List<Tile> visibleTiles = getVisibleTiles(game.getBoard());
 
 		visibleTargets = game.getPlayerList().stream()
-				.filter(p -> visibleTiles.contains(p.getCharacterState().getTile())
-						&& p.getCharacterState().getTile() != this)
+				.filter(p -> visibleTiles.contains(p.getCharacterState().getTile()))
 				.collect(Collectors.toList());
 		return visibleTargets;
 	}

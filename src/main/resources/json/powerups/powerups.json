@@ -1,16 +1,16 @@
 {
   "powerupDeck": [
     {
-      "name": "Targeting Scope",
-      "amount": 1,
+      "name": "Blue_Targeting_Scope",
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -55,8 +55,175 @@
       "image": ""
     },
     {
-      "name": "Newton",
-      "amount": 1,
+      "name": "Red_Targeting_Scope",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target Listx1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target is in target damage list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDamageTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Has ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Yellow_Targeting_Scope",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Damage Target Listx1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target is in target damage list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDamageTargetList",
+              "params": {
+              }
+            },
+            {
+              "name": "Has ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "numPlayerTargets" : 1,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Blue_Newton",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Move target ",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "One direction movement",
+              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "params": {
+              }
+            },
+            {
+              "name": "Max distance x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "maxDistance": 2
+              }
+            },
+            {
+              "name": "Not respawn phase",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
+              "params": {
+              }
+            }
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Red_Newton",
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -114,8 +281,67 @@
       "image": ""
     },
     {
-      "name": "Tagback Grenade",
-      "amount": 1,
+      "name": "Yellow_Newton",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Move target (",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "One direction movement",
+              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "params": {
+              }
+            },
+            {
+              "name": "Max distance x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "maxDistance": 2
+              }
+            },
+            {
+              "name": "Not respawn phase",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
+              "params": {
+              }
+            }
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Blue_Tagback_Grenade",
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",
@@ -123,7 +349,7 @@
           "effectList": [
             {
               "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 1
               }
@@ -132,7 +358,7 @@
           "conditionList": [
             {
               "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }
@@ -161,8 +387,194 @@
       "image": ""
     },
     {
-      "name": "Teleporter",
-      "amount": 1,
+      "name": "Red_Tagback_Grenade",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Mark target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+              }
+            }
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Yellow_Tagback_Grenade",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Mark target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
+              "params": {
+                "amount": 1
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Target visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+              }
+            }
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Blue_Teleporter",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Move target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Not respawn phase",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
+              "params": {
+              }
+            }
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Red_Teleporter",
+      "amount": 2,
+      "actions": [
+        {
+          "name": "Main Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Move target",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [
+            {
+              "name": "Not respawn phase",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
+              "params": {
+              }
+            }
+          ],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
+        },
+        {
+          "name": "Secondary Effect",
+          "available": true,
+          "effectList": [
+            {
+              "name": "Replace Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
+              "params": {
+              }
+            }
+          ],
+          "conditionList": [],
+          "numPlayerTargets" : 0,
+          "numTileTargets": 0,
+          "playerSelectionFirst": true
+        }
+      ],
+      "image": ""
+    },
+    {
+      "name": "Yellow_Teleporter",
+      "amount": 2,
       "actions": [
         {
           "name": "Main Effect",

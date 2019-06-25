@@ -81,7 +81,7 @@ public class KillShotTrack extends PlayerEventListenable {
             deathTrack.put(killCounter, colorIntegerEnumMap);
         }
         else {
-            // final frenzy mode(TrackState.EIGTHFRENZY), key already present in hash map.
+            // final frenzy mode, key already present in hash map.
             colorIntegerEnumMap = deathTrack.get(killCounter);
             if(!colorIntegerEnumMap.containsKey(deadPlayerColor)) {
                 updateTrackSlotValue(overkill, deadPlayerColor, colorIntegerEnumMap, 0);

@@ -2,7 +2,7 @@
   "weaponDeck": [
     {
       "type": "weapon",
-      "name": "Lock Rifle",
+      "name": "Lock_Rifle",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["BLUE", "BLUE"],
       "actions": [
@@ -11,15 +11,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
             },
             {
-              "name": "Mark Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "name": "Mark Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 1
               }
@@ -27,8 +27,8 @@
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }
@@ -44,8 +44,8 @@
           "available": false,
           "effectList": [
             {
-              "name": "Mark Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "name": "Mark Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 1
               }
@@ -55,21 +55,17 @@
               "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
               "params": {
                 "ammoToConsume": {
-                  "RED": 1
+                  "RED": 1,
+                  "BLUE": 0,
+                  "YELLOW": 0
                 }
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
-              "params": {
-              }
-            },
-            {
-              "name": "Target is not in target list",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInTargetList",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             },
@@ -78,7 +74,9 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "RED": 1
+                  "RED": 1,
+                  "BLUE": 0,
+                  "YELLOW": 0
                 }
               }
             },
@@ -87,6 +85,13 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
               "params": {
                 "actionUnits" : ["Basic Mode"]
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInActionUnitTargetList",
+              "params": {
+                "actionUnitName": "Basic Mode"
               }
             }
           ],
@@ -100,7 +105,7 @@
     },
     {
       "type": "weapon",
-      "name": "Machine Gun",
+      "name": "Machine_Gun",
       "pickUpCost": ["RED"],
       "reloadCost": ["BLUE", "RED"],
       "actions": [
@@ -135,8 +140,8 @@
           "available": false,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -146,6 +151,8 @@
               "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
               "params": {
                 "ammoToConsume": {
+                  "RED": 0,
+                  "BLUE": 0,
                   "YELLOW": 1
                 }
               }
@@ -153,16 +160,12 @@
           ],
           "conditionList": [
             {
-              "name": "Target is in target list",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDamageTargetList",
-              "params": {
-              }
-            },
-            {
               "name": "Has 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
+                  "RED": 0,
+                  "BLUE": 0,
                   "YELLOW": 1
                 }
               }
@@ -172,6 +175,13 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
               "params": {
                 "actionUnits" : ["Basic Mode"]
+              }
+            },
+            {
+              "name": "Target is in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInActionUnitTargetList",
+              "params": {
+                "actionUnitName": "Basic Mode"
               }
             }
           ],
@@ -184,8 +194,8 @@
           "available": false,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -195,21 +205,17 @@
               "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
               "params": {
                 "ammoToConsume": {
-                  "BLUE": 1
+                  "RED": 0,
+                  "BLUE": 1,
+                  "YELLOW": 0
                 }
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Target is not in target list",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInDamageTargetList",
-              "params": {
-              }
-            },
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             },
@@ -218,7 +224,10 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "BLUE": 1
+                  "RED": 0,
+                  "BLUE": 1,
+                  "YELLOW": 0
+
                 }
               }
             },
@@ -227,6 +236,13 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
               "params": {
                 "actionUnits" : ["Basic Mode"]
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInActionUnitTargetList",
+              "params": {
+                "actionUnitName" : "Focus Shot Effect"
               }
             }
           ],
@@ -239,7 +255,7 @@
     },
     {
       "type": "weapon",
-      "name": "T.H.O.R",
+      "name": "THOR",
       "pickUpCost": ["RED"],
       "reloadCost": ["BLUE", "RED"],
       "actions": [
@@ -248,8 +264,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -257,8 +273,8 @@
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }
@@ -274,8 +290,8 @@
           "available": false,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -292,17 +308,13 @@
           ],
           "conditionList": [
             {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
-              "params": {
-              }
-            },
-            {
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "BLUE": 1
+                  "RED": 0,
+                  "BLUE": 1,
+                  "YELLOW": 0
                 }
               }
             },
@@ -310,7 +322,21 @@
               "name" : "Executed Action Units",
               "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
               "params": {
-                "actionUnits" : ["Basic Mode", "Chain Reaction Effect"]
+                "actionUnits" : ["Basic Mode"]
+              }
+            },
+            {
+              "name": "Target List visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+                "actionUnitName" : "Basic Mode"
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInActionUnitTargetList",
+              "params": {
+                "actionUnitName" : "Basic Mode"
               }
             }
           ],
@@ -323,8 +349,8 @@
           "available": false,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -341,23 +367,13 @@
           ],
           "conditionList": [
             {
-              "name": "Target is not in target list",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInDamageTargetList",
-              "params": {
-              }
-            },
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
-              "params": {
-              }
-            },
-            {
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "BLUE": 1
+                  "RED": 0,
+                  "BLUE": 1,
+                  "YELLOW": 0
                 }
               }
             },
@@ -365,7 +381,28 @@
               "name" : "Executed Action Units",
               "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
               "params": {
-                "actionUnits" : ["Basic Mode"]
+                "actionUnits" : ["Basic Mode", "Chain Reaction Effect"]
+              }
+            },
+            {
+              "name": "Target List visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+                "actionUnitName" : "Chain Reaction Effect"
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInActionUnitTargetList",
+              "params": {
+                "actionUnitName" : "Basic Mode"
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInActionUnitTargetList",
+              "params": {
+                "actionUnitName" : "Chain Reaction Effect"
               }
             }
           ],
@@ -378,7 +415,7 @@
     },
     {
       "type": "weapon",
-      "name": "Plasma Gun",
+      "name": "Plasma_Gun",
       "pickUpCost": ["YELLOW"],
       "reloadCost": ["BLUE", "YELLOW"],
       "actions": [
@@ -387,8 +424,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -396,8 +433,8 @@
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }
@@ -416,6 +453,8 @@
               "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
+                "self": true,
+                "isTile": true
               }
             }
           ],
@@ -424,7 +463,16 @@
               "name": "Max Distance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
+                "self": true,
+                "finalIsTile": true,
                 "amount": 2
+              }
+            },
+            {
+              "name": "Can shoot",
+              "class_name": "it.polimi.se2019.server.actions.conditions.CanShoot",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ],
@@ -433,14 +481,15 @@
           "playerSelectionFirst": false
         },
         {
-          "name": "Charge Shot Effect",
+          "name": "Charged Shot Effect",
           "available": false,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "actionUnitName" : "Basic Mode"
               }
             },
             {
@@ -455,17 +504,13 @@
           ],
           "conditionList": [
             {
-              "name": "Target is in target list",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDamageTargetList",
-              "params": {
-              }
-            },
-            {
               "name": "Has 1 Blue Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "BLUE": 1
+                  "RED": 0,
+                  "BLUE": 1,
+                  "YELLOW": 0
                 }
               }
             },
@@ -477,7 +522,7 @@
               }
             }
           ],
-          "numPlayerTargets" : 1,
+          "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": false
         }
@@ -495,31 +540,35 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x3",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
-                "amount": 2
+                "amount": 3
               }
             },
             {
-              "name": "Mark Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "name": "Mark Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
+                "amount": 1
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             },
             {
-              "name": "Min Distance x1",
+              "name": "Min Distance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
               "params": {
-                "amount": 2
+                "amount": 2,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": false
               }
             }
           ],
@@ -546,15 +595,17 @@
               "name": "Damage Tile x1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Attacker in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "name": "Any Target in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HaveTargetsAtDistance",
               "params": {
+                "distance": 0
               }
             }
           ],
@@ -570,7 +621,8 @@
               "name": "Damage Tile x2",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
-                "amount": 2
+                "amount": 2,
+                "self": true
               }
             },
             {
@@ -586,9 +638,10 @@
           ],
           "conditionList": [
             {
-              "name": "Attacker in tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "name": "Any Target in tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HaveTargetsAtDistance",
               "params": {
+                "distance": 0
               }
             },
             {
@@ -597,7 +650,8 @@
               "params": {
                 "ammoNeeded": {
                   "BLUE": 1,
-                  "RED": 1
+                  "RED": 1,
+                  "YELLOW": 0
                 }
               }
             }
@@ -612,7 +666,7 @@
     },
     {
       "type": "weapon",
-      "name": "Tractor Beam",
+      "name": "Tractor_Beam",
       "pickUpCost": [],
       "reloadCost": ["BLUE"],
       "actions": [
@@ -621,23 +675,24 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
             },
             {
-              "name": "Move Target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move Target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
+                "self": false
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Tile visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileVisible",
+              "name": "Tile List visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileListVisible",
               "params": {
               }
             },
@@ -645,7 +700,10 @@
               "name": "MaxDistance",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "amount": 2
+                "amount": 2,
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true
               }
             }
           ],
@@ -658,16 +716,17 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x3",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 3
               }
             },
             {
-              "name": "Move Target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move Target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
+                "self": true
               }
             },
             {
@@ -683,31 +742,29 @@
           ],
           "conditionList": [
             {
-              "name": "Attacker Tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "name": "Has 1 Red and 1 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
+                "ammoNeeded": {
+                  "RED": 1,
+                  "BLUE": 0,
+                  "YELLOW": 1
+                }
               }
             },
             {
               "name": "MaxDistance",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "amount": 2
-              }
-            },
-            {
-              "name": "Has 1 Red and 1 Yellow Ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
-              "params": {
-                "ammoNeeded": {
-                  "RED": 1,
-                  "YELLOW": 1
-                }
+                "amount": 2,
+                "self": true,
+                "initialIsTile": false,
+                "finalIsTile": false
               }
             }
           ],
           "numPlayerTargets" : 1,
-          "numTileTargets": 1,
+          "numTileTargets": 0,
           "playerSelectionFirst": true
         }
       ],
@@ -716,7 +773,7 @@
     },
     {
       "type": "weapon",
-      "name": "Vortex Cannon",
+      "name": "Vortex_Cannon",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["RED", "BLUE"],
       "actions": [
@@ -725,23 +782,23 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
             },
             {
-              "name": "Move Target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move Target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Tile Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileVisible",
+              "name": "Tile List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileListVisible",
               "params": {
               }
             },
@@ -749,13 +806,17 @@
               "name": "Not Attacker Tile",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsNotAttackerTile",
               "params": {
+                "isTile": true
               }
             },
             {
               "name": "MaxDistance x1",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": false,
+                "initialIsTile": true,
+                "finalIsTile": false
               }
             }
           ],
@@ -766,12 +827,12 @@
       ],
       "optionalEffectList": [
         {
-          "name": "Black Hole",
+          "name": "Black Hole Effect",
           "available": false,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -780,6 +841,7 @@
               "name": "Move Target List",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
+                "actionUnitName": "Basic Mode"
               }
             },
             {
@@ -794,31 +856,13 @@
           ],
           "conditionList": [
             {
-              "name": "Max Target List x2",
-              "class_name": "it.polimi.se2019.server.actions.conditions.MaxTargetList",
-              "params": {
-                "amount": 2
-              }
-            },
-            {
-              "name": "MaxDistance",
-              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
-              "params": {
-                "amount": 1
-              }
-            },
-            {
-              "name": "Different Targets In List",
-              "class_name": "it.polimi.se2019.server.actions.conditions.DifferentTargetsInList",
-              "params": {
-              }
-            },
-            {
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "RED": 1
+                  "RED": 1,
+                  "BLUE": 0,
+                  "YELLOW": 0
                 }
               }
             },
@@ -828,10 +872,34 @@
               "params": {
                 "actionUnits" : ["Basic Mode"]
               }
+            },
+            {
+              "name": "MaxDistance",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "amount": 1,
+                "actionUnitName": "Basic Mode",
+                "self": false,
+                "initialIsTile": true,
+                "finalIsTile": false
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInActionUnitTargetList",
+              "params": {
+                "actionUnitName" : "Basic Mode"
+              }
+            },
+            {
+              "name": "Different Targets In List",
+              "class_name": "it.polimi.se2019.server.actions.conditions.DifferentTargetsInList",
+              "params": {
+              }
             }
           ],
           "numPlayerTargets" : 2,
-          "numTileTargets": 1,
+          "numTileTargets": 0,
           "playerSelectionFirst": true
         }
       ],
@@ -881,23 +949,36 @@
               "name": "Damage Tile x1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": false
               }
             },
             {
               "name": "Mark Tile x1",
               "class_name": "it.polimi.se2019.server.actions.effects.MarkTile",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": false,
+                "isTile": true
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Distance x1",
-              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "name": "Not Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotAttackerTile",
               "params": {
-                "amount": 1
+                "isTile": true
+              }
+            },
+            {
+              "name": "Max Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": true
               }
             }
           ],
@@ -921,8 +1002,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x3",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target Listx3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 3
               }
@@ -930,8 +1011,8 @@
           ],
           "conditionList": [
             {
-              "name": "Target Not Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotVisible",
+              "name": "Target List Not Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListNotVisible",
               "params": {
               }
             }
@@ -956,8 +1037,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -966,16 +1047,27 @@
               "name": "Mark Tile x1",
               "class_name": "it.polimi.se2019.server.actions.effects.MarkTile",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "isTile": false,
+                "self": false
               }
             }
           ],
           "conditionList": [
             {
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+              }
+            },
+            {
               "name": "Min Distance x1",
               "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": false
               }
             }
           ],
@@ -988,8 +1080,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
@@ -1013,19 +1105,30 @@
           ],
           "conditionList": [
             {
-              "name": "Min Distance x1",
-              "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
-              "params": {
-                "amount": 1
-              }
-            },
-            {
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "RED": 1
+                  "RED": 1,
+                  "BLUE": 0,
+                  "YELLOW": 0
                 }
+              }
+            },
+            {
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
+              "params": {
+              }
+            },
+            {
+              "name": "Min Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MinDistance",
+              "params": {
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": false
               }
             }
           ],
@@ -1061,12 +1164,22 @@
               "name": "Distance x1",
               "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": true,
+                "lazy": true
               }
             },
             {
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "params": {
+              }
+            },
+            {
+              "name": "One Tile One Target",
+              "class_name": "it.polimi.se2019.server.actions.conditions.OneTileOneTarget",
               "params": {
               }
             }
@@ -1080,17 +1193,25 @@
           "available": true,
           "effectList": [
             {
+              "name": "Sort Tile List",
+              "class_name": "it.polimi.se2019.server.actions.effects.SortTile",
+              "params": {
+              }
+            },
+            {
               "name": "Damage Tile x2",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
-                "amount": 2
+                "amount": 2,
+                "tileIndex": 0
               }
             },
             {
               "name": "Damage Tile x1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "tileIndex": 1
               }
             },
             {
@@ -1105,25 +1226,31 @@
           ],
           "conditionList": [
             {
+              "name": "Has 2 Yellow Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoNeeded": {
+                  "RED": 0,
+                  "BLUE": 0,
+                  "YELLOW": 2
+                }
+              }
+            },
+            {
               "name": "Distance x1",
               "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": true,
+                "lazy": true
               }
             },
             {
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
-              }
-            },
-            {
-              "name": "Has 2 Yellow Ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
-              "params": {
-                "ammoNeeded": {
-                  "YELLOW": 2
-                }
               }
             }
           ],
@@ -1138,7 +1265,7 @@
     },
     {
       "type": "weapon",
-      "name": "Grenade Launcher",
+      "name": "Grenade_Launcher",
       "pickUpCost": [],
       "reloadCost": ["RED"],
       "actions": [
@@ -1147,25 +1274,34 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
+              "name": "Damage Target Listx1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
             },
             {
-              "name": "Move Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "name": "Move Target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
-                "amount": 1
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
+              }
+            },
+            {
+              "name": "Max Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "amount": 1
               }
             }
           ],
@@ -1183,7 +1319,8 @@
               "name": "Damage Tile  x1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": false
               }
             },
             {
@@ -1198,18 +1335,20 @@
           ],
           "conditionList": [
             {
-              "name": "Tile Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileVisible",
-              "params": {
-              }
-            },
-            {
               "name": "Has 1 Red Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "RED": 1
+                  "RED": 1,
+                  "BLUE": 0,
+                  "YELLOW": 0
                 }
+              }
+            },
+            {
+              "name": "Tile List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTileListVisible",
+              "params": {
               }
             }
           ],
@@ -1222,7 +1361,7 @@
     },
     {
       "type": "weapon",
-      "name": "Rocket Launcher",
+      "name": "Rocket_Launcher",
       "pickUpCost": ["RED"],
       "reloadCost": ["RED", "RED"],
       "actions": [
@@ -1231,15 +1370,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
             },
             {
-              "name": "Move Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
                 "amount": 1
               }
@@ -1247,8 +1386,8 @@
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             },
@@ -1256,6 +1395,17 @@
               "name": "Not Attacker Tile",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsNotAttackerTile",
               "params": {
+                "isTile": false
+              }
+            },
+            {
+              "name": "Max Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "amount": 1
               }
             }
           ],
@@ -1270,10 +1420,11 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move Target x2",
+              "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
-                "amount": 2
+                "self" : true,
+                "isTile": true
               }
             },
             {
@@ -1292,8 +1443,26 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "BLUE": 1
+                  "RED": 0,
+                  "BLUE": 1,
+                  "YELLOW": 0
                 }
+              }
+            },
+            {
+              "name": "Max Distance x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "self": true,
+                "finalIsTile": true,
+                "amount": 2
+              }
+            },
+            {
+              "name": "Can shoot",
+              "class_name": "it.polimi.se2019.server.actions.conditions.CanShoot",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
               }
             }
           ],
@@ -1306,10 +1475,19 @@
           "available": false,
           "effectList": [
             {
+              "name": "Damage Tile  x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTile",
+              "params": {
+                "amount": 1,
+                "actionUnitName": "Basic Mode"
+              }
+            },
+            {
               "name": "Damage Target List  x1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "actionUnitName": "Basic Mode"
               }
             },
             {
@@ -1328,6 +1506,8 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
+                  "RED": 0,
+                  "BLUE": 0,
                   "YELLOW": 1
                 }
               }
@@ -1358,8 +1538,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x3",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 3
               }
@@ -1367,8 +1547,8 @@
           ],
           "conditionList": [
             {
-              "name": "Target In Direction",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetInDirection",
+              "name": "Target List In Direction",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListInDirection",
               "params": {
               }
             }
@@ -1417,8 +1597,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -1429,6 +1609,7 @@
               "name": "Attacker Tile",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
+                "isTile": false
               }
             }
           ],
@@ -1444,13 +1625,30 @@
           "effectList": [
             {
               "name": "Move Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
-                "amount": 1
+                "self": true,
+                "isTile": true
               }
             }
           ],
           "conditionList": [
+            {
+              "name": "Max Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "self": true,
+                "finalIsTile": true,
+                "amount": 1
+              }
+            },
+            {
+              "name": "Can shoot",
+              "class_name": "it.polimi.se2019.server.actions.conditions.CanShoot",
+              "params": {
+                "actionUnits" : ["Basic Mode"]
+              }
+            }
           ],
           "numPlayerTargets" : 0,
           "numTileTargets": 1,
@@ -1461,8 +1659,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -1479,22 +1677,12 @@
           ],
           "conditionList": [
             {
-              "name": "Attacker Tile",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
-              "params": {
-              }
-            },
-            {
-              "name": "Target is not in target list",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInTargetList",
-              "params": {
-              }
-            },
-            {
               "name": "Has 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
+                  "RED": 0,
+                  "BLUE": 0,
                   "YELLOW": 1
                 }
               }
@@ -1504,6 +1692,20 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.ExecutedActionUnits",
               "params": {
                 "actionUnits" : ["Basic Mode"]
+              }
+            },
+            {
+              "name": "Attacker Tile",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
+              "params": {
+                "isTile": false
+              }
+            },
+            {
+              "name": "Target is not in target list",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetNotInActionUnitTargetList",
+              "params": {
+                "actionUnitName": "Basic Mode"
               }
             }
           ],
@@ -1525,15 +1727,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
             },
             {
               "name": "Mark Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 2
               }
@@ -1541,8 +1743,8 @@
           ],
           "conditionList": [
             {
-              "name": "Target Visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetVisible",
+              "name": "Target List Visible",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
             }
@@ -1569,6 +1771,12 @@
               "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
               "params": {
               }
+            },
+            {
+              "name": "Different Targets In List",
+              "class_name": "it.polimi.se2019.server.actions.conditions.DifferentTargetsInList",
+              "params": {
+              }
             }
           ],
           "numPlayerTargets" : 3,
@@ -1591,15 +1799,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x3",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 3
               }
             },
             {
-              "name": "Move Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move Target List x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
                 "amount": 1
               }
@@ -1610,6 +1818,17 @@
               "name": "Attacker Tile",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
+                "isTile": false
+              }
+            },
+            {
+              "name": "Max Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
+              "params": {
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "amount": 1
               }
             }
           ],
@@ -1622,8 +1841,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -1634,7 +1853,11 @@
               "name": "Distance x1",
               "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": false,
+                "lazy": true
               }
             }
           ],
@@ -1649,7 +1872,7 @@
     },
     {
       "type": "weapon",
-      "name": "Power Glove",
+      "name": "Power_Glove",
       "pickUpCost": ["BLUE"],
       "reloadCost": ["YELLOW", "BLUE"],
       "actions": [
@@ -1658,15 +1881,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target Listx1",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 1
               }
             },
             {
-              "name": "Mark Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTarget",
+              "name": "Mark Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
               "params": {
                 "amount": 2
               }
@@ -1675,7 +1898,8 @@
               "name": "Move Target x1",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
-                "amount": 1
+                "self": true,
+                "isTile": false
               }
             }
           ],
@@ -1684,7 +1908,11 @@
               "name": "Distance x1",
               "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": false,
+                "lazy": true
               }
             }
           ],
@@ -1697,8 +1925,14 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Sort Tile List",
+              "class_name": "it.polimi.se2019.server.actions.effects.SortTile",
+              "params": {
+              }
+            },
+            {
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -1706,10 +1940,37 @@
           ],
           "conditionList": [
             {
+              "name": "Has 1 Blue Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoNeeded": {
+                  "RED": 0,
+                  "BLUE": 1,
+                  "YELLOW": 0
+                }
+              }
+            },
+            {
               "name": "Distance x1",
               "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": true,
+                "lazy": true
+              }
+            },
+            {
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
+              "params": {
+              }
+            },
+            {
+              "name": "One Tile One Target",
+              "class_name": "it.polimi.se2019.server.actions.conditions.OneTileOneTarget",
+              "params": {
               }
             }
           ],
@@ -1742,21 +2003,18 @@
           ],
           "conditionList": [
             {
-              "name": "Target List Distance x1",
-              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListDistance",
+              "name": "Distance x1",
+              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": false,
+                "lazy": false
               }
             },
             {
-              "name": "Max List List x3",
-              "class_name": "it.polimi.se2019.server.actions.conditions.MaxTargetList",
-              "params": {
-                "amount": 3
-              }
-            },
-            {
-              "name": "Target List On Different Tiles",
+              "name": "Target on different tiles",
               "class_name": "it.polimi.se2019.server.actions.conditions.TargetListOnDifferentTiles",
               "params": {
               }
@@ -1772,36 +2030,41 @@
           "effectList": [
             {
               "name": "Damage Tile List x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTileList",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetsAtDistance",
               "params": {
-                "amount": 1
+                "amount": 1,
+                "distance": 1
               }
             },
             {
-              "name": "Consume 1 Red Ammo",
+              "name": "Consume 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
               "params": {
                 "ammoToConsume": {
-                  "RED": 1
+                  "BLUE": 0,
+                  "RED": 0,
+                  "YELLOW": 1
                 }
               }
             }
           ],
           "conditionList": [
             {
-              "name": "Target List Distance x1",
-              "class_name": "it.polimi.se2019.server.actions.conditions.TargetListDistance",
-              "params": {
-                "amount": 1
-              }
-            },
-            {
-              "name": "Has 1 Red Ammo",
+              "name": "Has 1 Yellow Ammo",
               "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
               "params": {
                 "ammoNeeded": {
-                  "RED": 1
+                  "RED": 0,
+                  "BLUE": 0,
+                  "YELLOW": 1
                 }
+              }
+            },
+            {
+              "name": "Any targets at given distance",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HaveTargetsAtDistance",
+              "params": {
+                "distance": 1
               }
             }
           ],
@@ -1825,8 +2088,8 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 2
               }
@@ -1837,6 +2100,7 @@
               "name": "Attacker Tile",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
+                "isTile": false
               }
             }
           ],
@@ -1849,43 +2113,69 @@
           "available": true,
           "effectList": [
             {
-              "name": "Damage Target x3",
-              "class_name": "it.polimi.se2019.server.actions.effects.DamageTarget",
+              "name": "Damage Target Listx3",
+              "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
               "params": {
                 "amount": 3
               }
             },
             {
-              "name": "Move Target x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move Target List x2",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
-                "amount": 2
+              }
+            },
+            {
+              "name": "Consume 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeAmmo",
+              "params": {
+                "ammoToConsume": {
+                  "BLUE": 0,
+                  "RED": 1,
+                  "YELLOW": 0
+                }
               }
             }
           ],
           "conditionList": [
             {
+              "name": "Has 1 Red Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "params": {
+                "ammoNeeded": {
+                  "BLUE": 0,
+                  "RED": 1,
+                  "YELLOW": 0
+                }
+              }
+            },
+            {
               "name": "Attacker Tile",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsAttackerTile",
               "params": {
+                "isTile": false
               }
             },
             {
-              "name": "Distance x2",
-              "class_name": "it.polimi.se2019.server.actions.conditions.Distance",
+              "name": "MaxDistance x2",
+              "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "amount": 2
+                "amount": 2,
+                "self": true,
+                "initialIsTile": true,
+                "finalIsTile": true,
+                "lazy": true
               }
             },
             {
-              "name": "One direction movement",
-              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
               }
             }
           ],
           "numPlayerTargets" : 1,
-          "numTileTargets": 2,
+          "numTileTargets": 1,
           "playerSelectionFirst": true
         }
       ],

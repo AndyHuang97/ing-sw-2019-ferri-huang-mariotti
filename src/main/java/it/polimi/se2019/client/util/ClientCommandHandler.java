@@ -1,38 +1,38 @@
 package it.polimi.se2019.client.util;
 
-import it.polimi.se2019.client.gui.MainApp;
+import it.polimi.se2019.client.View;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.util.Response;
 import javafx.application.Platform;
 
+import java.util.logging.Logger;
+
 public class ClientCommandHandler {
-    MainApp mainApp;
+    private View view;
     
-    public ClientCommandHandler(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public ClientCommandHandler(View view) {
+        this.view = view;
     }
 
     public void handle(Response request) {
+        //TODO change it so that also the CLIView can handle it
         Platform.runLater(() -> internalHandle(request));
     }
 
     private void internalHandle(Response request) {
+        if (request.getMessage().equals("ping")) {
+            return;
+        }
         if (request.getSuccess()) {
-            this.mainApp.setGame(request.getGame());
+            // game initialization
+            this.view.setGame(request.getGame());
             try {
-                this.mainApp.setPlayerColor(request.getGame().getPlayerByNickname(mainApp.getNickname()).getColor());
+                this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
             } catch (PlayerNotFoundException e) {
-                e.printStackTrace();
+                Logger.getGlobal().warning(e.toString());
             }
-            this.mainApp.boardDeserialize();
-            this.mainApp.initRootLayout();
-            this.mainApp.showGameBoard();
 
-            this.mainApp.getPrimaryStage().setResizable(false);
-            this.mainApp.getPrimaryStage().setFullScreen(true);
-            this.mainApp.getPrimaryStage().sizeToScene();
-            this.mainApp.getPrimaryStage().show();
-            // TODO: redraw gameboard
+            this.view.showGame();
         }
     }
 }

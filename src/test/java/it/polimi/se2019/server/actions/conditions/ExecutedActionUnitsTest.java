@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.actions.conditions;
 
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.games.Game;
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +28,8 @@ public class ExecutedActionUnitsTest {
     @Test
     public void testExecutedActionUnits() {
         Condition condition;
-        game.setCurrentActionUnitsList(Arrays.asList("Basic Mode"));
+        ActionUnit basicMode = new ActionUnit(true,"Basic Mode", null, null, 0,0,true);
+        game.setCurrentActionUnitsList(Arrays.asList(basicMode));
 
         condition = new ExecutedActionUnits(Arrays.asList("Basic Mode"));
         assertTrue(condition.check(game, null));

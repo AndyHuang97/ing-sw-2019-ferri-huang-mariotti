@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -74,9 +75,9 @@ public class IsAttackerTileTest {
 
     @Test
     public void testAttackerTile() {
-        Condition condition = new IsAttackerTile();
+        Condition condition = new IsAttackerTile(true);
         list.add(tileMap[0][1]);
-        targets.put("tile", list);
+        targets.put(CommandConstants.TILELIST, list);
 
         game.setCurrentPlayer(p4);
         Assert.assertEquals(true, condition.check(game, targets));
@@ -86,9 +87,9 @@ public class IsAttackerTileTest {
 
     @Test
     public void testNotAttackerTile() {
-        Condition condition = new IsNotAttackerTile();
+        Condition condition = new IsNotAttackerTile(true);
         list.add(tileMap[0][1]);
-        targets.put("tile", list);
+        targets.put(CommandConstants.TILELIST, list);
 
         game.setCurrentPlayer(p3);
         Assert.assertEquals(true, condition.check(game, targets));

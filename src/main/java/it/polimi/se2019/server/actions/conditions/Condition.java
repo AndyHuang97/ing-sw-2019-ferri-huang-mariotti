@@ -15,6 +15,6 @@ public interface Condition {
 	 * @param game
 	 * @param targets
 	 */
-	public boolean check(Game game, Map<String, List<Targetable>> targets);
+	boolean check(Game game, Map<String, List<Targetable>> targets);
 
 }

@@ -41,7 +41,7 @@ public class RmiServer {
 
         @Override
         public void send(String rawRequest, String uuid) throws RemoteException {
-            Request request = (Request) new Request(null, null).deserialize(rawRequest);
+            Request request = (Request) new Request(new NetMessage(null), null).deserialize(rawRequest);
             if (commandHandlerPicker.containsKey(uuid)) {
                 commandHandlerPicker.get(uuid).handle(request);
             }

@@ -68,6 +68,21 @@ public class CharacterStateTest {
     }
 
     @Test
+    public void testInitAmmoBag() {
+        characterState.setAmmoBag(characterState.initAmmoBag());
+
+        Assert.assertTrue(characterState.getAmmoBag().keySet().containsAll(Arrays.asList(AmmoColor.values())));
+
+    }
+
+    @Test
+    public void testInitMarkerBar() {
+        characterState.setMarkerBar(characterState.initMarkerBar());
+
+        Assert.assertTrue(characterState.getMarkerBar().keySet().containsAll(Arrays.asList(PlayerColor.values())));
+
+    }
+    @Test
     public void testSetTile() {
         Tile newTile = new NormalTile(RoomColor.RED, new LinkType[4], null);
 
@@ -107,7 +122,9 @@ public class CharacterStateTest {
     public void testResetMarkerBar() {
         characterState.resetMarkerBar();
 
-        Assert.assertEquals(0, characterState.getMarkerBar().size());
+        characterState.getMarkerBar().keySet()
+                .forEach(k -> Assert.assertEquals(0, characterState.getMarkerBar().get(k).intValue()));
+        Assert.assertTrue(characterState.getMarkerBar().keySet().containsAll(Arrays.asList(PlayerColor.values())));
     }
 
     @Test

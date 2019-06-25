@@ -1,5 +1,6 @@
 package it.polimi.se2019.client.gui;
 
+import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.NamedImage;
 import it.polimi.se2019.client.util.Util;
@@ -27,7 +28,7 @@ public class MapController {
 
     private static final Logger logger = Logger.getLogger(MapController.class.getName());
 
-    private MainApp mainApp;
+    private View view;
     private List<GridPane> weaponCrateList;
 
     @FXML
@@ -70,10 +71,10 @@ public class MapController {
     /**
      *  Is called by the main application to set itself.
      *
-     * @param mainApp
+     * @param view
      */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setView(View view) {
+        this.view = view;
     }
 
 
@@ -85,12 +86,15 @@ public class MapController {
     @FXML
     public void handleMapLoading() {
 
-        mapImage.setImage(new Image(Constants.MAP_IMAGE + mainApp.getGame().getBoard().getId() + ".png"));
+        // recognizes the board from its id.
+        System.out.println(view.getModel().getGame().getBoard());
+        System.out.println(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png");
+        mapImage.setImage(new Image(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png"));
 
         try {
             // here the number of elements of the json array and the dimension of the grid pane
             // is the same
-            Tile[][] tileMap = mainApp.getGame().getBoard().getTileMap();
+            Tile[][] tileMap = view.getModel().getGame().getBoard().getTileMap();
             IntStream.range(0, tileMap[0].length)
                     .forEach(y -> IntStream.range(0, tileMap.length)
                             .forEach(x -> {
@@ -110,12 +114,14 @@ public class MapController {
 
         } catch (IllegalArgumentException e) {
             logger.warning(e.toString());
+            e.printStackTrace();
         }
     }
 
 
     /**
-     * Adds a button to every tile of the map.
+     * Adds a button to every tile of the map. There are two tile grids, one relative to the move,
+     * and the other to the shoot action. The differentiation is needed for the effects of the weapons.
      *
      * @param tileMap is the tile map.
      * @param x is the x coordinate of the tile.
@@ -138,19 +144,21 @@ public class MapController {
         }
     }
 
+    private static double ANCHOR = 0.0;
     public void setButtonTile(GridPane gridPane, Button button, Runnable handleAction) {
         button.setOpacity(0.4);
-        AnchorPane.setTopAnchor(button, 0.0);
-        AnchorPane.setRightAnchor(button, 0.0);
-        AnchorPane.setBottomAnchor(button, 0.0);
-        AnchorPane.setLeftAnchor(button, 0.0);
+        AnchorPane.setTopAnchor(button, ANCHOR);
+        AnchorPane.setRightAnchor(button, ANCHOR);
+        AnchorPane.setBottomAnchor(button, ANCHOR);
+        AnchorPane.setLeftAnchor(button, ANCHOR);
 
         button.setOnAction(event -> {
             button.setStyle("");
             button.setDisable(true);
-            BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
 
-            Util.ifFirstSelection(root, progressBar);
+            BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
+            Button confirmButton = (Button) root.lookup("#confirmButton");
+            Util.ifFirstSelection(confirmButton, progressBar);
             Util.updateCircle(progressBar);
 
             if (Util.isLastSelection(progressBar)) {
@@ -183,28 +191,20 @@ public class MapController {
                 // gets the i-th anchorpane containing the imageview
                 AnchorPane anchorPane = (AnchorPane) ((HBox) ammoGrid.getChildren().get(Util.convertToIndex(x, y))).getChildren().get(0);
                 ImageView iv = (ImageView) anchorPane.getChildren().get(0);
-                String id = mainApp.getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
-                //TODO separate the image loading form the setup, no need to iterate the mouse click behavior
+                String id = view.getModel().getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
+                //TODO separate the image loading from the setup, no need to iterate the mouse click behavior
                 iv.setImage(new NamedImage(Constants.AMMO_PATH + id + ".png", Constants.AMMO_PATH));
                 iv.setVisible(true);
                 iv.setDisable(true);
 
                 iv.setOnMouseClicked(event -> {
                     anchorPane.setDisable(true);
-                    anchorPane.setOpacity(0.6);
-                    BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
+                    anchorPane.setOpacity(Constants.onClickedOpacity);
 
-                    Util.ifFirstSelection(root, progressBar);
+                    BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
+                    Button confirmButton = (Button) root.lookup("#confirmButton");
+                    Util.ifFirstSelection(confirmButton, progressBar);
                     Util.updateCircle(progressBar);
-
-                    //iv.setStyle("");
-                    /*ammoGrid.getChildren().stream()
-                            .map(n -> (AnchorPane) ((HBox) n).getChildren().get(0))
-                            .filter(ap -> ap != anchorPane)
-                            .filter(ap -> ap.getChildren().get(0).isVisible())
-                            .forEach(ap -> ap.setStyle(""));
-
-                     */
 
                     NamedImage image = (NamedImage) iv.getImage();
                     handleAmmoCrateSelected(image.getName());
@@ -222,8 +222,6 @@ public class MapController {
      */
     public void initPlayerGrid(Tile[][] tileMap, int x, int y) {
 
-        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
-
         playerGrid.setDisable(true);
         if (tileMap[x][y] != null) {
             VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(x, y));
@@ -236,9 +234,11 @@ public class MapController {
                             .forEach(c ->
                                 c.setOnMouseClicked(event -> {
                                     c.setDisable(true);
-                                    c.setOpacity(0.6);
+                                    c.setOpacity(Constants.onClickedOpacity);
 
-                                    Util.ifFirstSelection(root, progressBar);
+                                    BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
+                                    Button confirmButton = (Button) root.lookup("#confirmButton");
+                                    Util.ifFirstSelection(confirmButton, progressBar);
                                     Util.updateCircle(progressBar);
 
                                     if (Util.isLastSelection(progressBar)) {
@@ -257,7 +257,6 @@ public class MapController {
      */
     public void initWeaponCrates() {
 
-        BorderPane root = (BorderPane) mainApp.getPrimaryStage().getScene().getRoot();
 
         weaponCrateList.stream()
                 .forEach(wc -> {
@@ -265,7 +264,7 @@ public class MapController {
                     wc.getChildren().stream()
                             .map(n -> (ImageView) n)
                             .forEach(w ->
-                                    mainApp.getGameBoardController().setCardSelectionBehavior(w, wc, Constants.GRAB)
+                                    ((GUIView) view).getGuiController().setCardSelectionBehavior(w, wc, Constants.GRAB)
                             );
                 });
     }
@@ -275,7 +274,7 @@ public class MapController {
      *
      */
     public void showWeaponCrates() {
-        Tile[][] tileMap = mainApp.getGame().getBoard().getTileMap();
+        Tile[][] tileMap = view.getModel().getGame().getBoard().getTileMap();
         IntStream.range(0, tileMap[0].length)
                 .forEach(y -> IntStream.range(0, tileMap.length)
                         .filter(x -> tileMap[x][y] != null)
@@ -303,7 +302,7 @@ public class MapController {
      *
      */
     public void showKillShotTrack() {
-        KillShotTrack kt = mainApp.getGame().getKillshotTrack();
+        KillShotTrack kt = view.getModel().getGame().getKillshotTrack();
 
         int offset = killShotTrackPane.getChildren().size() - kt.getKillsForFrenzy();
 
@@ -353,10 +352,10 @@ public class MapController {
      */
     public void showPlayers() {
 
-        mainApp.getGame().getPlayerList().stream()
+        view.getModel().getGame().getPlayerList().stream()
                 .forEach(p -> {
                     try {
-                        int[] coords = mainApp.getGame().getBoard().getTilePosition(p.getCharacterState().getTile());
+                        int[] coords = view.getModel().getGame().getBoard().getTilePosition(p.getCharacterState().getTile());
                         VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
                         vbox.setDisable(false);
 
@@ -401,18 +400,27 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a button from tile grid.
+     * Handles the selection of a button from normal tile grid.
      *
      * @param id is the id/position in the list of tiles.
      */
     public void handleTileSelected(int id) {
         System.out.println("Tile selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.MOVE, String.valueOf(id));
+        int[] coords = Util.convertToCoords(id);
+        Tile tile = view.getModel().getGame().getBoard().getTile(coords[0], coords[1]);
+        ((GUIView) view).getGuiController().addInput(Constants.MOVE, tile.getId());
     }
 
+    /**
+     * Handles the selection of a button from shoot tile grid.
+     *
+     * @param id is the id/position in the list of tiles.
+     */
     public void handleShootTileSelected(int id) {
-        System.out.println("Tile selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.SHOOT, String.valueOf(id));
+        System.out.println("Shoot Tile selected: " + id);
+        int[] coords = Util.convertToCoords(id);
+        Tile tile = view.getModel().getGame().getBoard().getTile(coords[0], coords[1]);
+        ((GUIView) view).getGuiController().addInput(Constants.SHOOT, tile.getId());
     }
 
     /**
@@ -421,7 +429,7 @@ public class MapController {
      */
     public void handleWeaponInCrateSelected(String id) {
         System.out.println("Weapon selected: " + id);
-        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
+        ((GUIView) view).getGuiController().addInput(Constants.GRAB, id);
     }
 
     /**
@@ -430,7 +438,7 @@ public class MapController {
      */
     public void handleAmmoCrateSelected(String id) {
         System.out.println("Ammocrate selected: "+ id);
-        mainApp.getGameBoardController().addInput(Constants.GRAB, id);
+        ((GUIView) view).getGuiController().addInput(Constants.GRAB, id);
     }
 
     /**
@@ -440,11 +448,11 @@ public class MapController {
      */
     public void handlePlayerSelected(String color) {
         System.out.println("Selected player: " + color);
-        String id = mainApp.getGame().getPlayerList().stream()
+        String id = view.getModel().getGame().getPlayerList().stream()
                 .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
                 .collect(Collectors.toList()).get(0).getId();
         System.out.println(color + " " + id);
-        mainApp.getGameBoardController().addInput(Constants.SHOOT, id);
+        ((GUIView) view).getGuiController().addInput(Constants.SHOOT, id);
     }
 
     /**
@@ -474,7 +482,7 @@ public class MapController {
                 .filter(ap -> !ap.getChildren().isEmpty())
                 .map(ap -> (Button) ap.getChildren().get(0))
                 .forEach(b -> {
-                    b.setStyle("-fx-background-color: "+mainApp.getBackgroundColor());
+                    b.setStyle("-fx-background-color: "+((GUIView) view).getBackgroundColor());
                     b.setDisable(false);
                     b.setVisible(true);
                 });

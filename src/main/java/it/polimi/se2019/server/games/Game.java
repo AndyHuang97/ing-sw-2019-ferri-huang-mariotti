@@ -1,14 +1,17 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
 import it.polimi.se2019.server.dataupdate.StateUpdate;
+import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Response;
 
@@ -31,7 +34,9 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Deck<Weapon> weaponDeck;
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
-	private List<String> currentActionUnitsList;
+	private List<ActionUnit> currentActionUnitsList;
+	private List<Targetable> cumulativeDamageTargetList;
+	private List<Targetable> cumulativeTargetList;
 	private boolean frenzy;
 
 	public Game() {
@@ -44,6 +49,9 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
+		this.currentActionUnitsList = new ArrayList<>();
+		this.cumulativeDamageTargetList = new ArrayList<>();
+		this.cumulativeTargetList = new ArrayList<>();
 		this.frenzy = false;
 	}
 
@@ -57,10 +65,14 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
+		this.currentActionUnitsList = new ArrayList<>();
+		this.cumulativeDamageTargetList = new ArrayList<>();
+		this.cumulativeTargetList = new ArrayList<>();
+		this.frenzy = false;
 	}
 
 	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killshotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerupDeck, Deck<AmmoCrate> ammoCrateDeck) {
-		// use this one to resume? a current one
+		// use this one to resume a current one ?
 		this.startDate = startDate;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
@@ -69,10 +81,58 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.weaponDeck = weaponDeck;
 		this.powerupDeck = powerupDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
+		this.currentActionUnitsList = new ArrayList<>();
+		this.cumulativeDamageTargetList = new ArrayList<>();
+		this.cumulativeTargetList = new ArrayList<>();
 	}
 
 	public GameData generateGameData() {
 		return new GameData(getStartDate());
+	}
+
+	//TODO initialize the board
+	public void initGameObjects(String mapIndex) {
+		new DirectDeserializers();
+		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
+		System.out.println(getBoard().getId());
+		this.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrate());
+		this.setWeaponDeck(DirectDeserializers.deserialzerWeaponDeck());
+		this.setPowerupDeck(DirectDeserializers.deserialzerPowerUpDeck());
+		this.getWeaponDeck().shuffle();
+		this.getAmmoCrateDeck().shuffle();
+		this.getPowerupDeck().shuffle();
+
+		initBoard();
+		initPlayerPowerUps();
+	}
+
+	public void initBoard() {
+		this.getBoard().getTileList().stream()
+				.filter(Objects::nonNull)
+				.filter(t -> t.isSpawnTile())
+				.forEach(t -> {
+					for (int i=0; i<3; i++) {
+						t.getWeaponCrate().add(weaponDeck.drawCard());
+					}
+				});
+		this.getBoard().getTileList().stream()
+				.filter(Objects::nonNull)
+				.filter(t-> !t.isSpawnTile())
+				.forEach(t -> t.setAmmoCrate(ammoCrateDeck.drawCard()));
+	}
+
+	public void initPlayerPowerUps() {
+		this.getPlayerList().stream()
+				.forEach(p -> {
+					for (int i=0; i<2; i++) {
+						givePowerUpToPlayer(p);
+					}
+				});
+
+	}
+
+	public void givePowerUpToPlayer(Player player) {
+		player.getCharacterState().getPowerUpBag().add(powerupDeck.drawCard());
 	}
 
 	public void updateTurn() {
@@ -86,9 +146,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	}
 
 	public void setCurrentPlayer(Player currentPlayer) {
-		if(currentPlayer.getActive()) this.currentPlayer = currentPlayer;
-
-		currentActionUnitsList = new ArrayList<>();
+		if(currentPlayer.getActive()) {this.currentPlayer = currentPlayer;}
+		else {throw new IllegalStateException();}
 	}
 
 	public Date getStartDate() {
@@ -184,11 +243,11 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = powerupDeck;
 	}
 
-	public List<String> getCurrentActionUnitsList() {
+	public List<ActionUnit> getCurrentActionUnitsList() {
 		return currentActionUnitsList;
 	}
 
-	public void setCurrentActionUnitsList(List<String> currentActionUnitsList) {
+	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
 		this.currentActionUnitsList = currentActionUnitsList;
 	}
 
@@ -213,5 +272,42 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	@Override
 	public void update(Response response) {
         notify(response);
+	}
+
+	public List<Targetable> getActionUnitTargetList(String actionUnitName) {
+		return getCurrentActionUnitsList().stream()
+				.filter(au -> au.getName().equals(actionUnitName))
+				.map(au -> au.getCommands().get(CommandConstants.TARGETLIST))
+				.findFirst().orElseThrow(IllegalStateException::new);
+	}
+
+	public ActionUnit getActionUnit(String actionUnitName) {
+		return getCurrentActionUnitsList().stream()
+				.filter(au -> au.getName().equals(actionUnitName))
+				.findFirst().orElseThrow(IllegalStateException::new);
+	}
+
+	public List<Targetable> getCumulativeDamageTargetList() {
+		return cumulativeDamageTargetList;
+	}
+
+	public void setCumulativeDamageTargetList(List<Targetable> cumulativeDamageTargetList) {
+		this.cumulativeDamageTargetList = cumulativeDamageTargetList;
+	}
+
+	public List<Targetable> getCumulativeTargetList() {
+		return cumulativeTargetList;
+	}
+
+	public void setCumulativeTargetList(List<Targetable> cumulativeTargetList) {
+		this.cumulativeTargetList = cumulativeTargetList;
+	}
+
+	public Deck<AmmoCrate> getAmmoCrateDeck() {
+		return ammoCrateDeck;
+	}
+
+	public void setAmmoCrateDeck(Deck<AmmoCrate> ammoCrateDeck) {
+		this.ammoCrateDeck = ammoCrateDeck;
 	}
 }

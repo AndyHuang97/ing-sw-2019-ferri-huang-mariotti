@@ -73,7 +73,7 @@ public class DamageTargetListTest {
 
     @Test
     public void testDamageTargetList() {
-        Effect effect = new DamageTargetList(2);
+        Effect effect = new DamageTargetList(2, null);
         List<Targetable> targetList = new ArrayList<>();
         targets.put("targetList", targetList);
         game.setCurrentPlayer(p1);
@@ -84,6 +84,8 @@ public class DamageTargetListTest {
         assertEquals(2, p2.getCharacterState().getDamageBar().size());
         assertEquals(2, p3.getCharacterState().getDamageBar().size());
         assertEquals(2, p4.getCharacterState().getDamageBar().size());
+        assertTrue(game.getCumulativeDamageTargetList().containsAll(Arrays.asList(p2, p3, p4)));
+        assertTrue(game.getCumulativeTargetList().containsAll(Arrays.asList(p2, p3, p4)));
         p2.getCharacterState().getDamageBar().stream()
                 .forEach(pc -> assertEquals(PlayerColor.BLUE, pc));
         p3.getCharacterState().getDamageBar().stream()

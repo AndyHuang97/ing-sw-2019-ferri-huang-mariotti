@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This condition checks whether the attacker has enough ammo.
@@ -20,6 +21,10 @@ public class HasAmmo implements Condition {
         this.ammoNeeded = ammoNeeded;
     }
 
+    public  Map<AmmoColor, Integer> getAmmoNeeded() {
+        return ammoNeeded;
+    }
+
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Map<AmmoColor, Integer> ammoBag = game.getCurrentPlayer().getCharacterState().getAmmoBag();
@@ -30,6 +35,7 @@ public class HasAmmo implements Condition {
                     if(ammoBag.get(color) - ammoNeeded.get(color) < 0) {
                         result = false;
                     }
+                    Logger.getGlobal().warning("HasAmmo: " + result);
                     return result;
                 });
 

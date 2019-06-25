@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,7 +76,7 @@ public class DamageRoomTest {
     public void testDamageRoom() {
         Effect effect = new DamageRoom(1);
         List<Targetable> tile = new ArrayList<>();
-        targets.put("tile", tile);
+        targets.put(CommandConstants.TILELIST, tile);
         game.setCurrentPlayer(p4);
 
         tile.add(tileMap[1][0]);

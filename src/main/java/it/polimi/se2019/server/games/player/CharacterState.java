@@ -21,6 +21,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
 	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
+	private static final int FIRST_ATTACKER = 0;
 
 	private int deaths;
 	private int[] valueBar;
@@ -31,7 +32,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
 	private Integer score;
+	private boolean connected;
 
+	/**
+	 * Default constructor
+	 *
+	 */
 
 	public CharacterState() {
 		this.deaths = 0;
@@ -43,6 +49,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
 		this.score = 0;
+		this.connected = true;
 	}
 
 	/**
@@ -54,16 +61,19 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 * @param tile
 	 * @param score
 	 */
-	public CharacterState(List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
+	public CharacterState(int deaths, int[] valueBar, List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
 						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weaponBag,
-						  List<PowerUp> powerUpBag, Tile tile, Integer score) {
-		this.damageBar = damageBar;
+						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected) {
+        this.deaths = deaths;
+        this.valueBar = valueBar;
+	    this.damageBar = damageBar;
 		this.markerBar = markerBar;
 		this.ammoBag = ammoBag;
 		this.weaponBag = weaponBag;
 		this.powerUpBag = powerUpBag;
 		this.tile = tile;
 		this.score = score;
+		this.connected = connected;
 	}
 
 
@@ -83,6 +93,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addDamage(PlayerColor playerColor, Integer amount) {
 		//TODO need to limit the damgeBar length to 12 as maximum.
+		// and handle markers...
 		for(int i = 0; i < amount; i++) {
 			if(damageBar.size() < 12) {
 				damageBar.add(playerColor);
@@ -133,8 +144,13 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		}
 	}
 
+	/**
+	 * Resets all key's values to 0.
+	 *
+	 */
 	public void resetMarkerBar() {
-		markerBar.clear();
+		markerBar.keySet()
+				.forEach(k -> markerBar.put(k, 0));
 	}
 
 	/**
@@ -221,7 +237,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
 			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
 			// first attack bonus
-			if(message.getDamageBar().get(0) == playerColor) {
+			if(message.getDamageBar().get(FIRST_ATTACKER) == playerColor) {
 				score += 1;
 			}
 
@@ -242,12 +258,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addWeapon(Weapon weapon) {
 		weaponBag.add(weapon);
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public void setWeaponBag(List<Weapon> weaponBag) {
 		this.weaponBag = weaponBag;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public List<PowerUp> getPowerUpBag() {
@@ -256,12 +272,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addPowerUp(PowerUp powerUp) {
 		powerUpBag.add(powerUp);
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public void setPowerUpBag(List<PowerUp> powerUpBag) {
 		this.powerUpBag = powerUpBag;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public int[] getValueBar() {
@@ -270,7 +286,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setValueBar(int[] valueBar) {
 		this.valueBar = valueBar;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
 	public int getDeaths() {
@@ -279,10 +295,18 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setDeaths(int deaths) {
 		this.deaths = deaths;
-		notifyCharaterStateChange();
+		notifyCharacterStateChange();
 	}
 
-	private void notifyCharaterStateChange() {
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
+	}
+
+	private void notifyCharacterStateChange() {
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
 	    notifyCharacterStateUpdate(stateUpdate);

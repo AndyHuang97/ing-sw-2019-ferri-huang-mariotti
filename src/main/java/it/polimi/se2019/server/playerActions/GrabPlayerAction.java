@@ -18,7 +18,7 @@ public class GrabPlayerAction extends PlayerAction {
     private static final int WEAPONPOSITION = 0;
     private static final int MAXWEAPONINBAG = 3;
     private static final String ERRORMESSAGE = "Grab action failed";
-    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_MAIN_ACTIONS};
+    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_GRAB};
 
     private Weapon weaponToGrab;
 

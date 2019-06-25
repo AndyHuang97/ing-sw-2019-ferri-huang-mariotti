@@ -16,7 +16,7 @@ import java.util.List;
  * the View sends a valid Request
  */
 public abstract class PlayerAction {
-    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_MAIN_ACTIONS};
+    private static final TurnPhase[] ALLOWED_IN = {};
 
     private Game game;
     private Player player;
