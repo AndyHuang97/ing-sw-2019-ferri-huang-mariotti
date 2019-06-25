@@ -17,8 +17,14 @@ public class GUIView extends View {
     private BorderPane rootLayout;
     private Stage primaryStage;
 
+    public GUIView() {
+        this.setCliTrueGuiFalse(false);
+    }
+
+
     public GUIView(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        this.setCliTrueGuiFalse(false);
     }
 
     @Override

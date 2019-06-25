@@ -23,6 +23,8 @@ public abstract class View extends Observable implements Observer<Response> {
     private Map<String, List<String>> playerInput = new HashMap<>();
     private List<Runnable> inputRequested = new ArrayList<>();
 
+    private boolean cliTrueGuiFalse;
+
     public View() {
         model = new Model();
     }
@@ -129,4 +131,8 @@ public abstract class View extends Observable implements Observer<Response> {
     public List<Runnable> getInputRequested() {
         return inputRequested;
     }
+
+    public boolean isCliTrueGuiFalse() { return cliTrueGuiFalse; }
+
+    public void setCliTrueGuiFalse(boolean cliTrueGuiFalse) { this.cliTrueGuiFalse = cliTrueGuiFalse; }
 }
