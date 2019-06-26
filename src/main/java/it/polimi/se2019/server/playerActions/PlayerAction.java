@@ -10,6 +10,7 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.ErrorResponse;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -94,5 +95,16 @@ public abstract class PlayerAction implements Targetable {
         }
 
         return false;
+    }
+
+
+    private static final PlayerAction MOVE = new MovePlayerAction(0);
+    private static final PlayerAction GRAB = new GrabPlayerAction(0);
+    private static final PlayerAction SHOOT = new ShootPlayerAction(0);
+    private static final PlayerAction RELOAD = new ReloadPlayerAction(0);
+    private static final PlayerAction POWERUP = new PowerUpAction(0);
+
+    public static List<PlayerAction> getAllPossibleActions() {
+        return Arrays.asList(MOVE, GRAB, SHOOT, RELOAD, POWERUP);
     }
 }

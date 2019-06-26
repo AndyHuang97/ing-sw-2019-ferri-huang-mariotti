@@ -13,9 +13,12 @@ public class CompositeAction {
         }
     }
 
+    public CompositeAction(List<PlayerAction> action) {
+        this.action = action;
+    }
+
     public List<PlayerAction> getAction() {
         return action;
     }
-
 
 }

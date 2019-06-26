@@ -1,5 +1,9 @@
 package it.polimi.se2019.server.net;
 import it.polimi.se2019.server.ServerApp;
+import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
@@ -7,6 +11,7 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.socket.SocketServer;
+import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;
@@ -54,22 +59,85 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         netMessage.getCommands().forEach((key, values) -> {
             List<Targetable> newValues = new ArrayList<>(); // moved it inside the for each, must be a new reference each time
             values.forEach((value) -> {
-
+                int oldSize = newValues.size();
                 Player playerTarget = game.getPlayerList().stream().filter(player -> player.getId().equals(value)).findAny().orElse(null);
                 if (playerTarget != null) {
                     newValues.add(playerTarget);
                     return;
                 }
-                Tile tileTarget = game.getBoard().getTileList().stream().filter(tile -> tile.getId().equals(value)).findAny().orElse(null);
+                Tile tileTarget = game.getBoard().getTileList().stream()
+                        .filter(Objects::nonNull)
+                        .filter(tile -> tile.getId().equals(value)).findAny().orElse(null);
                 if (tileTarget != null) {
                     newValues.add(tileTarget);
                     return;
                 }
-                //TODO handle Cards, ActionUnits, and keyOrder with PlayerAction id
-                throw new TargetableNotFoundException("Cannot find a targetable with id: " + value);
+                AmmoCrate ammoCrateTarget = game.getBoard().getTileList().stream()
+                        .filter(Objects::nonNull)
+                        .filter(tile -> !tile.isSpawnTile())
+                        .map(tile -> tile.getAmmoCrate())
+                        .filter(ammoCrate -> ammoCrate.getId().equals(value)).findAny().orElse(null);
+                if (ammoCrateTarget != null) {
+                    newValues.add(ammoCrateTarget);
+                    return;
+                }
+                PowerUp powerUpTarget = game.getCurrentPlayer().getCharacterState().getPowerUpBag().stream()
+                        .filter(powerUp -> powerUp.getId().equals(value)).findAny().orElse(null);
+                if (powerUpTarget != null) {
+                    newValues.add(powerUpTarget);
+                    return;
+                }
+                // tries to get the weapon from the player's hand
+                Weapon weaponTarget = game.getCurrentPlayer().getCharacterState().getWeaponBag().stream()
+                        .filter(weapon -> weapon.getId().equals(value)).findAny().orElse(null);
+                if (weaponTarget != null) {
+                    newValues.add(weaponTarget);
+                    return;
+                } else { // tries to get the weapon from a spwantile
+                    weaponTarget = game.getBoard().getTileList().stream()
+                            .filter(Objects::nonNull)
+                            .filter(tile -> tile.isSpawnTile())
+                            .map(tile -> tile.getWeaponCrate())
+                            .map(weapons -> weapons.stream()
+                                    .filter(weapon -> weapon.getId().equals(value))
+                                    .findAny().orElse(null))
+                            .filter(Objects::nonNull)
+                            .findAny().orElse(null);
+                    if (weaponTarget != null) {
+                        newValues.add(weaponTarget);
+                        return;
+                    }
+                }
+                // assuming that a weapon always precedes the action unit
+                if (newValues.size()>1) {
+                    ActionUnit actionUnitTarget = ((Weapon) newValues.get(0)).getActionUnitList().stream()
+                            .filter(actionUnit -> actionUnit.getId().equals(value)).findAny().orElse(null);
+                    if (actionUnitTarget != null) {
+                        newValues.add(actionUnitTarget);
+                        return;
+                    } else {
+                        actionUnitTarget = ((Weapon) newValues.get(0)).getOptionalEffectList().stream()
+                                .filter(actionUnit -> actionUnit.getId().equals(value)).findAny().orElse(null);
+                        if (actionUnitTarget != null) {
+                            newValues.add(actionUnitTarget);
+                            return;
+                        }
+                    }
+                }
+                PlayerAction playerActionTarget = PlayerAction.getAllPossibleActions().stream()
+                        .filter(playerAction -> playerAction.getId().equals(value)).findAny().orElse(null);
+                if (playerActionTarget != null) {
+                    newValues.add(playerActionTarget);
+                    return;
+                }
+
+                if (oldSize == newValues.size()) {
+                    throw new TargetableNotFoundException("Cannot find a targetable with id: " + value);
+                }
             });
             newCommands.put(key, newValues);
         });
+        Logger.getGlobal().info(newCommands.toString());
         return new InternalMessage(newCommands);
     }
 
@@ -105,7 +173,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
             try {
                 Game game = ServerApp.gameManager.retrieveGame(nickname);
                 request.setInternalMessage(convertNetMessage(message, game));
-                // TODO: process command
+                // TODO: process command, notify(request)?
 
             } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
                 logger.info(e.getMessage());

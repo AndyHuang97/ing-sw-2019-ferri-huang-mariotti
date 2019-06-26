@@ -4,6 +4,7 @@ import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.board.Tile;
@@ -42,7 +43,7 @@ public class ActionTileController {
     private Button confirmButton;
     private List<GridPane> weaponCrateList;
     private GridPane myWeapons;
-    private GridPane myPowerups;
+    private GridPane myPowerUps;
     private FlowPane actionUnitPane;
 
     @FXML
@@ -97,7 +98,7 @@ public class ActionTileController {
         weaponCrateList.add((GridPane) map.lookup("#yellowWeapons"));
 
         myWeapons = (GridPane) vBox.lookup("#myWeapons");
-        myPowerups = (GridPane) vBox.lookup("#myPowerups");
+        myPowerUps = (GridPane) vBox.lookup("#myPowerUps");
 
     }
 
@@ -221,6 +222,53 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
+    public void getPowerup() {
+        Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
+        if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
+            List<String> lst = new ArrayList<>();
+            lst.add(Constants.POWERUP);
+            intermediateInput.put(Constants.KEY_ORDER, lst);
+        } else {
+            intermediateInput.get(Constants.KEY_ORDER).add(Constants.POWERUP);
+        }
+
+        infoText.setText("Select 1 powerup ");
+        cancelButton.setDisable(true);
+        confirmButton.setDisable(true);
+
+        myPowerUps.setDisable(false);
+        myPowerUps.getStyleClass().add("my-node");
+        showMyPowerups();
+        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.POWERUP, new ArrayList<>());
+
+        setUpProgressBar(1);
+    }
+
+    public void getReload() {
+
+        Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
+        if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
+            List<String> lst = new ArrayList<>();
+            lst.add(Constants.RELOAD);
+            intermediateInput.put(Constants.KEY_ORDER, lst);
+        } else {
+            intermediateInput.get(Constants.KEY_ORDER).add(Constants.RELOAD);
+        }
+
+        //disableActionButtons();
+        infoText.setText("Select 1 card ");
+        cancelButton.setDisable(false);
+        confirmButton.setDisable(false);
+
+        myWeapons.setDisable(false);
+        myWeapons.getStyleClass().add("my-node");
+        showMyUnloadedWeapons();
+        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RELOAD, new ArrayList<>());
+
+        setUpProgressBar(3);
+
+    }
+
     public void getShoot() {
 
         Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
@@ -287,31 +335,6 @@ public class ActionTileController {
 
             view.askInput();
         });
-    }
-
-    public void getReload() {
-
-        Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
-        if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
-            List<String> lst = new ArrayList<>();
-            lst.add(Constants.RELOAD);
-            intermediateInput.put(Constants.KEY_ORDER, lst);
-        } else {
-            intermediateInput.get(Constants.KEY_ORDER).add(Constants.RELOAD);
-        }
-
-        //disableActionButtons();
-        infoText.setText("Select 1 card ");
-        cancelButton.setDisable(false);
-        confirmButton.setDisable(false);
-
-        myWeapons.setDisable(false);
-        myWeapons.getStyleClass().add("my-node");
-        showMyUnloadedWeapons();
-        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RELOAD, new ArrayList<>());
-
-        setUpProgressBar(3);
-
     }
 
     public void getTarget(int amount) {
@@ -474,6 +497,29 @@ public class ActionTileController {
                     }
 
                     ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myWeapons, Constants.SHOOT);
+                });
+    }
+
+    /**
+     * Shows the powerups for selection.
+     *
+     */
+    public void showMyPowerups() {
+        CharacterState myCharacterState =  view.getModel().getGame().getPlayerList().stream()
+                .filter(p -> p.getColor() == view.getPlayerColor())
+                .collect(Collectors.toList()).get(0).getCharacterState();
+        List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
+
+
+        IntStream.range(0, myPowerUpsModel.size())
+                .forEach(i -> {
+                    ImageView iv = null;
+                    iv = (ImageView) myPowerUps.getChildren().get(i);
+                    iv.setVisible(true);
+                    iv.setOpacity(1.0);
+                    iv.setDisable(false);
+
+                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myPowerUps, Constants.POWERUP);
                 });
     }
 

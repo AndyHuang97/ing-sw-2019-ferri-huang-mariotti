@@ -605,6 +605,7 @@ public class GUIController {
             addInput(action, image.getName());
         });
     }
+
     public void addInput(String key, String id) {
         intermediateInput.putIfAbsent(key, new ArrayList<>());
         intermediateInput.get(key).add(id);

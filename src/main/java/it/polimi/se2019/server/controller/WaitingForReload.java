@@ -1,17 +1,19 @@
 package it.polimi.se2019.server.controller;
 
+import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.playerActions.PlayerAction;
 
 import java.util.List;
 
 public class WaitingForReload implements ControllerState {
     @Override
-    public List<PlayerAction> getAllowedPlayerActions(List<PlayerAction> playerActions) {
-        return null;
+    public boolean checkActionAvailability(List<PlayerAction> playerActions, Game game, Player player) {
+        return false;
     }
 
     @Override
-    public ControllerState nextState() {
+    public ControllerState nextState(List<PlayerAction> playerActions) {
         return null;
     }
 }

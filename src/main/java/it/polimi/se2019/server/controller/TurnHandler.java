@@ -3,7 +3,6 @@ package it.polimi.se2019.server.controller;
 /**
  * The TurnHandler is the class that defines a turn's logic.
  */
-@Deprecated
 public abstract class TurnHandler {
 
     private BattleHandler battleHandler;

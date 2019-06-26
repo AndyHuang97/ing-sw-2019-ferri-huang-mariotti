@@ -152,6 +152,16 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		currentActionUnitsList = new ArrayList<>();
 	}
 
+
+	//TODO test it ...
+	public void nextCurrentPlayer() {
+		if (playerList.indexOf(getCurrentPlayer()) != (playerList.size()-1)) {
+			currentPlayer = playerList.get(playerList.indexOf(getCurrentPlayer()) + 1);
+		} else {
+			currentPlayer = playerList.get(0);
+		}
+	}
+
 	public Date getStartDate() {
 		return startDate;
 	}

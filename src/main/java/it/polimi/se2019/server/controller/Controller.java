@@ -6,6 +6,7 @@ import it.polimi.se2019.server.exceptions.MessageParseException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.util.Observer;
@@ -15,6 +16,7 @@ import it.polimi.se2019.util.RequestParser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class implement the Controller of the MVC pattern. The Controller parse the inputs (Requests)
@@ -43,17 +45,30 @@ public class Controller implements Observer<Request> {
     @Override
     public void update(Request request) {
         try {
-            RequestParser requestParser = new RequestParser();
-            requestParser.parse(request, gameManager);
-            List<PlayerAction> playerActionList = requestParser.getPlayerActionList();
+            String nickname = request.getNickname();
+            Game game = gameManager.retrieveGame(nickname);
 
-            // get the ControllerState from one of the PlayerActions (they're all from the same request so they
-            // all share the same game).
-            Game game = playerActionList.get(0).getGame();
+            Optional<Player> optPlayer = game.getPlayerList().stream()
+                    .filter(p -> p.getUserData().getNickname().equals(nickname))
+                    .findFirst();
+
+            Player player = null;
+            if (optPlayer.isPresent()) {
+                player = optPlayer.get();
+                System.out.println(player);
+            }
+
+            RequestParser requestParser = new RequestParser();
+            requestParser.parse(request, game, player);
+            List<PlayerAction> playerActionList = requestParser.getPlayerActionList();
 
             ControllerState controllerState = getStateFromGame(game);
 
-            List <PlayerAction> checkablePlayerActionList = controllerState.getAllowedPlayerActions(playerActionList);
+            if (!controllerState.checkActionAvailability(playerActionList, game, player)) {
+                throw new IllegalPlayerActionException();
+            }
+
+            //TODO change input handling based on the state of the controller
 
             boolean runnable = true;
 
@@ -66,12 +81,12 @@ public class Controller implements Observer<Request> {
             }
 
             if (runnable) {
-                for (PlayerAction playerAction : checkablePlayerActionList) {
+                for (PlayerAction playerAction : playerActionList) {
                     applyAction(playerAction);
                 }
 
                 // allowed PlayerActions have been run, time for next turn phase
-                setControllerStateForGame(game, controllerState.nextState());
+                setControllerStateForGame(game, controllerState.nextState(playerActionList));
             }
         } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
 
@@ -87,6 +102,8 @@ public class Controller implements Observer<Request> {
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
+
+
 
     /**
      * If the game is present in the controllerStateMap return the correspondent ControllerState value

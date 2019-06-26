@@ -1,12 +1,4 @@
 package it.polimi.se2019.server.controller;
 
-/**
- * The NormalTurnHandler manages a normal turn.
- */
-@Deprecated
-public class NormalTurnHandler extends TurnHandler {
-    @Override
-    public void run() {
-
-    }
+public class NormalTurnHandler {
 }

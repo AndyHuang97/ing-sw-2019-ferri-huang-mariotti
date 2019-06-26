@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.games;
 
 import com.google.gson.Gson;
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -137,6 +138,7 @@ public class GameManager {
 			newGame.register(tuple.commandHandler);
 		});
 		newGame.setPlayerList(playerList);
+		newGame.setCurrentPlayer(playerList.get(0));
 
 		//TODO read mapIndex from players' preference
 		Map<String, Long> occurrences =
@@ -150,7 +152,7 @@ public class GameManager {
 
 		this.waitingList.forEach(tuple -> {
 			try {
-				tuple.commandHandler.update(new Response(newGame, true, ""));
+				tuple.commandHandler.update(new Response(newGame, true, Constants.POWERUP));
 			} catch (Observer.CommunicationError e) {
 				logger.info(e.getMessage());
 			}

@@ -23,14 +23,16 @@ public class Constants {
     public static final String GUI = "GUI";
     public static final String CLI = "CLI";
     public static final String PROGRESS_BAR = "#progressBar";
+    public static final String NOP = "NoOperaion";
+    public static final String POWERUP = "PowerUp";
     public static final String GRAB = "Grab";
     public static final String MOVE = "Move";
     public static final String PLAYER = "Player";
     public static final String SHOOT = "Shoot";
     public static final String RELOAD = "Reload";
+    public static final String KEY_ORDER = "keyOrder";
     public static final double buttonOpacity = 0.45;
     public static final double onClickedOpacity = 0.6;
-    public static final String KEY_ORDER = "keyOrder";
     public static final String map0 = "0";
     public static final String map1 = "1";
     public static final String map2 = "2";

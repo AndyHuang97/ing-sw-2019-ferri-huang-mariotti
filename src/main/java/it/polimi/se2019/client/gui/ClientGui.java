@@ -2,6 +2,7 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.Model;
 import it.polimi.se2019.client.View;
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -43,9 +44,13 @@ public class ClientGui extends Application {
         showLogin();
 
         //testing
-        //view.setPlayerColor(PlayerColor.GREEN);
-        //((Model)view.getModel()).initGame();
-        //view.showGame();
+        /*
+        view.setPlayerColor(PlayerColor.GREEN);
+        ((Model)view.getModel()).initGame();
+        view.showGame();
+
+         */
+        //view.showMessage(Constants.POWERUP);
 
     }
 
