@@ -9,8 +9,6 @@ import java.util.List;
  * 
  */
 public class AmmoCrate extends Card {
-
-
     public AmmoCrate(List<ActionUnit> actionUnitList, String name) {
         super(actionUnitList, name);
     }

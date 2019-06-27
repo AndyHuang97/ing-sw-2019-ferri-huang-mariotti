@@ -4,7 +4,6 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.weapons.Weapon;
-import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -26,7 +25,6 @@ public class ShootPlayerAction extends PlayerAction {
     private static final int TILEPOSITIONINPARAMS = 3;
     private static final int EFFECTTILEPOSITIONINPARAMS = 4;
     private static final String ERRORMESSAGE = "Shoot action failed";
-    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_SHOOT, TurnPhase.WAITING_FOR_EFFECTS};
 
     private Player target;
     private Weapon chosenWeapon;
@@ -60,7 +58,6 @@ public class ShootPlayerAction extends PlayerAction {
     public boolean check() {
         // Is weapon loaded?
         if (!chosenWeapon.isLoaded()) {
-            System.out.println("lol");
             return false;
         }
 

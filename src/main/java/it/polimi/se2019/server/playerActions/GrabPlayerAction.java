@@ -1,13 +1,14 @@
 package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.Card;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
-import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.board.SpawnTile;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ErrorResponse;
@@ -17,21 +18,34 @@ import java.util.Map;
 
 public class GrabPlayerAction extends PlayerAction {
 
-    private static final int WEAPONPOSITION = 0;
+    private static final int ITEMPOSITION = 0;
     private static final int MAXWEAPONINBAG = 3;
     private static final String ERRORMESSAGE = "Grab action failed";
-    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_GRAB};
 
-    private Weapon weaponToGrab; //TODO needs to deal with ammo crate too
+    private Weapon weaponToGrab;
+    private AmmoCrate ammoToGrab;
 
     public GrabPlayerAction(Game game, Player player) { super(game, player); }
     public GrabPlayerAction(int amount) { super(amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
+        boolean weaponCastError = false;
+        boolean ammoCastError = false;
+
         try {
-            weaponToGrab = (Weapon) params.get(WEAPONPOSITION);
+            weaponToGrab = (Weapon) params.get(ITEMPOSITION);
         } catch (ClassCastException e) {
+            weaponCastError = true;
+        }
+
+        try {
+            ammoToGrab = (AmmoCrate) params.get(ITEMPOSITION);
+        } catch (ClassCastException e) {
+            ammoCastError = true;
+        }
+
+        if (weaponCastError && ammoCastError) {
             throw new UnpackingException();
         }
     }
@@ -41,22 +55,29 @@ public class GrabPlayerAction extends PlayerAction {
      */
     @Override
     public boolean check() {
-        try {
-            // assert that the player is on a SpawnTile
-            SpawnTile playerPosition = (SpawnTile) getPlayer().getCharacterState().getTile();
+        // access the player position that will be set during run phase
+        Tile playerPosition = getGame().getVirtualPlayerPosition();
 
+        if (playerPosition == null) {
+            playerPosition = getPlayer().getCharacterState().getTile();
+        }
+
+        if (weaponToGrab != null) {
             List<Weapon> weaponCrate = playerPosition.getWeaponCrate();
 
-            // assert that the weapon is avabile in the SpawnTile
+            // assert that the weapon is available in the SpawnTile
             boolean isWeaponAvailable = false;
-
-            for (Weapon weapon : weaponCrate) {
-                if(weapon == weaponToGrab) {
-                    isWeaponAvailable = true;
+            try {
+                for (Weapon weapon : weaponCrate) {
+                    if (weapon == weaponToGrab) {
+                        isWeaponAvailable = true;
+                    }
                 }
+            } catch (NullPointerException e) {
+                return false;
             }
 
-            // assert that player have 2 or less weapon
+            // assert that player have 2 or less weapons
             if (getPlayer().getCharacterState().getWeaponBag().size() >= MAXWEAPONINBAG) {
                 return false;
             }
@@ -76,10 +97,18 @@ public class GrabPlayerAction extends PlayerAction {
             }
 
             return isWeaponAvailable;
-
-        } catch (ClassCastException e) {
-            return false;
         }
+
+        else if (ammoToGrab != null) {
+            AmmoCrate ammoCrate = playerPosition.getAmmoCrate();
+
+            // check if player is asking to grab ammo in his tile,
+            // furthermore should check the conditions of the ActionUnits in ammoToGrab but
+            // there are no condition in AmmoCrates
+            return (ammoCrate != ammoToGrab);
+        }
+
+        return false;
     }
 
     @Override
@@ -94,12 +123,20 @@ public class GrabPlayerAction extends PlayerAction {
 
     @Override
     public void run() {
-        Player player = getGame().getCurrentPlayer();
+        if (weaponToGrab != null) {
+            Player player = getGame().getCurrentPlayer();
 
-        player.getCharacterState().addWeapon(weaponToGrab);
+            player.getCharacterState().addWeapon(weaponToGrab);
 
-        // pay pickup cost
-        player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap());
+            // pay pickup cost
+            player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap());
+        }
+
+        else if (ammoToGrab !=null) {
+            for (ActionUnit actionUnit : ammoToGrab.getActionUnitList()) {
+                actionUnit.run(getGame(), null);
+            }
+        }
     }
 
     @Override
