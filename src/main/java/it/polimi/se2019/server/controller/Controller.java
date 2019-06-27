@@ -74,29 +74,6 @@ public class Controller implements Observer<Request> {
             newControllerState.sendSelectionMessage(commandHandler);
 
 
-
-            //TODO the commented lines should be handled in WaitingForMainActions
-            /*
-            boolean runnable = true;
-
-            for (PlayerAction playerAction : playerActionList) {
-                if (!playerAction.check()) {
-                    CommandHandler commandHandler = requestParser.getCommandHandler();
-                    commandHandler.reportError(playerAction.getErrorMessage());
-                    runnable = false;
-                }
-            }
-
-            if (runnable) {
-                for (PlayerAction playerAction : playerActionList) {
-                    applyAction(playerAction);
-                }
-
-                // allowed PlayerActions have been run, time for next turn phase
-                setControllerStateForGame(game, controllerState.nextState(playerActionList, game, player));
-            }
-
-             */
         } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
 
         } catch (IllegalPlayerActionException e) {

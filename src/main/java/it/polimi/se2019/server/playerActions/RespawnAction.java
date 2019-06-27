@@ -5,8 +5,10 @@ import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.List;
@@ -20,7 +22,9 @@ public class RespawnAction extends PlayerAction {
 
     private PowerUp powerUpToDiscard;
 
-
+    public RespawnAction(Game game, Player player) {
+        super(game, player);
+    }
     public RespawnAction(int amount) {
         super(amount);
     }
@@ -75,6 +79,6 @@ public class RespawnAction extends PlayerAction {
 
     @Override
     public String getId() {
-        return Constants.POWERUP;
+        return Constants.RESPAWN;
     }
 }

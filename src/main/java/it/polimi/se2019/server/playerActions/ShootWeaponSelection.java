@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
@@ -53,6 +54,6 @@ public class ShootWeaponSelection extends PlayerAction {
 
     @Override
     public String getId() {
-        return null;
+        return Constants.SHOOT_WEAPON;
     }
 }

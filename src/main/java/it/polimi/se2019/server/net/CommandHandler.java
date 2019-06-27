@@ -124,6 +124,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                         }
                     }
                 }
+                //converts the KeyOrder
                 PlayerAction playerActionTarget = PlayerAction.getAllPossibleActions().stream()
                         .filter(playerAction -> playerAction.getId().equals(value)).findAny().orElse(null);
                 if (playerActionTarget != null) {
