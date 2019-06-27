@@ -2,14 +2,11 @@ package it.polimi.se2019.server.actions.effects;
 
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
-import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.CommandConstants;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DamageRoom extends Damage {
 
@@ -27,6 +24,6 @@ public class DamageRoom extends Damage {
         room.stream()
                 .forEach(t -> t.getPlayers(game).stream()
                         .filter(p -> !p.equals(game.getCurrentPlayer()))
-                        .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount)));
+                        .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount, game)));
     }
 }

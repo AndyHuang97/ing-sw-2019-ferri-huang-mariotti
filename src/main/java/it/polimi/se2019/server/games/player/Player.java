@@ -23,7 +23,6 @@ public class Player extends Observable<Response> implements Targetable, PlayerEv
 	private CharacterState characterState;
 	private PlayerColor color;
 	private String id;
-	private Tile tile;
 
 
 	public Player(String name) {

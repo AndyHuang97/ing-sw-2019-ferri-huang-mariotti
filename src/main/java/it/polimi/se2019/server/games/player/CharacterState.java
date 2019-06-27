@@ -34,6 +34,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
 	private Integer score;
+	private boolean firstSpawn;
 	private boolean connected;
 
 	private boolean beforeFrenzyActivator;
@@ -53,6 +54,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
 		this.score = 0;
+		this.firstSpawn = true;
 		this.connected = true;
 	}
 
@@ -81,7 +83,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	}
 
 	/**
-	 * The getPossibleActions returns the list of actions that a player can perform according to their damage bar
+	 * The getPossibleActions method returns the list of actions that a player can perform according to their damage bar
 	 * and the mode of the game(normal or frenzy).
 	 * @param isFrenzy is a boolean that indicates the game mode.
 	 * @return the list of allowed actions.
@@ -89,32 +91,28 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	//TODO could be deserialized (?)
 	public List<CompositeAction> getPossibleActions(boolean isFrenzy) {
 		List<CompositeAction> possibleActions = new ArrayList<>();
-		possibleActions.add(new CompositeAction(new GrabPlayerAction(0)));
-		possibleActions.add(new CompositeAction(new ShootPlayerAction(0)));
+		possibleActions.add(new CompositeAction(PlayerAction.GRAB));
+		possibleActions.add(new CompositeAction(PlayerAction.SHOOT));
 		if (isFrenzy) {
-			possibleActions.add(new CompositeAction(new ReloadPlayerAction( 0),
-					new ShootPlayerAction(0)));
+			possibleActions.add(new CompositeAction(PlayerAction.RELOAD, PlayerAction.SHOOT));
 			if (beforeFrenzyActivator) {
-				possibleActions.add(new CompositeAction(new MovePlayerAction(1), new ReloadPlayerAction( 0),
-						new ShootPlayerAction(0)));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.RELOAD,
+						PlayerAction.SHOOT));
 				possibleActions.add(new CompositeAction(new MovePlayerAction(4)));
-				possibleActions.add(new CompositeAction(
-						new MovePlayerAction(2), new GrabPlayerAction(0)));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.GRAB));
 			} else {
-				possibleActions.add(new CompositeAction(new MovePlayerAction(2), new ReloadPlayerAction(0),
-						new ShootPlayerAction(0)));
-				possibleActions.add(new CompositeAction(
-						new MovePlayerAction(3), new GrabPlayerAction(0)));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.RELOAD,
+						PlayerAction.SHOOT));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(3), PlayerAction.GRAB));
 			}
 		} else {
 			possibleActions.add(new CompositeAction(new MovePlayerAction(3)));
-			possibleActions.add(new CompositeAction(
-					new MovePlayerAction(1), new GrabPlayerAction(0)));
-			possibleActions.add(new CompositeAction(new ReloadPlayerAction(0)));
+			possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.GRAB));
+			possibleActions.add(new CompositeAction(PlayerAction.RELOAD));
 			if (this.getDamageBar().size()>=2) {
-				possibleActions.add(new CompositeAction(new MovePlayerAction(2), new GrabPlayerAction(0)));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.GRAB));
 				if (this.getDamageBar().size()>=5) {
-					possibleActions.add(new CompositeAction(new MovePlayerAction(1), new ShootPlayerAction(0)));
+					possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.SHOOT));
 				}
 			}
 		}
@@ -153,7 +151,10 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.damageBar = damageBar;
 	}
 
-	public void addDamage(PlayerColor playerColor, Integer amount) {
+	public void addDamage(PlayerColor playerColor, Integer amount, Game game) {
+		// finds the owner of this character state and then adds it to the list of damaged players
+		Player player = game.getPlayerList().stream().filter(p -> p.getCharacterState().equals(this)).findFirst().orElse(null);
+		game.getCumulativeDamageTargetSet().add(player);
 		//TODO need to limit the damgeBar length to 12 as maximum.
 		// and handle markers...
 		for(int i = 0; i < amount; i++) {
@@ -323,6 +324,11 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		notifyCharacterStateChange();
 	}
 
+	public void removeWeapon(Weapon weapon) {
+		weaponBag.remove(weapon);
+		notifyCharacterStateChange();
+	}
+
 	public void setWeaponBag(List<Weapon> weaponBag) {
 		this.weaponBag = weaponBag;
 		notifyCharacterStateChange();
@@ -334,6 +340,11 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addPowerUp(PowerUp powerUp) {
 		powerUpBag.add(powerUp);
+		notifyCharacterStateChange();
+	}
+
+	public void removePowerUp(PowerUp powerUp) {
+		powerUpBag.remove(powerUp);
 		notifyCharacterStateChange();
 	}
 
@@ -383,4 +394,15 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	    notifyCharacterStateUpdate(stateUpdate);
     }
 
+	public boolean isFirstSpawn() {
+		return firstSpawn;
+	}
+
+	public void setFirstSpawn(boolean firstSpawn) {
+		this.firstSpawn = firstSpawn;
+	}
+
+	public boolean isDead() {
+		return damageBar.size() >= 11;
+	}
 }

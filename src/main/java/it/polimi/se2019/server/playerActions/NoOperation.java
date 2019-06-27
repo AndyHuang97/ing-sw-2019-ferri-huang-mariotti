@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.util.ErrorResponse;
@@ -31,6 +32,11 @@ public class NoOperation extends PlayerAction {
     @Override
     public ErrorResponse getErrorMessage() {
         return new ErrorResponse("No operation");
+    }
+
+    @Override
+    public Card getCard() {
+        return null;
     }
 
     @Override

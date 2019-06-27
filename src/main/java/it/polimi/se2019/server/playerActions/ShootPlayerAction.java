@@ -2,6 +2,7 @@ package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
@@ -97,9 +98,18 @@ public class ShootPlayerAction extends PlayerAction {
 
     }
 
+    public Weapon getChosenWeapon() {
+        return chosenWeapon;
+    }
+
     @Override
     public ErrorResponse getErrorMessage() {
         return new ErrorResponse(ERRORMESSAGE);
+    }
+
+    @Override
+    public Card getCard() {
+        return chosenWeapon;
     }
 
     @Override

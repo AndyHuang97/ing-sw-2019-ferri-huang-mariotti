@@ -35,8 +35,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
 	private List<ActionUnit> currentActionUnitsList;
-	private List<Targetable> cumulativeDamageTargetList;
-	private List<Targetable> cumulativeTargetList;
+	private Set<Targetable> cumulativeDamageTargetSet;
+	private Set<Targetable> cumulativeTargetSet;
 	private boolean frenzy;
 
 	public Game() {
@@ -50,8 +50,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
 	}
 
@@ -66,8 +66,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
 	}
 
@@ -82,8 +82,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = powerupDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 	}
 
 	public GameData generateGameData() {
@@ -299,20 +299,20 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 				.findFirst().orElseThrow(IllegalStateException::new);
 	}
 
-	public List<Targetable> getCumulativeDamageTargetList() {
-		return cumulativeDamageTargetList;
+	public Set<Targetable> getCumulativeDamageTargetSet() {
+		return cumulativeDamageTargetSet;
 	}
 
-	public void setCumulativeDamageTargetList(List<Targetable> cumulativeDamageTargetList) {
-		this.cumulativeDamageTargetList = cumulativeDamageTargetList;
+	public void setCumulativeDamageTargetSet(Set<Targetable> cumulativeDamageTargetSet) {
+		this.cumulativeDamageTargetSet = cumulativeDamageTargetSet;
 	}
 
-	public List<Targetable> getCumulativeTargetList() {
-		return cumulativeTargetList;
+	public Set<Targetable> getCumulativeTargetSet() {
+		return cumulativeTargetSet;
 	}
 
-	public void setCumulativeTargetList(List<Targetable> cumulativeTargetList) {
-		this.cumulativeTargetList = cumulativeTargetList;
+	public void setCumulativeTargetSet(Set<Targetable> cumulativeTargetSet) {
+		this.cumulativeTargetSet = cumulativeTargetSet;
 	}
 
 	public Deck<AmmoCrate> getAmmoCrateDeck() {

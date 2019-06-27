@@ -84,8 +84,8 @@ public class DamageTargetListTest {
         assertEquals(2, p2.getCharacterState().getDamageBar().size());
         assertEquals(2, p3.getCharacterState().getDamageBar().size());
         assertEquals(2, p4.getCharacterState().getDamageBar().size());
-        assertTrue(game.getCumulativeDamageTargetList().containsAll(Arrays.asList(p2, p3, p4)));
-        assertTrue(game.getCumulativeTargetList().containsAll(Arrays.asList(p2, p3, p4)));
+        assertTrue(game.getCumulativeDamageTargetSet().containsAll(Arrays.asList(p2, p3, p4)));
+        assertTrue(game.getCumulativeTargetSet().containsAll(Arrays.asList(p2, p3, p4)));
         p2.getCharacterState().getDamageBar().stream()
                 .forEach(pc -> assertEquals(PlayerColor.BLUE, pc));
         p3.getCharacterState().getDamageBar().stream()

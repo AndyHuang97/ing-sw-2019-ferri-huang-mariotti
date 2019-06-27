@@ -1,11 +1,13 @@
 package it.polimi.se2019.server.deserialize;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.Deck;
+import it.polimi.se2019.server.games.player.AmmoColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,9 @@ public class PowerUpDeserializer implements RandomDeserializer {
             JsonObject jsonPowerup = ammoCrateElement.getAsJsonObject();
             String name = jsonPowerup.get("name").getAsString();
             int amount = jsonPowerup.get("amount").getAsInt();
+            String colorString = jsonPowerup.get("color").toString();
+            Gson gson = new Gson();
+            AmmoColor ammoColor = gson.fromJson(colorString, AmmoColor.class);
             PowerUp powerUp = null;
 
             try {
@@ -39,7 +44,7 @@ public class PowerUpDeserializer implements RandomDeserializer {
             }
 
             for (int i = 0; i< amount; i++) {
-                powerUp = new PowerUp(actions, name);
+                powerUp = new PowerUp(actions, name, ammoColor);
                 powerUpList.add(powerUp);
             }
         }

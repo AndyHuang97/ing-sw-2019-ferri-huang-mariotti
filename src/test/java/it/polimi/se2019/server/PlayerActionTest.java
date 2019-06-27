@@ -5,8 +5,8 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import it.polimi.se2019.server.playerActions.GrabPlayerAction;
 import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.server.users.ConcreteAction;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Assert;
@@ -22,7 +22,7 @@ public class PlayerActionTest {
     @Before
     public void setUp() {
         Player player= new Player(UUID.randomUUID().toString(),false, null, null, PlayerColor.BLUE);
-        playerAction = new ConcreteAction(new Game(), player, Action.MMM);
+        playerAction = new GrabPlayerAction(new Game(), player);
     }
 
     @After

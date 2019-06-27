@@ -222,7 +222,7 @@ public class ActionTileController {
         setUpProgressBar(1);
     }
 
-    public void getPowerup() {
+    public void getPowerUpForRespawn() {
         Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
         if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
             List<String> lst = new ArrayList<>();

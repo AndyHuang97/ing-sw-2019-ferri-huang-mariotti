@@ -64,12 +64,19 @@ public class Controller implements Observer<Request> {
 
             ControllerState controllerState = getStateFromGame(game);
 
-            if (!controllerState.checkActionAvailability(playerActionList, game, player)) {
-                throw new IllegalPlayerActionException();
-            }
+            // nextState handles the input and returns a new State, then a message is sent from the new state;
+            // if any model changes happened, the update will be sent before the selection message.
+            //TODO avoid using the update CommandHandler's update method, it shall be called only by notifications from the model
+            // need to add a new method in CommandHandler for selection purposes.
+            ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
+            setControllerStateForGame(game, newControllerState);
+            CommandHandler commandHandler = requestParser.getCommandHandler();
+            newControllerState.sendSelectionMessage(commandHandler);
 
-            //TODO change input handling based on the state of the controller
 
+
+            //TODO the commented lines should be handled in WaitingForMainActions
+            /*
             boolean runnable = true;
 
             for (PlayerAction playerAction : playerActionList) {
@@ -86,8 +93,10 @@ public class Controller implements Observer<Request> {
                 }
 
                 // allowed PlayerActions have been run, time for next turn phase
-                setControllerStateForGame(game, controllerState.nextState(playerActionList));
+                setControllerStateForGame(game, controllerState.nextState(playerActionList, game, player));
             }
+
+             */
         } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
 
         } catch (IllegalPlayerActionException e) {

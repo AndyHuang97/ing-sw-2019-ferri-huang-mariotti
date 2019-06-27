@@ -114,11 +114,13 @@ public class CardDeserializerTest {
         assertEquals(21, i);
         System.out.println();
         System.out.println("PowerUp:"+powerUpDeck);
-        powerUpDeck.shuffle();
+        //powerUpDeck.shuffle();
         PowerUp pU;
         i = 0;
         while((pU = powerUpDeck.drawCard()) != null) {
             System.out.println(pU.getName());
+            System.out.println("1): " + pU.getName().split("_")[1]);
+            //System.out.println(pU.getPowerUpColor());
             i++;
         }
         assertEquals(24, i);

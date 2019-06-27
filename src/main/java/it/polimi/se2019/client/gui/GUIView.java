@@ -1,6 +1,5 @@
 package it.polimi.se2019.client.gui;
 
-import it.polimi.se2019.client.Model;
 import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import javafx.fxml.FXMLLoader;
@@ -38,8 +37,8 @@ public class GUIView extends View {
     @Override
     public void showMessage(String message) {
         switch (message) {
-            case Constants.POWERUP:
-                guiController.getActionTileController().getPowerup();
+            case Constants.RESPAWN:
+                guiController.getActionTileController().getPowerUpForRespawn();
         }
     }
 

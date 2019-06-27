@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
@@ -21,7 +22,7 @@ public class GrabPlayerAction extends PlayerAction {
     private static final String ERRORMESSAGE = "Grab action failed";
     private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_GRAB};
 
-    private Weapon weaponToGrab;
+    private Weapon weaponToGrab; //TODO needs to deal with ammo crate too
 
     public GrabPlayerAction(Game game, Player player) { super(game, player); }
     public GrabPlayerAction(int amount) { super(amount);}
@@ -84,6 +85,11 @@ public class GrabPlayerAction extends PlayerAction {
     @Override
     public ErrorResponse getErrorMessage() {
         return new ErrorResponse(ERRORMESSAGE);
+    }
+
+    @Override
+    public Card getCard() {
+        return weaponToGrab;
     }
 
     @Override

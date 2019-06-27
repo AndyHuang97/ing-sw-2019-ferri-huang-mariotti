@@ -111,9 +111,9 @@ public class Model implements LocalModel {
                 });
 
         p1.getCharacterState().setPowerUpBag(Arrays.asList(
-                new PowerUp(null, "Blue_Newton"),
-                new PowerUp(null, "Red_Newton"),
-                new PowerUp(null, "Yellow_Teleporter")));
+                new PowerUp(null, "Blue_Newton", AmmoColor.BLUE),
+                new PowerUp(null, "Red_Newton", AmmoColor.RED),
+                new PowerUp(null, "Yellow_Teleporter", AmmoColor.YELLOW)));
 
         p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
         p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));

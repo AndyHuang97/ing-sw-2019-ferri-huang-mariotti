@@ -1,7 +1,7 @@
 package it.polimi.se2019.server.playerActions;
 
-import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.Action;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -57,6 +57,8 @@ public abstract class PlayerAction implements Targetable {
 
     public abstract ErrorResponse getErrorMessage();
 
+    public abstract Card getCard();
+
     public Game getGame() {
         return game;
     }
@@ -97,12 +99,11 @@ public abstract class PlayerAction implements Targetable {
         return false;
     }
 
-
-    private static final PlayerAction MOVE = new MovePlayerAction(0);
-    private static final PlayerAction GRAB = new GrabPlayerAction(0);
-    private static final PlayerAction SHOOT = new ShootPlayerAction(0);
-    private static final PlayerAction RELOAD = new ReloadPlayerAction(0);
-    private static final PlayerAction POWERUP = new PowerUpAction(0);
+    public static final PlayerAction MOVE = new MovePlayerAction(0);
+    public static final PlayerAction GRAB = new GrabPlayerAction(0);
+    public static final PlayerAction SHOOT = new ShootWeaponSelection(0);
+    public static final PlayerAction RELOAD = new ReloadPlayerAction(0);
+    public static final PlayerAction POWERUP = new RespawnAction(0);
 
     public static List<PlayerAction> getAllPossibleActions() {
         return Arrays.asList(MOVE, GRAB, SHOOT, RELOAD, POWERUP);
