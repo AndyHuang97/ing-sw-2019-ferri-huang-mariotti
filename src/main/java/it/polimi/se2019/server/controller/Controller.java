@@ -69,7 +69,9 @@ public class Controller implements Observer<Request> {
             //TODO avoid using the update CommandHandler's update method, it shall be called only by notifications from the model
             // need to add a new method in CommandHandler for selection purposes.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
+            System.out.println(getStateFromGame(game));
             setControllerStateForGame(game, newControllerState);
+            System.out.println(getStateFromGame(game));
             CommandHandler commandHandler = requestParser.getCommandHandler();
             newControllerState.sendSelectionMessage(commandHandler);
 
@@ -97,7 +99,7 @@ public class Controller implements Observer<Request> {
      * @param game the key you need to get the associated value
      * @return ControllerState of the selected Game
      */
-    private ControllerState getStateFromGame(Game game) {
+    public ControllerState getStateFromGame(Game game) {
         controllerStateMap.putIfAbsent(game, new WaitingForRespawn());
         return controllerStateMap.get(game);
     }
@@ -107,7 +109,7 @@ public class Controller implements Observer<Request> {
      * @param game the kay you need to set the associated value
      * @param controllerState the ControllerState you want to correspond to the key
      */
-    private void setControllerStateForGame(Game game, ControllerState controllerState) {
+    public void setControllerStateForGame(Game game, ControllerState controllerState) {
         controllerStateMap.put(game, controllerState);
     }
 }

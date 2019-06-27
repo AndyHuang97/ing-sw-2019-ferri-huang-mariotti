@@ -34,12 +34,14 @@ public class ControllerTest {
 
     private static final String TESTNICK0 = "testNick0";
     private static final String TESTNICK1 = "testNick1";
-    private static final String MOVEPLAYERACTION = "it.polimi.se2019.server.playerActions.MovePlayerAction";;
+    private static final String MOVEPLAYERACTION = "it.polimi.se2019.server.playerActions.MovePlayerAction";
     private static final String SHOOTPLAYERACTION = "it.polimi.se2019.server.playerActions.ShootPlayerAction";
     private static final String GRABPLAYERACTION = "it.polimi.se2019.server.playerActions.GrabPlayerAction";
     private static final String RELOADPLAYERACTION = "it.polimi.se2019.server.playerActions.ReloadPlayerAction";
+    private static final String SHOOTWEAPONSELECTION = "it.polimi.se2019.server.playerAction.ShootWeaponSelection";
 
     private GameManager gameManager = new GameManager();
+    private Game game;
     private Controller controller;
     private Tile[][] tileMap;
     private Board board;
@@ -67,7 +69,7 @@ public class ControllerTest {
             }
         }
 
-        Game game = gameManager.retrieveGame(TESTNICK0);
+        game = gameManager.retrieveGame(TESTNICK0);
 
         // Board init
         tileMap = new Tile[2][3];
@@ -134,6 +136,8 @@ public class ControllerTest {
 
     @Test
     public void testMovePlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        controller.setControllerStateForGame(game, new WaitingForMainActions());
+
         Player player = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
 
         List<Targetable> targetableList = new ArrayList<>();
@@ -152,24 +156,43 @@ public class ControllerTest {
     }
 
     @Test
-    public void testShootPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+    public void testShootWeaponSelection() throws GameManager.GameNotFoundException, PlayerNotFoundException {
         final int ACTIONUNITPOSITION = 0;
+
+        ControllerState waitingForMainActions = new WaitingForMainActions();
+        controller.setControllerStateForGame(game, waitingForMainActions);
 
         Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
 
         List<Targetable> targetableList = new ArrayList<>();
+        targetableList.add(weapon);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new ShootWeaponSelection(0)));
+        command.put(SHOOTWEAPONSELECTION, targetableList);
+
+        InternalMessage message = new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        ControllerState waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
+        controller.setControllerStateForGame(game, waitingForEffects);
+
+        targetableList = new ArrayList<>();
+
         targetableList.add(player1);
         targetableList.add(weapon);
         targetableList.add(weapon.getActionUnitList().get(ACTIONUNITPOSITION));
         targetableList.add(null);
         targetableList.add(null);
 
-        Map<String, List<Targetable>> command = new HashMap<>();
+        command = new HashMap<>();
         command.put(Constants.KEY_ORDER, Arrays.asList(new ShootPlayerAction(0)));
         command.put(SHOOTPLAYERACTION, targetableList);
 
-        InternalMessage message = new InternalMessage(command);
-        Request request = new Request(message, TESTNICK0);
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
 
         actualPlayerCommandHandler.handleLocalRequest(request);
 
@@ -181,6 +204,9 @@ public class ControllerTest {
 
     @Test
     public void testGrabPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        ControllerState waitingForMainActions = new WaitingForMainActions();
+        controller.setControllerStateForGame(game, waitingForMainActions);
+
         // add weapon to tileMap[0][0] SpawnTile
         List<Weapon> weaponList = new ArrayList<>();
         weaponList.add(weapon);
