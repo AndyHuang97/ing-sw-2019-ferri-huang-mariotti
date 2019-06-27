@@ -2,7 +2,6 @@ package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.cards.Card;
-import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -18,8 +17,6 @@ import java.util.List;
  * the View sends a valid Request
  */
 public abstract class PlayerAction implements Targetable {
-    private static final TurnPhase[] ALLOWED_IN = {};
-
     private Game game;
     private Player player;
     private CommandHandler commandHandler;
@@ -87,16 +84,6 @@ public abstract class PlayerAction implements Targetable {
 
     public int getAmount() {
         return amount;
-    }
-
-    public boolean isAvailable(TurnPhase turnPhase) {
-        for (TurnPhase allowedTurnPhase : ALLOWED_IN) {
-            if (allowedTurnPhase == turnPhase) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static final PlayerAction MOVE = new MovePlayerAction(0);

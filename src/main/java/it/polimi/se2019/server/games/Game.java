@@ -9,6 +9,7 @@ import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.CommandConstants;
@@ -38,6 +39,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Set<Targetable> cumulativeDamageTargetSet;
 	private Set<Targetable> cumulativeTargetSet;
 	private boolean frenzy;
+
+	private Tile virtualPlayerPosition;
 
 	public Game() {
 		// don't use this constructor
@@ -229,7 +232,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setKillshotTrack(KillShotTrack killshotTrack) {
 		this.killshotTrack = killshotTrack;
 
-		// notify killshot track change
+		// notify KillShotTrack change
         KillShotTrackUpdate killShotTrackUpdate = new KillShotTrackUpdate(killshotTrack);
 
         List<StateUpdate> updateList = new ArrayList<>();
@@ -322,4 +325,16 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setAmmoCrateDeck(Deck<AmmoCrate> ammoCrateDeck) {
 		this.ammoCrateDeck = ammoCrateDeck;
 	}
+
+    /**
+     * Needed by the GrabPlayer action to access the player position before it's changed by the MovePlayerAction.run()
+     * @return the possible position of the current player at the end of the turn
+     */
+    public Tile getVirtualPlayerPosition() {
+        return virtualPlayerPosition;
+    }
+
+    public void setVirtualPlayerPosition(Tile virtualPlayerPosition) {
+        this.virtualPlayerPosition = virtualPlayerPosition;
+    }
 }
