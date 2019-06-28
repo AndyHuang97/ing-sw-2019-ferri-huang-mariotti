@@ -7,6 +7,7 @@ import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.util.DeserializerConstants;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,27 +16,27 @@ import java.util.logging.Logger;
 
 public class DirectDeserializers {
 
-    private static String MAP = "maps/map";
-    private static String JSON_PATH = "src/main/resources/json/";
-    private static String WEAPON = "weapons/weapons.json";
-    private static String POWERUP = "powerups/powerups.json";
-    private static String AMMOCRATE = "ammocrates/ammocrates.json";
-    private static String JSON = ".json";
+    private static final String MAP = "maps/map";
+    private static final String JSON_PATH = "src/main/resources/json/";
+    private static final String WEAPON = "weapons/weapons.json";
+    private static final String POWERUP = "powerups/powerups.json";
+    private static final String AMMOCRATE = "ammocrates/ammocrates.json";
+    private static final String JSON = ".json";
 
     static DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
 
 
     public DirectDeserializers() {
-        factory.registerDeserializer("tile", new TileDeserializerSupplier());
-        factory.registerDeserializer("ammmocratedeck", new AmmoCrateDeserializerSupplier());
-        factory.registerDeserializer("powerupdeck", new PowerUpDeserializerSupplier());
-        factory.registerDeserializer("weapondeck", new WeaponDeckDeserializerSuppier());
-        factory.registerDeserializer("weapon", new WeaponDeserializerSupplier());
-        factory.registerDeserializer("actions", new ActionsDeserializerSupplier());
-        factory.registerDeserializer("optionaleffects", new OptionalEffectDeserializerSupplier());
-        factory.registerDeserializer("actionunit", new ActionUnitDeserializerSupplier());
-        factory.registerDeserializer("effects", new EffectDeserializerSupplier());
-        factory.registerDeserializer("conditions", new ConditionDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.TILE, new TileDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.AMMOCRATEDECK, new AmmoCrateDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.POWERUPDECK, new PowerUpDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.WEAPONDECK, new WeaponDeckDeserializerSuppier());
+        factory.registerDeserializer(DeserializerConstants.WEAPON, new WeaponDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONS, new ActionsDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.OPTIONALEFFECTS, new OptionalEffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONUNIT, new ActionUnitDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.EFFECTS, new EffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.CONDITIONS, new ConditionDeserializerSupplier());
     }
 
     public static Board deserializeBoard(String mapIndex) {
@@ -50,7 +51,7 @@ public class DirectDeserializers {
     }
 
     public static Deck<Weapon> deserialzerWeaponDeck() {
-        WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer("weapondeck");
+        WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer(DeserializerConstants.WEAPONDECK);
 
         String path = JSON_PATH+WEAPON;
 
@@ -62,7 +63,7 @@ public class DirectDeserializers {
     }
 
     public static Deck<PowerUp> deserialzerPowerUpDeck() {
-        PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer("powerupdeck");
+        PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer(DeserializerConstants.POWERUPDECK);
 
         String path = JSON_PATH+POWERUP;
 
@@ -74,7 +75,7 @@ public class DirectDeserializers {
     }
 
     public static Deck<AmmoCrate> deserializeAmmoCrate() {
-        AmmoCrateDeserializer ammoCrateDeserializer = (AmmoCrateDeserializer) factory.getDeserializer("ammmocratedeck");
+        AmmoCrateDeserializer ammoCrateDeserializer = (AmmoCrateDeserializer) factory.getDeserializer(DeserializerConstants.AMMOCRATEDECK);
 
         String path = JSON_PATH+AMMOCRATE;
 

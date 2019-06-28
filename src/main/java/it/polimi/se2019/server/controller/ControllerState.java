@@ -16,7 +16,7 @@ interface ControllerState {
     void sendSelectionMessage(CommandHandler commandHandler);
 
     /**
-     * @ This method must be run after running the allowed player actions, and it's meant to be used
+     * This method must be run after running the allowed player actions, and it's meant to be used
      * to set the next ControllerState of the controller for the game of the PlayerActions
      * @return the next ControllerState (turn phase) based on which action have been executed
      * @param playerActions
