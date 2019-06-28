@@ -37,11 +37,11 @@ public class ControllerTest {
 
     private static final String TESTNICK0 = "testNick0";
     private static final String TESTNICK1 = "testNick1";
-    private static final String MOVEPLAYERACTION = "it.polimi.se2019.server.playerActions.MovePlayerAction";
-    private static final String SHOOTPLAYERACTION = "it.polimi.se2019.server.playerActions.ShootPlayerAction";
-    private static final String GRABPLAYERACTION = "it.polimi.se2019.server.playerActions.GrabPlayerAction";
-    private static final String RELOADPLAYERACTION = "it.polimi.se2019.server.playerActions.ReloadPlayerAction";
-    private static final String SHOOTWEAPONSELECTION = "it.polimi.se2019.server.playerAction.ShootWeaponSelection";
+    private static final String MOVEPLAYERACTION = MovePlayerAction.class.getName();
+    private static final String SHOOTPLAYERACTION = ShootPlayerAction.class.getName();
+    private static final String GRABPLAYERACTION = GrabPlayerAction.class.getName();
+    private static final String RELOADPLAYERACTION = ReloadPlayerAction.class.getName();
+    private static final String SHOOTWEAPONSELECTION = ShootWeaponSelection.class.getName();
 
     private GameManager gameManager = new GameManager();
     private Game game;
@@ -284,6 +284,9 @@ public class ControllerTest {
 
     @Test
     public void testReloadPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        ControllerState waitingForReload = new WaitingForReload();
+        controller.setControllerStateForGame(game, waitingForReload);
+
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
         player0.getCharacterState().addAmmo(getAmmoBag(3));
 

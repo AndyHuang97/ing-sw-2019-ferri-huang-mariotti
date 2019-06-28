@@ -129,7 +129,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void swapValueBar(boolean isFrenzy) {
 		if (isFrenzy) {
-			if (this.getDamageBar().size() == 0) {
+			if (this.getDamageBar().isEmpty()) {
 				valueBar = FRENZY_VALUE_BAR;
 			} else {
 				valueBar = NORMAL_VALUE_BAR;
@@ -153,11 +153,13 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	}
 
 	public void addDamage(PlayerColor playerColor, Integer amount, Game game) {
+	    amount += getMarker(playerColor);
+	    resetMarkerBar(playerColor);
+
 		// finds the owner of this character state and then adds it to the list of damaged players
 		Player player = game.getPlayerList().stream().filter(p -> p.getCharacterState().equals(this)).findFirst().orElse(null);
 		game.getCumulativeDamageTargetSet().add(player);
-		//TODO need to limit the damgeBar length to 12 as maximum.
-		// and handle markers...
+
 		for(int i = 0; i < amount; i++) {
 			if(damageBar.size() < 12) {
 				damageBar.add(playerColor);
@@ -207,6 +209,14 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 			}
 		}
 	}
+
+	public void resetMarkerBar(PlayerColor playerColor) {
+	    getMarkerBar().put(playerColor, 0);
+    }
+
+	public int getMarker(PlayerColor playerColor) {
+	    return getMarkerBar().get(playerColor);
+    }
 
 	/**
 	 * Resets all key's values to 0.
@@ -274,15 +284,14 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 
 	/**
-	 * @return tile
+	 * @return tile with the actual player position
 	 */
 	public Tile getTile() {
 		return tile;
 	}
 
 	/**
-	 *
-	 * @param tile
+	 * Set the actual player position to the tile passed as argument
 	 */
 	public void setTile(Tile tile) {
 		this.tile = tile;

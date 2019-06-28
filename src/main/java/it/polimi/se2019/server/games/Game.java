@@ -10,6 +10,7 @@ import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.CommandConstants;
@@ -277,6 +278,19 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setFrenzy(boolean frenzy) {
 		this.frenzy = frenzy;
+
+		boolean beforeFrenzyActivator = true;
+
+		for (Player player : playerList) {
+            CharacterState characterState = player.getCharacterState();
+		    characterState.setBeforeFrenzyActivator(beforeFrenzyActivator);
+
+            if (player == currentPlayer) {
+                beforeFrenzyActivator = false;
+            }
+
+            characterState.swapValueBar(frenzy);
+        }
 	}
 
 	/**
@@ -335,5 +349,9 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
     public void setVirtualPlayerPosition(Tile virtualPlayerPosition) {
         this.virtualPlayerPosition = virtualPlayerPosition;
+    }
+
+    public Player getStartingPlayer() {
+        return playerList.get(0);
     }
 }
