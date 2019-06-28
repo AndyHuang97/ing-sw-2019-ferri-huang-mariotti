@@ -12,46 +12,39 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.ErrorResponse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ShootPlayerAction extends PlayerAction {
 
-    private static final int TARGETPOSITIONINPARAMS = 0;
-    private static final int WEAPONPOSITIONINPARAMS = 1;
-    private static final int ACTIONUNITPOSITIONINPARAMS = 2;
-    private static final int TILEPOSITIONINPARAMS = 3;
-    private static final int EFFECTTILEPOSITIONINPARAMS = 4;
     private static final String ERRORMESSAGE = "Shoot action failed";
 
-    private Player target;
     private Weapon chosenWeapon;
     private ActionUnit chosenActionUnit;
-    private Tile chosenTile;
-    private Tile effectTile;
-
+    private Map<String, List<Targetable>> inputCommands;
 
     public ShootPlayerAction(Game game, Player player) { super(game, player); }
     public ShootPlayerAction(int amount) { super(amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
-        target = (Player) params.get(TARGETPOSITIONINPARAMS);
-        chosenWeapon = (Weapon) params.get(WEAPONPOSITIONINPARAMS);
-        chosenActionUnit = (ActionUnit) params.get(ACTIONUNITPOSITIONINPARAMS);
-        chosenTile = (Tile) params.get(TILEPOSITIONINPARAMS);
-        effectTile = (Tile) params.get(EFFECTTILEPOSITIONINPARAMS);
+
+        inputCommands = buildCommandDict(params);
+
+        chosenWeapon = (Weapon) params.stream()
+                .filter(t -> getPlayer().getCharacterState().getWeaponBag().contains(t))
+                .findAny().orElseThrow(UnpackingException::new);
+
+        chosenActionUnit = (ActionUnit) params.stream()
+                .filter(t -> chosenWeapon.getActionUnitList().contains(t) || chosenWeapon.getOptionalEffectList().contains(t))
+                .findAny().orElseThrow(UnpackingException::new);
     }
 
     @Override
     public void run() {
         // since ActionUnit.run() signature changed we need to build a Map<String, List<Targetable>>
         // in order to run the action
-        Map<String, List<Targetable>> effectCommands = buildCommandDict();
-
-        chosenActionUnit.run(getGame(), effectCommands);
+        chosenActionUnit.run(getGame(), inputCommands);
     }
 
     @Override
@@ -62,37 +55,13 @@ public class ShootPlayerAction extends PlayerAction {
         }
 
         // Is chosenActionUnit in chosenWeapon?
+        /* should be already checked by unpack
         if (chosenWeapon.getActionUnitList().stream().noneMatch(availableActionUnit -> availableActionUnit == chosenActionUnit)) {
             return false;
         }
+         */
 
-        // build params for Condition (every possible Condition)
-        Map<String, List<Targetable>> conditionCommands = buildCommandDict();
-
-        return chosenActionUnit.check(getGame(), conditionCommands);
-    }
-
-    private Map<String, List<Targetable>> buildCommandDict() {
-        Map<String, List<Targetable>> commandDict = new HashMap<>();
-
-        List<Targetable> targetList = new ArrayList<>();
-        targetList.add(target);
-
-        commandDict.put(CommandConstants.TARGETLIST, targetList);
-
-        List<Targetable> chosenTileList = new ArrayList<>();
-        chosenTileList.add(chosenTile);
-
-        commandDict.put(CommandConstants.TILE, chosenTileList);
-
-        List<Targetable> tileList = new ArrayList<>();
-        tileList.add(chosenTile);
-        tileList.add(effectTile);
-
-        commandDict.put(CommandConstants.TILELIST, tileList);
-
-        return commandDict;
-
+        return chosenActionUnit.check(getGame(), inputCommands);
     }
 
     public Weapon getChosenWeapon() {

@@ -41,26 +41,28 @@ public class WaitingForPowerUps implements ControllerState {
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
         // could receive a pass(NOP) message to skip the selection of powerUp
-        if (playerActions.get(0).getId().equals(Constants.NOP)) {
+        if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
             Logger.getGlobal().info("Detected a NOP");
             return storedWaitingForEffects;
         }
 
         if (expectedPowerUp.equals(Constants.TARGETING_SCOPE)) {
-            if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(expectedPowerUp))) {
+            if (playerActions.stream().allMatch(playerAction ->
+                    playerAction.getId().equals(Constants.POWERUP)
+                                                    &&
+                    playerAction.getCard().getName().split("_")[1].equals(Constants.TARGETING_SCOPE))) {
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
                     playerActions.forEach(PlayerAction::run);
+                    Logger.getGlobal().info("Targeting Scope was executed");
                     return storedWaitingForEffects;
                 }
-            } else if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
-                return storedWaitingForEffects; // chose to not use powerUp
             }
+            Logger.getGlobal().info("Invalid input for Targeting Scope");
             return this; // no valid input for Targeting Scope
         }
 
         if (expectedPowerUp.equals(Constants.TAGBACK_GRENADE)) {
-            if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(expectedPowerUp)) ||
-                    playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
+            if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP))) {
                 // this block of code will be executed either with a powerUp or with a NOP, in the latter case nothing
                 // is performed on the model, but it is still needed to ask the next player for input
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
@@ -91,6 +93,7 @@ public class WaitingForPowerUps implements ControllerState {
                 }
             }
         }
+        Logger.getGlobal().info("Invalid input for Tagback Grenade");
         return this; // invalid input
     }
 
