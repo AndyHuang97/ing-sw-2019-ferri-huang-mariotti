@@ -10,9 +10,9 @@ import java.util.Map;
 
 public class AddAmmo implements Effect {
 
-    private EnumMap<AmmoColor, Integer> ammoToAdd;
+    private Map<AmmoColor, Integer> ammoToAdd;
 
-    public AddAmmo(EnumMap<AmmoColor, Integer> ammoToAdd) {
+    public AddAmmo(Map<AmmoColor, Integer> ammoToAdd) {
         this.ammoToAdd = ammoToAdd;
     }
 

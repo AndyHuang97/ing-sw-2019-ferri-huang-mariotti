@@ -1,8 +1,7 @@
 package it.polimi.se2019.server.playerActions;
 
-import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.Action;
-import it.polimi.se2019.server.controller.TurnPhase;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -10,6 +9,7 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.ErrorResponse;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,8 +17,6 @@ import java.util.List;
  * the View sends a valid Request
  */
 public abstract class PlayerAction implements Targetable {
-    private static final TurnPhase[] ALLOWED_IN = {};
-
     private Game game;
     private Player player;
     private CommandHandler commandHandler;
@@ -56,6 +54,8 @@ public abstract class PlayerAction implements Targetable {
 
     public abstract ErrorResponse getErrorMessage();
 
+    public abstract Card getCard();
+
     public Game getGame() {
         return game;
     }
@@ -86,13 +86,16 @@ public abstract class PlayerAction implements Targetable {
         return amount;
     }
 
-    public boolean isAvailable(TurnPhase turnPhase) {
-        for (TurnPhase allowedTurnPhase : ALLOWED_IN) {
-            if (allowedTurnPhase == turnPhase) {
-                return true;
-            }
-        }
+    public static final PlayerAction MOVE = new MovePlayerAction(0);
+    public static final PlayerAction GRAB = new GrabPlayerAction(0);
+    public static final PlayerAction SHOOT = new ShootWeaponSelection(0);
+    public static final PlayerAction RELOAD = new ReloadPlayerAction(0);
+    public static final PlayerAction POWERUP = new RespawnAction(0);
+    public static final PlayerAction NOP = new NoOperation(0);
+    public static final PlayerAction RESPAWN = new ReloadPlayerAction(0);
+    public static final PlayerAction SHOOT_WEAPON = new ShootWeaponSelection(0);
 
-        return false;
+    public static List<PlayerAction> getAllPossibleActions() {
+        return Arrays.asList(MOVE, GRAB, SHOOT, RELOAD, POWERUP, NOP, RESPAWN, SHOOT_WEAPON);
     }
 }

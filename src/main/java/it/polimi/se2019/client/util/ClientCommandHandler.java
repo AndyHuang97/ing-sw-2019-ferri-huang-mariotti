@@ -32,6 +32,7 @@ public class ClientCommandHandler {
                 Logger.getGlobal().warning(e.toString());
             }
             this.view.showGame();
+            this.view.showMessage(request.getMessage());
         }
     }
 }

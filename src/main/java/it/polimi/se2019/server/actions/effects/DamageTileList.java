@@ -20,6 +20,6 @@ public class DamageTileList extends Damage {
 
         tileList.stream()
                 .forEach(t -> ((Tile) t).getPlayers(game).stream()
-                        .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount)));
+                        .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount, game)));
     }
 }

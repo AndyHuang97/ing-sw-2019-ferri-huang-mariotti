@@ -43,7 +43,7 @@ public class DamageTile extends Damage {
 
         targetList.stream()
                 .filter(p -> !p.equals(game.getCurrentPlayer()))
-                .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount));
+                .forEach(p -> p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount, game));
 
     }
 }

@@ -79,7 +79,7 @@ public class AddPowerUpTest {
         targets.put("powerUp", powerUpList);
         game.setCurrentPlayer(p1);
 
-        PowerUp pu = new PowerUp(null, "");
+        PowerUp pu = new PowerUp(null, "", null);
         powerUpList.add(pu);
 
         int oldSize = p1.getCharacterState().getPowerUpBag().size();

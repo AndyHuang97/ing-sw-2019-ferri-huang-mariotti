@@ -9,6 +9,7 @@ import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.CommandConstants;
@@ -35,9 +36,11 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
 	private List<ActionUnit> currentActionUnitsList;
-	private List<Targetable> cumulativeDamageTargetList;
-	private List<Targetable> cumulativeTargetList;
+	private Set<Targetable> cumulativeDamageTargetSet;
+	private Set<Targetable> cumulativeTargetSet;
 	private boolean frenzy;
+
+	private Tile virtualPlayerPosition;
 
 	public Game() {
 		// don't use this constructor
@@ -50,8 +53,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
 	}
 
@@ -66,8 +69,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
 	}
 
@@ -82,8 +85,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = powerupDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 	}
 
 	public GameData generateGameData() {
@@ -94,7 +97,6 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void initGameObjects(String mapIndex) {
 		new DirectDeserializers();
 		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
-		System.out.println(getBoard().getId());
 		this.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrate());
 		this.setWeaponDeck(DirectDeserializers.deserialzerWeaponDeck());
 		this.setPowerupDeck(DirectDeserializers.deserialzerPowerUpDeck());
@@ -150,6 +152,16 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		else {throw new IllegalStateException();}
 
 		currentActionUnitsList = new ArrayList<>();
+	}
+
+
+	//TODO test it ...
+	public void nextCurrentPlayer() {
+		if (playerList.indexOf(getCurrentPlayer()) != (playerList.size()-1)) {
+			currentPlayer = playerList.get(playerList.indexOf(getCurrentPlayer()) + 1);
+		} else {
+			currentPlayer = playerList.get(0);
+		}
 	}
 
 	public Date getStartDate() {
@@ -219,7 +231,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setKillshotTrack(KillShotTrack killshotTrack) {
 		this.killshotTrack = killshotTrack;
 
-		// notify killshot track change
+		// notify KillShotTrack change
         KillShotTrackUpdate killShotTrackUpdate = new KillShotTrackUpdate(killshotTrack);
 
         List<StateUpdate> updateList = new ArrayList<>();
@@ -289,20 +301,20 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 				.findFirst().orElseThrow(IllegalStateException::new);
 	}
 
-	public List<Targetable> getCumulativeDamageTargetList() {
-		return cumulativeDamageTargetList;
+	public Set<Targetable> getCumulativeDamageTargetSet() {
+		return cumulativeDamageTargetSet;
 	}
 
-	public void setCumulativeDamageTargetList(List<Targetable> cumulativeDamageTargetList) {
-		this.cumulativeDamageTargetList = cumulativeDamageTargetList;
+	public void setCumulativeDamageTargetSet(Set<Targetable> cumulativeDamageTargetSet) {
+		this.cumulativeDamageTargetSet = cumulativeDamageTargetSet;
 	}
 
-	public List<Targetable> getCumulativeTargetList() {
-		return cumulativeTargetList;
+	public Set<Targetable> getCumulativeTargetSet() {
+		return cumulativeTargetSet;
 	}
 
-	public void setCumulativeTargetList(List<Targetable> cumulativeTargetList) {
-		this.cumulativeTargetList = cumulativeTargetList;
+	public void setCumulativeTargetSet(Set<Targetable> cumulativeTargetSet) {
+		this.cumulativeTargetSet = cumulativeTargetSet;
 	}
 
 	public Deck<AmmoCrate> getAmmoCrateDeck() {
@@ -312,4 +324,16 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setAmmoCrateDeck(Deck<AmmoCrate> ammoCrateDeck) {
 		this.ammoCrateDeck = ammoCrateDeck;
 	}
+
+    /**
+     * Needed by the GrabPlayer action to access the player position before it's changed by the MovePlayerAction.run()
+     * @return the possible position of the current player at the end of the turn
+     */
+    public Tile getVirtualPlayerPosition() {
+        return virtualPlayerPosition;
+    }
+
+    public void setVirtualPlayerPosition(Tile virtualPlayerPosition) {
+        this.virtualPlayerPosition = virtualPlayerPosition;
+    }
 }

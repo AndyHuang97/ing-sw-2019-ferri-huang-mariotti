@@ -6,6 +6,7 @@ import it.polimi.se2019.server.exceptions.MessageParseException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.util.Observer;
@@ -15,6 +16,7 @@ import it.polimi.se2019.util.RequestParser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class implement the Controller of the MVC pattern. The Controller parse the inputs (Requests)
@@ -43,36 +45,35 @@ public class Controller implements Observer<Request> {
     @Override
     public void update(Request request) {
         try {
-            RequestParser requestParser = new RequestParser();
-            requestParser.parse(request, gameManager);
-            List<PlayerAction> playerActionList = requestParser.getPlayerActionList();
+            String nickname = request.getNickname();
+            Game game = gameManager.retrieveGame(nickname);
 
-            // get the ControllerState from one of the PlayerActions (they're all from the same request so they
-            // all share the same game).
-            Game game = playerActionList.get(0).getGame();
+            Optional<Player> optPlayer = game.getPlayerList().stream()
+                    .filter(p -> p.getUserData().getNickname().equals(nickname))
+                    .findFirst();
+
+            Player player = null;
+            if (optPlayer.isPresent()) {
+                player = optPlayer.get();
+                System.out.println(player);
+            }
+
+            RequestParser requestParser = new RequestParser();
+            requestParser.parse(request, game, player);
+            List<PlayerAction> playerActionList = requestParser.getPlayerActionList();
 
             ControllerState controllerState = getStateFromGame(game);
 
-            List <PlayerAction> checkablePlayerActionList = controllerState.getAllowedPlayerActions(playerActionList);
+            // nextState handles the input and returns a new State, then a message is sent from the new state;
+            // if any model changes happened, the update will be sent before the selection message.
+            //TODO avoid using the update CommandHandler's update method, it shall be called only by notifications from the model
+            // need to add a new method in CommandHandler for selection purposes.
+            ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
+            setControllerStateForGame(game, newControllerState);
+            CommandHandler commandHandler = requestParser.getCommandHandler();
+            newControllerState.sendSelectionMessage(commandHandler);
 
-            boolean runnable = true;
 
-            for (PlayerAction playerAction : playerActionList) {
-                if (!playerAction.check()) {
-                    CommandHandler commandHandler = requestParser.getCommandHandler();
-                    commandHandler.reportError(playerAction.getErrorMessage());
-                    runnable = false;
-                }
-            }
-
-            if (runnable) {
-                for (PlayerAction playerAction : checkablePlayerActionList) {
-                    applyAction(playerAction);
-                }
-
-                // allowed PlayerActions have been run, time for next turn phase
-                setControllerStateForGame(game, controllerState.nextState());
-            }
         } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
 
         } catch (IllegalPlayerActionException e) {
@@ -88,13 +89,15 @@ public class Controller implements Observer<Request> {
         this.gameManager = gameManager;
     }
 
+
+
     /**
      * If the game is present in the controllerStateMap return the correspondent ControllerState value
      * else returns a new WaitingForRespawn (subclass of ControllerState)
      * @param game the key you need to get the associated value
      * @return ControllerState of the selected Game
      */
-    private ControllerState getStateFromGame(Game game) {
+    public ControllerState getStateFromGame(Game game) {
         controllerStateMap.putIfAbsent(game, new WaitingForRespawn());
         return controllerStateMap.get(game);
     }
@@ -104,7 +107,7 @@ public class Controller implements Observer<Request> {
      * @param game the kay you need to set the associated value
      * @param controllerState the ControllerState you want to correspond to the key
      */
-    private void setControllerStateForGame(Game game, ControllerState controllerState) {
+    public void setControllerStateForGame(Game game, ControllerState controllerState) {
         controllerStateMap.put(game, controllerState);
     }
 }

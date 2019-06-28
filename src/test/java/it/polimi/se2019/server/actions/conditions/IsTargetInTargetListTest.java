@@ -9,7 +9,6 @@ import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,18 +77,18 @@ public class IsTargetInTargetListTest {
     @Test
     public void testIsTargetInTargetList() {
         Condition condition = new IsTargetInTargetList();
-        game.getCumulativeTargetList().addAll(Arrays.asList(p2, p3,p4));
+        game.getCumulativeTargetSet().addAll(Arrays.asList(p2, p3,p4));
         //targets.put("cumulativeTargetList", cumulativeTargetList);
         list.add(p2);
         targets.put(CommandConstants.TARGETLIST, list);
         game.setCurrentPlayer(p1);
 
-        game.getCumulativeTargetList().addAll(Arrays.asList(p2, p3,p4));
+        game.getCumulativeTargetSet().addAll(Arrays.asList(p2, p3,p4));
         assertTrue(condition.check(game, targets));
-        game.getCumulativeTargetList().clear();
+        game.getCumulativeTargetSet().clear();
 
-        game.getCumulativeTargetList().addAll(Arrays.asList(p3,p4));
+        game.getCumulativeTargetSet().addAll(Arrays.asList(p3,p4));
         assertFalse(condition.check(game, targets));
-        game.getCumulativeTargetList().clear();
+        game.getCumulativeTargetSet().clear();
     }
 }

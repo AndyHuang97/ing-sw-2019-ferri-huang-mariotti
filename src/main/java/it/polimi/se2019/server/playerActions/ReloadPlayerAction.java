@@ -1,8 +1,8 @@
 package it.polimi.se2019.server.playerActions;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.weapons.Weapon;
-import it.polimi.se2019.server.controller.TurnPhase;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
@@ -17,7 +17,6 @@ import java.util.Map;
 
 public class ReloadPlayerAction extends PlayerAction {
     private static final String ERRORMESSAGE = "Reload action failed";
-    private static final TurnPhase[] ALLOWED_IN = {TurnPhase.WAITING_FOR_RELOAD};
 
     private List<Weapon> weaponToReload = new ArrayList<>();
 
@@ -86,6 +85,11 @@ public class ReloadPlayerAction extends PlayerAction {
     @Override
     public ErrorResponse getErrorMessage() {
         return new ErrorResponse(ERRORMESSAGE);
+    }
+
+    @Override
+    public Card getCard() {
+        return null;
     }
 
     @Override

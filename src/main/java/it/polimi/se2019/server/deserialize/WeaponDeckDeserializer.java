@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Deck;
+import it.polimi.se2019.util.DeserializerConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,10 @@ public class WeaponDeckDeserializer implements RandomDeserializer {
     public Deck<Weapon> deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
-        JsonArray jsonWeaponArray = json.getAsJsonArray("weaponDeck");
+        JsonArray jsonWeaponArray = json.getAsJsonArray(DeserializerConstants.WEAPONDECK);
 
         List<Weapon> weaponList = new ArrayList<>();
-        WeaponDeserializer weaponDeserializer = (WeaponDeserializer) deserializerFactory.getDeserializer("weapon");
+        WeaponDeserializer weaponDeserializer = (WeaponDeserializer) deserializerFactory.getDeserializer(DeserializerConstants.WEAPON);
 
         for(JsonElement weaponElement : jsonWeaponArray) {
             JsonObject jsonWeapon = weaponElement.getAsJsonObject();

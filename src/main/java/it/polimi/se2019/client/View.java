@@ -66,11 +66,16 @@ public abstract class View extends Observable implements Observer<Response> {
     }
 
     /**
-     * The sendInput method sends an input message to the server.
+     * The sendInput method sends an input message to the server, only if the client is the current player of
+     * the match.
      */
     public void sendInput() {
         System.out.println(">>> Sending: " + getPlayerInput());
-        networkClient.send(new Request(new NetMessage(playerInput), nickname));
+        if (model.getGame().getCurrentPlayer().getUserData().getNickname().equals(nickname)) {
+            networkClient.send(new Request(new NetMessage(playerInput), nickname));
+        } else {
+            System.out.println("Wait for your turn!");
+        }
         getPlayerInput().clear();
     }
 
@@ -80,7 +85,8 @@ public abstract class View extends Observable implements Observer<Response> {
     public abstract void askInput();
 
     /**
-     * The showMessage method shows a message received as response from the server.
+     * The showMessage method shows a message received as response from the server, it may execute some methods
+     * for input selection.
      * @param message a response message containing info on the performed action.
      */
     public abstract void showMessage(String message);

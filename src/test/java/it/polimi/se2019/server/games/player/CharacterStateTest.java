@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games.player;
 
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.LinkType;
 import it.polimi.se2019.server.games.board.NormalTile;
@@ -94,8 +95,8 @@ public class CharacterStateTest {
     @Test
     public void testAddDamage() {
         int oldSize = characterState.getDamageBar().size();
-
-        characterState.addDamage(PlayerColor.BLUE, 2);
+        Game game = new Game();
+        characterState.addDamage(PlayerColor.BLUE, 2, game);
 
         Assert.assertEquals(oldSize+2, characterState.getDamageBar().size());
         Assert.assertEquals(PlayerColor.BLUE, characterState.getDamageBar().get(oldSize));
