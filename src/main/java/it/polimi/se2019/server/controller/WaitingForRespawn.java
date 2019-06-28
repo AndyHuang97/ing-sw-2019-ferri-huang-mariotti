@@ -27,6 +27,7 @@ public class WaitingForRespawn implements ControllerState {
         }
     }
 
+
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 

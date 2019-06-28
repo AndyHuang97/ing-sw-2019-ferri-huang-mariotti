@@ -10,18 +10,20 @@ import java.util.List;
 interface ControllerState {
     /**
      *
-     * @param commandHandler @return a List<PlayerAction> containing the actions allowed during the specific turn phase represented
-     *         by the Controller State
+     * @param commandHandler
+     * @return sends a message to the correct commandHandler of the current player
      */
+    //TODO get the correct commandHandler
     void sendSelectionMessage(CommandHandler commandHandler);
 
     /**
-     * @ This method must be run after running the allowed player actions, and it's meant to be used
-     * to set the next ControllerState of the controller for the game of the PlayerActions
-     * @return the next ControllerState (turn phase) based on which action have been executed
-     * @param playerActions
-     * @param game
-     * @param player
+     * This method contains all the logic of a state. It checks whether the input is among those allowed in the state.
+     * If if fails it stays in the same state and keeps waiting for the same input, otherwise it performs the check
+     * and run methods of the actions, with possible modifications on the model and then goes to a new state.
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controlelr
      */
     ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player);
 }

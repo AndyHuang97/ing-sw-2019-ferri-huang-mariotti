@@ -15,6 +15,7 @@ import it.polimi.se2019.util.Response;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,7 +63,7 @@ public class WaitingForMainActions implements ControllerState {
                 Weapon chosenWeapon = (Weapon) shootWeaponSelection.getCard(); // cannot return null because of the if...
                 return new WaitingForEffects(chosenWeapon, this);
             }
-            // no shoot action or no optional effects
+            // no shoot weapon selection
             if (game.isFrenzy()) {
                 if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                     // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
@@ -81,6 +82,7 @@ public class WaitingForMainActions implements ControllerState {
                 } else { // still an action left
                     // could receive a pass(NOP) message to skip the turn
                     if (playerActions.get(0).getId().equals(Constants.NOP)) {
+                        Logger.getGlobal().info("Detected a NOP");
                         game.nextCurrentPlayer();
                         if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
                             return new WaitingForRespawn(); // first spawn
@@ -130,8 +132,8 @@ public class WaitingForMainActions implements ControllerState {
                                                 .filter(playerAction -> playerAction.getId().equals(Constants.MOVE))
                                                 .map(pa -> (MovePlayerAction) pa)
                                                 .findFirst().orElseThrow(IllegalStateException::new);
-                                        System.out.println("possible:" + possiblePlayerAction.getAmount());
-                                        System.out.println("distance:" + game.getBoard().getTileTree()
+                                        Logger.getGlobal().info("possible:" + possiblePlayerAction.getAmount());
+                                        Logger.getGlobal().info("distance:" + game.getBoard().getTileTree()
                                                 .distance(mpa.getPlayer().getCharacterState().getTile(), mpa.getMoveList().get(0)));
                                         if (possiblePlayerAction.getAmount() <      // the predicate that checks the distance,
                                                 game.getBoard().getTileTree()       // if the selected tile gives a greater distance then the action is not allowed
@@ -140,7 +142,7 @@ public class WaitingForMainActions implements ControllerState {
                                         }
                                         return true;
                                     });
-                            System.out.println(res);
+                            Logger.getGlobal().info(String.valueOf(res));
                             return res; // the result of the the internal anyMatch, it is returned as value of the external anyMatch
                         }
                 );

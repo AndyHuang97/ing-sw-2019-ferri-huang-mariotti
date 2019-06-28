@@ -49,6 +49,7 @@ public class DirectDeserializers {
         return board;
     }
 
+    //TODO need renaming
     public static Deck<Weapon> deserialzerWeaponDeck() {
         WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer("weapondeck");
 
@@ -61,6 +62,7 @@ public class DirectDeserializers {
         return weaponDeck;
     }
 
+    //TODO need renaming
     public static Deck<PowerUp> deserialzerPowerUpDeck() {
         PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer("powerupdeck");
 

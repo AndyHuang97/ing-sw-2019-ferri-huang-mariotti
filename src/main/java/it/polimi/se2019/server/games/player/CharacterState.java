@@ -91,6 +91,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	//TODO could be deserialized (?)
 	public List<CompositeAction> getPossibleActions(boolean isFrenzy) {
 		List<CompositeAction> possibleActions = new ArrayList<>();
+		possibleActions.add(new CompositeAction(PlayerAction.NOP));
 		possibleActions.add(new CompositeAction(PlayerAction.GRAB));
 		possibleActions.add(new CompositeAction(PlayerAction.SHOOT));
 		if (isFrenzy) {
@@ -109,9 +110,9 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 			possibleActions.add(new CompositeAction(new MovePlayerAction(3)));
 			possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.GRAB));
 			possibleActions.add(new CompositeAction(PlayerAction.RELOAD));
-			if (this.getDamageBar().size()>=2) {
+			if (this.getDamageBar().size()>=3) {
 				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.GRAB));
-				if (this.getDamageBar().size()>=5) {
+				if (this.getDamageBar().size()>=6) {
 					possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.SHOOT));
 				}
 			}

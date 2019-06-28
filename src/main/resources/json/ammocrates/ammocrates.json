@@ -9,19 +9,14 @@
           "available": true,
           "effectList": [
             {
-              "name": "Add yellow ammo x1",
+              "name": "Add ammo",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "amount": 1,
-                "ammoColor": "Yellow"
-              }
-            },
-            {
-              "name": "Add blue ammo x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Blue",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 2,
+                  "RED": 0,
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -42,19 +37,14 @@
           "available": true,
           "effectList": [
             {
-              "name": "Add yellow ammo x1",
+              "name": "Add ammo",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Yellow",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add red ammo x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Red",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 0,
+                  "RED": 2,
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -75,19 +65,14 @@
           "available": true,
           "effectList": [
             {
-              "name": "Add red ammo x1",
+              "name": "Add ammo",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Red",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add blue ammo x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Blue",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 2,
+                  "RED": 1,
+                  "YELLOW": 0
+                }
               }
             }
           ],
@@ -111,16 +96,11 @@
               "name": "Add red ammo x1",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Red",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add yellow ammo x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Yellow",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 0,
+                  "RED": 1,
+                  "YELLOW": 2
+                }
               }
             }
           ],
@@ -141,19 +121,14 @@
           "available": true,
           "effectList": [
             {
-              "name": "Add blue ammo x1",
+              "name": "Add ammo",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Blue",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add yellow ammo x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Yellow",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 1,
+                  "RED": 0,
+                  "YELLOW": 2
+                }
               }
             }
           ],
@@ -177,16 +152,11 @@
               "name": "Add blue ammo x1",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Blue",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add red ammo x2",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Red",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 1,
+                  "RED": 2,
+                  "YELLOW": 0
+                }
               }
             }
           ],
@@ -213,11 +183,14 @@
               }
             },
             {
-              "name": "Add yellow ammo x2",
+              "name": "Add ammo",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Yellow",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 0,
+                  "RED": 0,
+                  "YELLOW": 2
+                }
               }
             }
           ],
@@ -247,8 +220,11 @@
               "name": "Add red ammo x2",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Red",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 0,
+                  "RED": 2,
+                  "YELLOW": 0
+                }
               }
             }
           ],
@@ -278,8 +254,11 @@
               "name": "Add blue ammo x2",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Blue",
-                "amount": 2
+                "ammoToAdd" : {
+                  "BLUE": 2,
+                  "RED": 0,
+                  "YELLOW": 0
+                }
               }
             }
           ],
@@ -309,16 +288,11 @@
               "name": "Add yellow ammo x1",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Yellow",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add red ammo x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Red",
-                "amount": 1
+                "ammoToAdd" : {
+                  "BLUE": 0,
+                  "RED": 1,
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -348,16 +322,11 @@
               "name": "Add yellow ammo x1",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Yellow",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add blue ammo x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Blue",
-                "amount": 1
+                "ammoToAdd" : {
+                  "BLUE": 1,
+                  "RED": 0,
+                  "YELLOW": 1
+                }
               }
             }
           ],
@@ -387,16 +356,11 @@
               "name": "Add red ammo x1",
               "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
               "params": {
-                "ammoColor": "Red",
-                "amount": 1
-              }
-            },
-            {
-              "name": "Add blue ammo x1",
-              "class_name": "it.polimi.se2019.server.actions.effects.AddAmmo",
-              "params": {
-                "ammoColor": "Blue",
-                "amount": 1
+                "ammoToAdd" : {
+                  "BLUE": 1,
+                  "RED": 1,
+                  "YELLOW": 0
+                }
               }
             }
           ],
