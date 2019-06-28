@@ -26,8 +26,8 @@ import java.util.stream.Stream;
 public class WaitingForMainActions implements ControllerState {
 
     private static final int NORMAL_ACTION_NUMBER = 2;
-    private static final int FRENZY_BEFORE_NUMBER = 2;
-    private static final int FRENZY_AFTER_NUMBER = 1;
+    private static final int BEFORE_FRENZY_NUMBER = 2;
+    private static final int AFTER_FRENZY_NUMBER = 1;
 
     /**
      *
@@ -49,7 +49,20 @@ public class WaitingForMainActions implements ControllerState {
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) throws ClassCastException {
         //TODO need to add all the error reports: commandHandler.reportError(playerAction.getErrorMessage());
         if (!checkPlayerActionAvailability(playerActions, game, player)) { // action was not even available
+            Logger.getGlobal().info("Action not available");
             return this; // stay in the same state and do nothing, only wait for correct input
+        }
+        // could receive a pass(NOP) message to skip the turn
+        if (playerActions.get(0).getId().equals(Constants.NOP)) {
+            Logger.getGlobal().info("Detected a NOP");
+            game.nextCurrentPlayer();
+            if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
+                Logger.getGlobal().info("Next player has never spawned until now");
+                return new WaitingForRespawn(); // first spawn
+            } else {
+                Logger.getGlobal().info("Next player has already spawned");
+                return new WaitingForMainActions(); // new player reset all
+            }
         }
         if (playerActions.stream().allMatch(PlayerAction::check)) {
             playerActions.forEach(PlayerAction::run);
@@ -61,41 +74,38 @@ public class WaitingForMainActions implements ControllerState {
             if (shootWeaponSelection != null) {
                 // there is a Shoot action, switch to the shoot sequence in WaitingForEffects state
                 Weapon chosenWeapon = (Weapon) shootWeaponSelection.getCard(); // cannot return null because of the if...
+                Logger.getGlobal().info("Detected ShootWeaponSelection");
                 return new WaitingForEffects(chosenWeapon, this);
             }
             // no shoot weapon selection
             if (game.isFrenzy()) {
-                if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
-                    // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
-                    WaitingForRespawn newState = new WaitingForRespawn();
-                    return newState.nextState(playerActions, game, player);
-                } else { // no kills in final frenzy action
-                    if (actionCounter == counterLimit) {
+                if (actionCounter == counterLimit) {
+                    if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+                        // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
+                        WaitingForRespawn newState = new WaitingForRespawn();
+                        Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
+                        return newState.nextState(playerActions, game, player);
+                    } else {// no kills in final frenzy action
                         game.nextCurrentPlayer(); // consumed all actions in frenzy mode, give control to another player
+                        Logger.getGlobal().info("No one was killed in frenzy. No more actions, next player");
                         return new WaitingForMainActions(); // new player, reset all
                     }
-                    return this; // keeps track of the actionCounter
+                } else {
+                    Logger.getGlobal().info("More actions left, get the next action");
+                    return this; // keeps track of the actionCounter for the current player
                 }
             } else { // not frenzy
                 if (actionCounter == counterLimit) { // consumed all actions in normal mode, nextPlayer is delegated to WaitingForReload state
+                    Logger.getGlobal().info("Not frenzy. No more actions, go to reload");
                     return new WaitingForReload(); // in normal mode, respawn is after Reload
                 } else { // still an action left
-                    // could receive a pass(NOP) message to skip the turn
-                    if (playerActions.get(0).getId().equals(Constants.NOP)) {
-                        Logger.getGlobal().info("Detected a NOP");
-                        game.nextCurrentPlayer();
-                        if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
-                            return new WaitingForRespawn(); // first spawn
-                        } else {
-                            return new WaitingForMainActions(); // new player reset all
-                        }
-                    }
+                    Logger.getGlobal().info("Not frenzy. More actions left, get the next action");
                     return this; // keeps track of the action actionCounter
                 }
             }
         }
+        Logger.getGlobal().info("Action was available, but check failed");
         return this; // invalid action because of input selection
-
     }
 
     /**
@@ -132,12 +142,14 @@ public class WaitingForMainActions implements ControllerState {
                                                 .filter(playerAction -> playerAction.getId().equals(Constants.MOVE))
                                                 .map(pa -> (MovePlayerAction) pa)
                                                 .findFirst().orElseThrow(IllegalStateException::new);
+                                        int distance = game.getBoard().getTileTree()
+                                                .distance(mpa.getPlayer().getCharacterState().getTile(), mpa.getMoveList().get(0));
                                         Logger.getGlobal().info("possible:" + possiblePlayerAction.getAmount());
-                                        Logger.getGlobal().info("distance:" + game.getBoard().getTileTree()
-                                                .distance(mpa.getPlayer().getCharacterState().getTile(), mpa.getMoveList().get(0)));
-                                        if (possiblePlayerAction.getAmount() <      // the predicate that checks the distance,
-                                                game.getBoard().getTileTree()       // if the selected tile gives a greater distance then the action is not allowed
-                                                        .distance(mpa.getPlayer().getCharacterState().getTile(), mpa.getMoveList().get(0))) {
+                                        Logger.getGlobal().info("distance:" + distance);
+                                        if (possiblePlayerAction.getAmount() < distance || distance == -1) {
+                                            // the predicate that checks the distance, if the selected tile gives a
+                                            // greater distance then the action is not allowed
+                                            // also checks reachability
                                             return false;
                                         }
                                         return true;
@@ -159,9 +171,9 @@ public class WaitingForMainActions implements ControllerState {
             return NORMAL_ACTION_NUMBER;
         } else {
             if (player.getCharacterState().isBeforeFrenzyActivator()) {
-                return FRENZY_BEFORE_NUMBER;
+                return BEFORE_FRENZY_NUMBER;
             } else {
-                return FRENZY_AFTER_NUMBER;
+                return AFTER_FRENZY_NUMBER;
             }
         }
     }

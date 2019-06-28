@@ -34,14 +34,16 @@ public class WaitingForReload implements ControllerState {
 
                 if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                     WaitingForRespawn newState = new WaitingForRespawn();
+                    Logger.getGlobal().info("Someone was killed");
                     return newState.nextState(playerActions, game, player);
                 } else {
                     game.nextCurrentPlayer();
+                    Logger.getGlobal().info("No one was killed");
                     return new WaitingForMainActions();
                 }
             }
         }
-
+        Logger.getGlobal().info("Invalid input");
         return this; // invalid input
     }
 }

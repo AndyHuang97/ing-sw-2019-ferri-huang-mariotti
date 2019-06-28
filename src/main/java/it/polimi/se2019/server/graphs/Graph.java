@@ -49,7 +49,7 @@ public class Graph<T> {
      * It returns a positive value if the nodes are connected, a negative value (-1) otherwise.
      * @param start is the starting node.
      * @param end is the node we are calculating the distance from start node.
-     * @return the distance between the nodes, if they nodes are disconnected it returns -1.
+     * @return the distance between the nodes, if the nodes are disconnected it returns -1.
      */
     public Integer distance(T start, T end) {
         Integer distance = -1;

@@ -38,9 +38,14 @@ public class WaitingForPowerUps implements ControllerState {
         }
     }
 
-    //TODO
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
+        // could receive a pass(NOP) message to skip the selection of powerUp
+        if (playerActions.get(0).getId().equals(Constants.NOP)) {
+            Logger.getGlobal().info("Detected a NOP");
+            return storedWaitingForEffects;
+        }
+
         if (expectedPowerUp.equals(Constants.TARGETING_SCOPE)) {
             if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(expectedPowerUp))) {
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
