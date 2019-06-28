@@ -66,7 +66,7 @@ public class Model implements LocalModel {
     // testing methods ---------------------------------------------------------------------------------------------
     public void initGame() {
         game = new Game();
-        game.setFrenzy(false);
+        game.setFrenzy(true);
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);

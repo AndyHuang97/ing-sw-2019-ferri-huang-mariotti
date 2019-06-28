@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.actions.effects;
 
 import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
@@ -75,16 +76,14 @@ public class AddPowerUpTest {
     @Test
     public void testAddPowerUp() {
         Effect effect = new AddPowerUp();
-        List<Targetable> powerUpList = new ArrayList<>();
-        targets.put("powerUp", powerUpList);
         game.setCurrentPlayer(p1);
+        new DirectDeserializers();
+        game.setPowerupDeck(DirectDeserializers.deserialzerPowerUpDeck());
 
         PowerUp pu = new PowerUp(null, "", null);
-        powerUpList.add(pu);
 
         int oldSize = p1.getCharacterState().getPowerUpBag().size();
-        effect.run(game, targets);
-        assertTrue(p1.getCharacterState().getPowerUpBag().contains(pu));
+        effect.run(game, null);
         assertEquals(oldSize+1, p1.getCharacterState().getPowerUpBag().size());
     }
 }
