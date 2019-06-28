@@ -1,7 +1,5 @@
 package it.polimi.se2019.server.deserialize;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
@@ -9,16 +7,19 @@ import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.util.DeserializerConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class CardDeserializerTest {
 
@@ -28,15 +29,15 @@ public class CardDeserializerTest {
     public void setUp()  {
         factory = new DynamicDeserializerFactory();
 
-        factory.registerDeserializer("ammmocratedeck", new AmmoCrateDeserializerSupplier());
-        factory.registerDeserializer("powerupdeck", new PowerUpDeserializerSupplier());
-        factory.registerDeserializer("weapondeck", new WeaponDeckDeserializerSuppier());
-        factory.registerDeserializer("weapon", new WeaponDeserializerSupplier());
-        factory.registerDeserializer("actions", new ActionsDeserializerSupplier());
-        factory.registerDeserializer("optionaleffects", new OptionalEffectDeserializerSupplier());
-        factory.registerDeserializer("actionunit", new ActionUnitDeserializerSupplier());
-        factory.registerDeserializer("effects", new EffectDeserializerSupplier());
-        factory.registerDeserializer("conditions", new ConditionDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.AMMOCRATEDECK, new AmmoCrateDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.POWERUPDECK, new PowerUpDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.WEAPONDECK, new WeaponDeckDeserializerSuppier());
+        factory.registerDeserializer(DeserializerConstants.WEAPON, new WeaponDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONS, new ActionsDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.OPTIONALEFFECTS, new OptionalEffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONUNIT, new ActionUnitDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.EFFECTS, new EffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.CONDITIONS, new ConditionDeserializerSupplier());
     }
 
     @After
@@ -46,9 +47,9 @@ public class CardDeserializerTest {
 
     @Test
     public void testDeserialize() {
-        AmmoCrateDeserializer ammoCrateDeserializer = (AmmoCrateDeserializer) factory.getDeserializer("ammmocratedeck");
-        PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer("powerupdeck");
-        WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer("weapondeck");
+        AmmoCrateDeserializer ammoCrateDeserializer = (AmmoCrateDeserializer) factory.getDeserializer(DeserializerConstants.AMMOCRATEDECK);
+        PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer(DeserializerConstants.POWERUPDECK);
+        WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer(DeserializerConstants.WEAPONDECK);
 
         String ammoCratePath = "src/main/resources/json/ammocrates/ammocrates.json";
         String powerUpPath = "src/main/resources/json/powerups/powerups.json";

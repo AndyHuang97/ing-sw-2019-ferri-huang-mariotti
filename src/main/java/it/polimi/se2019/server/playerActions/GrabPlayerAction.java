@@ -105,7 +105,7 @@ public class GrabPlayerAction extends PlayerAction {
             // check if player is asking to grab ammo in his tile,
             // furthermore should check the conditions of the ActionUnits in ammoToGrab but
             // there are no condition in AmmoCrates
-            return (ammoCrate != ammoToGrab);
+            return (ammoCrate == ammoToGrab);
         }
 
         return false;
@@ -132,7 +132,7 @@ public class GrabPlayerAction extends PlayerAction {
             player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap());
         }
 
-        else if (ammoToGrab !=null) {
+        else if (ammoToGrab != null) {
             for (ActionUnit actionUnit : ammoToGrab.getActionUnitList()) {
                 actionUnit.run(getGame(), null);
             }

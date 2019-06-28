@@ -4,10 +4,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.ServerApp;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.*;
 import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
+import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.games.Targetable;
@@ -18,6 +20,7 @@ import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.*;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.DeserializerConstants;
 import it.polimi.se2019.util.InternalMessage;
 import it.polimi.se2019.util.Request;
 import org.junit.Assert;
@@ -97,11 +100,15 @@ public class ControllerTest {
         player1.getCharacterState().setTile(tileMap[0][1]);
 
         // initialize Weapons
-        factory.registerDeserializer("actions", new ActionsDeserializerSupplier());
-        factory.registerDeserializer("optionaleffects", new OptionalEffectDeserializerSupplier());
-        factory.registerDeserializer("actionunit", new ActionUnitDeserializerSupplier());
-        factory.registerDeserializer("effects", new EffectDeserializerSupplier());
-        factory.registerDeserializer("conditions", new ConditionDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.AMMOCRATEDECK, new AmmoCrateDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.POWERUPDECK, new PowerUpDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.WEAPONDECK, new WeaponDeckDeserializerSuppier());
+        factory.registerDeserializer(DeserializerConstants.WEAPON, new WeaponDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONS, new ActionsDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.OPTIONALEFFECTS, new OptionalEffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONUNIT, new ActionUnitDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.EFFECTS, new EffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.CONDITIONS, new ConditionDeserializerSupplier());
 
         String path = "src/test/java/it/polimi/se2019/server/deserialize/data/cards.json";
         BufferedReader bufferedReader;
@@ -211,9 +218,13 @@ public class ControllerTest {
         List<Weapon> weaponList = new ArrayList<>();
         weaponList.add(weapon);
 
+        AmmoCrate ammoToGrab = getAmmoCrate("1_PowerUp_2_Red");
+
         tileMap[0][0].setWeaponCrate(weaponList);
+        tileMap[0][1].setAmmoCrate(ammoToGrab);
 
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        player0.getCharacterState().setTile(tileMap[0][0]);
         player0.getCharacterState().addAmmo(getAmmoBag(3));
 
         List<Targetable> targetableList = new ArrayList<>();
@@ -250,6 +261,25 @@ public class ControllerTest {
         Assert.assertEquals(3, player0.getCharacterState().getWeaponBag().size());
         Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.BLUE));
         Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW));
+
+        controller.setControllerStateForGame(game, waitingForMainActions);
+
+        // test ammo pickup
+        player0.getCharacterState().setAmmoBag(getAmmoBag(0));
+        command.put(Constants.KEY_ORDER, Arrays.asList(new MovePlayerAction(0), new GrabPlayerAction(0)));
+        targetableList = new ArrayList<>();
+        targetableList.add(tileMap[0][1]);
+        command.put(MOVEPLAYERACTION, targetableList);
+        targetableList = new ArrayList<>();
+        targetableList.add(ammoToGrab);
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        Assert.assertEquals(tileMap[0][1], player0.getCharacterState().getTile());
+        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.RED));
     }
 
     @Test
@@ -313,4 +343,16 @@ public class ControllerTest {
 
         return ammo;
     }
+
+    private AmmoCrate getAmmoCrate(String cardName) {
+        Deck<AmmoCrate> deck = DirectDeserializers.deserializeAmmoCrate();
+        AmmoCrate card = deck.drawCard();
+
+        while(!card.getName().equals(cardName)) {
+            card = deck.drawCard();
+        }
+
+        return card;
+    }
+
 }

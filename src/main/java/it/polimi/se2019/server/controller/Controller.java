@@ -69,9 +69,7 @@ public class Controller implements Observer<Request> {
             //TODO avoid using the update CommandHandler's update method, it shall be called only by notifications from the model
             // need to add a new method in CommandHandler for selection purposes.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
-            System.out.println(getStateFromGame(game));
             setControllerStateForGame(game, newControllerState);
-            System.out.println(getStateFromGame(game));
             CommandHandler commandHandler = requestParser.getCommandHandler();
             newControllerState.sendSelectionMessage(commandHandler);
 
