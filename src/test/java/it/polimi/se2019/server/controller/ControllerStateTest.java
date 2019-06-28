@@ -324,6 +324,7 @@ public class ControllerStateTest {
         assertEquals(waitingForMainActions, newState);
 
         System.out.println("3) Success, ShootWeaponSelection ");
+        game.setCurrentPlayer(p1);
         game.setFrenzy(false);
         playerActions.clear();
         action = new ShootWeaponSelection(game, p1);
@@ -337,6 +338,7 @@ public class ControllerStateTest {
         assertEquals(WaitingForEffects.class, newState.getClass());
 
         System.out.println("4) Success, MovePlayerSelection");
+        game.setCurrentPlayer(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
@@ -351,35 +353,38 @@ public class ControllerStateTest {
         assertEquals(waitingForMainActions, newState);
 
         System.out.println("4-bis) Success, MovePlayerSelection and GrabPlayerAction");
+        game.setCurrentPlayer(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,0);
+        p1.getCharacterState().getPowerUpBag().clear();
         action = new MovePlayerAction(game, p1);
         targetableList = new ArrayList<>();
-        targetableList.add(board.getTile(0,1));
+        targetableList.add(board.getTile(0,1)); // must be same as  the tile
         action.unpack(targetableList);
         playerActions.add(action);
         action = new GrabPlayerAction(game, p1);
         targetableList = new ArrayList<>();
         AmmoCrate ammoCrate = getAmmoCrate("1_PowerUp_2_Red");
-        board.getTile(0,0).setAmmoCrate(ammoCrate);
+        board.getTile(0,1).setAmmoCrate(ammoCrate);
         targetableList.add(ammoCrate);
         action.unpack(targetableList);
         playerActions.add(action);
-        p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,0);
-        p1.getCharacterState().getPowerUpBag().clear();
         newState = waitingForMainActions.nextState(playerActions, game, p1);
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
         assertEquals(waitingForMainActions, newState);
-        assertEquals(2,p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
         assertEquals(1, p1.getCharacterState().getPowerUpBag().size());
+        assertEquals(0,p1.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).intValue());
+        assertEquals(0,p1.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).intValue());
+        assertEquals(2,p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
 
-        System.out.println("5) Success, NOP -> go to next player");
+        System.out.println("5) Success, NOP -> go to next player (not spawned)");
+        game.setCurrentPlayer(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
-        p1.getCharacterState().setTile(board.getTile(0,0));
         p1.getCharacterState().setFirstSpawn(false);
         action = new NoOperation(game, p1);
         targetableList = new ArrayList<>();
@@ -389,7 +394,127 @@ public class ControllerStateTest {
         assertEquals(p2.getId(), game.getCurrentPlayer().getId());
         assertEquals(WaitingForRespawn.class, newState.getClass());
 
+        System.out.println("5-bis) Success, NOP -> go to next player(spawned)");
+        game.setCurrentPlayer(p1);
+        game.setFrenzy(false);
+        waitingForMainActions = new WaitingForMainActions();
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p2.getCharacterState().setFirstSpawn(false);
+        action = new NoOperation(game, p1);
+        targetableList = new ArrayList<>();
+        action.unpack(targetableList);
+        playerActions.add(action);
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(p2.getId(), game.getCurrentPlayer().getId());
+        assertEquals(WaitingForMainActions.class, newState.getClass());
+
         System.out.println("6) Success, 2 actions -> go to next player");
+        game.setCurrentPlayer(p1);
+        game.setFrenzy(false);
+        waitingForMainActions = new WaitingForMainActions();
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p2.getCharacterState().setFirstSpawn(false);
+        action = new MovePlayerAction(game, p1);
+        targetableList = new ArrayList<>();
+        targetableList.add(board.getTile(0,1));
+        action.unpack(targetableList);
+        playerActions.add(action);
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(WaitingForMainActions.class, newState.getClass());
+        action = new MovePlayerAction(game, p1);
+        targetableList = new ArrayList<>();
+        targetableList.add(board.getTile(0,2));
+        action.unpack(targetableList);
+        playerActions.add(action);
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(WaitingForReload.class, newState.getClass());
+
+        System.out.println("7) Someone was killed in frenzy");
+        game.setCurrentPlayer(p1);
+        p1.getCharacterState().setBeforeFrenzyActivator(false); // only one action possible
+        game.setFrenzy(true);
+        waitingForMainActions = new WaitingForMainActions();
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        p2.getCharacterState().setFirstSpawn(false);
+        action = new MovePlayerAction(game, p1);
+        targetableList = new ArrayList<>();
+        targetableList.add(board.getTile(0,1));
+        action.unpack(targetableList);
+        playerActions.add(action);
+        p3.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(p3.getId(), game.getCurrentPlayer().getId());
+        assertEquals(WaitingForRespawn.class, newState.getClass());
+
+        System.out.println("8) No one was killed in frenzy");
+        game.setCurrentPlayer(p1);
+        p1.getCharacterState().setBeforeFrenzyActivator(false); // only one action possible
+        game.setFrenzy(true);
+        waitingForMainActions = new WaitingForMainActions();
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        p2.getCharacterState().setFirstSpawn(false);
+        action = new MovePlayerAction(game, p1);
+        targetableList = new ArrayList<>();
+        targetableList.add(board.getTile(0,1));
+        action.unpack(targetableList);
+        playerActions.add(action);
+        p3.getCharacterState().resetDamageBar();
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(p2.getId(), game.getCurrentPlayer().getId());
+        assertEquals(WaitingForMainActions.class, newState.getClass());
+
+        System.out.println("8) Some actions left");
+        game.setCurrentPlayer(p1);
+        p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
+        game.setFrenzy(true);
+        waitingForMainActions = new WaitingForMainActions();
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        p2.getCharacterState().setFirstSpawn(false);
+        action = new MovePlayerAction(game, p1);
+        targetableList = new ArrayList<>();
+        targetableList.add(board.getTile(0,1));
+        action.unpack(targetableList);
+        playerActions.add(action);
+        p3.getCharacterState().resetDamageBar();
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(WaitingForMainActions.class, newState.getClass());
+
+    }
+
+    @Test
+    public void testEffects() throws UnpackingException {
+        System.out.println("Testing WaitingForMainActions ...");
+        Board board = game.getBoard();
+        List<Targetable> targetableList = new ArrayList<>();
+        List<PlayerAction> playerActions = new ArrayList<>();
+        PlayerAction action;
+        ControllerState newState;
+
+        ControllerState waitingForMainActions = new WaitingForMainActions();
+
+    }
+
+    @Test
+    public void testPowerUps() throws UnpackingException {
+        System.out.println("Testing WaitingForMainActions ...");
+        Board board = game.getBoard();
+        List<Targetable> targetableList = new ArrayList<>();
+        List<PlayerAction> playerActions = new ArrayList<>();
+        PlayerAction action;
+        ControllerState newState;
+
+        ControllerState waitingForMainActions = new WaitingForMainActions();
 
     }
 

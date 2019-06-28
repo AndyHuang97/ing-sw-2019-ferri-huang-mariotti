@@ -138,7 +138,6 @@ public class GameManager {
 			newGame.register(tuple.commandHandler);
 		});
 		newGame.setPlayerList(playerList);
-		newGame.setCurrentPlayer(playerList.get(0));
 
 		//TODO read mapIndex from players' preference
 		Map<String, Long> occurrences =

@@ -28,6 +28,7 @@ public class WaitingForRespawn implements ControllerState {
     }
 
 
+    //TODO call addDeath, swapValueBar, reset damageBar. double kill(da implementare, e aggiornare l'update dello score)
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 
@@ -55,6 +56,7 @@ public class WaitingForRespawn implements ControllerState {
                                 playerActions.get(POWERUP_POSITION).run(); // spawns the player
                         }
                     } else {
+                        Logger.getGlobal().info("Expecting a correct input from a dead player.");
                         return this; // tries to get input again for the dead player
                     }
                 }
@@ -64,6 +66,7 @@ public class WaitingForRespawn implements ControllerState {
                     playerStack.push(deadPlayers.get(0)); // pushes the dead player to respawn
                     Logger.getGlobal().info("Pushed player:" + deadPlayers.get(0).getId());
                     game.setCurrentPlayer(deadPlayers.get(0)); // give control to one of the dead players, until everyone has spawned
+                    Logger.getGlobal().info("Giving control to a dead player");
                     return this; // stays in this state until everyone is spawned
                 } else { // nobody is dead
                     player = playerStack.pop();// gives back the player that was ending the turn
