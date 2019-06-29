@@ -310,7 +310,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
 			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
 			// first attack bonus
-			if(message.getDamageBar().get(FIRST_ATTACKER) == playerColor) {
+			if(message.getDamageBar().get(FIRST_ATTACKER) == playerColor && !message.isDeathDuringFrenzy()) {
 				score += 1;
 			}
 

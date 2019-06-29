@@ -146,7 +146,7 @@ public class CharacterStateTest {
         Player player = new Player("", true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.BLUE);
         player.getCharacterState().setDamageBar(damageBar);
         player.getCharacterState().setDeaths(0);
-        PlayerDeath message = new PlayerDeath(player);
+        PlayerDeath message = new PlayerDeath(player, false);
 
         characterState.setScore(0);
         characterState.updateScore(message, PlayerColor.YELLOW);

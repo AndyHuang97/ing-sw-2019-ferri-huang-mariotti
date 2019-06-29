@@ -118,13 +118,15 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 				.filter(t -> t.isSpawnTile())
 				.forEach(t -> {
 					for (int i=0; i<3; i++) {
-						t.getWeaponCrate().add(weaponDeck.drawCard());
+						t.getWeaponCrate().add(drawWeaponFromDeck());
 					}
 				});
 		this.getBoard().getTileList().stream()
 				.filter(Objects::nonNull)
 				.filter(t-> !t.isSpawnTile())
-				.forEach(t -> t.setAmmoCrate(ammoCrateDeck.drawCard()));
+				.forEach(t -> t.setAmmoCrate(drawAmmoCrateFromDeck()));
+
+		this.getBoard().registerObserverForAllTiles(this);
 	}
 
 	public void initPlayerPowerUps() {
@@ -138,7 +140,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	}
 
 	public void givePowerUpToPlayer(Player player) {
-		player.getCharacterState().getPowerUpBag().add(powerupDeck.drawCard());
+		player.getCharacterState().getPowerUpBag().add(drawPowerupFromDeck());
 	}
 
 	public void updateTurn() {
@@ -269,6 +271,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.currentActionUnitsList = currentActionUnitsList;
 	}
 
+	@Deprecated
 	public void performMove(String action) {
 		Response response = new Response(new Game(), true, "");
 		notify(response);
@@ -356,5 +359,26 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
     public Player getStartingPlayer() {
         return playerList.get(0);
+    }
+
+    public void addDeath(Player player, boolean overkill) {
+        boolean triggerFrenzy = killshotTrack.addDeath(player, overkill);
+
+        if (!isFrenzy() && triggerFrenzy) {
+            setFrenzy(true);
+        }
+
+    }
+
+    private Weapon drawWeaponFromDeck() {
+        return weaponDeck.drawCard();
+    }
+
+    private AmmoCrate drawAmmoCrateFromDeck() {
+        return ammoCrateDeck.drawCard();
+    }
+
+    private PowerUp drawPowerupFromDeck() {
+        return powerupDeck.drawCard();
     }
 }

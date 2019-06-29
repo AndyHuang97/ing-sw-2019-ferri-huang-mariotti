@@ -6,7 +6,8 @@ import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.graphs.Graph;
-import it.polimi.se2019.server.graphs.Vertex;
+import it.polimi.se2019.util.Observer;
+import it.polimi.se2019.util.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,11 +54,21 @@ public class Board {
         return tileMap[xCoord][yCoord];
     }
 
+    public Tile getTileFromID(String id) {
+        for (int x = 0; x < tileMap.length; x++) {
+            for (int y = 0; y < tileMap[x].length; y++) {
+                if (tileMap[x][y].getId() == id) return tileMap[x][y];
+            }
+        }
+
+        return null;
+    }
+
     public int[] getTilePosition(Tile t) throws TileNotFoundException {
         int[] result = new int[2];
 
         for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
-            for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
+            for (int yCoord = 0; yCoord < tileMap[xCoord].length; yCoord++) {
                 if (tileMap[xCoord][yCoord] == t) {
                     result[0] = xCoord;
                     result[1] = yCoord;
@@ -66,6 +77,14 @@ public class Board {
             }
         }
         throw new TileNotFoundException();
+    }
+
+    public void registerObserverForAllTiles(Observer<Response> observer) {
+        for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
+            for (int yCoord = 0; yCoord < tileMap[xCoord].length; yCoord++) {
+                tileMap[xCoord][yCoord].register(observer);
+            }
+        }
     }
 
     public Graph<Tile> generateGraph() {
