@@ -25,11 +25,13 @@ public class ClientCommandHandler {
         }
         if (request.getSuccess()) {
             // game initialization
-            this.view.setGame(request.getGame());
-            try {
-                this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
-            } catch (PlayerNotFoundException e) {
-                Logger.getGlobal().warning(e.toString());
+            if (request.getGame() != null) {
+                this.view.setGame(request.getGame());
+                try {
+                    this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
+                } catch (PlayerNotFoundException e) {
+                    Logger.getGlobal().warning(e.toString());
+                }
             }
             this.view.showGame();
             this.view.showMessage(request.getMessage());

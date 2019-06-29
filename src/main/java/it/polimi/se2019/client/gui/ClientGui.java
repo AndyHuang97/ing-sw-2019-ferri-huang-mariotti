@@ -41,7 +41,7 @@ public class ClientGui extends Application {
 
         view = new GUIView(primaryStage);
 
-        showLogin();
+        //showLogin();
 
         //testing
 
