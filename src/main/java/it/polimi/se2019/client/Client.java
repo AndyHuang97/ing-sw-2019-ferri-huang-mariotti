@@ -1,5 +1,6 @@
 package it.polimi.se2019.client;
 
+import it.polimi.se2019.client.cli.CLIView;
 import it.polimi.se2019.client.gui.ClientGui;
 import javafx.application.Application;
 
@@ -9,7 +10,7 @@ public class Client {
 
     public static boolean chooseView(String input) {
         if (input.equalsIgnoreCase("cli")) {
-            new CLIView(System.out);
+            new CLIView();
         }
         else if (input.equalsIgnoreCase("gui")) {
             Application.launch(ClientGui.class);

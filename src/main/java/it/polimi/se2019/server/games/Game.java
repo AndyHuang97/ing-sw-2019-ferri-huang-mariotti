@@ -112,21 +112,19 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		initPlayerPowerUps();
 	}
 
-	public void initBoard() {
+	private void initBoard() {
 		this.getBoard().getTileList().stream()
 				.filter(Objects::nonNull)
 				.filter(t -> t.isSpawnTile())
 				.forEach(t -> {
 					for (int i=0; i<3; i++) {
-						t.getWeaponCrate().add(drawWeaponFromDeck());
+					    t.getWeaponCrate().add(drawWeaponFromDeck());
 					}
 				});
 		this.getBoard().getTileList().stream()
 				.filter(Objects::nonNull)
 				.filter(t-> !t.isSpawnTile())
 				.forEach(t -> t.setAmmoCrate(drawAmmoCrateFromDeck()));
-
-		this.getBoard().registerObserverForAllTiles(this);
 	}
 
 	public void initPlayerPowerUps() {

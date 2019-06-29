@@ -2,16 +2,12 @@ package it.polimi.se2019.server.games.board;
 
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
-import it.polimi.se2019.server.dataupdate.TileStateUpdate;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.Observable;
-import it.polimi.se2019.util.Response;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -19,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * 
  */
-public class Tile extends Observable<Response> implements Targetable {
+public class Tile implements Targetable {
 
 	private static final Logger logger = Logger.getLogger(Tile.class.getName());
 
@@ -203,12 +199,7 @@ public class Tile extends Observable<Response> implements Targetable {
 	}
 
 	public void setWeaponCrate(List<Weapon> weaponCrate) {
-		this.weaponCrate = weaponCrate;
-
-        TileStateUpdate tileStateUpdate = new TileStateUpdate(id, null, weaponCrate);
-        Response response = new Response(Arrays.asList(tileStateUpdate));
-
-        notify(response);
+	    this.weaponCrate = weaponCrate;
 	}
 
 	public AmmoCrate getAmmoCrate() {
@@ -216,11 +207,7 @@ public class Tile extends Observable<Response> implements Targetable {
 	}
 
 	public void setAmmoCrate(AmmoCrate ammoCrate) {
-		this.ammoCrate = ammoCrate;
-        TileStateUpdate tileStateUpdate = new TileStateUpdate(id, ammoCrate, null);
-        Response response = new Response(Arrays.asList(tileStateUpdate));
-
-        notify(response);
+	    this.ammoCrate = ammoCrate;
 	}
 
 	public boolean isSpawnTile() {
