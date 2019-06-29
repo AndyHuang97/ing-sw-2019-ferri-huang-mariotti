@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * This class implement the Controller of the MVC pattern. The Controller parse the inputs (Requests)
@@ -45,6 +46,7 @@ public class Controller implements Observer<Request> {
     @Override
     public void update(Request request) {
         try {
+            Logger.getGlobal().info("Controller received request: "+request.getNickname());
             String nickname = request.getNickname();
             Game game = gameManager.retrieveGame(nickname);
 
@@ -55,7 +57,7 @@ public class Controller implements Observer<Request> {
             Player player = null;
             if (optPlayer.isPresent()) {
                 player = optPlayer.get();
-                System.out.println(player);
+                Logger.getGlobal().info(player.getId());
             }
 
             RequestParser requestParser = new RequestParser();

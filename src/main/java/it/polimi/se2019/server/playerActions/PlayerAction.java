@@ -7,10 +7,14 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * PlayerAction objects are used by the Controller to modify the Model after
@@ -86,13 +90,30 @@ public abstract class PlayerAction implements Targetable {
         return amount;
     }
 
+    public Map<String, List<Targetable>> buildCommandDict(List<Targetable> params) {
+        Map<String, List<Targetable>> commandDict = new HashMap<>();
+
+        // assuming that all params were converted correctly
+        List<Targetable> targetList = params.stream()
+                .filter(t -> getGame().getPlayerList().contains(t))
+                .collect(Collectors.toList());
+        commandDict.put(CommandConstants.TARGETLIST, targetList);
+
+        List<Targetable> tileList = params.stream()
+                .filter(t -> getGame().getBoard().getTileList().contains(t))
+                .collect(Collectors.toList());
+        commandDict.put(CommandConstants.TILELIST, tileList);
+
+        return commandDict;
+    }
+
     public static final PlayerAction MOVE = new MovePlayerAction(0);
     public static final PlayerAction GRAB = new GrabPlayerAction(0);
     public static final PlayerAction SHOOT = new ShootWeaponSelection(0);
     public static final PlayerAction RELOAD = new ReloadPlayerAction(0);
-    public static final PlayerAction POWERUP = new RespawnAction(0);
+    public static final PlayerAction POWERUP = new PowerUpAction(0);
     public static final PlayerAction NOP = new NoOperation(0);
-    public static final PlayerAction RESPAWN = new ReloadPlayerAction(0);
+    public static final PlayerAction RESPAWN = new RespawnAction(0);
     public static final PlayerAction SHOOT_WEAPON = new ShootWeaponSelection(0);
 
     public static List<PlayerAction> getAllPossibleActions() {

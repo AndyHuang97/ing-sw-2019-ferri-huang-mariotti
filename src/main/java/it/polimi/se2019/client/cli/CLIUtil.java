@@ -1,13 +1,17 @@
 package it.polimi.se2019.client.cli;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
-import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class CLIUtil {
@@ -16,8 +20,17 @@ public class CLIUtil {
     private PrintStream out = System.out;
 
     private String basicUserInput(String printString) {
-        out.print(printString);
-        return in.nextLine();
+        try {
+            out.print(printString);
+            FutureTask<String> task = new FutureTask<>(() -> { return in.nextLine(); });
+            Thread thread = new Thread(task);
+            thread.setDaemon(true);
+            thread.start();
+            return task.get(20, TimeUnit.SECONDS);
+        } catch (InterruptedException | TimeoutException | ExecutionException ex) {
+            out.println("Input timeout reached");
+            return Constants.NOP;
+        }
     }
 
     public synchronized String askUserInput(String question) {
@@ -38,22 +51,28 @@ public class CLIUtil {
         return printString.toString();
     }
 
+    private String processIndexResponse(String indexResponse, List<String> validResponses) {
+        try {
+            return validResponses.get(Integer.parseInt(indexResponse));
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+
     public synchronized String askUserInput(String question, List<String> validResponses, Boolean numbered) {
         if (numbered) {
             String indexResponse, response;
             do {
                 indexResponse = basicUserInput(columnStringBuilder(question, validResponses));
-                try {
-                    response = validResponses.get(Integer.parseInt(indexResponse));
-                } catch (Exception ex) {
-                    response = null;
-                }
+                if (indexResponse.equals(Constants.NOP)) return Constants.NOP;
+                response = processIndexResponse(indexResponse, validResponses);
             } while (!validResponses.contains(response));
             return response;
         } else {
             String response;
             do {
                 response = basicUserInput(question + " [" + String.join("/", validResponses) + "]\n> ");
+                if (response.equals(Constants.NOP)) return Constants.NOP;
             } while (!validResponses.contains(response));
             return response;
         }
@@ -66,19 +85,17 @@ public class CLIUtil {
             String indexResponse, response;
             do {
                 indexResponse = basicUserInput(columnStringBuilder(question, validResponses));
+                if (indexResponse.equals(Constants.NOP)) return Constants.NOP;
                 if (indexResponse.equals("")) return defaultResponse;
-                try {
-                    response = validResponses.get(Integer.parseInt(indexResponse));
-                } catch (Exception ex) {
-                    response = null;
-                }
+                response = processIndexResponse(indexResponse, validResponses);
             } while (!validResponses.contains(response));
             return response;
         } else {
             String response;
             do {
                 response = basicUserInput(question + " [" + String.join("/", validResponses) + "]\n> ");
-                if (response.equals("")) response = defaultResponse;
+                if (response.equals(Constants.NOP)) return Constants.NOP;
+                if (response.equals("")) return defaultResponse;
             } while (!validResponses.contains(response));
             return response;
         }

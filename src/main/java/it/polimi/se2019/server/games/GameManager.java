@@ -2,6 +2,7 @@ package it.polimi.se2019.server.games;
 
 import com.google.gson.Gson;
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -26,6 +27,7 @@ public class GameManager {
 	private List<String> mapPreference;
 	private String dumpName;
 	private int pingIntervalMilliseconds;
+	private Controller controller;
 
 	public class Tuple<X, Y> {
 		public final UserData userData;
@@ -125,8 +127,8 @@ public class GameManager {
 	public void createGame() throws IndexOutOfBoundsException {
 		logger.info("Starting a new game");
 		//create the new game and reset waiting list, do not use it
-		Game newGame = new Game();
 		List<Player> playerList = new ArrayList<>();
+		Game newGame = new Game(playerList);
 		this.waitingList.forEach(tuple -> {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
@@ -137,7 +139,7 @@ public class GameManager {
 			// register all players
 			newGame.register(tuple.commandHandler);
 		});
-		newGame.setPlayerList(playerList);
+		//newGame.setPlayerList(playerList);
 
 		//TODO read mapIndex from players' preference
 		Map<String, Long> occurrences =
@@ -151,7 +153,8 @@ public class GameManager {
 
 		this.waitingList.forEach(tuple -> {
 			try {
-				tuple.commandHandler.update(new Response(newGame, true, Constants.POWERUP));
+				tuple.commandHandler.register(controller);
+				tuple.commandHandler.update(new Response(newGame, true, Constants.RESPAWN));
 			} catch (Observer.CommunicationError e) {
 				logger.info(e.getMessage());
 			}
@@ -230,5 +233,9 @@ public class GameManager {
 
 	public List<Game> getGameList() {
 		return gameList;
+	}
+
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
 }

@@ -226,10 +226,10 @@ public class ActionTileController {
         Map<String, List<String>> intermediateInput = ((GUIView)view).getGuiController().getIntermediateInput();
         if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
             List<String> lst = new ArrayList<>();
-            lst.add(Constants.POWERUP);
+            lst.add(Constants.RESPAWN);
             intermediateInput.put(Constants.KEY_ORDER, lst);
         } else {
-            intermediateInput.get(Constants.KEY_ORDER).add(Constants.POWERUP);
+            intermediateInput.get(Constants.KEY_ORDER).add(Constants.RESPAWN);
         }
 
         infoText.setText("Select 1 powerup ");
@@ -239,7 +239,7 @@ public class ActionTileController {
         myPowerUps.setDisable(false);
         myPowerUps.getStyleClass().add("my-node");
         showMyPowerups();
-        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.POWERUP, new ArrayList<>());
+        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RESPAWN, new ArrayList<>());
 
         setUpProgressBar(1);
     }

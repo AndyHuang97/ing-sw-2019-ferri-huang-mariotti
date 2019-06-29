@@ -24,7 +24,7 @@ public class Constants {
     public static final String CLI = "CLI";
     public static final String PROGRESS_BAR = "#progressBar";
     public static final String MAIN_ACTION = "MainAction";
-    public static final String NOP = "NoOperaion";
+    public static final String NOP = "NoOperation";
     public static final String SHOOT_WEAPON = "ShootWeapon";
     public static final String POWERUP = "PowerUp";
     public static final String RESPAWN = "Respawn";

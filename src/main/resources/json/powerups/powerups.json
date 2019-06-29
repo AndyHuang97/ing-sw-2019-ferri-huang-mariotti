@@ -362,14 +362,7 @@
               }
             }
           ],
-          "conditionList": [
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
-              "params": {
-              }
-            }
-          ],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
@@ -410,14 +403,7 @@
               }
             }
           ],
-          "conditionList": [
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
-              "params": {
-              }
-            }
-          ],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
@@ -458,14 +444,7 @@
               }
             }
           ],
-          "conditionList": [
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
-              "params": {
-              }
-            }
-          ],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
