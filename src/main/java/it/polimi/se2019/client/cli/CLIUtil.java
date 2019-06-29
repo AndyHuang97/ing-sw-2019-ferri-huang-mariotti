@@ -1,6 +1,8 @@
 package it.polimi.se2019.client.cli;
 
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 
 import java.io.*;
 import java.util.*;
@@ -18,11 +20,11 @@ public class CLIUtil {
         return in.nextLine();
     }
 
-    public String askUserInput(String question) {
+    public synchronized String askUserInput(String question) {
         return basicUserInput(question + "\n> ");
     }
 
-    public String askUserInput(String question, String defaultResponse) {
+    public synchronized String askUserInput(String question, String defaultResponse) {
         String response = basicUserInput(question + " (" + defaultResponse + ")\n> ");
         if (response.equals("")) response = defaultResponse;
         return response;
@@ -36,7 +38,7 @@ public class CLIUtil {
         return printString.toString();
     }
 
-    public String askUserInput(String question, List<String> validResponses, Boolean numbered) {
+    public synchronized String askUserInput(String question, List<String> validResponses, Boolean numbered) {
         if (numbered) {
             String indexResponse, response;
             do {
@@ -57,7 +59,7 @@ public class CLIUtil {
         }
     }
 
-    public String askUserInput(String question, String defaultResponse, List<String> validResponses, Boolean numbered) {
+    public synchronized String askUserInput(String question, String defaultResponse, List<String> validResponses, Boolean numbered) {
         if (!validResponses.contains(defaultResponse)) validResponses.add(0, defaultResponse);
         Collections.replaceAll(validResponses, defaultResponse, "(" + defaultResponse + ")");
         if (numbered) {
@@ -82,7 +84,7 @@ public class CLIUtil {
         }
     }
 
-    public void printBanner() {
+    public synchronized void printBanner() {
         out.println("      ___    ____  ____  _______   _____    __    _____   _____ ");
         out.println("     /   |  / __ \\/ __ \\/ ____/ | / /   |  / /   /  _/ | / /   |");
         out.println("    / /| | / / / / /_/ / __/ /  |/ / /| | / /    / //  |/ / /| |");
@@ -97,6 +99,10 @@ public class CLIUtil {
         } catch (InterruptedException ex) {
             logger.info(ex.toString());
         }
+    }
+
+    public Boolean canReload(List<AmmoColor> reloadCost, Map<AmmoColor, Integer> ammoBag, List<PowerUp> powerUpBag) {
+        return !reloadCost.stream().anyMatch(c -> (!ammoBag.containsKey(c) || ammoBag.get(c) <= 0) && !powerUpBag.stream().anyMatch(u -> u.getPowerUpColor().equals(c)));
     }
 
     public String loadMapString(String mapNumber) {
@@ -168,6 +174,6 @@ public class CLIUtil {
         return colorDict.get(color);
     }
 
-    public void print(String content) { out.print(content); }
-    public void println(String content) { out.println(content); }
+    public synchronized void print(String content) { out.print(content); }
+    public synchronized void println(String content) { out.println(content); }
 }

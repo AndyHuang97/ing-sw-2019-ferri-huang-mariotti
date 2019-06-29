@@ -32,7 +32,7 @@ public class CLIController {
                             if (tileMap[x][y] != null) {
                                 final int[] lineSize = new int[2];
                                 if (!tileMap[x][y].isSpawnTile()) {
-                                    String ammoName = view.getModel().getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
+                                    String ammoName = tileMap[x][y].getAmmoCrate().getName();
                                     replacement.get(0).append(utils.getUpperLowerCrate(ammoName).get(0));
                                     lineSize[0] = 3;
                                     replacement.get(1).append(utils.getUpperLowerCrate(ammoName).get(1));
