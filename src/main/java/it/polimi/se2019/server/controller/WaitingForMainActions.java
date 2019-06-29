@@ -66,8 +66,7 @@ public class WaitingForMainActions implements ControllerState {
         }
         if (playerActions.stream().allMatch(PlayerAction::check)) {
             playerActions.forEach(PlayerAction::run);
-            int counterLimit = getCounterLimit(game, player);
-            actionCounter++;
+            updateCounter();
 
             PlayerAction shootWeaponSelection = playerActions.stream().filter(playerAction -> playerAction.getId().equals(Constants.SHOOT_WEAPON))
                     .findFirst().orElse(null);
@@ -75,11 +74,12 @@ public class WaitingForMainActions implements ControllerState {
                 // there is a Shoot action, switch to the shoot sequence in WaitingForEffects state
                 Weapon chosenWeapon = (Weapon) shootWeaponSelection.getCard(); // cannot return null because of the if...
                 Logger.getGlobal().info("Detected ShootWeaponSelection");
+                game.getCurrentActionUnitsList().clear();
                 return new WaitingForEffects(chosenWeapon, this);
             }
             // no shoot weapon selection
             if (game.isFrenzy()) {
-                if (actionCounter == counterLimit) {
+                if (actionCounter == getCounterLimit(game, player)) {
                     if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                         // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
                         WaitingForRespawn newState = new WaitingForRespawn();
@@ -95,7 +95,7 @@ public class WaitingForMainActions implements ControllerState {
                     return this; // keeps track of the actionCounter for the current player
                 }
             } else { // not frenzy
-                if (actionCounter == counterLimit) { // consumed all actions in normal mode, nextPlayer is delegated to WaitingForReload state
+                if (actionCounter == getCounterLimit(game, player)) { // consumed all actions in normal mode, nextPlayer is delegated to WaitingForReload state
                     Logger.getGlobal().info("Not frenzy. No more actions, go to reload");
                     return new WaitingForReload(); // in normal mode, respawn is after Reload
                 } else { // still an action left
@@ -108,6 +108,30 @@ public class WaitingForMainActions implements ControllerState {
         return this; // invalid action because of input selection
     }
 
+    public ControllerState nextPlayerOrReloadRespawn(Game game, Player player) {
+        if (actionCounter >= getCounterLimit(game, player)) { // no actions left
+            game.getCurrentActionUnitsList().clear();
+            if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+                if (game.isFrenzy()) {
+                    WaitingForRespawn newState = new WaitingForRespawn();
+                    Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
+                    return newState.nextState(null, game, player); // do not need for the current player
+                } else {
+                    Logger.getGlobal().info("Someone was killed in normal. No more actions");
+                    return new WaitingForReload();
+                }
+            }
+            else {// no one died
+                game.nextCurrentPlayer();
+                Logger.getGlobal().info("No one died. No more actions");
+                return new WaitingForMainActions();
+            }
+        } else {
+            Logger.getGlobal().info("Still have some actions left");
+            return this;
+        }
+    }
+
     /**
      * The checkPlayerActionAvailability method controls whether the input action that is being processed
      * is an action contained in the permitted action list of the sender player.
@@ -117,7 +141,7 @@ public class WaitingForMainActions implements ControllerState {
      * @param player is the sender of the action.
      * @throws IllegalPlayerActionException is thrown when an input action is not in the list of possible actions
      */
-    public boolean checkPlayerActionAvailability(List<PlayerAction> playerActionList, Game game, Player player)  {
+    private boolean checkPlayerActionAvailability(List<PlayerAction> playerActionList, Game game, Player player)  {
         List<CompositeAction> possibleActions = player.getCharacterState().getPossibleActions(game.isFrenzy());
         return possibleActions.stream()
                 // checks whether the different lists of Ids of the possible actions contain the list of Ids of the input
@@ -176,5 +200,10 @@ public class WaitingForMainActions implements ControllerState {
                 return AFTER_FRENZY_NUMBER;
             }
         }
+    }
+
+    //public for testing
+    public void updateCounter() {
+        actionCounter++;
     }
 }

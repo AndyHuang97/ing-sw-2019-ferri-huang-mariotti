@@ -46,7 +46,7 @@ public class WaitingForPowerUps implements ControllerState {
             // could receive a pass(NOP) message to skip the selection of powerUp
             if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
                 Logger.getGlobal().info("Detected a NOP for Targeting Scope");
-                return storedWaitingForEffects;
+                return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);
             }
             if (playerActions.stream().allMatch(playerAction ->
                     playerAction.getId().equals(Constants.POWERUP)
@@ -55,8 +55,8 @@ public class WaitingForPowerUps implements ControllerState {
                 //TODO deal with ammo selection
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
                     playerActions.forEach(PlayerAction::run);
-                    Logger.getGlobal().info("Targeting Scope was executed");
-                    return storedWaitingForEffects;
+                    Logger.getGlobal().info("Targeting Scope going back to WaitingForEffects");
+                    return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);
                 }
             }
             Logger.getGlobal().info("Invalid input for Targeting Scope");
@@ -97,11 +97,13 @@ public class WaitingForPowerUps implements ControllerState {
                         Logger.getGlobal().info("More visible people with Tagback Grenade");
                         return this;
                     }
+                    Logger.getGlobal().info("CurrentActionUnitList size: " + game.getCurrentActionUnitsList().size());
                     player = playerStack.pop(); // should be the player that was performing the turn
+                    Logger.getGlobal().info("Popped current player");
                     game.setCurrentPlayer(player);
                     alreadyAskedPlayers.clear();
                     Logger.getGlobal().info("Tagback grenade going back to WaitingForEffects");
-                    return storedWaitingForEffects;
+                    return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);
                 }
             }
             Logger.getGlobal().info("Invalid input for Tagback Grenade, at least one was not a Tagback Grenade");

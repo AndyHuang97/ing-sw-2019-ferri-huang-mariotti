@@ -175,6 +175,8 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 Game game = ServerApp.gameManager.retrieveGame(nickname);
                 request.setInternalMessage(convertNetMessage(message, game));
                 // TODO: process command, notify(request)?
+                Logger.getGlobal().info("Notifying request to the controller: " + request.getNickname());
+                handleLocalRequest(request);
 
             } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
                 logger.info(e.getMessage());

@@ -154,7 +154,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		if(currentPlayer.getActive()) {this.currentPlayer = currentPlayer;}
 		else {throw new IllegalStateException();}
 
-		currentActionUnitsList = new ArrayList<>();
+		//currentActionUnitsList = new ArrayList<>();
 	}
 
 

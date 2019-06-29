@@ -20,6 +20,7 @@ public class WaitingForEffects implements ControllerState {
     private static final int SHOOT_POSITION = 0;
 
     private Weapon chosenWeapon;
+    private ShootPlayerAction shootPlayerAction;
     private ControllerState storedWaitingForMainActions;
 
     public WaitingForEffects(Weapon chosenWeapon, ControllerState storedWaitingForMainActions) {
@@ -36,6 +37,7 @@ public class WaitingForEffects implements ControllerState {
         }
     }
 
+    //TODO check the availability of more optionalEffects as first thing
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
         // in this state the controller is expecting to receive a ShootPlayerAction
@@ -43,14 +45,14 @@ public class WaitingForEffects implements ControllerState {
             if (playerActions.stream().allMatch(PlayerAction::check)) {
                 playerActions.forEach(PlayerAction::run); // there is actually only one action in the list
 
-                ShootPlayerAction shootPlayerAction = (ShootPlayerAction) playerActions.stream()
+                shootPlayerAction = (ShootPlayerAction) playerActions.stream()
                         .filter(playerAction -> playerAction.getId().equals(Constants.SHOOT)).findFirst().orElse(null);
                 if (game.getCumulativeDamageTargetSet().isEmpty()){ // means no damage was dealt with the run of the action
 
                     if(!shootPlayerAction.getChosenWeapon().getOptionalEffectList().isEmpty()) {
                         // there are optional effects, no change of player
                         //TODO check the amount of ammo to see directly whether more effects are to be expected?
-                        if (game.getCurrentActionUnitsList().size()-1 == shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
+                        if (game.getCurrentActionUnitsList().size()-1 >= shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
                             Logger.getGlobal().info("No more optional effects with NO damage");
                             return swapBackToMainAction(game, storedWaitingForMainActions); // no more optional effect
                         } else { // more effects remaining
@@ -91,12 +93,13 @@ public class WaitingForEffects implements ControllerState {
                     // no need to go to WaitingForPowerUps state
                     Logger.getGlobal().info("CurrentActionUnitList size: " + game.getCurrentActionUnitsList().size());
                     Logger.getGlobal().info("OptionalEffectList size: " + shootPlayerAction.getChosenWeapon().getOptionalEffectList().size());
-                    if (game.getCurrentActionUnitsList().size()-1 == shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
+                    if (game.getCurrentActionUnitsList().size()-1 >= shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
                         Logger.getGlobal().info("No more optional effects with damage");
                         return swapBackToMainAction(game, storedWaitingForMainActions); // no more optional effect
                     } else { // more effects remaining
                         Logger.getGlobal().info("More optional effects left with damage");
                         game.getCumulativeDamageTargetSet().clear();
+                        //game.getCurrentActionUnitsList().forEach(au -> System.out.println(au.getId()));
                         return this;
                     }
                 }
@@ -116,9 +119,31 @@ public class WaitingForEffects implements ControllerState {
         return this;
     }
 
+    /**
+     * The nextEffectOrAction method is used to detect the cases in which no more optionalEffects are expected
+     * when returning from the WaitingForPowerUp state.
+     * @return this state if more effects are left, storedWaitingForMainActions otherwise.
+     */
+    public ControllerState nextEffectOrAction(Game game) {
+        if(!shootPlayerAction.getChosenWeapon().getOptionalEffectList().isEmpty()) {
+            // there are optional effects, no change of player
+            Logger.getGlobal().info("CurrentActionUnitList size: " + game.getCurrentActionUnitsList().size());
+            Logger.getGlobal().info("OptionalEffectList size: " + shootPlayerAction.getChosenWeapon().getOptionalEffectList().size());
+            //TODO check the amount of ammo to see directly whether more effects are to be expected?
+            if (game.getCurrentActionUnitsList().size()-1 >= shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
+                Logger.getGlobal().info("No more optional effects left");
+                return swapBackToMainAction(game, storedWaitingForMainActions); // no more optional effect
+            } else { // more effects remaining
+                Logger.getGlobal().info("More optional effects left");
+                return this;
+            }
+        }
+        Logger.getGlobal().info("OptionalEffectList was empty");
+        return swapBackToMainAction(game, storedWaitingForMainActions);
+    }
+
     private ControllerState swapBackToMainAction(Game game, ControllerState waitingForMainActions) {
         game.getCumulativeDamageTargetSet().clear();
-        game.getCurrentActionUnitsList().clear();
-        return waitingForMainActions; // should go back to the WaitingForMainActions it came from
+        return ((WaitingForMainActions)waitingForMainActions).nextPlayerOrReloadRespawn(game, game.getCurrentPlayer()); // should go back to the WaitingForMainActions it came from
     }
 }
