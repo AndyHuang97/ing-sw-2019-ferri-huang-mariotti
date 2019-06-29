@@ -65,4 +65,9 @@ public class DataUpdateTest {
 
         Assert.assertEquals((Integer) 42, score);
     }
+
+    @Test
+    public void testAmmoCrateUpdate() {
+
+    }
 }
