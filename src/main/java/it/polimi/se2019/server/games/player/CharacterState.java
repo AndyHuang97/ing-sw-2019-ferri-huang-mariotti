@@ -135,6 +135,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 				valueBar = NORMAL_VALUE_BAR;
 			}
 		}
+		notifyCharacterStateChange();
 	}
 
 
@@ -150,6 +151,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void setDamageBar(List<PlayerColor> damageBar) {
 		this.damageBar = damageBar;
+		notifyCharacterStateChange();
 	}
 
 	public void addDamage(PlayerColor playerColor, Integer amount, Game game) {
@@ -165,10 +167,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 				damageBar.add(playerColor);
 			}
 		}
+		notifyCharacterStateChange();
 	}
 
 	public void resetDamageBar() {
 		damageBar.clear();
+		notifyCharacterStateChange();
 	}
 
 	public Map<PlayerColor, Integer> initMarkerBar() {
@@ -194,6 +198,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void setMarkerBar(Map<PlayerColor, Integer> markerBar) {
 		this.markerBar = markerBar;
+		notifyCharacterStateChange();
 	}
 
 	public void addMarker(PlayerColor playerColor, Integer amount) {
@@ -208,10 +213,12 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 				markerBar.put(playerColor, markerBar.get(playerColor) + amount);
 			}
 		}
+		notifyCharacterStateChange();
 	}
 
 	public void resetMarkerBar(PlayerColor playerColor) {
 	    getMarkerBar().put(playerColor, 0);
+	    notifyCharacterStateChange();
     }
 
 	public int getMarker(PlayerColor playerColor) {
@@ -225,6 +232,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	public void resetMarkerBar() {
 		markerBar.keySet()
 				.forEach(k -> markerBar.put(k, 0));
+		notifyCharacterStateChange();
 	}
 
 	/**
@@ -254,6 +262,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void setAmmoBag(Map<AmmoColor, Integer> ammoBag) {
 		this.ammoBag = ammoBag;
+		notifyCharacterStateChange();
 	}
 
 	/**
@@ -270,6 +279,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 						ammoBag.put(k, ammoBag.get(k) + ammoToAdd.get(k));
 					}
 				});
+		notifyCharacterStateChange();
 	}
 
 	/**
@@ -280,6 +290,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume) {
 		ammoToConsume.keySet()
 				.forEach(k -> ammoBag.put(k, ammoBag.get(k) - ammoToConsume.get(k)));
+		notifyCharacterStateChange();
 	}
 
 
@@ -295,6 +306,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void setTile(Tile tile) {
 		this.tile = tile;
+		notifyCharacterStateChange();
 	}
 
 	public Integer getScore() {
@@ -303,6 +315,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setScore(Integer score) {
 		this.score = score;
+		notifyCharacterStateChange();
 	}
 
 	public void updateScore(PlayerDeath message, PlayerColor playerColor) {
@@ -323,6 +336,8 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 				score++;
 			}
 		}
+
+		notifyCharacterStateChange();
 	}
 
 	public List<Weapon> getWeaponBag() {
@@ -392,6 +407,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setBeforeFrenzyActivator(boolean beforeFrenzyActivator) {
 		this.beforeFrenzyActivator = beforeFrenzyActivator;
+		notifyCharacterStateChange();
 	}
 
 	public boolean isBeforeFrenzyActivator() {
@@ -410,6 +426,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setFirstSpawn(boolean firstSpawn) {
 		this.firstSpawn = firstSpawn;
+		notifyCharacterStateChange();
 	}
 
 	public boolean isDead() {

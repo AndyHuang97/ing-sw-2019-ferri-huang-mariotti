@@ -43,7 +43,7 @@ public class ControllerTest {
     private static final String RELOADPLAYERACTION = ReloadPlayerAction.class.getName();
     private static final String SHOOTWEAPONSELECTION = ShootWeaponSelection.class.getName();
 
-    private GameManager gameManager = new GameManager();
+    private GameManager gameManager;
     private Game game;
     private Controller controller;
     private Tile[][] tileMap;
@@ -59,6 +59,7 @@ public class ControllerTest {
     public void setUp() throws GameManager.AlreadyPlayingException, GameManager.GameNotFoundException, PlayerNotFoundException {
         // GameManager and Game init
         ServerApp serverApp = new ServerApp();
+        gameManager = serverApp.gameManager;
         gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
         gameManager.getMapPreference().add("0");
         int waitingListMaxSize = 5;
@@ -136,7 +137,7 @@ public class ControllerTest {
         game.setCurrentPlayer(player0);
 
         // Controller init
-        controller = new Controller(gameManager);
+        controller = ServerApp.controller;
 
         actualPlayerCommandHandler.register(controller);
     }
