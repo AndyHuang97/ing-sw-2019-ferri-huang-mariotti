@@ -7,6 +7,7 @@ import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
+import sun.rmi.runtime.Log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,17 +41,18 @@ public class WaitingForPowerUps implements ControllerState {
 
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
-        // could receive a pass(NOP) message to skip the selection of powerUp
-        if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
-            Logger.getGlobal().info("Detected a NOP");
-            return storedWaitingForEffects;
-        }
 
         if (expectedPowerUp.equals(Constants.TARGETING_SCOPE)) {
+            // could receive a pass(NOP) message to skip the selection of powerUp
+            if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
+                Logger.getGlobal().info("Detected a NOP for Targeting Scope");
+                return storedWaitingForEffects;
+            }
             if (playerActions.stream().allMatch(playerAction ->
                     playerAction.getId().equals(Constants.POWERUP)
                                                     &&
                     playerAction.getCard().getName().split("_")[1].equals(Constants.TARGETING_SCOPE))) {
+                //TODO deal with ammo selection
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
                     playerActions.forEach(PlayerAction::run);
                     Logger.getGlobal().info("Targeting Scope was executed");
@@ -62,38 +64,50 @@ public class WaitingForPowerUps implements ControllerState {
         }
 
         if (expectedPowerUp.equals(Constants.TAGBACK_GRENADE)) {
-            if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP))) {
+            Logger.getGlobal().info("inside Tagback");
+            if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP)
+                                                    &&
+                    playerAction.getCard().getName().split("_")[1].equals(Constants.TAGBACK_GRENADE))) {
+                Logger.getGlobal().info("Found a Tagback Grenade");
                 // this block of code will be executed either with a powerUp or with a NOP, in the latter case nothing
                 // is performed on the model, but it is still needed to ask the next player for input
+                Logger.getGlobal().info("PlayerActionCheck: " + playerActions.stream().allMatch(PlayerAction::check));
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
                     playerActions.forEach(PlayerAction::run);
 
-                    playerStack.pop(); // pops the player that sent the correct powerUp to be consumed
+                    Player poppedPlayer = playerStack.pop(); // pops the player that sent the correct powerUp to be consumed
+                    Logger.getGlobal().info("Popped: "+poppedPlayer.getId());
+                    playerStack.forEach(p -> Logger.getGlobal().info("Player at the top of the stack: "+playerStack.peek().getId()));
                     List<Player> powerUpPlayers = game.getCumulativeDamageTargetSet().stream() // checks whether one of the attacked players has a Tagback Grenade
-                            .map(t -> (Player) t).filter(p ->
-                                    p.getCharacterState().getPowerUpBag().stream()
+                            .map(t -> (Player) t)
+                                    .filter(notCurrentPlayer -> !alreadyAskedPlayers.contains(notCurrentPlayer))
+                                    .filter(notCurrentPlayer -> !notCurrentPlayer.equals(playerStack.peek())) // gets the targets who can see the attacker
+                                    .filter(p -> p.getCharacterState().getTile().getVisibleTargets(game).contains(playerStack.peek()))
+                                    .filter(p -> p.getCharacterState().getPowerUpBag().stream() // check if they have tagback grenade
                                             .anyMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TAGBACK_GRENADE)))
                             .collect(Collectors.toList());
+                    Logger.getGlobal().info("powerUpPlayers is not empty: "+ !powerUpPlayers.isEmpty());
+                    powerUpPlayers.forEach(player1 -> Logger.getGlobal().info("powerUpPlayer: "+player1.getId() + "\tPowerUp: "+player1.getCharacterState().getPowerUpBag().get(0).getId()));
                     if (!powerUpPlayers.isEmpty()) {
-                        // if any player still has a tagback
-                        if (!alreadyAskedPlayers.containsAll(powerUpPlayers)) {
-                            // alreadyAskedPlayers keeps track of players that were already asked to use the powerUp
-                            // if this set contains all the remaining powerUpPlayers with a tagback grenade, it means it
-                            // has already asked every player.
-                            playerStack.push(powerUpPlayers.get(0));
-                            alreadyAskedPlayers.add(powerUpPlayers.get(0));
-                            game.setCurrentPlayer(powerUpPlayers.get(0));
-                            return this;
-                        }
+                        // if any player still needs to be asked and has a tagback grenade
+                        alreadyAskedPlayers.forEach(player1 -> Logger.getGlobal().info("AlreadyAskedPlayer: "+player1.getId()));
+                        playerStack.push(powerUpPlayers.get(0));
+                        alreadyAskedPlayers.add(powerUpPlayers.get(0));
+                        game.setCurrentPlayer(powerUpPlayers.get(0));
+                        Logger.getGlobal().info("More visible people with Tagback Grenade");
+                        return this;
                     }
                     player = playerStack.pop(); // should be the player that was performing the turn
                     game.setCurrentPlayer(player);
                     alreadyAskedPlayers.clear();
+                    Logger.getGlobal().info("Tagback grenade going back to WaitingForEffects");
                     return storedWaitingForEffects;
                 }
             }
+            Logger.getGlobal().info("Invalid input for Tagback Grenade, at least one was not a Tagback Grenade");
+            return this;
         }
-        Logger.getGlobal().info("Invalid input for Tagback Grenade");
+        Logger.getGlobal().info("Invalid input, keep waiting");
         return this; // invalid input
     }
 

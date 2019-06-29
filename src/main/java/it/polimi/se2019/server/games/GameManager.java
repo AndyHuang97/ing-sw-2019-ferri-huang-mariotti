@@ -125,8 +125,8 @@ public class GameManager {
 	public void createGame() throws IndexOutOfBoundsException {
 		logger.info("Starting a new game");
 		//create the new game and reset waiting list, do not use it
-		Game newGame = new Game();
 		List<Player> playerList = new ArrayList<>();
+		Game newGame = new Game(playerList);
 		this.waitingList.forEach(tuple -> {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
@@ -137,7 +137,7 @@ public class GameManager {
 			// register all players
 			newGame.register(tuple.commandHandler);
 		});
-		newGame.setPlayerList(playerList);
+		//newGame.setPlayerList(playerList);
 
 		//TODO read mapIndex from players' preference
 		Map<String, Long> occurrences =
@@ -151,7 +151,7 @@ public class GameManager {
 
 		this.waitingList.forEach(tuple -> {
 			try {
-				tuple.commandHandler.update(new Response(newGame, true, Constants.POWERUP));
+				tuple.commandHandler.update(new Response(newGame, true, Constants.RESPAWN));
 			} catch (Observer.CommunicationError e) {
 				logger.info(e.getMessage());
 			}

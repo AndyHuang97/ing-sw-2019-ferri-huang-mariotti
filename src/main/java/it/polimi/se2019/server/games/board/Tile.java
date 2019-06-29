@@ -9,6 +9,7 @@ import it.polimi.se2019.server.games.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -151,6 +152,7 @@ public class Tile implements Targetable {
 		List<Tile> visibleTiles = getVisibleTiles(game.getBoard());
 
 		visibleTargets = game.getPlayerList().stream()
+				.filter(p -> p.getCharacterState().getTile()!=null)
 				.filter(p -> visibleTiles.contains(p.getCharacterState().getTile()))
 				.collect(Collectors.toList());
 		return visibleTargets;
@@ -169,13 +171,18 @@ public class Tile implements Targetable {
 	public List<Tile> getRoom(Board board) {
 		List<Tile> tiles = new ArrayList<>();
 
+		/*
 		for(int i = 0; i < board.getTileMap()[0].length; i++) {
 			for(int j = 0; j < board.getTileMap().length; j++) {
 				if(board.getTileMap()[j][i].getRoomColor() == roomColor) {
 					tiles.add(board.getTileMap()[j][i]);
 				}
 			}
-		}
+		}*/
+		tiles = board.getTileList().stream()
+				.filter(Objects::nonNull)
+				.filter(tile -> tile.getRoomColor().equals(roomColor))
+				.collect(Collectors.toList());
 
 		return tiles;
 	}

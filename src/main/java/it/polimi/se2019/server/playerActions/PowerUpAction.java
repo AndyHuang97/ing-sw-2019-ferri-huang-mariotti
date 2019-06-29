@@ -25,6 +25,7 @@ public class PowerUpAction extends PlayerAction {
     public PowerUpAction(Game game, Player player) {
         super(game, player);
     }
+    public PowerUpAction(int amount) {super (amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
@@ -40,10 +41,12 @@ public class PowerUpAction extends PlayerAction {
     @Override
     public void run() {
         powerUpToDiscard.getActionUnitList().get(MAIN_EFFECT).run(getGame(), inputCommands);
+        getPlayer().getCharacterState().removePowerUp(powerUpToDiscard);
     }
 
     @Override
     public boolean check() {
+        Logger.getGlobal().info(String.valueOf(getPlayer().getCharacterState().getPowerUpBag().contains(powerUpToDiscard)));
         return getPlayer().getCharacterState().getPowerUpBag().contains(powerUpToDiscard)
                 &&
                 powerUpToDiscard.getActionUnitList().get(MAIN_EFFECT).check(getGame(), inputCommands);

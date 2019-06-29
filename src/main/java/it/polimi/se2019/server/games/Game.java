@@ -48,7 +48,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.playerList = new ArrayList<>();
 		this.currentPlayer = null;
 		this.board = new Board();
-		this.killshotTrack = null;
+		this.killshotTrack = new KillShotTrack(playerList);
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
@@ -62,7 +62,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		// use this constructor to start a new game
 		this.startDate = new Date();
 		this.playerList = playerList;
-		this.currentPlayer = playerList.get(0);
+		this.currentPlayer = null;
 		this.board = new Board();
 		this.killshotTrack = new KillShotTrack(playerList);
 		this.weaponDeck = null;
@@ -97,7 +97,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void initGameObjects(String mapIndex) {
 
 		this.setCurrentPlayer(playerList.get(0));
-		this.killshotTrack = new KillShotTrack(playerList);
+		//this.killshotTrack = new KillShotTrack(playerList);
 		new DirectDeserializers();
 		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
 		this.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrate());

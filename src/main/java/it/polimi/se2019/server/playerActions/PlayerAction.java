@@ -111,9 +111,9 @@ public abstract class PlayerAction implements Targetable {
     public static final PlayerAction GRAB = new GrabPlayerAction(0);
     public static final PlayerAction SHOOT = new ShootWeaponSelection(0);
     public static final PlayerAction RELOAD = new ReloadPlayerAction(0);
-    public static final PlayerAction POWERUP = new RespawnAction(0);
+    public static final PlayerAction POWERUP = new PowerUpAction(0);
     public static final PlayerAction NOP = new NoOperation(0);
-    public static final PlayerAction RESPAWN = new ReloadPlayerAction(0);
+    public static final PlayerAction RESPAWN = new RespawnAction(0);
     public static final PlayerAction SHOOT_WEAPON = new ShootWeaponSelection(0);
 
     public static List<PlayerAction> getAllPossibleActions() {

@@ -13,6 +13,7 @@ import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ShootPlayerAction extends PlayerAction {
@@ -33,11 +34,13 @@ public class ShootPlayerAction extends PlayerAction {
 
         chosenWeapon = (Weapon) params.stream()
                 .filter(t -> getPlayer().getCharacterState().getWeaponBag().contains(t))
-                .findAny().orElseThrow(UnpackingException::new);
+                .findAny().orElse(null);
 
-        chosenActionUnit = (ActionUnit) params.stream()
-                .filter(t -> chosenWeapon.getActionUnitList().contains(t) || chosenWeapon.getOptionalEffectList().contains(t))
-                .findAny().orElseThrow(UnpackingException::new);
+        if (chosenWeapon != null) {
+            chosenActionUnit = (ActionUnit) params.stream()
+                    .filter(t -> chosenWeapon.getActionUnitList().contains(t) || chosenWeapon.getOptionalEffectList().contains(t))
+                    .findAny().orElse(null);
+        }
     }
 
     @Override
@@ -50,6 +53,10 @@ public class ShootPlayerAction extends PlayerAction {
     @Override
     public boolean check() {
         // Is weapon loaded?
+        if (chosenWeapon == null || chosenActionUnit == null) {
+            return false;
+        }
+        Logger.getGlobal().info("Valid weapon and action unit");
         if (!chosenWeapon.isLoaded()) {
             return false;
         }
