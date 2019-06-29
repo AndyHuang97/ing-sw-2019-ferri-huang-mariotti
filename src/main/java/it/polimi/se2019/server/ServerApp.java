@@ -1,4 +1,5 @@
 package it.polimi.se2019.server;
+import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.net.rmi.RmiServer;
 import it.polimi.se2019.server.net.socket.SocketServer;
@@ -15,6 +16,7 @@ public class ServerApp {
     private static final Logger logger = Logger.getLogger(ServerApp.class.getName());
     private static SocketServer socketServer;
     private static RmiServer rmiServer;
+    public static Controller controller;
     public static GameManager gameManager = new GameManager();
 
     public static void main(String[] args) throws IOException {
@@ -37,6 +39,8 @@ public class ServerApp {
             prop.load(input);
             gameManager = new GameManager();
             gameManager.init(prop.getProperty("dump.filename"));
+            controller = new Controller(gameManager);
+            gameManager.setController(controller);
             rmiServer = new RmiServer();
             String rmiHost = prop.getProperty("rmi.host");
             int rmiPort = Integer.parseInt(prop.getProperty("rmi.port"));

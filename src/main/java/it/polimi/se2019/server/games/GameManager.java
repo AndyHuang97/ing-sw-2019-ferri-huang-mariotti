@@ -2,6 +2,7 @@ package it.polimi.se2019.server.games;
 
 import com.google.gson.Gson;
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -26,6 +27,7 @@ public class GameManager {
 	private List<String> mapPreference;
 	private String dumpName;
 	private int pingIntervalMilliseconds;
+	private Controller controller;
 
 	public class Tuple<X, Y> {
 		public final UserData userData;
@@ -151,6 +153,7 @@ public class GameManager {
 
 		this.waitingList.forEach(tuple -> {
 			try {
+				tuple.commandHandler.register(controller);
 				tuple.commandHandler.update(new Response(newGame, true, Constants.RESPAWN));
 			} catch (Observer.CommunicationError e) {
 				logger.info(e.getMessage());
@@ -230,5 +233,9 @@ public class GameManager {
 
 	public List<Game> getGameList() {
 		return gameList;
+	}
+
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
 }
