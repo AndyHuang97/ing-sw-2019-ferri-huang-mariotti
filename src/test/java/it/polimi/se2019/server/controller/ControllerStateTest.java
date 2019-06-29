@@ -588,7 +588,7 @@ public class ControllerStateTest {
         assertEquals(waitingForEffects, newState);
         p1.getCharacterState().removeWeapon(weapon);
 
-        System.out.println("4) ShootPlayerAction with damage, more optional effects");
+        System.out.println("4.1) ShootPlayerAction with damage, more optional effects");
         weapon = getWeapon("Lock_Rifle");
         game.setCurrentPlayer(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
@@ -622,7 +622,7 @@ public class ControllerStateTest {
         assertEquals(waitingForEffects, newState);
         p1.getCharacterState().removeWeapon(weapon);
 
-        System.out.println("4-bis) ShootPlayerAction with NO damage, no more optional effects");
+        System.out.println("4.2) ShootPlayerAction with NO damage, no more optional effects");
         weapon = getWeapon("Lock_Rifle");
         game.setCurrentPlayer(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
@@ -633,7 +633,7 @@ public class ControllerStateTest {
         targetableList.add(weapon);
         p1.getCharacterState().addWeapon(weapon);
         p1.getCharacterState().getPowerUpBag().clear();
-        p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,1);
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,3);
         p2.getCharacterState().getPowerUpBag().clear();
         weapon.setLoaded(true);
         ActionUnit secondLock = weapon.getOptionalEffectList().stream()
@@ -645,21 +645,54 @@ public class ControllerStateTest {
         action.unpack(targetableList);
         assertEquals(weapon, action.getCard());
         playerActions.add(action);
+        game.getCurrentActionUnitsList().clear();
         game.getCurrentActionUnitsList().add(basicMode);
         game.getCurrentActionUnitsList().forEach(au -> System.out.println("CurrentActionUnitList: "+au.getName()));
         newState = waitingForEffects.nextState(playerActions, game, p1);
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(waitingForMainActions, newState);
         assertEquals(0, p3.getCharacterState().getDamageBar().size());
         assertEquals(1, p3.getCharacterState().getMarkerBar().get(PlayerColor.BLUE).intValue());
         assertEquals(0, game.getCumulativeDamageTargetSet().size());
         p3.getCharacterState().resetDamageBar();
         p3.getCharacterState().resetMarkerBar();
-        assertEquals(waitingForMainActions, newState);
         p1.getCharacterState().removeWeapon(weapon);
+/*
+        System.out.println("4.3) ShootPlayerAction with NO damage, no more optional effects, no more actions " +
+                "-> goes to next MainAction");
+        p1.getCharacterState().setBeforeFrenzyActivator(false);
+        game.setFrenzy(true);
+        ((WaitingForMainActions)waitingForMainActions).updateCounter();
+        waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,2);
+        newState = waitingForEffects.nextState(playerActions, game, p1);
+        assertEquals(WaitingForMainActions.class, newState.getClass());
+
+
+        System.out.println("4.4) ShootPlayerActionl with NO damage, no more optional effects, no more actions " +
+                "-> goes to next respawn");
+        p1.getCharacterState().setBeforeFrenzyActivator(false);
+        game.setFrenzy(false);
+        //waitingForMainActions = new WaitingForMainActions();
+        ((WaitingForMainActions)waitingForMainActions).updateCounter();
+        ((WaitingForMainActions)waitingForMainActions).updateCounter();
+        waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,1);
+        p1.getCharacterState().setFirstSpawn(false);
+        p2.getCharacterState().addDamage(PlayerColor.BLUE,11,game);
+        newState = waitingForEffects.nextState(playerActions, game, p1);
+        assertEquals(WaitingForReload.class, newState.getClass());
+        //2assertEquals(WaitingForRespawn.class, newState.getClass());
+        //2assertEquals(p2, game.getCurrentPlayer());
+        p2.getCharacterState().resetDamageBar();
+
+ */
+
 
         System.out.println("5) ShootPlayerAction with damage, no more optional effects");
         weapon = getWeapon("Whisper");
         game.setCurrentPlayer(p1);
+        game.setFrenzy(false);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -754,44 +787,6 @@ public class ControllerStateTest {
         assertEquals(WaitingForPowerUps.class, newState.getClass());
         p1.getCharacterState().removeWeapon(weapon);
 
-        System.out.println("9) ShootPlayerAction with damage, damaged players with Tagback Grenade");
-        weapon = getWeapon("Lock_Rifle");
-        game.setCurrentPlayer(p1);
-        waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
-        playerActions.clear();
-        p1.getCharacterState().setTile(board.getTile(0,0));
-        game.getCumulativeDamageTargetSet().clear();
-        game.getCurrentActionUnitsList().clear();
-        action = new ShootPlayerAction(game, p1);
-        targetableList = new ArrayList<>();
-        targetableList.add(weapon);
-        p1.getCharacterState().addWeapon(weapon);
-        powerUp = getPowerUp("Red_TagbackGrenade");
-        PowerUp powerUp1 = getPowerUp("Yellow_TagbackGrenade");
-        p2.getCharacterState().getPowerUpBag().clear();
-        p2.getCharacterState().getPowerUpBag().add(powerUp);
-        p2.getCharacterState().getPowerUpBag().add(powerUp1);
-        p2.getCharacterState().setTile(board.getTile(0,1));
-        p3.getCharacterState().setTile(board.getTile(0,1));
-        PowerUp powerUp2 = getPowerUp("Blue_TagbackGrenade");
-        p3.getCharacterState().getPowerUpBag().clear();
-        p3.getCharacterState().getPowerUpBag().add(powerUp2);
-        p1.getCharacterState().getPowerUpBag().clear();
-        weapon.setLoaded(true);
-        basicMode = weapon.getActionUnitList().stream()
-                .filter(au -> au.getName().equals("Basic Mode")).findFirst().orElse(null);
-        System.out.println(basicMode.getName());
-        targetableList.add(basicMode);
-        targetableList.add(p2);
-        p2.getCharacterState().setTile(board.getTile(0,1));
-        action.unpack(targetableList);
-        assertEquals(weapon, action.getCard());
-        playerActions.add(action);
-        newState = waitingForEffects.nextState(playerActions, game, p1);
-        assertEquals(p2.getId(), game.getCurrentPlayer().getId());
-        assertEquals(WaitingForPowerUps.class, newState.getClass());
-        p1.getCharacterState().removeWeapon(weapon);
-
 
     }
 
@@ -805,8 +800,41 @@ public class ControllerStateTest {
         ControllerState newState;
 
         WaitingForPowerUps waitingForPowerUps;
+        ControllerState waitingForEffects;
+        WaitingForMainActions waitingForMainActions = new WaitingForMainActions();
         Weapon weapon = getWeapon("Lock_Rifle");
-        ControllerState waitingForEffects = new WaitingForEffects(weapon, null);
+        game.setCurrentPlayer(p1);
+        waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
+        playerActions.clear();
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        game.getCumulativeDamageTargetSet().clear();
+        game.getCurrentActionUnitsList().clear();
+        action = new ShootPlayerAction(game, p1);
+        targetableList = new ArrayList<>();
+        targetableList.add(weapon);
+        p1.getCharacterState().addWeapon(weapon);
+        p1.getCharacterState().getPowerUpBag().clear();
+        p2.getCharacterState().getPowerUpBag().clear();
+        weapon.setLoaded(true);
+        ActionUnit basicMode = weapon.getActionUnitList().stream()
+                .filter(au -> au.getName().equals("Basic Mode")).findFirst().orElse(null);
+        System.out.println(basicMode.getName());
+        targetableList.add(basicMode);
+        targetableList.add(p2);
+        p2.getCharacterState().setTile(board.getTile(0,1));
+        action.unpack(targetableList);
+        assertEquals(weapon, action.getCard());
+        playerActions.add(action);
+        newState = waitingForEffects.nextState(playerActions, game, p1);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(2, p2.getCharacterState().getDamageBar().size());
+        assertEquals(1, p2.getCharacterState().getMarkerBar().get(PlayerColor.BLUE).intValue());
+        assertEquals(0, game.getCumulativeDamageTargetSet().size());
+        p2.getCharacterState().resetDamageBar();
+        p2.getCharacterState().resetMarkerBar();
+        assertEquals(waitingForEffects, newState);
+        p1.getCharacterState().removeWeapon(weapon);
+
 
         System.out.println("1) Invalid input for an invalid expected powerup");
         game.setCurrentPlayer(p1);
@@ -949,7 +977,7 @@ public class ControllerStateTest {
         waitingForPowerUps.getAlreadyAskedPlayers().add(p2);
         newState = waitingForPowerUps.nextState(playerActions, game, p2);
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
-        assertEquals(waitingForEffects, newState);
+        assertEquals(waitingForMainActions, newState);
 
         System.out.println("6) Correct Tagback Grenade, more people left to ask for powerup");
         game.setCurrentPlayer(p1);
@@ -986,6 +1014,42 @@ public class ControllerStateTest {
         assertEquals(1, p2.getCharacterState().getPowerUpBag().size());
         assertEquals(p3.getId(), game.getCurrentPlayer().getId());
         assertEquals(waitingForPowerUps, newState);
+
+        System.out.println("7) Correct Tagback Grenade, no more people left to ask");
+        game.setCurrentPlayer(p1);
+        waitingForPowerUps = new WaitingForPowerUps(Constants.TAGBACK_GRENADE, waitingForEffects);
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        p2.getCharacterState().setFirstSpawn(false);
+        game.getCumulativeDamageTargetSet().clear();
+        game.getCumulativeDamageTargetSet().add(p2);
+        action = new PowerUpAction(game, p2);
+        targetableList = new ArrayList<>();
+        powerUp = getPowerUp("Red_TagbackGrenade");
+        powerUp1 = getPowerUp("Yellow_TagbackGrenade");
+        p2.getCharacterState().getPowerUpBag().clear();
+        p2.getCharacterState().getPowerUpBag().add(powerUp);
+        p2.getCharacterState().getPowerUpBag().add(powerUp1);
+        p2.getCharacterState().setTile(board.getTile(0,1));
+        p3.getCharacterState().setTile(board.getTile(0,1));
+        powerUp2 = getPowerUp("Blue_TagbackGrenade");
+        p3.getCharacterState().getPowerUpBag().add(powerUp2);
+        targetableList.add(powerUp);
+        action.unpack(targetableList);
+        assertEquals(powerUp, action.getCard());
+        playerActions.add(action);
+        waitingForPowerUps.getPlayerStack().push(p1);
+        waitingForPowerUps.getPlayerStack().push(p2);
+        waitingForPowerUps.getAlreadyAskedPlayers().add(p2);
+        game.getCurrentActionUnitsList().clear();
+        game.getCurrentActionUnitsList().add(basicMode);
+        game.getCurrentActionUnitsList().forEach(au -> System.out.println(au.getId()));
+        newState = waitingForPowerUps.nextState(playerActions, game, p2);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(waitingForMainActions, newState);
+
+
     }
 
     private PowerUp getPowerUp(String cardName) {
