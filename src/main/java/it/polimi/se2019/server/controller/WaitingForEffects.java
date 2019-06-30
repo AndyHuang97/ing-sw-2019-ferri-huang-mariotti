@@ -9,7 +9,6 @@ import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.server.playerActions.ShootPlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
-import sun.rmi.runtime.Log;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -45,8 +44,7 @@ public class WaitingForEffects implements ControllerState {
             if (playerActions.stream().allMatch(PlayerAction::check)) {
                 playerActions.forEach(PlayerAction::run); // there is actually only one action in the list
 
-                shootPlayerAction = (ShootPlayerAction) playerActions.stream()
-                        .filter(playerAction -> playerAction.getId().equals(Constants.SHOOT)).findFirst().orElse(null);
+                shootPlayerAction = (ShootPlayerAction) playerActions.get(SHOOT_POSITION);
                 if (game.getCumulativeDamageTargetSet().isEmpty()){ // means no damage was dealt with the run of the action
 
                     if(!shootPlayerAction.getChosenWeapon().getOptionalEffectList().isEmpty()) {
@@ -91,8 +89,8 @@ public class WaitingForEffects implements ControllerState {
                         return newState;
                     }
                     // no need to go to WaitingForPowerUps state
-                    Logger.getGlobal().info("CurrentActionUnitList size: " + game.getCurrentActionUnitsList().size());
-                    Logger.getGlobal().info("OptionalEffectList size: " + shootPlayerAction.getChosenWeapon().getOptionalEffectList().size());
+                    // Logger.getGlobal().info("CurrentActionUnitList size: " + game.getCurrentActionUnitsList().size());
+                    // Logger.getGlobal().info("OptionalEffectList size: " + shootPlayerAction.getChosenWeapon().getOptionalEffectList().size());
                     if (game.getCurrentActionUnitsList().size()-1 >= shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
                         Logger.getGlobal().info("No more optional effects with damage");
                         return swapBackToMainAction(game); // no more optional effect

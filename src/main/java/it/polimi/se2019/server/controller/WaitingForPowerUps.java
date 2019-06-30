@@ -1,7 +1,6 @@
 package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.client.util.Constants;
-import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
@@ -9,7 +8,6 @@ import it.polimi.se2019.server.playerActions.PlayerAction;
 import it.polimi.se2019.server.playerActions.PowerUpAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
-import sun.rmi.runtime.Log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -54,7 +52,6 @@ public class WaitingForPowerUps implements ControllerState {
                     playerAction.getId().equals(Constants.POWERUP)
                                                     &&
                             ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE)))) {
-                //TODO deal with ammo selection
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
                     playerActions.forEach(PlayerAction::run);
                     Logger.getGlobal().info("Targeting Scope going back to WaitingForEffects");
@@ -105,9 +102,10 @@ public class WaitingForPowerUps implements ControllerState {
                     }
                     Logger.getGlobal().info("CurrentActionUnitList size: " + game.getCurrentActionUnitsList().size());
                     game.getCurrentActionUnitsList().forEach(au -> Logger.getGlobal().info(au.getId()));
-                    player = playerStack.pop(); // should be the player that was performing the turn
+
+                    Player originalPlayer = playerStack.pop(); // should be the player that was performing the turn
                     Logger.getGlobal().info("Popped current player");
-                    game.setCurrentPlayer(player);
+                    game.setCurrentPlayer(originalPlayer);
                     alreadyAskedPlayers.clear();
                     Logger.getGlobal().info("Tagback grenade going back to WaitingForEffects");
                     return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);

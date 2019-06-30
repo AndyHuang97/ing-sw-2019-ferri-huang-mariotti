@@ -854,31 +854,6 @@ public class ControllerStateTest {
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
         assertEquals(waitingForPowerUps, newState);
 
-        //TODO implement the ammo selection
-        /*
-        System.out.println("2) Targeting Scope");
-        game.setCurrentPlayer(p1);
-        p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
-        game.setFrenzy(true);
-        waitingForPowerUps = new WaitingForPowerUps(Constants.TARGETING_SCOPE, waitingForEffects);
-        playerActions.clear();
-        p1.getCharacterState().setFirstSpawn(false);
-        p1.getCharacterState().setTile(board.getTile(0,0));
-        p2.getCharacterState().setFirstSpawn(false);
-        game.getCumulativeDamageTargetSet().add(p2);
-        action = new PowerUpAction(game, p1);
-        targetableList = new ArrayList<>();
-        PowerUp powerUp = getPowerUp("Blue_TargetingScope");
-        p1.getCharacterState().getPowerUpBag().add(powerUp);
-        targetableList.add(powerUp);
-        targetableList.add(p2);
-        action.unpack(targetableList);
-        playerActions.add(action);
-        newState = waitingForPowerUps.nextState(playerActions, game, p1);
-        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
-        assertEquals(waitingForEffects, newState);
-         */
-
         System.out.println("2) NOP for Targeting Scope");
         game.setCurrentPlayer(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
@@ -896,6 +871,42 @@ public class ControllerStateTest {
         newState = waitingForPowerUps.nextState(playerActions, game, p1);
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
         assertEquals(waitingForEffects, newState);
+
+
+        System.out.println("2-bis) Targeting Scope, ");
+        game.setCurrentPlayer(p1);
+        p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
+        game.setFrenzy(true);
+        waitingForPowerUps = new WaitingForPowerUps(Constants.TARGETING_SCOPE, waitingForEffects);
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        p2.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,1);
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.BLUE,1);
+        game.getCumulativeDamageTargetSet().add(p2);
+        action = new PowerUpAction(game, p1);
+        targetableList = new ArrayList<>();
+        PowerUp blueTargetingScope = getPowerUp("Blue_TargetingScope");
+        PowerUp redTargetingScope = getPowerUp("Red_TargetingScope");
+        p1.getCharacterState().getPowerUpBag().add(blueTargetingScope);
+        p1.getCharacterState().getPowerUpBag().add(redTargetingScope);
+        targetableList.add(blueTargetingScope);
+        targetableList.add(p2);
+        targetableList.add(AmmoColor.BLUE);
+        targetableList.add(redTargetingScope);
+        targetableList.add(p2);
+        targetableList.add(AmmoColor.RED);
+        action.unpack(targetableList);
+        playerActions.add(action);
+        p2.getCharacterState().resetDamageBar();
+        newState = waitingForPowerUps.nextState(playerActions, game, p1);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(waitingForEffects, newState);
+        assertEquals(2, p2.getCharacterState().getDamageBar().size());
+        assertEquals(0, p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
+        assertEquals(0, p1.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).intValue());
+        assertEquals(0, p1.getCharacterState().getPowerUpBag().size());
 
         System.out.println("3) Incorrect powerUp, not a Targeting scope");
         game.setCurrentPlayer(p1);

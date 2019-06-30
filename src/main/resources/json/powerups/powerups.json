@@ -15,6 +15,13 @@
               "params": {
                 "amount": 1
               }
+            },
+            {
+              "name": "Consume Targeted Ammo x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeTargetedAmmo",
+              "params": {
+                "amount": 1
+              }
             }
           ],
           "conditionList": [
@@ -25,8 +32,8 @@
               }
             },
             {
-              "name": "Has ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "name": "Has Targeted Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasTargetedAmmo",
               "params": {
                 "amount": 1
               }
@@ -70,6 +77,13 @@
               "params": {
                 "amount": 1
               }
+            },
+            {
+              "name": "Consume Targeted Ammo x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeTargetedAmmo",
+              "params": {
+                "amount": 1
+              }
             }
           ],
           "conditionList": [
@@ -80,8 +94,8 @@
               }
             },
             {
-              "name": "Has ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "name": "Has Targeted Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasTargetedAmmo",
               "params": {
                 "amount": 1
               }
@@ -125,6 +139,13 @@
               "params": {
                 "amount": 1
               }
+            },
+            {
+              "name": "Consume Targeted Ammo x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeTargetedAmmo",
+              "params": {
+                "amount": 1
+              }
             }
           ],
           "conditionList": [
@@ -135,8 +156,8 @@
               }
             },
             {
-              "name": "Has ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "name": "Has Targeted Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasTargetedAmmo",
               "params": {
                 "amount": 1
               }

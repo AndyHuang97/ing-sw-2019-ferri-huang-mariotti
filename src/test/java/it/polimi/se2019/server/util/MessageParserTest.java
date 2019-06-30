@@ -21,7 +21,7 @@ import org.junit.Test;
 import java.util.*;
 
 public class MessageParserTest {
-    static final String className = "it.polimi.se2019.server.playerActions.MovePlayerAction";
+    static final String className = MovePlayerAction.class.getSimpleName();
 
     @Before
     public void setUp() {
