@@ -153,17 +153,36 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setCurrentPlayer(Player currentPlayer) {
 		if(currentPlayer.getActive()) {this.currentPlayer = currentPlayer;}
 		else {throw new IllegalStateException();}
-
-		//currentActionUnitsList = new ArrayList<>();
 	}
 
 
-	//TODO test it ...
 	public void nextCurrentPlayer() {
 		if (playerList.indexOf(getCurrentPlayer()) != (playerList.size()-1)) {
 			currentPlayer = playerList.get(playerList.indexOf(getCurrentPlayer()) + 1);
 		} else {
 			currentPlayer = playerList.get(0);
+		}
+
+		for (Tile tile : getBoard().tileMapToList()) {
+			if (tile.isSpawnTile()) {
+				List<Weapon> weaponCrate = tile.getWeaponCrate();
+
+				List<Weapon> updatedWeaponCrate = new ArrayList<>();
+
+				for (Weapon weapon : weaponCrate) {
+					if (weapon == null) {
+						updatedWeaponCrate.add(drawWeaponFromDeck());
+					} else {
+						updatedWeaponCrate.add(weapon);
+					}
+				}
+
+				getBoard().setWeaponCrate(tile.getxPosition(), tile.getyPosition(), updatedWeaponCrate);
+			} else {
+				if (tile.getAmmoCrate() == null) {
+					getBoard().setAmmoCrate(tile.getxPosition(), tile.getyPosition(), drawAmmoCrateFromDeck());
+				}
+			}
 		}
 	}
 
