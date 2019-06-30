@@ -291,12 +291,33 @@ public class CharacterState extends Observable<Response> implements Serializable
 	 * it keeps an ammo color's max value to 0.
 	 * @param ammoToConsume is a map containing the amount of each ammo color to consume from the player's ammoBag.
 	 */
-	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume) {
-		ammoToConsume.keySet()
-				.forEach(k -> ammoBag.put(k, ammoBag.get(k) - ammoToConsume.get(k)));
+	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume, Game game) {
+		for (Map.Entry<AmmoColor, Integer> ammoColor : ammoToConsume.entrySet()) {
+		    int remainingAmmo = ammoBag.get(ammoColor.getKey()) - ammoColor.getValue();
+
+		    if (remainingAmmo > 0) {
+                ammoBag.put(ammoColor.getKey(), remainingAmmo);
+            } else {
+		        ammoBag.put(ammoColor.getKey(), 0);
+		        consumePowerup(ammoColor.getKey(), Math.abs(remainingAmmo), game);
+            }
+		}
 		notifyCharacterStateChange();
 	}
 
+	private void consumePowerup(AmmoColor color, int amount, Game game) {
+	    Iterator<PowerUp> iter = powerUpBag.iterator();
+
+	    while (iter.hasNext()) {
+	        PowerUp powerUp = iter.next();
+
+	        if (powerUp.getPowerUpColor() == color && amount > 0) {
+	            amount--;
+	            game.discardPowerup(powerUp);
+	            iter.remove();
+            }
+        }
+    }
 
 	/**
 	 * @return tile with the actual player position
@@ -440,5 +461,17 @@ public class CharacterState extends Observable<Response> implements Serializable
 
     public PlayerColor getColor() {
         return color;
+    }
+
+    public int powerUpCount(AmmoColor color) {
+	    int amount = 0;
+
+	    for (PowerUp powerUp : powerUpBag) {
+            System.out.println(powerUp.getPowerUpColor());
+	        if (powerUp.getPowerUpColor() == color) amount += 1;
+        }
+
+        System.out.println(amount);
+        return amount;
     }
 }

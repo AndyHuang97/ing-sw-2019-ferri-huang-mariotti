@@ -39,7 +39,7 @@ public class ReloadPlayerAction extends PlayerAction {
         for (Weapon weapon : weaponToReload) {
             Map<AmmoColor, Integer> reloadCost = weapon.getReloadCostAsMap();
 
-            getPlayer().getCharacterState().consumeAmmo(reloadCost);
+            getPlayer().getCharacterState().consumeAmmo(reloadCost, getGame());
 
             weapon.setLoaded(true);
         }

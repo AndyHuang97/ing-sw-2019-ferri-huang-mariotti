@@ -141,7 +141,7 @@ public class GrabPlayerAction extends PlayerAction {
             player.getCharacterState().addWeapon(weaponToGrab);
 
             // pay pickup cost
-            player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap());
+            player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap(), getGame());
 
             // consume the ammoCrate card
             List<Weapon> weaponCrate = playerTile.getWeaponCrate();

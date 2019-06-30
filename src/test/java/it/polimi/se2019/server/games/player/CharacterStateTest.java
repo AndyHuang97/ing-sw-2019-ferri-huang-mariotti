@@ -1,5 +1,10 @@
 package it.polimi.se2019.server.games.player;
 
+import it.polimi.se2019.server.actions.conditions.Condition;
+import it.polimi.se2019.server.actions.conditions.HasAmmo;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.deserialize.DirectDeserializers;
+import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.LinkType;
@@ -12,10 +17,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 public class CharacterStateTest {
 
@@ -159,5 +161,48 @@ public class CharacterStateTest {
         characterState.setScore(0);
         characterState.updateScore(message, PlayerColor.GREEN);
         Assert.assertEquals(4, characterState.getScore().intValue());
+    }
+
+    @Test
+    public void testPowerUpAsAmmo() {
+        new DirectDeserializers();
+        Deck<PowerUp> powerUpDeck = DirectDeserializers.deserialzerPowerUpDeck();
+        characterState.addPowerUp(powerUpDeck.drawCard());
+        characterState.addPowerUp(powerUpDeck.drawCard());
+        characterState.addPowerUp(powerUpDeck.drawCard());
+
+        AmmoColor color0 = characterState.getPowerUpBag().get(0).getPowerUpColor();
+        System.out.println(color0);
+        AmmoColor color1 = characterState.getPowerUpBag().get(1).getPowerUpColor();
+        System.out.println(color1);
+        AmmoColor color2 = characterState.getPowerUpBag().get(2).getPowerUpColor();
+        System.out.println(color2);
+
+        Map<AmmoColor, Integer> neededAmmo = new HashMap<>();
+
+        neededAmmo.put(AmmoColor.BLUE, 0);
+        neededAmmo.put(AmmoColor.RED, 0);
+        neededAmmo.put(AmmoColor.YELLOW, 0);
+        neededAmmo.put(color0, neededAmmo.get(color0) + 1);
+        neededAmmo.put(color1, neededAmmo.get(color1) + 1);
+        neededAmmo.put(color2, neededAmmo.get(color2) + 1);
+
+        System.out.println("needed color 2 " + neededAmmo.get(color2));
+
+        System.out.println("needed " + neededAmmo.get(color0));
+
+        Condition hasAmmo = new HasAmmo(neededAmmo);
+
+        Game game = new Game();
+        Player player = new Player("TESTNICK", true, null, characterState, PlayerColor.BLUE);
+        game.setPlayerList(Arrays.asList(player));
+        game.setCurrentPlayer(player);
+
+        Assert.assertEquals(3, characterState.getPowerUpBag().size());
+        Assert.assertTrue(hasAmmo.check(game, null));
+
+        characterState.consumeAmmo(neededAmmo, game);
+
+        Assert.assertEquals(0, characterState.getPowerUpBag().size());
     }
 }

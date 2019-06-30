@@ -5,7 +5,6 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.AmmoColor;
 
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -32,12 +31,17 @@ public class HasAmmo implements Condition {
         return Arrays.stream(AmmoColor.values())
                 .allMatch(color -> {
                     boolean result = true;
-                    if(ammoBag.get(color) - ammoNeeded.get(color) < 0) {
+                    int powerUpAmount = game.getCurrentPlayer().getCharacterState().powerUpCount(color);
+                    int remainingAmmo = ammoBag.get(color) + powerUpAmount - ammoNeeded.get(color);
+
+                    System.out.println("powerUp amount: " + powerUpAmount);
+                    System.out.println("remainingAmmo " + remainingAmmo);
+
+                    if(remainingAmmo < 0) {
                         result = false;
                     }
                     Logger.getGlobal().warning("HasAmmo: " + result);
                     return result;
                 });
-
     }
 }
