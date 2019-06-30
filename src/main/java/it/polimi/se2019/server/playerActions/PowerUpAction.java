@@ -9,6 +9,8 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ErrorResponse;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -41,12 +43,12 @@ public class PowerUpAction extends PlayerAction {
 
     @Override
     public void run() {
-        powerUpsToDiscard.forEach(powerUp -> {
-            powerUp.getActionUnitList().get(MAIN_EFFECT).run(getGame(), inputCommands);
-            getGame().getCurrentActionUnitsList().remove(powerUp.getActionUnitList().get(MAIN_EFFECT));
-            getPlayer().getCharacterState().removePowerUp(powerUp);
-            getGame().discardPowerup(powerUp);
-        });
+        for (int i = 0; i < powerUpsToDiscard.size(); i++) {
+            powerUpsToDiscard.get(i).getActionUnitList().get(MAIN_EFFECT).run(getGame(), extractOneCommand(inputCommands, i));
+            getGame().getCurrentActionUnitsList().remove(powerUpsToDiscard.get(i).getActionUnitList().get(MAIN_EFFECT));
+            getPlayer().getCharacterState().removePowerUp(powerUpsToDiscard.get(i));
+            getGame().discardPowerup(powerUpsToDiscard.get(i));
+        }
     }
 
     @Override
@@ -74,5 +76,15 @@ public class PowerUpAction extends PlayerAction {
 
     public List<PowerUp> getPowerUpsToDiscard() {
         return powerUpsToDiscard;
+    }
+
+
+    // assumes that all list values have the same length
+    private Map<String, List<Targetable>> extractOneCommand(Map<String, List<Targetable>> commands, int position) {
+        Logger.getGlobal().info("position: "+position);
+        Map<String, List<Targetable>> oneCommand = new HashMap<>();
+        commands.keySet().stream().filter(key -> commands.get(key).size()>0).forEach(key -> oneCommand.putIfAbsent(key, new ArrayList<>()));
+        oneCommand.keySet().forEach(key -> oneCommand.get(key).add(commands.get(key).get(position)));
+        return oneCommand;
     }
 }

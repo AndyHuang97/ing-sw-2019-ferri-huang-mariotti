@@ -113,16 +113,8 @@ public class Board extends Observable<Response> {
         return graph;
     }
 
-    public List<Tile> tileMapToList() {
-        List<Tile> list = new ArrayList<>();
-        for (Tile[] array : tileMap){
-            list.addAll(Arrays.asList(array));
-        }
-        return list;
-    }
-
     public Tile getSpawnTile(RoomColor roomColor) {
-        return tileMapToList().stream()
+        return getTileList().stream()
                 .filter(Objects::nonNull)
                 .filter(Tile::isSpawnTile)
                 .filter(t -> t.getRoomColor() == roomColor)
