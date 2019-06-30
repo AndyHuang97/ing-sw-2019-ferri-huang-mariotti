@@ -22,7 +22,6 @@ public class CLIView extends View {
     CLIUtil utils = new CLIUtil();
     Weapon weaponInUse;
     Boolean usedBasicEffect;
-    List<PowerUp> powerUpsInUse;
 
 
     public CLIView() {
@@ -283,12 +282,12 @@ public class CLIView extends View {
                         targetingScopeTargets.put("Tile " + i, String.valueOf(i));
                     }
                     getModel().getGame().getPlayerList().forEach(p -> {
-                        if (!p.getId().equals(currentPlayer.getId())) targetingScopeTargets.put("User " + p.getUserData().getNickname(), p.getId());
+                        if (!p.getId().equals(currentPlayer.getId())) targetingScopeTargets.put("Player " + p.getUserData().getNickname(), p.getId());
                     });
-                    powerUpsInUse.forEach(up -> {
+                    currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> up.getName().contains("TargetingScope")).forEach(up -> {
                         targetingScope.add(up.getName());
-                        String selectedGenericTarget = utils.askUserInput("Select a user or tile to target with the " + up.getName() + " powerup", new ArrayList<>(targetingScopeTargets.keySet()), true);
-                        if (selectedGenericTarget.equals(Constants.NOP)) {
+                        String selectedGenericTarget = utils.askUserInput("Select a user or tile to target with the " + up.getName() + " powerup or n not to use it", new ArrayList<>(targetingScopeTargets.keySet()), true);
+                        if (selectedGenericTarget.equals(Constants.NOP) || selectedGenericTarget.equals("n")) {
                             sendNOP();
                             return;
                         }
