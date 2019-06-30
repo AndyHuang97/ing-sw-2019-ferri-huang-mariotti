@@ -194,14 +194,19 @@ public class GameManager {
 		}
 
 		public void run(){
-			try {
-				this.commandHandler.update(new Response(null, true, "ping"));
-			} catch (Observer.CommunicationError e) {
-				logger.info("User " + this.nickname + " disconnected");
-				//TODO: handle disconnection
-				this.timer.cancel();
-				this.timer.purge();
-			}
+		    try {
+                try {
+                    this.commandHandler.update(new Response(null, false, "ping"));
+                } catch (Observer.CommunicationError e) {
+                    logger.info(e.getMessage());
+                    logger.info("User " + this.nickname + " disconnected");
+                    //TODO: handle disconnection
+                    this.timer.cancel();
+                    this.timer.purge();
+                }
+            } catch (Exception ex) {
+		        logger.info(ex.getMessage());
+            }
 		}
 	}
 

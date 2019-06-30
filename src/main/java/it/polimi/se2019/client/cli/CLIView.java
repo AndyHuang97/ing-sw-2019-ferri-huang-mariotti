@@ -129,6 +129,7 @@ public class CLIView extends View {
                             possibleActions.put(">\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.SHOOT_WEAPON));
                     }
                     if (currentPlayer.getCharacterState().getPowerUpBag().stream().anyMatch(up -> up.getName().contains("Newton") || up.getName().contains("Teleporter"))) possibleActions.put("PowerUp", Arrays.asList(Constants.POWERUP));
+                    possibleActions.put("Skip", Arrays.asList(Constants.NOP));
                     String actionInput = utils.askUserInput("Pick an action", new ArrayList<>(possibleActions.keySet()), true);
                     if (actionInput.equals(Constants.NOP)) {
                         sendNOP();

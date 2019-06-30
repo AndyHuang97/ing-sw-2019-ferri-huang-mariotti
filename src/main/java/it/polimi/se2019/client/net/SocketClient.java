@@ -68,8 +68,7 @@ public class SocketClient implements NetworkClient {
                         Map<String, List<String>> socketPayload = new HashMap<>();
                         socketPayload.put("pong", new ArrayList<>());
                         this.out.println(new Request(new NetMessage(socketPayload), this.nickname).serialize());
-                    }
-                    commandHandler.handle(request);
+                    } else commandHandler.handle(request);
                 }
             } catch (IOException | NullPointerException e) {
                 // do something if connection fails
