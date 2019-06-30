@@ -45,7 +45,7 @@ public class TileDeserializerTest {
             Assert.fail("Class not found");
         }
 
-        Assert.assertFalse(!tile.isSpawnTile());
+        Assert.assertFalse(tile.isSpawnTile());
     }
 
 }

@@ -415,7 +415,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
         return powerupDeck.drawCard();
     }
 
-    public void dicardPowerup(PowerUp powerUp) {
+    public void discardPowerup(PowerUp powerUp) {
         usedPowerups.add(powerUp);
     }
 

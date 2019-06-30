@@ -3,7 +3,6 @@ package it.polimi.se2019.server.controller;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2019.client.util.Constants;
-import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.*;
@@ -58,10 +57,15 @@ public class ControllerTest {
     @SuppressWarnings("Duplicates")
     public void setUp() throws GameManager.AlreadyPlayingException, GameManager.GameNotFoundException, PlayerNotFoundException, IOException {
         // GameManager and Game init
-        ServerApp serverApp = new ServerApp();
-        gameManager = serverApp.gameManager;
+        //ServerApp serverApp = new ServerApp();
+        gameManager = new GameManager();
         gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
         gameManager.getMapPreference().add("0");
+
+        // Controller init
+        controller = new Controller(gameManager);
+        gameManager.setController(controller);
+
         int waitingListMaxSize = 5;
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
@@ -136,10 +140,7 @@ public class ControllerTest {
         // Set testNick0 as current player
         game.setCurrentPlayer(player0);
 
-        // Controller init
-        controller = ServerApp.controller;
-
-        actualPlayerCommandHandler.register(controller);
+        //actualPlayerCommandHandler.register(controller);
     }
 
     @Test
@@ -215,21 +216,24 @@ public class ControllerTest {
         ControllerState waitingForMainActions = new WaitingForMainActions();
         controller.setControllerStateForGame(game, waitingForMainActions);
 
+        Deck<Weapon> weaponDeck =  DirectDeserializers.deserialzerWeaponDeck();
+
         // add weapon to tileMap[0][0] SpawnTile
-        List<Weapon> weaponList = new ArrayList<>();
-        weaponList.add(weapon);
+
 
         AmmoCrate ammoToGrab = getAmmoCrate("1_PowerUp_2_Red");
 
-        tileMap[0][0].setWeaponCrate(weaponList);
         tileMap[0][1].setAmmoCrate(ammoToGrab);
 
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
         player0.getCharacterState().setTile(tileMap[0][0]);
         player0.getCharacterState().addAmmo(getAmmoBag(3));
 
+        List<Weapon> weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
         List<Targetable> targetableList = new ArrayList<>();
-        targetableList.add(weapon);
+        targetableList.add(weaponList.get(0));
 
         Map<String, List<Targetable>> command = new HashMap<>();
         command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
@@ -239,29 +243,69 @@ public class ControllerTest {
         Request request = new Request(message, TESTNICK0);
 
         player0.getCharacterState().addAmmo(getAmmoBag(3));
+        player0.getCharacterState().getTile().setWeaponCrate(weaponList);
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player have two weapons
         Assert.assertEquals(2, player0.getCharacterState().getWeaponBag().size());
 
+        weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
+        targetableList = new ArrayList<>();
+        targetableList.add(weaponList.get(0));
+
+        command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+
         player0.getCharacterState().setAmmoBag(getAmmoBag(0));
+        player0.getCharacterState().getTile().setWeaponCrate(weaponList);
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player still have two weapons (unable to pay pickup cost)
         Assert.assertEquals(2, player0.getCharacterState().getWeaponBag().size());
 
+        weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
+        targetableList = new ArrayList<>();
+        targetableList.add(weaponList.get(0));
+
+        command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+
+        player0.getCharacterState().getTile().setWeaponCrate(weaponList);
         player0.getCharacterState().addAmmo(getAmmoBag(3));
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player have tree weapons
         Assert.assertEquals(3, player0.getCharacterState().getWeaponBag().size());
 
+        weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
+        targetableList = new ArrayList<>();
+        targetableList.add(weaponList.get(0));
+
+        command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player still have tree weapons (bag full)
         Assert.assertEquals(3, player0.getCharacterState().getWeaponBag().size());
-        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.BLUE));
-        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW));
 
         controller.setControllerStateForGame(game, waitingForMainActions);
 

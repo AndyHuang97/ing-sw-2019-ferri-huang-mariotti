@@ -67,8 +67,10 @@ public class GrabPlayerAction extends PlayerAction {
 
             // assert that the weapon is available in the SpawnTile
             boolean isWeaponAvailable = false;
+            //System.out.println(weaponToGrab);
             try {
                 for (Weapon weapon : weaponCrate) {
+                    System.out.println(weapon);
                     if (weapon == weaponToGrab) {
                         isWeaponAvailable = true;
                     }
@@ -96,6 +98,7 @@ public class GrabPlayerAction extends PlayerAction {
                 }
             }
 
+            System.out.println(isWeaponAvailable);
             return isWeaponAvailable;
         }
 
