@@ -197,8 +197,8 @@ public class GameManager {
 		    try {
                 try {
                     this.commandHandler.update(new Response(null, false, "ping"));
-                } catch (Observer.CommunicationError e) {
-                    logger.info(e.getMessage());
+                } catch (Observer.CommunicationError ex) {
+                    logger.info(ex.getMessage());
                     logger.info("User " + this.nickname + " disconnected");
                     //TODO: handle disconnection
                     this.timer.cancel();

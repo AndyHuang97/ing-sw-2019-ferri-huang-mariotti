@@ -20,7 +20,7 @@ public class ClientCommandHandler {
         else Platform.runLater(() -> internalHandle(request));
     }
 
-    private void internalHandle(Response request) {
+    private synchronized void internalHandle(Response request) {
         if (request.getSuccess()) {
             // game initialization
             if (request.getGame() != null) {
