@@ -5,6 +5,7 @@ import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.CommandConstants;
@@ -103,6 +104,10 @@ public abstract class PlayerAction implements Targetable {
                 .filter(t -> getGame().getBoard().getTileList().contains(t))
                 .collect(Collectors.toList());
         commandDict.put(CommandConstants.TILELIST, tileList);
+
+        List<Targetable> targetedAmmoColor = params.stream()
+                .filter(t -> Arrays.asList(AmmoColor.values()).contains(t)).collect(Collectors.toList());
+        commandDict.put(CommandConstants.AMMOCOLOR, targetedAmmoColor);
 
         return commandDict;
     }

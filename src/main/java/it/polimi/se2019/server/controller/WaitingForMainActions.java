@@ -55,7 +55,7 @@ public class WaitingForMainActions implements ControllerState {
         // could receive a pass(NOP) message to skip the turn
         if (playerActions.get(0).getId().equals(Constants.NOP)) {
             Logger.getGlobal().info("Detected a NOP");
-            game.nextCurrentPlayer();
+            game.updateTurn();
             if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
                 Logger.getGlobal().info("Next player has never spawned until now");
                 return new WaitingForRespawn(); // first spawn
@@ -87,7 +87,7 @@ public class WaitingForMainActions implements ControllerState {
                         Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
                         return newState.nextState(playerActions, game, player);
                     } else {// no kills in final frenzy action
-                        game.nextCurrentPlayer(); // consumed all actions in frenzy mode, give control to another player
+                        game.updateTurn(); // consumed all actions in frenzy mode, give control to another player
                         Logger.getGlobal().info("No one was killed in frenzy. No more actions, next player");
                         return new WaitingForMainActions(); // new player, reset all
                     }
@@ -123,7 +123,7 @@ public class WaitingForMainActions implements ControllerState {
                 }
             }
             else {// no one died
-                game.nextCurrentPlayer();
+                game.updateTurn();
                 Logger.getGlobal().info("No one died. No more actions");
                 return new WaitingForMainActions();
             }

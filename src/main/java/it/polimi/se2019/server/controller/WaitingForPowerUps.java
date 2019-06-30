@@ -54,7 +54,6 @@ public class WaitingForPowerUps implements ControllerState {
                     playerAction.getId().equals(Constants.POWERUP)
                                                     &&
                             ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE)))) {
-                //TODO deal with ammo selection
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
                     playerActions.forEach(PlayerAction::run);
                     Logger.getGlobal().info("Targeting Scope going back to WaitingForEffects");
