@@ -14,7 +14,9 @@
           "DOOR",
           "OPEN",
           "WALL"
-        ]
+        ],
+        "xPosition": 0,
+        "yPosition": 0
       }
     },
     {
@@ -30,7 +32,9 @@
           "OPEN",
           "DOOR",
           "DOOR"
-        ]
+        ],
+        "xPosition": 1,
+        "yPosition": 0
       }
     },
     {
@@ -46,7 +50,9 @@
           "WALL",
           "DOOR",
           "OPEN"
-        ]
+        ],
+        "xPosition": 2,
+        "yPosition": 0
       }
     },
     {
@@ -54,7 +60,11 @@
       "pos": [
         3,
         0
-      ]
+      ],
+      "params": {
+      "xPosition": 3,
+      "yPosition": 0
+      }
     },
     {
       "type": "SpawnTile",
@@ -69,7 +79,9 @@
           "WALL",
           "DOOR",
           "WALL"
-        ]
+        ],
+        "xPosition": 0,
+        "yPosition": 1
       }
     },
     {
@@ -85,7 +97,9 @@
           "OPEN",
           "DOOR",
           "WALL"
-        ]
+        ],
+        "xPosition": 1,
+        "yPosition": 1
       }
     },
     {
@@ -101,7 +115,9 @@
           "DOOR",
           "WALL",
           "OPEN"
-        ]
+        ],
+        "xPosition": 2,
+        "yPosition": 1
       }
     },
     {
@@ -117,7 +133,9 @@
           "WALL",
           "OPEN",
           "DOOR"
-        ]
+        ],
+        "xPosition": 3,
+        "yPosition": 1
       }
     },
     {
@@ -133,7 +151,9 @@
           "OPEN",
           "WALL",
           "WALL"
-        ]
+        ],
+        "xPosition": 0,
+        "yPosition": 2
       }
     },
     {
@@ -149,7 +169,9 @@
           "OPEN",
           "WALL",
           "OPEN"
-        ]
+        ],
+        "xPosition": 1,
+        "yPosition": 2
       }
     },
     {
@@ -165,7 +187,9 @@
           "DOOR",
           "WALL",
           "OPEN"
-        ]
+        ],
+        "xPosition": 2,
+        "yPosition": 2
       }
     },
     {
@@ -181,7 +205,9 @@
           "WALL",
           "WALL",
           "DOOR"
-        ]
+        ],
+        "xPosition": 3,
+        "yPosition": 2
       }
     }
   ]

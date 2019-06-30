@@ -38,9 +38,9 @@ public class BoardDeserializer implements RandomDeserializer {
 
             // read position and add the tile to the array
             // TODO: read config
-            JsonArray position = jsonTile.getAsJsonArray(DeserializerConstants.POS);
-            int xCoord = position.get(0).getAsInt();
-            int yCoord = position.get(1).getAsInt();
+            JsonObject jsonParams = jsonTile.get(DeserializerConstants.PARAMS).getAsJsonObject();
+            int xCoord = jsonParams.get(DeserializerConstants.XPOSITION).getAsInt();
+            int yCoord = jsonParams.get(DeserializerConstants.YPOSITION).getAsInt();
 
             //System.out.println(tile);
             tileMap[xCoord][yCoord] = tile;

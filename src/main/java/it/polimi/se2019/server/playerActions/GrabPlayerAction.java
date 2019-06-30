@@ -123,19 +123,31 @@ public class GrabPlayerAction extends PlayerAction {
 
     @Override
     public void run() {
-        if (weaponToGrab != null) {
-            Player player = getGame().getCurrentPlayer();
+        Player player = getGame().getCurrentPlayer();
+        Tile playerTile = player.getCharacterState().getTile();
 
+        int x = playerTile.getxPosition();
+        int y = playerTile.getyPosition();
+
+        if (weaponToGrab != null) {
             player.getCharacterState().addWeapon(weaponToGrab);
 
             // pay pickup cost
             player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap());
+
+            // consume the ammoCrate card
+            List<Weapon> weaponCrate = playerTile.getWeaponCrate();
+            weaponCrate.remove(weaponToGrab);
+
+            getGame().getBoard().setWeaponCrate(x, y, weaponCrate);
         }
 
         else if (ammoToGrab != null) {
             for (ActionUnit actionUnit : ammoToGrab.getActionUnitList()) {
                 actionUnit.run(getGame(), null);
             }
+
+            getGame().getBoard().setAmmoCrate(x, y, null);
         }
     }
 

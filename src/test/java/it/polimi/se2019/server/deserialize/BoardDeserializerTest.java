@@ -3,7 +3,6 @@ package it.polimi.se2019.server.deserialize;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2019.server.games.board.Board;
-import it.polimi.se2019.server.games.board.NormalTile;
 import it.polimi.se2019.server.games.board.Tile;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,7 +24,7 @@ public class BoardDeserializerTest {
 
     @Test
     public void testDeserialize() {
-        String path = "src/test/java/it/polimi/se2019/server/deserialize/data/boardData.json";
+        String path = "src/main/resources/json/maps/map0.json";
         BufferedReader bufferedReader;
 
         Board board = null;

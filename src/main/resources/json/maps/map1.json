@@ -14,7 +14,9 @@
           "OPEN",
           "DOOR",
           "WALL"
-        ]
+        ],
+        "xPosition": 0,
+        "yPosition": 0
       }
     },
     {
@@ -30,7 +32,9 @@
           "OPEN",
           "WALL",
           "OPEN"
-        ]
+        ],
+        "xPosition": 1,
+        "yPosition": 0
       }
     },
     {
@@ -46,7 +50,9 @@
           "DOOR",
           "DOOR",
           "OPEN"
-        ]
+        ],
+        "xPosition": 2,
+        "yPosition": 0
       }
     },
     {
@@ -62,7 +68,9 @@
           "WALL",
           "DOOR",
           "DOOR"
-        ]
+        ],
+        "xPosition": 3,
+        "yPosition": 0
       }
     },
     {
@@ -78,7 +86,9 @@
           "OPEN",
           "WALL",
           "WALL"
-        ]
+        ],
+        "xPosition": 0,
+        "yPosition": 1
       }
     },
     {
@@ -94,7 +104,9 @@
           "WALL",
           "DOOR",
           "OPEN"
-        ]
+        ],
+        "xPosition": 1,
+        "yPosition": 1
       }
     },
     {
@@ -110,7 +122,9 @@
           "OPEN",
           "OPEN",
           "WALL"
-        ]
+        ],
+        "xPosition": 2,
+        "yPosition": 1
       }
     },
     {
@@ -126,7 +140,9 @@
           "WALL",
           "OPEN",
           "OPEN"
-        ]
+        ],
+        "xPosition": 3,
+        "yPosition": 1
       }
     },
     {
@@ -134,7 +150,12 @@
       "pos": [
         0,
         2
-      ]
+      ],
+      "params": {
+        ,
+      "xPosition": 0,
+      "yPosition": 2
+      }
     },
     {
       "type": "NormalTile",
@@ -149,7 +170,9 @@
           "DOOR",
           "WALL",
           "WALL"
-        ]
+        ],
+        "xPosition": 1,
+        "yPosition": 2
       }
     },
     {
@@ -165,7 +188,9 @@
           "OPEN",
           "WALL",
           "DOOR"
-        ]
+        ],
+        "xPosition": 2,
+        "yPosition": 2
       }
     },
     {
@@ -181,7 +206,9 @@
           "WALL",
           "WALL",
           "OPEN"
-        ]
+        ],
+        "xPosition": 3,
+        "yPosition": 2
       }
     }
   ]
