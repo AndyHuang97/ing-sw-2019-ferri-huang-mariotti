@@ -81,7 +81,7 @@ public class IsTargetNotInTargetListTest {
         //targets.put("cumulativeTargetList", cumulativeTargetList);
         list.add(p2);
         targets.put(CommandConstants.TARGETLIST, list);
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
 
         game.getCumulativeTargetSet().addAll(Arrays.asList(p2, p3,p4));
         assertFalse(condition.check(game, targets));

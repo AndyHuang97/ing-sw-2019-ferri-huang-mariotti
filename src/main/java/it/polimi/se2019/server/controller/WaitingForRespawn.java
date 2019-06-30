@@ -65,14 +65,14 @@ public class WaitingForRespawn implements ControllerState {
                             .filter(p -> p.getCharacterState().isDead()).collect(Collectors.toList());
                     playerStack.push(deadPlayers.get(0)); // pushes the dead player to respawn
                     Logger.getGlobal().info("Pushed player:" + deadPlayers.get(0).getId());
-                    game.setCurrentPlayer(deadPlayers.get(0)); // give control to one of the dead players, until everyone has spawned
+                    game.setCurrentPlayerNotify(deadPlayers.get(0)); // give control to one of the dead players, until everyone has spawned
                     Logger.getGlobal().info("Giving control to a dead player");
                     return this; // stays in this state until everyone is spawned
                 } else { // nobody is dead
                     player = playerStack.pop();// gives back the player that was ending the turn
                     Logger.getGlobal().info("Popped player:" + player.getId());
                     player.getCharacterState().setFirstSpawn(false);
-                    game.setCurrentPlayer(player);
+                    game.setCurrentPlayerNotify(player);
                     game.nextCurrentPlayer(); // resumes the turn cycle
                     Logger.getGlobal().info("Next Player: "+game.getCurrentPlayer().getId());
                     if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {

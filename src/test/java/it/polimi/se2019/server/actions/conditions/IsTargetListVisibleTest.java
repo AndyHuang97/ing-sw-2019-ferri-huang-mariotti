@@ -78,22 +78,22 @@ public class IsTargetListVisibleTest {
         List<Targetable> targetList = new ArrayList<>();
         targets.put("targetList", targetList);
 
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         targetList.addAll(Arrays.asList(p2,p4));
         assertFalse(condition.check(game, targets));
         targetList.clear();
 
-        game.setCurrentPlayer(p2);
+        game.setCurrentPlayerNotify(p2);
         targetList.addAll(Arrays.asList(p1,p4));
         assertTrue(condition.check(game, targets));
         targetList.clear();
 
-        game.setCurrentPlayer(p2);
+        game.setCurrentPlayerNotify(p2);
         targetList.addAll(Arrays.asList(p1,p3));
         assertFalse(condition.check(game, targets));
         targetList.clear();
 
-        game.setCurrentPlayer(p3);
+        game.setCurrentPlayerNotify(p3);
         targetList.addAll(Arrays.asList(p4));
         assertTrue(condition.check(game, targets));
         targetList.clear();

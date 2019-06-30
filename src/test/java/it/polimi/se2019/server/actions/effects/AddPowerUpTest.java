@@ -76,7 +76,7 @@ public class AddPowerUpTest {
     @Test
     public void testAddPowerUp() {
         Effect effect = new AddPowerUp();
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         new DirectDeserializers();
         game.setPowerupDeck(DirectDeserializers.deserialzerPowerUpDeck());
 

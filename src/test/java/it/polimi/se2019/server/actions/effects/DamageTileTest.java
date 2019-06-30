@@ -77,7 +77,7 @@ public class DamageTileTest {
         Effect effect = new DamageTile(2,null, false);
         List<Targetable> tile = new ArrayList<>();
         targets.put(CommandConstants.TILELIST, tile);
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
 
         tile.add(tileMap[1][1]);
         p4.getCharacterState().setTile(tileMap[1][1]);

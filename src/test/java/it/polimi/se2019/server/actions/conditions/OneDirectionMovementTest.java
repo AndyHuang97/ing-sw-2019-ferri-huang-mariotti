@@ -79,7 +79,7 @@ public class OneDirectionMovementTest {
         List<Targetable> tile = new ArrayList<>();
         targets.put(CommandConstants.TILELIST,tile);
 
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         tile.add(tileMap[1][2]);
         Assert.assertFalse(condition.check(game, targets));
         tile.clear();

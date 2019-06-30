@@ -80,13 +80,13 @@ public class IsRoomVisibleTest {
         targetableList.add(tileMap[0][0]);
         targets.put(CommandConstants.TILELIST, targetableList);
 
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         Assert.assertEquals(true, condition.check(game, targets));
-        game.setCurrentPlayer(p2);
+        game.setCurrentPlayerNotify(p2);
         Assert.assertEquals(false, condition.check(game, targets));
-        game.setCurrentPlayer(p3);
+        game.setCurrentPlayerNotify(p3);
         Assert.assertEquals(false, condition.check(game, targets));
-        game.setCurrentPlayer(p4);
+        game.setCurrentPlayerNotify(p4);
         Assert.assertEquals(true, condition.check(game, targets));
 
     }

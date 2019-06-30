@@ -77,7 +77,7 @@ public class MarkTileTest {
         Effect effect = new MarkTile(2, false, true);
         List<Targetable> tile = new ArrayList<>();
         targets.put(CommandConstants.TILELIST, tile);
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
 
         tile.add(tileMap[1][1]);
         p4.getCharacterState().setTile(tileMap[1][1]);

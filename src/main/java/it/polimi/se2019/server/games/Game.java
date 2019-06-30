@@ -99,7 +99,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void initGameObjects(String mapIndex) {
 
-		this.setCurrentPlayer(playerList.get(0));
+		this.setCurrentPlayerNotify(playerList.get(0));
 		//this.killshotTrack = new KillShotTrack(playerList);
 		new DirectDeserializers();
 		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
@@ -175,13 +175,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		return currentPlayer;
 	}
 
-	public void setCurrentPlayerState(Player currentPlayer) {
+	public void setCurrentPlayer(Player currentPlayer) {
         if (currentPlayer.getActive()) this.currentPlayer = currentPlayer;
         else throw new IllegalStateException();
     }
 
-	public void setCurrentPlayer(Player currentPlayer) {
-	    setCurrentPlayerState(currentPlayer);
+	public void setCurrentPlayerNotify(Player currentPlayer) {
+	    setCurrentPlayer(currentPlayer);
 
         CurrentPlayerStateUpdate currentPlayerUpdate = new CurrentPlayerStateUpdate(currentPlayer);
 
@@ -194,7 +194,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		int newIndex = playerList.indexOf(currentPlayer) + 1;
 		if(newIndex >= playerList.size()) {newIndex = 0;}
 		//currentPlayer = playerList.get(newIndex);
-        setCurrentPlayer(playerList.get(newIndex));
+        setCurrentPlayerNotify(playerList.get(newIndex));
 	}
 
 	public Date getStartDate() {

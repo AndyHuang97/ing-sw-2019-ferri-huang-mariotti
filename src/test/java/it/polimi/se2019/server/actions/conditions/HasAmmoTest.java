@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.actions.conditions;
 
-import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.*;
@@ -15,8 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class HasAmmoTest {
 
@@ -77,7 +74,7 @@ public class HasAmmoTest {
     @Test
     public void testHasAmmo() {
         Condition condition;
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
         ammoBag.putIfAbsent(AmmoColor.BLUE, 3);
         ammoBag.putIfAbsent(AmmoColor.RED, 3);

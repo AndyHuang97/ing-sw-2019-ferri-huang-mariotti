@@ -76,7 +76,7 @@ public class MarkTileListTest {
         Effect effect = new MarkTileList(2);
         List<Targetable> tileList = new ArrayList<>();
         targets.put("tileList", tileList);
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
 
         tileList.addAll(Arrays.asList(tileMap[1][1],tileMap[1][2], tileMap[0][1]));
         effect.run(game, targets);

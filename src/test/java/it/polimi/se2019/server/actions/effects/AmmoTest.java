@@ -75,7 +75,7 @@ public class AmmoTest {
     @Test
     public void testAddAmmo() {
         Effect effect;
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
         ammoBag.put(AmmoColor.BLUE, 0);
         ammoBag.put(AmmoColor.RED, 0);
@@ -107,7 +107,7 @@ public class AmmoTest {
     @Test
     public void testConsumeAmmo() {
         Effect effect;
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
         ammoBag.put(AmmoColor.BLUE, 3);
         ammoBag.put(AmmoColor.RED, 3);

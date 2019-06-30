@@ -68,7 +68,7 @@ public class ControllerStateTest {
         PlayerAction respawnAction;
 
         ControllerState respawnState = new WaitingForRespawn();
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         PowerUp bluePowerUp = getPowerUp("Blue_TargetingScope");
         PowerUp redPowerUp = getPowerUp("Red_TargetingScope");
         PowerUp yellowPowerUp = getPowerUp("Yellow_TargetingScope");
@@ -198,7 +198,7 @@ public class ControllerStateTest {
 
         ControllerState waitingForReload = new WaitingForReload();
         Weapon weapon = getWeapon("Lock_Rifle");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().addWeapon(weapon);
         weapon.setLoaded(false);
 
@@ -217,7 +217,7 @@ public class ControllerStateTest {
 
 
         System.out.println("2) NOP, people died!");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setFirstSpawn(false);
         p3.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
         p4.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
@@ -228,7 +228,7 @@ public class ControllerStateTest {
 
         System.out.println("3) Relaod weapon, no one died.");
         playerActions.clear();
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         reloadAction = new ReloadPlayerAction(game, p1);
         targetableList.add(weapon);
         reloadAction.unpack(targetableList);
@@ -247,7 +247,7 @@ public class ControllerStateTest {
 
         System.out.println("4) Relaod weapon, people died.");
         playerActions.clear();
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         reloadAction = new ReloadPlayerAction(game, p1);
         targetableList = new ArrayList<>();
         targetableList.add(weapon);
@@ -263,7 +263,7 @@ public class ControllerStateTest {
 
         System.out.println("5) Random not valid action");
         playerActions.clear();
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         reloadAction = new MovePlayerAction(game, p1);
         playerActions.add(reloadAction);    // adding action
         newState = waitingForReload.nextState(playerActions, game, p1);
@@ -272,7 +272,7 @@ public class ControllerStateTest {
 
         System.out.println("6) Reload weapon failed. Weapon was already loaded");
         playerActions.clear();
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         reloadAction = new ReloadPlayerAction(game, p1);
         targetableList.add(weapon);
         weapon.setLoaded(true);
@@ -303,7 +303,7 @@ public class ControllerStateTest {
                 });
 
         System.out.println("1) Fail: action was not available");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setTile(board.getTile(0,0));
         action = new MovePlayerAction(game, p1);
         targetableList.add(board.getTile(3,2));
@@ -326,7 +326,7 @@ public class ControllerStateTest {
         assertEquals(waitingForMainActions, newState);
 
         System.out.println("3) Success, ShootWeaponSelection ");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(false);
         playerActions.clear();
         action = new ShootWeaponSelection(game, p1);
@@ -340,7 +340,7 @@ public class ControllerStateTest {
         assertEquals(WaitingForEffects.class, newState.getClass());
 
         System.out.println("4) Success, MovePlayerSelection");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
@@ -355,7 +355,7 @@ public class ControllerStateTest {
         assertEquals(waitingForMainActions, newState);
 
         System.out.println("4-bis) Success, MovePlayerSelection and GrabPlayerAction");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
@@ -383,7 +383,7 @@ public class ControllerStateTest {
         assertEquals(2,p1.getCharacterState().getAmmoBag().get(AmmoColor.RED).intValue());
 
         System.out.println("5) Success, NOP -> go to next player (not spawned)");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
@@ -397,7 +397,7 @@ public class ControllerStateTest {
         assertEquals(WaitingForRespawn.class, newState.getClass());
 
         System.out.println("5-bis) Success, NOP -> go to next player(spawned)");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
@@ -412,7 +412,7 @@ public class ControllerStateTest {
         assertEquals(WaitingForMainActions.class, newState.getClass());
 
         System.out.println("6) Success, 2 actions -> go to next player");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(false);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
@@ -436,7 +436,7 @@ public class ControllerStateTest {
         assertEquals(WaitingForReload.class, newState.getClass());
 
         System.out.println("7) Someone was killed in frenzy");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(true);
         p1.getCharacterState().setBeforeFrenzyActivator(false); // only one action possible
         waitingForMainActions = new WaitingForMainActions();
@@ -455,7 +455,7 @@ public class ControllerStateTest {
         assertEquals(WaitingForRespawn.class, newState.getClass());
 
         System.out.println("8) No one was killed in frenzy");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(true);
         p1.getCharacterState().setBeforeFrenzyActivator(false); // only one action possible
         waitingForMainActions = new WaitingForMainActions();
@@ -474,7 +474,7 @@ public class ControllerStateTest {
         assertEquals(WaitingForMainActions.class, newState.getClass());
 
         System.out.println("8) Some actions left");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForMainActions = new WaitingForMainActions();
@@ -508,7 +508,7 @@ public class ControllerStateTest {
         ControllerState waitingForEffects;
 
         System.out.println("1)NOP, and no actions performed");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -525,7 +525,7 @@ public class ControllerStateTest {
         assertEquals(waitingForMainActions, newState);
 
         System.out.println("1-bis)NOP, an action action was performed -> unload the weapon");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -543,7 +543,7 @@ public class ControllerStateTest {
         assertEquals(waitingForMainActions, newState);
 
         System.out.println("2) Invalid action");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -559,7 +559,7 @@ public class ControllerStateTest {
         assertEquals(waitingForEffects, newState);
 
         System.out.println("3) ShootPlayerAction failed check, weapon was not loaded");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -590,7 +590,7 @@ public class ControllerStateTest {
 
         System.out.println("4.1) ShootPlayerAction with damage, more optional effects");
         weapon = getWeapon("Lock_Rifle");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -624,7 +624,7 @@ public class ControllerStateTest {
 
         System.out.println("4.2) ShootPlayerAction with NO damage, no more optional effects");
         weapon = getWeapon("Lock_Rifle");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -691,7 +691,7 @@ public class ControllerStateTest {
 
         System.out.println("5) ShootPlayerAction with damage, no more optional effects");
         weapon = getWeapon("Whisper");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         game.setFrenzy(false);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
@@ -726,7 +726,7 @@ public class ControllerStateTest {
 
         System.out.println("6) ShootPlayerAction with NO damage, more optional effects left");
         weapon = getWeapon("Plasma_Gun");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -759,7 +759,7 @@ public class ControllerStateTest {
 
         System.out.println("7) ShootPlayerAction with damage, attacker with Targeting Scope");
         weapon = getWeapon("Lock_Rifle");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -803,7 +803,7 @@ public class ControllerStateTest {
         ControllerState waitingForEffects;
         WaitingForMainActions waitingForMainActions = new WaitingForMainActions();
         Weapon weapon = getWeapon("Lock_Rifle");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
@@ -837,7 +837,7 @@ public class ControllerStateTest {
 
 
         System.out.println("1) Invalid input for an invalid expected powerup");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps("", waitingForEffects);
@@ -855,7 +855,7 @@ public class ControllerStateTest {
         assertEquals(waitingForPowerUps, newState);
 
         System.out.println("2) NOP for Targeting Scope");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps(Constants.TARGETING_SCOPE, waitingForEffects);
@@ -874,7 +874,7 @@ public class ControllerStateTest {
 
 
         System.out.println("2-bis) Targeting Scope, ");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps(Constants.TARGETING_SCOPE, waitingForEffects);
@@ -909,7 +909,7 @@ public class ControllerStateTest {
         assertEquals(0, p1.getCharacterState().getPowerUpBag().size());
 
         System.out.println("3) Incorrect powerUp, not a Targeting scope");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps(Constants.TARGETING_SCOPE, waitingForEffects);
@@ -934,7 +934,7 @@ public class ControllerStateTest {
 
 
         System.out.println("4) Incorrect powerUp. Expecting a Tagback, but wasnt");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps(Constants.TAGBACK_GRENADE, waitingForEffects);
@@ -958,7 +958,7 @@ public class ControllerStateTest {
         assertEquals(waitingForPowerUps, newState);
 
         System.out.println("5) Correct Tagback Grenade, no more people left to ask");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps(Constants.TAGBACK_GRENADE, waitingForEffects);
@@ -991,7 +991,7 @@ public class ControllerStateTest {
         assertEquals(waitingForMainActions, newState);
 
         System.out.println("6) Correct Tagback Grenade, more people left to ask for powerup");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps(Constants.TAGBACK_GRENADE, waitingForEffects);
@@ -1026,7 +1026,7 @@ public class ControllerStateTest {
         assertEquals(waitingForPowerUps, newState);
 
         System.out.println("7) Correct Tagback Grenade, no more people left to ask and no optional effects left");
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
         waitingForPowerUps = new WaitingForPowerUps(Constants.TAGBACK_GRENADE, waitingForEffects);
         playerActions.clear();
         p1.getCharacterState().setFirstSpawn(false);

@@ -12,6 +12,6 @@ public class CurrentPlayerStateUpdate implements StateUpdate {
 
     @Override
     public void updateData(LocalModel model) {
-        model.getGame().setCurrentPlayerState(newCurrentPlayer);
+        model.getGame().setCurrentPlayer(newCurrentPlayer);
     }
 }

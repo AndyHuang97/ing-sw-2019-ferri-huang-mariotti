@@ -15,8 +15,6 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
-
 public class IsTargetInDamageTargetListTest {
 
     Tile tile;
@@ -56,7 +54,7 @@ public class IsTargetInDamageTargetListTest {
         p4 = new Player(UUID.randomUUID().toString(), true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
-        game.setCurrentPlayer(p1);
+        game.setCurrentPlayerNotify(p1);
 
         list = new ArrayList<>();
 

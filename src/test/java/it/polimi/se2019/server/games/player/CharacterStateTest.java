@@ -196,7 +196,7 @@ public class CharacterStateTest {
         Game game = new Game();
         Player player = new Player("TESTNICK", true, null, characterState, PlayerColor.BLUE);
         game.setPlayerList(Arrays.asList(player));
-        game.setCurrentPlayer(player);
+        game.setCurrentPlayerNotify(player);
 
         Assert.assertEquals(3, characterState.getPowerUpBag().size());
         Assert.assertTrue(hasAmmo.check(game, null));

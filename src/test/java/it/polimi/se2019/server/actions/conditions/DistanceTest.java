@@ -77,9 +77,9 @@ public class DistanceTest {
         list.add(tileMap[0][0]);
         targets.put("tileList", list);
 
-        game.setCurrentPlayer(p4);
+        game.setCurrentPlayerNotify(p4);
         //Assert.assertEquals(true, condition.check(game, targets));
-        game.setCurrentPlayer(p2);
+        game.setCurrentPlayerNotify(p2);
         //Assert.assertEquals(false, condition.check(game, targets));
 
     }
