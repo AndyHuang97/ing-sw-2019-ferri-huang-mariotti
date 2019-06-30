@@ -24,7 +24,7 @@ public class ConsumeTargetedAmmo implements Effect {
         AmmoColor targetedAmmoColor = (AmmoColor) targets.get(CommandConstants.AMMOCOLOR).get(AMMO_POSITION);
         Map<AmmoColor, Integer> ammoToConsume = new HashMap<>();
         ammoToConsume.put(targetedAmmoColor, amount);
-        game.getCurrentPlayer().getCharacterState().consumeAmmo(ammoToConsume);
+        game.getCurrentPlayer().getCharacterState().consumeAmmo(ammoToConsume, game);
 
     }
 }

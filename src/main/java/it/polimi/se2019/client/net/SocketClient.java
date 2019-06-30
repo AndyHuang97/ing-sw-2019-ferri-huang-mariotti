@@ -17,6 +17,7 @@ public class SocketClient implements NetworkClient {
     private String nickname;
     private String serverHost;
     private PrintWriter out;
+    private Socket socket;
 
     public SocketClient(String nickname, String serverHost) {
         this.nickname = nickname;
@@ -29,7 +30,7 @@ public class SocketClient implements NetworkClient {
             Properties prop = new Properties();
             prop.load(input);
             int socketPort = Integer.parseInt(prop.getProperty("socket.port"));
-            Socket socket = new Socket(serverHost, socketPort);
+            socket = new Socket(serverHost, socketPort);
             this.out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             ClientCommandHandler commandHandler = new ClientCommandHandler(view);
@@ -57,16 +58,11 @@ public class SocketClient implements NetworkClient {
             this.nickname = nickname;
         }
 
-        public void run(){
+        public void run() {
             try {
                 String inputLine;
                 while ((inputLine = this.in.readLine()) != null) {
                     Response request = (Response) new Response(null, false, "").deserialize(inputLine);
-                    if (request == null) {
-                        Logger.getGlobal().info("Deserialization failed! Request was null");
-                    } else {
-
-                    }
                     // custom code to handle ping pong socket sequence
                     if (request.getMessage().equals("ping")) {
                         Map<String, List<String>> socketPayload = new HashMap<>();
@@ -75,9 +71,13 @@ public class SocketClient implements NetworkClient {
                     }
                     commandHandler.handle(request);
                 }
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 // do something if connection fails
             }
         }
+    }
+
+    public void close() throws IOException {
+        socket.close();
     }
 }
