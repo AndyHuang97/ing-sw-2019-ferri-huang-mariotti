@@ -5,9 +5,11 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
 import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 
 import java.util.*;
@@ -20,6 +22,7 @@ public class CLIView extends View {
     CLIUtil utils = new CLIUtil();
     Weapon weaponInUse;
     Boolean usedBasicEffect;
+    List<PowerUp> powerUpsInUse;
 
 
     public CLIView() {
@@ -83,20 +86,20 @@ public class CLIView extends View {
                         sendNOP();
                         return;
                     }
-                    Map<String, String> players = new HashMap<>();
+                    Map<String, String> shootPlayers = new HashMap<>();
                     getModel().getGame().getPlayerList().forEach(p -> {
-                        players.put(p.getUserData().getNickname(), p.getId());
+                        shootPlayers.put(p.getUserData().getNickname(), p.getId());
                     });
                     for (int i = 0; i < actionUnit.getNumPlayerTargets(); i++) {
-                        String selectedPlayerTarget = utils.askUserInput("Select a player #" + i + " to target", new ArrayList<>(players.keySet()), true);
+                        String selectedPlayerTarget = utils.askUserInput("Select a player #" + i + " to target", new ArrayList<>(shootPlayers.keySet()), true);
                         if (selectedPlayerTarget.equals(Constants.NOP)) {
                             sendNOP();
                             return;
                         }
-                        shootList.add(players.get(selectedPlayerTarget));
+                        shootList.add(shootPlayers.get(selectedPlayerTarget));
                     }
                     for (int i = 0; i < actionUnit.getNumTileTargets(); i++) {
-                        String selectedTileTarget = utils.askUserInput("Select tile #" + i + " to target", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), true);
+                        String selectedTileTarget = utils.askUserInput("Select tile #" + i + " to target", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), false);
                         if (selectedTileTarget.equals(Constants.NOP)) {
                             sendNOP();
                             return;
@@ -155,7 +158,7 @@ public class CLIView extends View {
                                     }
                                     if (toBeReloaded.equals("Y")) selectedReloadWeaponsMA.add(wn);
                                 });
-                                if (selectedReloadWeaponsMA.size() <= 0) break;
+                                if (selectedReloadWeaponsMA.isEmpty()) break;
                                 doneActions.add(Constants.RELOAD);
                                 getPlayerInput().put(Constants.RELOAD, selectedReloadWeaponsMA);
                                 break;
@@ -241,7 +244,32 @@ public class CLIView extends View {
                     // TODO: Implement
                     break;
                 case Constants.TARGETING_SCOPE:
-                    // TODO: Implement
+                    List<String> targetingScope = new ArrayList<>();
+                    Map<String, String> targetingScopeTargets = new HashMap<>();
+                    for (int i = 0; i < 12; i++) {
+                        targetingScopeTargets.put("Tile " + i, String.valueOf(i));
+                    }
+                    getModel().getGame().getPlayerList().forEach(p -> {
+                        targetingScopeTargets.put("User " + p.getUserData().getNickname(), p.getId());
+                    });
+                    powerUpsInUse.forEach(up -> {
+                        targetingScope.add(up.getName());
+                        String selectedGenericTarget = utils.askUserInput("Select a user or tile to target with the " + up.getName() + " powerup", new ArrayList<>(targetingScopeTargets.keySet()), true);
+                        if (selectedGenericTarget.equals(Constants.NOP)) {
+                            sendNOP();
+                            return;
+                        }
+                        targetingScope.add(targetingScopeTargets.get(selectedGenericTarget));
+                        String selectedAmmoColor = utils.askUserInput("Select an ammo color to use with with the " + up.getName() + " powerup", Arrays.asList(AmmoColor.BLUE.getColor(), AmmoColor.RED.getColor(), AmmoColor.YELLOW.getColor()), true);
+                        if (selectedGenericTarget.equals(Constants.NOP)) {
+                            sendNOP();
+                            return;
+                        }
+                        targetingScope.add(selectedAmmoColor);
+                    });
+                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.TARGETING_SCOPE));
+                    getPlayerInput().put(Constants.TARGETING_SCOPE, targetingScope);
+                    sendInput();
                     break;
             }
         } catch (PlayerNotFoundException ex) {
