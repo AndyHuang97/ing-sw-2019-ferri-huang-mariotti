@@ -4,6 +4,7 @@ import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.dataupdate.CurrentPlayerStateUpdate;
 import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
 import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.deserialize.DirectDeserializers;
@@ -174,15 +175,26 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		return currentPlayer;
 	}
 
+	public void setCurrentPlayerState(Player currentPlayer) {
+        if (currentPlayer.getActive()) this.currentPlayer = currentPlayer;
+        else throw new IllegalStateException();
+    }
+
 	public void setCurrentPlayer(Player currentPlayer) {
-		if(currentPlayer.getActive()) {this.currentPlayer = currentPlayer;}
-		else {throw new IllegalStateException();}
+	    setCurrentPlayerState(currentPlayer);
+
+        CurrentPlayerStateUpdate currentPlayerUpdate = new CurrentPlayerStateUpdate(currentPlayer);
+
+        Response request = new Response(Arrays.asList(currentPlayerUpdate));
+        notify(request);
+
 	}
 
 	public void nextCurrentPlayer() {
 		int newIndex = playerList.indexOf(currentPlayer) + 1;
 		if(newIndex >= playerList.size()) {newIndex = 0;}
-		currentPlayer = playerList.get(newIndex);
+		//currentPlayer = playerList.get(newIndex);
+        setCurrentPlayer(playerList.get(newIndex));
 	}
 
 	public Date getStartDate() {

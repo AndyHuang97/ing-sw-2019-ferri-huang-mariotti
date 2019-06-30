@@ -19,10 +19,12 @@ import java.util.Map;
 public class GrabPlayerAction extends PlayerAction {
 
     private static final int ITEMPOSITION = 0;
+    private static final int OPTIONALITEM = 1;
     private static final int MAXWEAPONINBAG = 3;
     private static final String ERRORMESSAGE = "Grab action failed";
 
     private Weapon weaponToGrab;
+    private Weapon weaponToDiscard;
     private AmmoCrate ammoToGrab;
 
     public GrabPlayerAction(Game game, Player player) { super(game, player); }
@@ -32,6 +34,7 @@ public class GrabPlayerAction extends PlayerAction {
     public void unpack(List<Targetable> params) throws UnpackingException {
         boolean weaponCastError = false;
         boolean ammoCastError = false;
+        boolean optionalCastError = false;
 
         try {
             weaponToGrab = (Weapon) params.get(ITEMPOSITION);
@@ -45,7 +48,13 @@ public class GrabPlayerAction extends PlayerAction {
             ammoCastError = true;
         }
 
-        if (weaponCastError && ammoCastError) {
+        try {
+             weaponToDiscard = (Weapon) params.get(OPTIONALITEM);
+        } catch (IndexOutOfBoundsException | ClassCastException e) {
+            optionalCastError = true;
+        }
+
+        if (weaponCastError && ammoCastError && optionalCastError) {
             throw new UnpackingException();
         }
     }
@@ -67,10 +76,8 @@ public class GrabPlayerAction extends PlayerAction {
 
             // assert that the weapon is available in the SpawnTile
             boolean isWeaponAvailable = false;
-            //System.out.println(weaponToGrab);
             try {
                 for (Weapon weapon : weaponCrate) {
-                    System.out.println(weapon);
                     if (weapon == weaponToGrab) {
                         isWeaponAvailable = true;
                     }
@@ -80,7 +87,20 @@ public class GrabPlayerAction extends PlayerAction {
             }
 
             // assert that player have 2 or less weapons
-            if (getPlayer().getCharacterState().getWeaponBag().size() >= MAXWEAPONINBAG) {
+            int weaponBagSize = getPlayer().getCharacterState().getWeaponBag().size();
+
+            if (weaponBagSize == 3 && weaponToDiscard != null) {
+                boolean isWeaponToDiscardInWeaponBag = false;
+
+                for (Weapon weapon : getPlayer().getCharacterState().getWeaponBag()) {
+                    if (weapon == weaponToDiscard) {
+                        isWeaponToDiscardInWeaponBag = true;
+                    }
+                }
+
+                if (!isWeaponToDiscardInWeaponBag) return false;
+
+            } else if (weaponBagSize >= MAXWEAPONINBAG) {
                 return false;
             }
 
@@ -98,7 +118,6 @@ public class GrabPlayerAction extends PlayerAction {
                 }
             }
 
-            System.out.println(isWeaponAvailable);
             return isWeaponAvailable;
         }
 
@@ -138,6 +157,11 @@ public class GrabPlayerAction extends PlayerAction {
         int y = playerTile.getyPosition();
 
         if (weaponToGrab != null) {
+            if (weaponToDiscard != null) {
+                getPlayer().getCharacterState().getWeaponBag().remove(weaponToDiscard);
+                getGame().discardWeapon(weaponToDiscard);
+            }
+
             player.getCharacterState().addWeapon(weaponToGrab);
 
             // pay pickup cost

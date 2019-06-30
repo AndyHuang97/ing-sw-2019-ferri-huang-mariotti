@@ -10,6 +10,8 @@ public class AddPowerUp implements Effect {
 
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
-        game.getCurrentPlayer().getCharacterState().addPowerUp(game.getPowerupDeck().drawCard());
+        if (game.getCurrentPlayer().getCharacterState().getPowerUpBag().size() < 3) {
+            game.getCurrentPlayer().getCharacterState().addPowerUp(game.getPowerupDeck().drawCard());
+        }
     }
 }
