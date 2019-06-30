@@ -32,4 +32,6 @@ public class DeserializerConstants {
     public static final String SPAWNTILE = "SpawnTile";
     public static final String PICKUPCOST = "pickUpCost";
     public static final String RELOADCOST = "reloadCost";
+    public static final String XPOSITION = "xPosition";
+    public static final String YPOSITION = "yPosition";
 }

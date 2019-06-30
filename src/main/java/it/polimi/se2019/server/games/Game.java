@@ -94,7 +94,6 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		return new GameData(getStartDate());
 	}
 
-	//TODO initialize the board
 	public void initGameObjects(String mapIndex) {
 
 		this.setCurrentPlayer(playerList.get(0));

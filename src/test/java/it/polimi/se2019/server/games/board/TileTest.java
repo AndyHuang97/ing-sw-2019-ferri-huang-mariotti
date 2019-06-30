@@ -64,6 +64,7 @@ public class TileTest {
         board = null;
     }
 
+    /*
     @Test
     public void testSetColor() {
 
@@ -71,8 +72,6 @@ public class TileTest {
 
         Assert.assertEquals(RoomColor.BLUE, tile.getRoomColor());
     }
-
-
 
     @Test
     public void testSetNorthLink() {
@@ -113,6 +112,7 @@ public class TileTest {
 
         Assert.assertEquals(playerList, tile.getPlayers(game));
     }
+    */
 
     @Test
     public void testGetVisibleTiles() {

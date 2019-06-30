@@ -8,13 +8,13 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameTest {
 
@@ -23,7 +23,7 @@ public class GameTest {
     @Before
     public void setUp() {
         game = new Game();
-        Player p1 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
+        Player p1 = new Player(UUID.randomUUID().toString(),true, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
         Player p2 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick2"), new CharacterState(), PlayerColor.GREEN);
         Player p3 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick3"), new CharacterState(), PlayerColor.PURPLE);
         game.getPlayerList().addAll(Arrays.asList(p1,p2,p3));

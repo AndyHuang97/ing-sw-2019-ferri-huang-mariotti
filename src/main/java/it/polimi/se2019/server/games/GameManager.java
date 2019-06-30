@@ -135,7 +135,10 @@ public class GameManager {
 			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
 			// TODO: initialize character state or it is fine?
 			CharacterState characterState = new CharacterState();
-			playerList.add(new Player(UUID.randomUUID().toString(), true, tuple.userData, characterState, color));
+			Player player = new Player(UUID.randomUUID().toString(), true, tuple.userData, characterState, color);
+			playerList.add(player);
+			player.register(newGame);
+			characterState.register(newGame);
 			// register all players
 			newGame.register(tuple.commandHandler);
 		});

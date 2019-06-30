@@ -56,7 +56,7 @@ public class ControllerTest {
 
     @Before
     @SuppressWarnings("Duplicates")
-    public void setUp() throws GameManager.AlreadyPlayingException, GameManager.GameNotFoundException, PlayerNotFoundException {
+    public void setUp() throws GameManager.AlreadyPlayingException, GameManager.GameNotFoundException, PlayerNotFoundException, IOException {
         // GameManager and Game init
         ServerApp serverApp = new ServerApp();
         gameManager = serverApp.gameManager;
