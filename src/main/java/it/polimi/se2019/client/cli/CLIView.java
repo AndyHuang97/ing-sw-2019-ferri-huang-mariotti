@@ -88,7 +88,7 @@ public class CLIView extends View {
                     }
                     Map<String, String> shootPlayers = new HashMap<>();
                     getModel().getGame().getPlayerList().forEach(p -> {
-                        shootPlayers.put(p.getUserData().getNickname(), p.getId());
+                        if (!p.getId().equals(currentPlayer.getId())) shootPlayers.put(p.getUserData().getNickname(), p.getId());
                     });
                     for (int i = 0; i < actionUnit.getNumPlayerTargets(); i++) {
                         String selectedPlayerTarget = utils.askUserInput("Select a player #" + i + " to target", new ArrayList<>(shootPlayers.keySet()), true);
@@ -110,32 +110,33 @@ public class CLIView extends View {
                     sendInput();
                     break;
                 case Constants.MAIN_ACTION:
-                    Map<String, List<String>> possibileActions = new HashMap<>();
+                    Map<String, List<String>> possibleActions = new HashMap<>();
                     if (getModel().getGame().isFrenzy()) {
                         if (currentPlayer.getCharacterState().isBeforeFrenzyActivator()) {
-                            possibileActions.put(">↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT_WEAPON));
-                            possibileActions.put(">>>>", Arrays.asList(Constants.MOVE));
-                            possibileActions.put(">>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
+                            possibleActions.put(">↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT_WEAPON));
+                            possibleActions.put(">>>>", Arrays.asList(Constants.MOVE));
+                            possibleActions.put(">>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
                         } else {
-                            possibileActions.put(">>↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT_WEAPON));
-                            possibileActions.put(">>>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
+                            possibleActions.put(">>↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT_WEAPON));
+                            possibleActions.put(">>>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
                         }
                     } else {
-                        possibileActions.put(">>>", Arrays.asList(Constants.MOVE));
-                        possibileActions.put(">✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
-                        possibileActions.put("\uD83D\uDF8B", Arrays.asList(Constants.SHOOT_WEAPON));
+                        possibleActions.put(">>>", Arrays.asList(Constants.MOVE));
+                        possibleActions.put(">✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
+                        possibleActions.put("\uD83D\uDF8B", Arrays.asList(Constants.SHOOT_WEAPON));
                         if (currentPlayer.getCharacterState().getDeaths() > 2)
-                            possibileActions.put(">>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
+                            possibleActions.put(">>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
                         if (currentPlayer.getCharacterState().getDeaths() > 5)
-                            possibileActions.put(">\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.SHOOT_WEAPON));
+                            possibleActions.put(">\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.SHOOT_WEAPON));
                     }
-                    String actionInput = utils.askUserInput("Pick an action", new ArrayList<>(possibileActions.keySet()), true);
+                    if (currentPlayer.getCharacterState().getPowerUpBag().stream().anyMatch(up -> up.getName().contains("Newton") || up.getName().contains("Teleporter"))) possibleActions.put("PowerUp", Arrays.asList(Constants.POWERUP));
+                    String actionInput = utils.askUserInput("Pick an action", new ArrayList<>(possibleActions.keySet()), true);
                     if (actionInput.equals(Constants.NOP)) {
                         sendNOP();
                         return;
                     }
                     List<String> doneActions = new ArrayList<>();
-                    possibileActions.get(actionInput).forEach(action -> {
+                    possibleActions.get(actionInput).forEach(action -> {
                         switch (action) {
                             case Constants.MOVE:
                                 String selectedMoveTile = utils.askUserInput("Pick a tile or n not to move", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "n"), false);
@@ -225,6 +226,38 @@ public class CLIView extends View {
                                     getPlayerInput().put(Constants.GRAB, Arrays.asList(grabCrates.get(selectedCrateGrab)));
                                 }
                                 break;
+                            case Constants.POWERUP:
+                                List<String> validPowerUps = currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> up.getName().contains("Newton") || up.getName().contains("Teleporter")).map(up -> up.getName()).collect(Collectors.toList());
+                                String selectedPowerUp = utils.askUserInput("Choose the powerUp to use", validPowerUps, true);
+                                if (selectedPowerUp.equals(Constants.NOP)) {
+                                    sendNOP();
+                                    return;
+                                }
+                                if (selectedPowerUp.contains("Newton")) {
+                                    Map<String, String> newtonPlayers = new HashMap<>();
+                                    getModel().getGame().getPlayerList().forEach(p -> {
+                                        if (!p.getId().equals(currentPlayer.getId())) newtonPlayers.put(p.getUserData().getNickname(), p.getId());
+                                    });
+                                    String selectedNewtonPlayer = utils.askUserInput("Select a player to newton", new ArrayList<>(newtonPlayers.keySet()), true);
+                                    if (selectedNewtonPlayer.equals(Constants.NOP)) {
+                                        sendNOP();
+                                        return;
+                                    }
+                                    String selectedNewtonTile = utils.askUserInput("Pick a tile where to newton it", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), false);
+                                    if (selectedNewtonTile.equals(Constants.NOP)) {
+                                        sendNOP();
+                                        return;
+                                    }
+                                    getPlayerInput().put(Constants.POWERUP, Arrays.asList(selectedPowerUp, selectedNewtonPlayer, selectedNewtonTile));
+                                } else if (selectedPowerUp.contains("Teleporter")) {
+                                    String selectedTeleportTile = utils.askUserInput("Pick a tile where to teleport", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), false);
+                                    if (selectedTeleportTile.equals(Constants.NOP)) {
+                                        sendNOP();
+                                        return;
+                                    }
+                                    getPlayerInput().put(Constants.POWERUP, Arrays.asList(selectedPowerUp, selectedTeleportTile));
+                                }
+                                break;
                         }
                     });
                     getPlayerInput().put(Constants.KEY_ORDER, doneActions);
@@ -250,7 +283,7 @@ public class CLIView extends View {
                         targetingScopeTargets.put("Tile " + i, String.valueOf(i));
                     }
                     getModel().getGame().getPlayerList().forEach(p -> {
-                        targetingScopeTargets.put("User " + p.getUserData().getNickname(), p.getId());
+                        if (!p.getId().equals(currentPlayer.getId())) targetingScopeTargets.put("User " + p.getUserData().getNickname(), p.getId());
                     });
                     powerUpsInUse.forEach(up -> {
                         targetingScope.add(up.getName());
@@ -261,7 +294,7 @@ public class CLIView extends View {
                         }
                         targetingScope.add(targetingScopeTargets.get(selectedGenericTarget));
                         String selectedAmmoColor = utils.askUserInput("Select an ammo color to use with with the " + up.getName() + " powerup", Arrays.asList(AmmoColor.BLUE.getColor(), AmmoColor.RED.getColor(), AmmoColor.YELLOW.getColor()), true);
-                        if (selectedGenericTarget.equals(Constants.NOP)) {
+                        if (selectedAmmoColor.equals(Constants.NOP)) {
                             sendNOP();
                             return;
                         }
