@@ -42,16 +42,16 @@ public class CLIController {
                                     weaponCreates.append(utils.getPrintableRoomColor(color) + color.toLowerCase().substring(0, 1).toUpperCase() + color.toLowerCase().substring(1) + " Weapons Create" + Colors.RESET + "\n");
                                     weaponCreates.append(handleWeapons(tileMap[x][y].getWeaponCrate()));
                                 }
-                                tileMap[x][y].getPlayers(view.getModel().getGame()).forEach(p -> {
-                                    if (lineSize[0] < 6) {
-                                        replacement.get(0).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "⬤" + Colors.RESET);
-                                        lineSize[0]++;
+                                view.getModel().getGame().getPlayerList().forEach(p -> {
+                                    if (p.getCharacterState().getTile() != null && tileMap[x][y].getId().equals(p.getCharacterState().getTile().getId())) {
+                                        if (lineSize[0] < 6) {
+                                            replacement.get(0).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "●" + Colors.RESET);
+                                            lineSize[0]++;
+                                        } else {
+                                            replacement.get(1).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "●" + Colors.RESET);
+                                            lineSize[1]++;
+                                        }
                                     }
-                                    else {
-                                        replacement.get(1).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "⬤" + Colors.RESET);
-                                        lineSize[1]++;
-                                    }
-
                                 });
                                 while (lineSize[0] < 6) {
                                     replacement.get(0).append(" ");

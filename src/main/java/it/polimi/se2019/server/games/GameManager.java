@@ -146,8 +146,7 @@ public class GameManager {
 			playerCommandHandlerMap.put(tuple.userData.getNickname(),tuple.commandHandler);
 		});
 
-		Map<String, Long> occurrences =
-				mapPreference.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+		Map<String, Long> occurrences = mapPreference.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
 		Map.Entry<String, Long> max = occurrences.entrySet()
 				.stream()
 				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);

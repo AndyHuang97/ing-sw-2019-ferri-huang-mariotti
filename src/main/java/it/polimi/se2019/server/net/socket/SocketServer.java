@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -56,7 +57,10 @@ public class SocketServer {
                     if (request.getNetMessage().getCommands().containsKey("pong")) {
                         this.echo = true;
                     }
+                    String uuid = String.valueOf(UUID.randomUUID());
+                    logger.info(uuid);
                     this.commandHandler.handle(request);
+                    logger.info(uuid);
                 }
 
                 in.close();

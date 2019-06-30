@@ -259,6 +259,10 @@ public class CLIView extends View {
                                 break;
                         }
                     });
+                    if (doneActions.isEmpty()) {
+                        sendNOP();
+                        return;
+                    }
                     getPlayerInput().put(Constants.KEY_ORDER, doneActions);
                     sendInput();
                     break;
