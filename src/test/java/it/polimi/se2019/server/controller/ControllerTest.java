@@ -37,11 +37,11 @@ public class ControllerTest {
 
     private static final String TESTNICK0 = "testNick0";
     private static final String TESTNICK1 = "testNick1";
-    private static final String MOVEPLAYERACTION = MovePlayerAction.class.getName();
-    private static final String SHOOTPLAYERACTION = ShootPlayerAction.class.getName();
-    private static final String GRABPLAYERACTION = GrabPlayerAction.class.getName();
-    private static final String RELOADPLAYERACTION = ReloadPlayerAction.class.getName();
-    private static final String SHOOTWEAPONSELECTION = ShootWeaponSelection.class.getName();
+    private static final String MOVEPLAYERACTION = MovePlayerAction.class.getSimpleName();
+    private static final String SHOOTPLAYERACTION = ShootPlayerAction.class.getSimpleName();
+    private static final String GRABPLAYERACTION = GrabPlayerAction.class.getSimpleName();
+    private static final String RELOADPLAYERACTION = ReloadPlayerAction.class.getSimpleName();
+    private static final String SHOOTWEAPONSELECTION = ShootWeaponSelection.class.getSimpleName();
 
     private GameManager gameManager;
     private Game game;

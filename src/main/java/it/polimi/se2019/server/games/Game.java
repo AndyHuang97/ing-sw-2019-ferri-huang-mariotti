@@ -42,6 +42,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private boolean frenzy;
 
 	private Tile virtualPlayerPosition;
+	private List<PowerUp> usedPowerups = new ArrayList<>();
+	private List<Weapon> usedWeapons = new ArrayList<>();
 
 	public Game() {
 		// don't use this constructor
@@ -154,7 +156,6 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		if(currentPlayer.getActive()) {this.currentPlayer = currentPlayer;}
 		else {throw new IllegalStateException();}
 	}
-
 
 	public void nextCurrentPlayer() {
 		if (playerList.indexOf(getCurrentPlayer()) != (playerList.size()-1)) {
@@ -387,14 +388,38 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
     }
 
     private Weapon drawWeaponFromDeck() {
-        return weaponDeck.drawCard();
+        Weapon drawnWeapon = weaponDeck.drawCard();
+        if (drawnWeapon == null) {
+            this.weaponDeck = new Deck<>(usedWeapons);
+            drawnWeapon = weaponDeck.drawCard();
+        }
+
+        return drawnWeapon;
     }
 
     private AmmoCrate drawAmmoCrateFromDeck() {
+        AmmoCrate drawnAmmoCrate = ammoCrateDeck.drawCard();
+        if (drawnAmmoCrate == null) {
+            this.ammoCrateDeck = DirectDeserializers.deserializeAmmoCrate();
+            drawnAmmoCrate = ammoCrateDeck.drawCard();
+        }
         return ammoCrateDeck.drawCard();
     }
 
     private PowerUp drawPowerupFromDeck() {
+        PowerUp drawnPowerup = powerupDeck.drawCard();
+        if (drawnPowerup == null) {
+            this.powerupDeck = new Deck<>(usedPowerups);
+            drawnPowerup = powerupDeck.drawCard();
+        }
         return powerupDeck.drawCard();
+    }
+
+    public void dicardPowerup(PowerUp powerUp) {
+        usedPowerups.add(powerUp);
+    }
+
+    public void discardWeapon(Weapon weapon) {
+        usedWeapons.add(weapon);
     }
 }

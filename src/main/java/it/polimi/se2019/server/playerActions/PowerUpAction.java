@@ -42,6 +42,7 @@ public class PowerUpAction extends PlayerAction {
     public void run() {
         powerUpToDiscard.getActionUnitList().get(MAIN_EFFECT).run(getGame(), inputCommands);
         getPlayer().getCharacterState().removePowerUp(powerUpToDiscard);
+        getGame().dicardPowerup(powerUpToDiscard);
     }
 
     @Override
