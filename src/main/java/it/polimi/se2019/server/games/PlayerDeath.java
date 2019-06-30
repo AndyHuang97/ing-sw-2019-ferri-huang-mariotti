@@ -14,15 +14,17 @@ public class PlayerDeath {
     private List<PlayerColor> damageBar;
     private int[] valueBar;
     private int deaths;
+    private boolean deathDuringFrenzy;
 
     /**
      * Constructs the main object to notify every player to update their score.
      */
-    public PlayerDeath(Player player) {
+    public PlayerDeath(Player player, boolean deathDuringFrenzy) {
         this.deadPlayer = player.getColor();
         this.damageBar = player.getCharacterState().getDamageBar();
         this.valueBar = player.getCharacterState().getValueBar();
         this.deaths = player.getCharacterState().getDeaths();
+        this.deathDuringFrenzy = deathDuringFrenzy;
     }
 
     /**
@@ -87,5 +89,9 @@ public class PlayerDeath {
 
     public void setDeaths(int deaths) {
         this.deaths = deaths;
+    }
+
+    public boolean isDeathDuringFrenzy() {
+        return deathDuringFrenzy;
     }
 }

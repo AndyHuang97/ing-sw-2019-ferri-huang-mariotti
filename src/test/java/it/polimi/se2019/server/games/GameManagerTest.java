@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class GameManagerTest {
 
@@ -63,11 +64,15 @@ public class GameManagerTest {
         // load a properties file
         prop.load(input);
         int waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
+        System.out.println(waitingListMaxSize);
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
+            gameManager.getMapPreference().add("0");
             gameManager.addUserToWaitingList(user, new CommandHandler());
         }
+        Logger.getGlobal().info(gameManager.getGameList().toString());
         Assert.assertEquals(1, gameManager.getGameList().size());
+        gameManager.getGameList().clear();
     }
 
     @Test
@@ -79,8 +84,10 @@ public class GameManagerTest {
         int waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
         for (int i = 0; i <= 2 * waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
+            gameManager.getMapPreference().add("0");
             gameManager.addUserToWaitingList(user, new CommandHandler());
         }
         Assert.assertNotEquals(gameManager.retrieveGame("testNick0"), gameManager.retrieveGame("testNick" + 2 * waitingListMaxSize));
+        gameManager.getGameList().clear();
     }
 }

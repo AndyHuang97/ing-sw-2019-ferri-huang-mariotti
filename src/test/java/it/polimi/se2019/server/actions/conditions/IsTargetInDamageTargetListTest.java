@@ -7,6 +7,7 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.CommandConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -78,34 +79,30 @@ public class IsTargetInDamageTargetListTest {
     @Test
     public void testIsTargetInDamageTargetList() {
         Condition condition = new IsTargetInDamageTargetList();
-        List<Targetable> damageTargetList = new ArrayList<>();
-        targets.put("damageTargetList", damageTargetList);
         list.add(p2);
-        targets.put("target", list);
+        targets.put(CommandConstants.TARGETLIST, list);
 
-        damageTargetList.addAll(Arrays.asList(p2, p3,p4));
+        game.getCumulativeDamageTargetSet().addAll(Arrays.asList(p2, p3,p4));
         Assert.assertEquals(true, condition.check(game, targets));
-        damageTargetList.clear();
+        game.getCumulativeDamageTargetSet().clear();
 
-        damageTargetList.addAll(Arrays.asList(p3,p4));
+        game.getCumulativeDamageTargetSet().addAll(Arrays.asList(p3,p4));
         Assert.assertEquals(false, condition.check(game, targets));
-        damageTargetList.clear();
+        game.getCumulativeDamageTargetSet().clear();
     }
 
     @Test
     public void testIsTargetNotInDamageTargetList() {
         Condition condition = new IsTargetNotInDamageTargetList();
-        List<Targetable> damageTargetList = new ArrayList<>();
-        targets.put("damageTargetList", damageTargetList);
         list.add(p2);
-        targets.put("target", list);
+        targets.put(CommandConstants.TARGETLIST, list);
 
-        damageTargetList.addAll(Arrays.asList(p2, p3,p4));
+        game.getCumulativeDamageTargetSet().addAll(Arrays.asList(p2, p3,p4));
         Assert.assertEquals(false, condition.check(game, targets));
-        damageTargetList.clear();
+        game.getCumulativeDamageTargetSet().clear();
 
-        damageTargetList.addAll(Arrays.asList(p3,p4));
+        game.getCumulativeDamageTargetSet().addAll(Arrays.asList(p3,p4));
         Assert.assertEquals(true, condition.check(game, targets));
-        damageTargetList.clear();
+        game.getCumulativeDamageTargetSet().clear();
     }
 }

@@ -2,11 +2,16 @@ package it.polimi.se2019.server.games.board;
 
 import com.google.gson.Gson;
 import it.polimi.se2019.server.actions.Direction;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.dataupdate.AmmoCrateUpdate;
+import it.polimi.se2019.server.dataupdate.WeaponCrateUpdate;
 import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.graphs.Graph;
-import it.polimi.se2019.server.graphs.Vertex;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,11 +21,11 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Board {
+public class Board extends Observable<Response> {
 
     private String id;
     private Tile[][] tileMap;
-    private Graph<Tile> tileTree;
+    private transient Graph<Tile> tileTree;
 
     public Board() {
     }
@@ -53,11 +58,21 @@ public class Board {
         return tileMap[xCoord][yCoord];
     }
 
+    public Tile getTileFromID(String id) {
+        for (int x = 0; x < tileMap.length; x++) {
+            for (int y = 0; y < tileMap[x].length; y++) {
+                if (tileMap[x][y].getId() == id) return tileMap[x][y];
+            }
+        }
+
+        return null;
+    }
+
     public int[] getTilePosition(Tile t) throws TileNotFoundException {
         int[] result = new int[2];
 
         for (int xCoord = 0; xCoord < tileMap.length; xCoord++) {
-            for (int yCoord = 0; yCoord < tileMap[0].length; yCoord++) {
+            for (int yCoord = 0; yCoord < tileMap[xCoord].length; yCoord++) {
                 if (tileMap[xCoord][yCoord] == t) {
                     result[0] = xCoord;
                     result[1] = yCoord;
@@ -98,16 +113,8 @@ public class Board {
         return graph;
     }
 
-    public List<Tile> tileMapToList() {
-        List<Tile> list = new ArrayList<>();
-        for (Tile[] array : tileMap){
-            list.addAll(Arrays.asList(array));
-        }
-        return list;
-    }
-
     public Tile getSpawnTile(RoomColor roomColor) {
-        return tileMapToList().stream()
+        return getTileList().stream()
                 .filter(Objects::nonNull)
                 .filter(Tile::isSpawnTile)
                 .filter(t -> t.getRoomColor() == roomColor)
@@ -192,5 +199,25 @@ public class Board {
 
     public String getId() {
         return id;
+    }
+
+    public void setAmmoCrate(int xPosition, int yPosition, AmmoCrate ammoCrate) {
+        Tile tile = getTile(xPosition, yPosition);
+        tile.setAmmoCrate(ammoCrate);
+
+        AmmoCrateUpdate ammoCrateUpdate = new AmmoCrateUpdate(xPosition, yPosition, ammoCrate);
+        Response response = new Response(Arrays.asList(ammoCrateUpdate));
+
+        notify(response);
+    }
+
+    public void setWeaponCrate(int xPosition, int yPosition, List<Weapon> weaponCrate) {
+        Tile tile = getTile(xPosition, yPosition);
+        tile.setWeaponCrate(weaponCrate);
+
+        WeaponCrateUpdate weaponCrateUpdate = new WeaponCrateUpdate(xPosition, yPosition, weaponCrate);
+        Response response = new Response(Arrays.asList(weaponCrateUpdate));
+
+        notify(response);
     }
 }

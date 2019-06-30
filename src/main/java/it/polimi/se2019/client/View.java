@@ -8,11 +8,10 @@ import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.*;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Observer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class View extends Observable implements Observer<Response> {
 
@@ -23,6 +22,8 @@ public abstract class View extends Observable implements Observer<Response> {
 
     private Map<String, List<String>> playerInput = new HashMap<>();
     private List<Runnable> inputRequested = new ArrayList<>();
+
+    private boolean cliTrueGuiFalse;
 
     public View() {
         model = new Model();
@@ -60,16 +61,21 @@ public abstract class View extends Observable implements Observer<Response> {
 
         networkClient.start(this);
         Map<String, List<String>> payload = new HashMap<>();
-        payload.put("connect", new ArrayList<>());
+        payload.put("connect", Arrays.asList(map));
         networkClient.send(new Request(new NetMessage(payload), nickname));
     }
 
     /**
-     * The sendInput method sends an input message to the server.
+     * The sendInput method sends an input message to the server, only if the client is the current player of
+     * the match.
      */
     public void sendInput() {
         System.out.println(">>> Sending: " + getPlayerInput());
-        networkClient.send(new Request(new NetMessage(playerInput), nickname));
+        if (model.getGame().getCurrentPlayer().getUserData().getNickname().equals(nickname)) {
+            networkClient.send(new Request(new NetMessage(playerInput), nickname));
+        } else {
+            System.out.println("Wait for your turn!");
+        }
         getPlayerInput().clear();
     }
 
@@ -79,7 +85,8 @@ public abstract class View extends Observable implements Observer<Response> {
     public abstract void askInput();
 
     /**
-     * The showMessage method shows a message received as response from the server.
+     * The showMessage method shows a message received as response from the server, it may execute some methods
+     * for input selection.
      * @param message a response message containing info on the performed action.
      */
     public abstract void showMessage(String message);
@@ -130,4 +137,8 @@ public abstract class View extends Observable implements Observer<Response> {
     public List<Runnable> getInputRequested() {
         return inputRequested;
     }
+
+    public boolean isCliTrueGuiFalse() { return cliTrueGuiFalse; }
+
+    public void setCliTrueGuiFalse(boolean cliTrueGuiFalse) { this.cliTrueGuiFalse = cliTrueGuiFalse; }
 }

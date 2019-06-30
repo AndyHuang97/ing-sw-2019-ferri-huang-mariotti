@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.games.Deck;
+import it.polimi.se2019.util.DeserializerConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,13 @@ public class AmmoCrateDeserializer implements RandomDeserializer {
         List<AmmoCrate> ammoCrateList = new ArrayList<>();
         List<ActionUnit> actions = null;
 
-        JsonArray jsonAmmoCrateArray = json.getAsJsonArray("ammocrateDeck");
-        ActionsDeserializer actionDeserializer = (ActionsDeserializer) deserializerFactory.getDeserializer("actions");
+        JsonArray jsonAmmoCrateArray = json.getAsJsonArray(DeserializerConstants.AMMOCRATEDECK);
+        ActionsDeserializer actionDeserializer = (ActionsDeserializer) deserializerFactory.getDeserializer(DeserializerConstants.ACTIONS);
 
         for(JsonElement ammoCrateElement : jsonAmmoCrateArray) {
             JsonObject jsonAmmoCrate = ammoCrateElement.getAsJsonObject();
-            String name = jsonAmmoCrate.get("name").getAsString();
+            String name = jsonAmmoCrate.get(DeserializerConstants.NAME).getAsString();
+            int amount = jsonAmmoCrate.get(DeserializerConstants.AMOUNT).getAsInt();
             AmmoCrate ammoCrate = null;
 
             try {
@@ -38,8 +40,10 @@ public class AmmoCrateDeserializer implements RandomDeserializer {
                 throw e;
             }
 
-            ammoCrate = new AmmoCrate(actions, name);
-            ammoCrateList.add(ammoCrate);
+            for (int i = 0; i< amount; i++) {
+                ammoCrate = new AmmoCrate(actions, name);
+                ammoCrateList.add(ammoCrate);
+            }
         }
 
         return new Deck(ammoCrateList);

@@ -1,8 +1,9 @@
 {
   "powerupDeck": [
     {
-      "name": "Blue_Targeting_Scope",
-      "amount": 1,
+      "name": "Blue_TargetingScope",
+      "amount": 2,
+      "color": "BLUE",
       "actions": [
         {
           "name": "Main Effect",
@@ -14,6 +15,13 @@
               "params": {
                 "amount": 1
               }
+            },
+            {
+              "name": "Consume Targeted Ammo x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeTargetedAmmo",
+              "params": {
+                "amount": 1
+              }
             }
           ],
           "conditionList": [
@@ -24,8 +32,8 @@
               }
             },
             {
-              "name": "Has ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "name": "Has Targeted Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasTargetedAmmo",
               "params": {
                 "amount": 1
               }
@@ -55,8 +63,9 @@
       "image": ""
     },
     {
-      "name": "Red_Targeting_Scope",
-      "amount": 1,
+      "name": "Red_TargetingScope",
+      "amount": 2,
+      "color": "RED",
       "actions": [
         {
           "name": "Main Effect",
@@ -65,6 +74,13 @@
             {
               "name": "Damage Target Listx1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Consume Targeted Ammo x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeTargetedAmmo",
               "params": {
                 "amount": 1
               }
@@ -78,8 +94,8 @@
               }
             },
             {
-              "name": "Has ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "name": "Has Targeted Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasTargetedAmmo",
               "params": {
                 "amount": 1
               }
@@ -109,8 +125,9 @@
       "image": ""
     },
     {
-      "name": "Yellow_Targeting_Scope",
-      "amount": 1,
+      "name": "Yellow_TargetingScope",
+      "amount": 2,
+      "color": "YELLOW",
       "actions": [
         {
           "name": "Main Effect",
@@ -119,6 +136,13 @@
             {
               "name": "Damage Target Listx1",
               "class_name": "it.polimi.se2019.server.actions.effects.DamageTargetList",
+              "params": {
+                "amount": 1
+              }
+            },
+            {
+              "name": "Consume Targeted Ammo x1",
+              "class_name": "it.polimi.se2019.server.actions.effects.ConsumeTargetedAmmo",
               "params": {
                 "amount": 1
               }
@@ -132,8 +156,8 @@
               }
             },
             {
-              "name": "Has ammo",
-              "class_name": "it.polimi.se2019.server.actions.conditions.HasAmmo",
+              "name": "Has Targeted Ammo",
+              "class_name": "it.polimi.se2019.server.actions.conditions.HasTargetedAmmo",
               "params": {
                 "amount": 1
               }
@@ -164,7 +188,8 @@
     },
     {
       "name": "Blue_Newton",
-      "amount": 1,
+      "amount": 2,
+      "color": "BLUE",
       "actions": [
         {
           "name": "Main Effect",
@@ -223,7 +248,8 @@
     },
     {
       "name": "Red_Newton",
-      "amount": 1,
+      "amount": 2,
+      "color": "RED",
       "actions": [
         {
           "name": "Main Effect",
@@ -282,7 +308,8 @@
     },
     {
       "name": "Yellow_Newton",
-      "amount": 1,
+      "amount": 2,
+      "color": "YELLOW",
       "actions": [
         {
           "name": "Main Effect",
@@ -340,29 +367,15 @@
       "image": ""
     },
     {
-      "name": "Blue_Tagback_Grenade",
-      "amount": 1,
+      "name": "Blue_TagbackGrenade",
+      "amount": 2,
+      "color": "BLUE",
       "actions": [
         {
           "name": "Main Effect",
           "available": true,
-          "effectList": [
-            {
-              "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
-              "params": {
-                "amount": 1
-              }
-            }
-          ],
-          "conditionList": [
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
-              "params": {
-              }
-            }
-          ],
+          "effectList": [],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
@@ -387,29 +400,15 @@
       "image": ""
     },
     {
-      "name": "Red_Tagback_Grenade",
-      "amount": 1,
+      "name": "Red_TagbackGrenade",
+      "amount": 2,
+      "color": "RED",
       "actions": [
         {
           "name": "Main Effect",
           "available": true,
-          "effectList": [
-            {
-              "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
-              "params": {
-                "amount": 1
-              }
-            }
-          ],
-          "conditionList": [
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
-              "params": {
-              }
-            }
-          ],
+          "effectList": [],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
@@ -434,29 +433,15 @@
       "image": ""
     },
     {
-      "name": "Yellow_Tagback_Grenade",
-      "amount": 1,
+      "name": "Yellow_TagbackGrenade",
+      "amount": 2,
+      "color": "YELLOW",
       "actions": [
         {
           "name": "Main Effect",
           "available": true,
-          "effectList": [
-            {
-              "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
-              "params": {
-                "amount": 1
-              }
-            }
-          ],
-          "conditionList": [
-            {
-              "name": "Target visible",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsTargetListVisible",
-              "params": {
-              }
-            }
-          ],
+          "effectList": [],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
@@ -482,7 +467,8 @@
     },
     {
       "name": "Blue_Teleporter",
-      "amount": 1,
+      "amount": 2,
+      "color": "BLUE",
       "actions": [
         {
           "name": "Main Effect",
@@ -528,7 +514,8 @@
     },
     {
       "name": "Red_Teleporter",
-      "amount": 1,
+      "amount": 2,
+      "color": "RED",
       "actions": [
         {
           "name": "Main Effect",
@@ -574,7 +561,8 @@
     },
     {
       "name": "Yellow_Teleporter",
-      "amount": 1,
+      "amount": 2,
+      "color": "YELLOW",
       "actions": [
         {
           "name": "Main Effect",

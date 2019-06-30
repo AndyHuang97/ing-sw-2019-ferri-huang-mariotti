@@ -1,7 +1,7 @@
 package it.polimi.se2019.client.gui;
 
-import it.polimi.se2019.client.Model;
 import it.polimi.se2019.client.View;
+import it.polimi.se2019.client.util.Constants;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -17,8 +17,14 @@ public class GUIView extends View {
     private BorderPane rootLayout;
     private Stage primaryStage;
 
+    public GUIView() {
+        this.setCliTrueGuiFalse(false);
+    }
+
+
     public GUIView(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        this.setCliTrueGuiFalse(false);
     }
 
     @Override
@@ -30,7 +36,10 @@ public class GUIView extends View {
 
     @Override
     public void showMessage(String message) {
-
+        switch (message) {
+            case Constants.RESPAWN:
+                guiController.getActionTileController().getPowerUpForRespawn();
+        }
     }
 
     @Override
@@ -41,7 +50,7 @@ public class GUIView extends View {
     @Override
     public void showGame() {
 
-        // the next line is used only for testing purposes only.
+        // the next line is used for testing purposes only.
         //((Model)super.getModel()).boardDeserialize();
 
         this.initRootLayout();
@@ -87,7 +96,7 @@ public class GUIView extends View {
 
             // initialization of the map must precede the initialization of the player boards
 
-            guiController.init(super.getModel().getGame().getPlayerByColor(super.getPlayerColor()));
+            guiController.init(getModel().getGame().getPlayerByColor(getPlayerColor()));
 
         } catch(IOException e) {
             Logger.getGlobal().warning(e.toString());

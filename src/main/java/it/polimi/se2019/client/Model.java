@@ -9,7 +9,6 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
-import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.board.Board;
@@ -33,22 +32,30 @@ public class Model implements LocalModel {
     private Game game;
 
     @Override
-    public void setCharacterState(CharacterState characterState, Player player) {
-        String playerNickname = player.getUserData().getNickname();
+    public void setCharacterState(CharacterState characterState) {
+        PlayerColor color = characterState.getColor();
 
         Player localPlayer;
-        try {
-            localPlayer = game.getPlayerByNickname(playerNickname);
-            localPlayer.setCharacterState(characterState);
-        } catch (PlayerNotFoundException e) {
-            // Throw appropriate exception
-        }
+        localPlayer = game.getPlayerByColor(color);
+
+        localPlayer.setCharacterState(characterState);
     }
 
     @Override
     public void setGame(Game game) {
         this.game = game;
     }
+
+    @Override
+    public void setKillShotTrack(KillShotTrack killShotTrack) {
+        this.game.setKillshotTrack(killShotTrack);
+    }
+
+    @Override
+    public Board getBoard() {
+        return getGame().getBoard();
+    }
+
     @Override
     public Game getGame() {
         return game;
@@ -59,7 +66,7 @@ public class Model implements LocalModel {
     // testing methods ---------------------------------------------------------------------------------------------
     public void initGame() {
         game = new Game();
-        game.setFrenzy(false);
+        game.setFrenzy(true);
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
@@ -104,9 +111,9 @@ public class Model implements LocalModel {
                 });
 
         p1.getCharacterState().setPowerUpBag(Arrays.asList(
-                new PowerUp(null, "Blue_Newton"),
-                new PowerUp(null, "Red_Newton"),
-                new PowerUp(null, "Yellow_Teleporter")));
+                new PowerUp(null, "Blue_Newton", AmmoColor.BLUE),
+                new PowerUp(null, "Red_Newton", AmmoColor.RED),
+                new PowerUp(null, "Yellow_Teleporter", AmmoColor.YELLOW)));
 
         p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
         p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));

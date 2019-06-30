@@ -3,24 +3,28 @@ package it.polimi.se2019.server.games.player;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
-import it.polimi.se2019.server.dataupdate.PlayerEventListenable;
+import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.playerActions.CompositeAction;
+import it.polimi.se2019.server.playerActions.MovePlayerAction;
+import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * This class contains the information about a character, it's meant to be serialized.
  * A read-only copy of this object should be stored in the client (view).
  */
-public class CharacterState extends PlayerEventListenable implements Serializable {
+public class CharacterState extends Observable<Response> implements Serializable {
 
 	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
 	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
+	private static final int FIRST_ATTACKER = 0;
 
 	private int deaths;
 	private int[] valueBar;
@@ -31,7 +35,11 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	private List<PowerUp> powerUpBag;
 	private Tile tile;
 	private Integer score;
+	private boolean firstSpawn;
 	private boolean connected;
+    private final PlayerColor color;
+
+	private boolean beforeFrenzyActivator;
 
 	/**
 	 * Default constructor
@@ -48,7 +56,9 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.powerUpBag = new ArrayList<>();
 		this.tile = null;
 		this.score = 0;
+		this.firstSpawn = true;
 		this.connected = true;
+		this.color = PlayerColor.BLUE;
 	}
 
 	/**
@@ -62,7 +72,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public CharacterState(int deaths, int[] valueBar, List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
 						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weaponBag,
-						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected) {
+						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected, PlayerColor color) {
         this.deaths = deaths;
         this.valueBar = valueBar;
 	    this.damageBar = damageBar;
@@ -73,6 +83,63 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.tile = tile;
 		this.score = score;
 		this.connected = connected;
+		this.color = color;
+	}
+
+	/**
+	 * The getPossibleActions method returns the list of actions that a player can perform according to their damage bar
+	 * and the mode of the game(normal or frenzy).
+	 * @param isFrenzy is a boolean that indicates the game mode.
+	 * @return the list of allowed actions.
+	 */
+	//TODO could be deserialized (?)
+	public List<CompositeAction> getPossibleActions(boolean isFrenzy) {
+		List<CompositeAction> possibleActions = new ArrayList<>();
+		possibleActions.add(new CompositeAction(PlayerAction.NOP));
+		possibleActions.add(new CompositeAction(PlayerAction.GRAB));
+		possibleActions.add(new CompositeAction(PlayerAction.SHOOT));
+		if (isFrenzy) {
+			possibleActions.add(new CompositeAction(PlayerAction.RELOAD, PlayerAction.SHOOT));
+			if (beforeFrenzyActivator) {
+				possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.RELOAD,
+						PlayerAction.SHOOT));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(4)));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.GRAB));
+			} else {
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.RELOAD,
+						PlayerAction.SHOOT));
+				possibleActions.add(new CompositeAction(new MovePlayerAction(3), PlayerAction.GRAB));
+			}
+		} else {
+			possibleActions.add(new CompositeAction(new MovePlayerAction(3)));
+			possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.GRAB));
+			possibleActions.add(new CompositeAction(PlayerAction.RELOAD));
+			if (this.getDamageBar().size()>=3) {
+				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.GRAB));
+				if (this.getDamageBar().size()>=6) {
+					possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.SHOOT));
+				}
+			}
+		}
+
+		return possibleActions;
+	}
+
+
+	/**
+	 * The swapValueBar method swaps out the current value bar of the player with the correct one according to
+	 * the game mode.
+	 * @param isFrenzy is a boolean that indicates the game mode.
+	 */
+	public void swapValueBar(boolean isFrenzy) {
+		if (isFrenzy) {
+			if (this.getDamageBar().isEmpty()) {
+				valueBar = FRENZY_VALUE_BAR;
+			} else {
+				valueBar = NORMAL_VALUE_BAR;
+			}
+		}
+		notifyCharacterStateChange();
 	}
 
 
@@ -88,20 +155,28 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void setDamageBar(List<PlayerColor> damageBar) {
 		this.damageBar = damageBar;
+		notifyCharacterStateChange();
 	}
 
-	public void addDamage(PlayerColor playerColor, Integer amount) {
-		//TODO need to limit the damgeBar length to 12 as maximum.
-		// and handle markers...
+	public void addDamage(PlayerColor playerColor, Integer amount, Game game) {
+	    amount += getMarker(playerColor);
+	    resetMarkerBar(playerColor);
+
+		// finds the owner of this character state and then adds it to the list of damaged players
+		Player player = game.getPlayerList().stream().filter(p -> p.getCharacterState().equals(this)).findFirst().orElse(null);
+		game.getCumulativeDamageTargetSet().add(player);
+
 		for(int i = 0; i < amount; i++) {
 			if(damageBar.size() < 12) {
 				damageBar.add(playerColor);
 			}
 		}
+		notifyCharacterStateChange();
 	}
 
 	public void resetDamageBar() {
 		damageBar.clear();
+		notifyCharacterStateChange();
 	}
 
 	public Map<PlayerColor, Integer> initMarkerBar() {
@@ -127,6 +202,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void setMarkerBar(Map<PlayerColor, Integer> markerBar) {
 		this.markerBar = markerBar;
+		notifyCharacterStateChange();
 	}
 
 	public void addMarker(PlayerColor playerColor, Integer amount) {
@@ -141,7 +217,17 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 				markerBar.put(playerColor, markerBar.get(playerColor) + amount);
 			}
 		}
+		notifyCharacterStateChange();
 	}
+
+	public void resetMarkerBar(PlayerColor playerColor) {
+	    getMarkerBar().put(playerColor, 0);
+	    notifyCharacterStateChange();
+    }
+
+	public int getMarker(PlayerColor playerColor) {
+	    return getMarkerBar().get(playerColor);
+    }
 
 	/**
 	 * Resets all key's values to 0.
@@ -150,6 +236,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	public void resetMarkerBar() {
 		markerBar.keySet()
 				.forEach(k -> markerBar.put(k, 0));
+		notifyCharacterStateChange();
 	}
 
 	/**
@@ -179,6 +266,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public void setAmmoBag(Map<AmmoColor, Integer> ammoBag) {
 		this.ammoBag = ammoBag;
+		notifyCharacterStateChange();
 	}
 
 	/**
@@ -195,6 +283,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 						ammoBag.put(k, ammoBag.get(k) + ammoToAdd.get(k));
 					}
 				});
+		notifyCharacterStateChange();
 	}
 
 	/**
@@ -202,25 +291,47 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 * it keeps an ammo color's max value to 0.
 	 * @param ammoToConsume is a map containing the amount of each ammo color to consume from the player's ammoBag.
 	 */
-	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume) {
-		ammoToConsume.keySet()
-				.forEach(k -> ammoBag.put(k, ammoBag.get(k) - ammoToConsume.get(k)));
+	public void consumeAmmo(Map<AmmoColor, Integer> ammoToConsume, Game game) {
+		for (Map.Entry<AmmoColor, Integer> ammoColor : ammoToConsume.entrySet()) {
+		    int remainingAmmo = ammoBag.get(ammoColor.getKey()) - ammoColor.getValue();
+
+		    if (remainingAmmo > 0) {
+                ammoBag.put(ammoColor.getKey(), remainingAmmo);
+            } else {
+		        ammoBag.put(ammoColor.getKey(), 0);
+		        consumePowerup(ammoColor.getKey(), Math.abs(remainingAmmo), game);
+            }
+		}
+		notifyCharacterStateChange();
 	}
 
+	private void consumePowerup(AmmoColor color, int amount, Game game) {
+	    Iterator<PowerUp> iter = powerUpBag.iterator();
+
+	    while (iter.hasNext()) {
+	        PowerUp powerUp = iter.next();
+
+	        if (powerUp.getPowerUpColor() == color && amount > 0) {
+	            amount--;
+	            game.discardPowerup(powerUp);
+	            iter.remove();
+            }
+        }
+    }
 
 	/**
-	 * @return tile
+	 * @return tile with the actual player position
 	 */
 	public Tile getTile() {
 		return tile;
 	}
 
 	/**
-	 *
-	 * @param tile
+	 * Set the actual player position to the tile passed as argument
 	 */
 	public void setTile(Tile tile) {
 		this.tile = tile;
+		notifyCharacterStateChange();
 	}
 
 	public Integer getScore() {
@@ -229,6 +340,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void setScore(Integer score) {
 		this.score = score;
+		notifyCharacterStateChange();
 	}
 
 	public void updateScore(PlayerDeath message, PlayerColor playerColor) {
@@ -236,7 +348,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
 			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
 			// first attack bonus
-			if(message.getDamageBar().get(0) == playerColor) {
+			if(message.getDamageBar().get(FIRST_ATTACKER) == playerColor && !message.isDeathDuringFrenzy()) {
 				score += 1;
 			}
 
@@ -249,6 +361,8 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 				score++;
 			}
 		}
+
+		notifyCharacterStateChange();
 	}
 
 	public List<Weapon> getWeaponBag() {
@@ -257,6 +371,11 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addWeapon(Weapon weapon) {
 		weaponBag.add(weapon);
+		notifyCharacterStateChange();
+	}
+
+	public void removeWeapon(Weapon weapon) {
+		weaponBag.remove(weapon);
 		notifyCharacterStateChange();
 	}
 
@@ -271,6 +390,11 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 
 	public void addPowerUp(PowerUp powerUp) {
 		powerUpBag.add(powerUp);
+		notifyCharacterStateChange();
+	}
+
+	public void removePowerUp(PowerUp powerUp) {
+		powerUpBag.remove(powerUp);
 		notifyCharacterStateChange();
 	}
 
@@ -305,9 +429,49 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.connected = connected;
 	}
 
+	public void setBeforeFrenzyActivator(boolean beforeFrenzyActivator) {
+		this.beforeFrenzyActivator = beforeFrenzyActivator;
+		notifyCharacterStateChange();
+	}
+
+	public boolean isBeforeFrenzyActivator() {
+		return beforeFrenzyActivator;
+	}
+
 	private void notifyCharacterStateChange() {
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
-	    notifyCharacterStateUpdate(stateUpdate);
+	    Response response = new Response(Arrays.asList(stateUpdate));
+	    Logger.getGlobal().info(response.getUpdateData().toString());
+	    notify(response);
+    }
+
+	public boolean isFirstSpawn() {
+		return firstSpawn;
+	}
+
+	public void setFirstSpawn(boolean firstSpawn) {
+		this.firstSpawn = firstSpawn;
+		notifyCharacterStateChange();
+	}
+
+	public boolean isDead() {
+		return damageBar.size() >= 11;
+	}
+
+    public PlayerColor getColor() {
+        return color;
+    }
+
+    public int powerUpCount(AmmoColor color) {
+	    int amount = 0;
+
+	    for (PowerUp powerUp : powerUpBag) {
+            System.out.println(powerUp.getPowerUpColor());
+	        if (powerUp.getPowerUpColor() == color) amount += 1;
+        }
+
+        System.out.println(amount);
+        return amount;
     }
 }

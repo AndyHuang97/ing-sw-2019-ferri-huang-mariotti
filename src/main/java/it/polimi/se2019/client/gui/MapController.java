@@ -87,6 +87,8 @@ public class MapController {
     public void handleMapLoading() {
 
         // recognizes the board from its id.
+        System.out.println(view.getModel().getGame().getBoard());
+        System.out.println(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png");
         mapImage.setImage(new Image(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png"));
 
         try {
@@ -142,12 +144,13 @@ public class MapController {
         }
     }
 
+    private static double ANCHOR = 0.0;
     public void setButtonTile(GridPane gridPane, Button button, Runnable handleAction) {
         button.setOpacity(0.4);
-        AnchorPane.setTopAnchor(button, 0.0);
-        AnchorPane.setRightAnchor(button, 0.0);
-        AnchorPane.setBottomAnchor(button, 0.0);
-        AnchorPane.setLeftAnchor(button, 0.0);
+        AnchorPane.setTopAnchor(button, ANCHOR);
+        AnchorPane.setRightAnchor(button, ANCHOR);
+        AnchorPane.setBottomAnchor(button, ANCHOR);
+        AnchorPane.setLeftAnchor(button, ANCHOR);
 
         button.setOnAction(event -> {
             button.setStyle("");

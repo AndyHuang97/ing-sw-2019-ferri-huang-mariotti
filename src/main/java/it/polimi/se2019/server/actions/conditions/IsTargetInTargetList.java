@@ -6,6 +6,7 @@ import it.polimi.se2019.util.CommandConstants;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class IsTargetInTargetList implements Condition {
@@ -15,7 +16,7 @@ public class IsTargetInTargetList implements Condition {
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Targetable targetPlayer = targets.get(CommandConstants.TARGETLIST).get(PLAYERPOSITION);
-        List<Targetable> cumulativeTargetList = game.getCumulativeTargetList();
+        Set<Targetable> cumulativeTargetList = game.getCumulativeTargetSet();
         Logger.getGlobal().warning("IsTargetInTargetList: "+cumulativeTargetList.contains(targetPlayer));
         return cumulativeTargetList.contains(targetPlayer);
     }

@@ -27,7 +27,7 @@ public class PlayerDeathTest {
         player = new Player("", true, new UserData("Jon Snow"), new CharacterState(), PlayerColor.BLUE);
         player.getCharacterState().setDamageBar(damageBar);
         player.getCharacterState().setDeaths(0);
-        pd = new PlayerDeath(player);
+        pd = new PlayerDeath(player, false);
 
     }
 

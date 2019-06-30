@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.util.DeserializerConstants;
 
 import java.util.logging.Logger;
 
@@ -16,13 +17,12 @@ public class BoardDeserializer implements RandomDeserializer {
     public Board deserialize(JsonObject json, DynamicDeserializerFactory deserializerFactory) throws ClassNotFoundException {
         if (json.isJsonNull()) return null;
 
-        String id = json.get("id").getAsString();
-        JsonArray jsonTileArray = json.getAsJsonArray("tiles");
+        String id = json.get(DeserializerConstants.ID).getAsString();
+        JsonArray jsonTileArray = json.getAsJsonArray(DeserializerConstants.TILES);
 
         // TODO: hardcoded array size
         Tile[][] tileMap = new Tile[4][3];
-        // TODO: use LeafDeseializer (?), read deserializer name from confic
-        TileDeserializer tileDeserializer = (TileDeserializer) deserializerFactory.getDeserializer("tile");
+        TileDeserializer tileDeserializer = (TileDeserializer) deserializerFactory.getDeserializer(DeserializerConstants.TILE);
 
         for (JsonElement tileElement : jsonTileArray) {
             JsonObject jsonTile = tileElement.getAsJsonObject();
@@ -38,9 +38,9 @@ public class BoardDeserializer implements RandomDeserializer {
 
             // read position and add the tile to the array
             // TODO: read config
-            JsonArray position = jsonTile.getAsJsonArray("pos");
-            int xCoord = position.get(0).getAsInt();
-            int yCoord = position.get(1).getAsInt();
+            JsonObject jsonParams = jsonTile.get(DeserializerConstants.PARAMS).getAsJsonObject();
+            int xCoord = jsonParams.get(DeserializerConstants.XPOSITION).getAsInt();
+            int yCoord = jsonParams.get(DeserializerConstants.YPOSITION).getAsInt();
 
             //System.out.println(tile);
             tileMap[xCoord][yCoord] = tile;

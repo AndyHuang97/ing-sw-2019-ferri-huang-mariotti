@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.games;
 
-public interface Targetable {
+import java.io.Serializable;
+
+public interface Targetable extends Serializable {
 
     String getId();
 }

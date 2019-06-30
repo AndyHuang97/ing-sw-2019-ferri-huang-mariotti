@@ -4,9 +4,13 @@ import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
+import it.polimi.se2019.server.dataupdate.StateUpdate;
+import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
-import it.polimi.se2019.server.games.command.Command;
+import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.CommandConstants;
@@ -17,6 +21,11 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class contains data and logic of a game. In the MVC pattern this class implements a big chunk of the
+ * Model, the Observer pattern is used to communicate data updates to the view. This class also forwards the changes
+ * of other parts of the model lo the view.
+ */
 public class Game extends Observable<Response> implements it.polimi.se2019.util.Observer<Response>, Serializable {
 
 	private Date startDate;
@@ -28,9 +37,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
 	private List<ActionUnit> currentActionUnitsList;
-	private List<Targetable> cumulativeDamageTargetList;
-	private List<Targetable> cumulativeTargetList;
+	private Set<Targetable> cumulativeDamageTargetSet;
+	private Set<Targetable> cumulativeTargetSet;
 	private boolean frenzy;
+
+	private Tile virtualPlayerPosition;
+	private List<PowerUp> usedPowerups = new ArrayList<>();
+	private List<Weapon> usedWeapons = new ArrayList<>();
 
 	public Game() {
 		// don't use this constructor
@@ -43,8 +56,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
 	}
 
@@ -52,15 +65,15 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		// use this constructor to start a new game
 		this.startDate = new Date();
 		this.playerList = playerList;
-		this.currentPlayer = playerList.get(0);
+		this.currentPlayer = null;
 		this.board = new Board();
 		this.killshotTrack = new KillShotTrack(playerList);
 		this.weaponDeck = null;
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
 	}
 
@@ -75,18 +88,86 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = powerupDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
 		this.currentActionUnitsList = new ArrayList<>();
-		this.cumulativeDamageTargetList = new ArrayList<>();
-		this.cumulativeTargetList = new ArrayList<>();
+		this.cumulativeDamageTargetSet = new HashSet<>();
+		this.cumulativeTargetSet = new HashSet<>();
 	}
 
 	public GameData generateGameData() {
 		return new GameData(getStartDate());
 	}
 
+	public void initGameObjects(String mapIndex) {
+
+		this.setCurrentPlayer(playerList.get(0));
+		//this.killshotTrack = new KillShotTrack(playerList);
+		new DirectDeserializers();
+		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
+		this.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrate());
+		this.setWeaponDeck(DirectDeserializers.deserialzerWeaponDeck());
+		this.setPowerupDeck(DirectDeserializers.deserialzerPowerUpDeck());
+		this.getWeaponDeck().shuffle();
+		this.getAmmoCrateDeck().shuffle();
+		this.getPowerupDeck().shuffle();
+
+		initBoard();
+		initPlayerPowerUps();
+	}
+
+	private void initBoard() {
+		this.getBoard().getTileList().stream()
+				.filter(Objects::nonNull)
+				.filter(t -> t.isSpawnTile())
+				.forEach(t -> {
+					for (int i=0; i<3; i++) {
+					    t.getWeaponCrate().add(drawWeaponFromDeck());
+					}
+				});
+		this.getBoard().getTileList().stream()
+				.filter(Objects::nonNull)
+				.filter(t-> !t.isSpawnTile())
+				.forEach(t -> t.setAmmoCrate(drawAmmoCrateFromDeck()));
+	}
+
+	public void initPlayerPowerUps() {
+		this.getPlayerList().stream()
+				.forEach(p -> {
+					for (int i=0; i<2; i++) {
+						givePowerUpToPlayer(p);
+					}
+				});
+
+	}
+
+	public void givePowerUpToPlayer(Player player) {
+		player.getCharacterState().getPowerUpBag().add(drawPowerupFromDeck());
+	}
+
 	public void updateTurn() {
-		int newIndex = playerList.indexOf(currentPlayer) + 1;
-		if(newIndex >= playerList.size()) {newIndex = 0;}
-		currentPlayer = playerList.get(newIndex);
+		nextCurrentPlayer();
+
+		for (Tile tile : getBoard().getTileList()) {
+			if (tile != null) {
+				if (tile.isSpawnTile()) {
+					List<Weapon> weaponCrate = tile.getWeaponCrate();
+
+					List<Weapon> updatedWeaponCrate = new ArrayList<>();
+
+					for (Weapon weapon : weaponCrate) {
+						if (weapon == null) {
+							updatedWeaponCrate.add(drawWeaponFromDeck());
+						} else {
+							updatedWeaponCrate.add(weapon);
+						}
+					}
+
+					getBoard().setWeaponCrate(tile.getxPosition(), tile.getyPosition(), updatedWeaponCrate);
+				} else {
+					if (tile.getAmmoCrate() == null) {
+						getBoard().setAmmoCrate(tile.getxPosition(), tile.getyPosition(), drawAmmoCrateFromDeck());
+					}
+				}
+			}
+		}
 	}
 
 	public Player getCurrentPlayer() {
@@ -96,6 +177,12 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setCurrentPlayer(Player currentPlayer) {
 		if(currentPlayer.getActive()) {this.currentPlayer = currentPlayer;}
 		else {throw new IllegalStateException();}
+	}
+
+	public void nextCurrentPlayer() {
+		int newIndex = playerList.indexOf(currentPlayer) + 1;
+		if(newIndex >= playerList.size()) {newIndex = 0;}
+		currentPlayer = playerList.get(newIndex);
 	}
 
 	public Date getStartDate() {
@@ -164,6 +251,15 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setKillshotTrack(KillShotTrack killshotTrack) {
 		this.killshotTrack = killshotTrack;
+
+		// notify KillShotTrack change
+        KillShotTrackUpdate killShotTrackUpdate = new KillShotTrackUpdate(killshotTrack);
+
+        List<StateUpdate> updateList = new ArrayList<>();
+        updateList.add(killShotTrackUpdate);
+
+        Response response = new Response(updateList);
+        notify(response);
 	}
 
 	public Deck<Weapon> getWeaponDeck() {
@@ -190,6 +286,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.currentActionUnitsList = currentActionUnitsList;
 	}
 
+	@Deprecated
 	public void performMove(String action) {
 		Response response = new Response(new Game(), true, "");
 		notify(response);
@@ -202,11 +299,28 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setFrenzy(boolean frenzy) {
 		this.frenzy = frenzy;
+
+		boolean beforeFrenzyActivator = true;
+
+		for (Player player : playerList) {
+            CharacterState characterState = player.getCharacterState();
+		    characterState.setBeforeFrenzyActivator(beforeFrenzyActivator);
+
+            if (player == currentPlayer) {
+                beforeFrenzyActivator = false;
+            }
+
+            characterState.swapValueBar(frenzy);
+        }
 	}
 
+	/**
+     * This method is used to forward changes from other parts of the Model to the View.
+     * @param response change request from other classes of the model.
+	 */
 	@Override
 	public void update(Response response) {
-
+        notify(response);
 	}
 
 	public List<Targetable> getActionUnitTargetList(String actionUnitName) {
@@ -222,19 +336,88 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 				.findFirst().orElseThrow(IllegalStateException::new);
 	}
 
-	public List<Targetable> getCumulativeDamageTargetList() {
-		return cumulativeDamageTargetList;
+	public Set<Targetable> getCumulativeDamageTargetSet() {
+		return cumulativeDamageTargetSet;
 	}
 
-	public void setCumulativeDamageTargetList(List<Targetable> cumulativeDamageTargetList) {
-		this.cumulativeDamageTargetList = cumulativeDamageTargetList;
+	public void setCumulativeDamageTargetSet(Set<Targetable> cumulativeDamageTargetSet) {
+		this.cumulativeDamageTargetSet = cumulativeDamageTargetSet;
 	}
 
-	public List<Targetable> getCumulativeTargetList() {
-		return cumulativeTargetList;
+	public Set<Targetable> getCumulativeTargetSet() {
+		return cumulativeTargetSet;
 	}
 
-	public void setCumulativeTargetList(List<Targetable> cumulativeTargetList) {
-		this.cumulativeTargetList = cumulativeTargetList;
+	public void setCumulativeTargetSet(Set<Targetable> cumulativeTargetSet) {
+		this.cumulativeTargetSet = cumulativeTargetSet;
 	}
+
+	public Deck<AmmoCrate> getAmmoCrateDeck() {
+		return ammoCrateDeck;
+	}
+
+	public void setAmmoCrateDeck(Deck<AmmoCrate> ammoCrateDeck) {
+		this.ammoCrateDeck = ammoCrateDeck;
+	}
+
+    /**
+     * Needed by the GrabPlayer action to access the player position before it's changed by the MovePlayerAction.run()
+     * @return the possible position of the current player at the end of the turn
+     */
+    public Tile getVirtualPlayerPosition() {
+        return virtualPlayerPosition;
+    }
+
+    public void setVirtualPlayerPosition(Tile virtualPlayerPosition) {
+        this.virtualPlayerPosition = virtualPlayerPosition;
+    }
+
+    public Player getStartingPlayer() {
+        return playerList.get(0);
+    }
+
+    public void addDeath(Player player, boolean overkill) {
+        boolean triggerFrenzy = killshotTrack.addDeath(player, overkill);
+
+        if (!isFrenzy() && triggerFrenzy) {
+            setFrenzy(true);
+        }
+
+    }
+
+    private Weapon drawWeaponFromDeck() {
+        Weapon drawnWeapon = weaponDeck.drawCard();
+        if (drawnWeapon == null) {
+            this.weaponDeck = new Deck<>(usedWeapons);
+            drawnWeapon = weaponDeck.drawCard();
+        }
+
+        return drawnWeapon;
+    }
+
+    private AmmoCrate drawAmmoCrateFromDeck() {
+        AmmoCrate drawnAmmoCrate = ammoCrateDeck.drawCard();
+        if (drawnAmmoCrate == null) {
+            this.ammoCrateDeck = DirectDeserializers.deserializeAmmoCrate();
+            drawnAmmoCrate = ammoCrateDeck.drawCard();
+        }
+        return ammoCrateDeck.drawCard();
+    }
+
+    private PowerUp drawPowerupFromDeck() {
+        PowerUp drawnPowerup = powerupDeck.drawCard();
+        if (drawnPowerup == null) {
+            this.powerupDeck = new Deck<>(usedPowerups);
+            drawnPowerup = powerupDeck.drawCard();
+        }
+        return powerupDeck.drawCard();
+    }
+
+    public void discardPowerup(PowerUp powerUp) {
+        usedPowerups.add(powerUp);
+    }
+
+    public void discardWeapon(Weapon weapon) {
+        usedWeapons.add(weapon);
+    }
 }

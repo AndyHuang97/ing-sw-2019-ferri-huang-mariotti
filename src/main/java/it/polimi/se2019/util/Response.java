@@ -1,7 +1,8 @@
 package it.polimi.se2019.util;
 
 import com.google.gson.Gson;
-import it.polimi.se2019.server.dataupdate.StateUpdate;
+import com.google.gson.GsonBuilder;
+import it.polimi.se2019.server.dataupdate.*;
 import it.polimi.se2019.server.games.Game;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ public class Response implements Serializable, NetMsg {
     private Game game;
     private boolean success;
     private String message;
+    private static Gson gson;
 
     private List<StateUpdate> updateData;
 
@@ -22,6 +24,8 @@ public class Response implements Serializable, NetMsg {
     }
 
     public Response(List<StateUpdate> updateData) {
+        this.success = true;
+        this.message =  "Model update";
         this.updateData = updateData;
     }
 
@@ -43,15 +47,30 @@ public class Response implements Serializable, NetMsg {
 
     @Override
     public String serialize() {
+        RuntimeTypeAdapterFactory<StateUpdate> stateUpdateAdapterFactory = RuntimeTypeAdapterFactory.of(StateUpdate.class, "type")
+                .registerSubtype(AmmoCrateUpdate.class, "AmmoCrateUpdate")
+                .registerSubtype(WeaponCrateUpdate.class, "WeaponCrateUpdate")
+                .registerSubtype(CharacterStateUpdate.class, "CharacterStateUpdate")
+                .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate");
 
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(stateUpdateAdapterFactory).create();
+        return gson.toJson(this, Response.class);
+//        Gson gson = new Gson();
+//        return gson.toJson(this);
     }
 
     @Override
     public NetMsg deserialize(String msg) {
+        RuntimeTypeAdapterFactory<StateUpdate> stateUpdateAdapterFactory = RuntimeTypeAdapterFactory.of(StateUpdate.class, "type")
+                .registerSubtype(AmmoCrateUpdate.class, "AmmoCrateUpdate")
+                .registerSubtype(WeaponCrateUpdate.class, "WeaponCrateUpdate")
+                .registerSubtype(CharacterStateUpdate.class, "CharacterStateUpdate")
+                .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate");
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(stateUpdateAdapterFactory).create();
+
         return gson.fromJson(msg, Response.class);
+//        Gson gson = new Gson();
+//        return gson.fromJson(msg, Response.class);
     }
 }

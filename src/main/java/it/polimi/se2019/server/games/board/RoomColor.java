@@ -7,7 +7,8 @@ public enum RoomColor implements Targetable {
     PURPLE("PURPLE"),
     RED("RED"),
     WHITE("WHITE"),
-    YELLOW("YELLOW");
+    YELLOW("YELLOW"),
+    GREEN("GREEN");
 
     private String color;
 

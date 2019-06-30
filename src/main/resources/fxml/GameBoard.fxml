@@ -198,7 +198,7 @@
                                              <children>
                                                 <ImageView fitHeight="110.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../images/powerups/Blue_Tagback_Grenade.png" />
+                                                      <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
                                                    <GridPane.margin>
                                                       <Insets left="11.0" />
@@ -206,12 +206,12 @@
                                                 </ImageView>
                                                 <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                                    <image>
-                                                      <Image url="@../images/powerups/Blue_Tagback_Grenade.png" />
+                                                      <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
                                                 </ImageView>
                                                 <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                                    <image>
-                                                      <Image url="@../images/powerups/Blue_Tagback_Grenade.png" />
+                                                      <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
                                                 </ImageView>
                                              </children>

@@ -1,5 +1,7 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -14,10 +16,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ReloadPlayerAction extends PlayerAction {
+    private static final String ERRORMESSAGE = "Reload action failed";
 
     private List<Weapon> weaponToReload = new ArrayList<>();
 
     public ReloadPlayerAction(Game game, Player player) { super(game, player); }
+    public ReloadPlayerAction(int amount) { super(amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
@@ -35,7 +39,7 @@ public class ReloadPlayerAction extends PlayerAction {
         for (Weapon weapon : weaponToReload) {
             Map<AmmoColor, Integer> reloadCost = weapon.getReloadCostAsMap();
 
-            getPlayer().getCharacterState().consumeAmmo(reloadCost);
+            getPlayer().getCharacterState().consumeAmmo(reloadCost, getGame());
 
             weapon.setLoaded(true);
         }
@@ -80,6 +84,16 @@ public class ReloadPlayerAction extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
+        return new ErrorResponse(ERRORMESSAGE);
+    }
+
+    @Override
+    public Card getCard() {
         return null;
+    }
+
+    @Override
+    public String getId() {
+        return Constants.RELOAD;
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.se2019.server.actions.conditions.*;
 import it.polimi.se2019.server.actions.effects.*;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.player.AmmoColor;
+import it.polimi.se2019.util.DeserializerConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,11 +27,11 @@ public class WeaponDeserializerTest {
 
     @Before
     public void setUp() throws Exception {
-        factory.registerDeserializer("actions", new ActionsDeserializerSupplier());
-        factory.registerDeserializer("optionaleffects", new OptionalEffectDeserializerSupplier());
-        factory.registerDeserializer("actionunit", new ActionUnitDeserializerSupplier());
-        factory.registerDeserializer("effects", new EffectDeserializerSupplier());
-        factory.registerDeserializer("conditions", new ConditionDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONS, new ActionsDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.OPTIONALEFFECTS, new OptionalEffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONUNIT, new ActionUnitDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.EFFECTS, new EffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.CONDITIONS, new ConditionDeserializerSupplier());
     }
 
     @After

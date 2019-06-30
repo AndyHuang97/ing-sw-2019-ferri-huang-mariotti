@@ -25,9 +25,9 @@ public class DamageTargetList extends Damage {
 
         targetList.stream()
                 .forEach(p -> {
-                    ((Player) p).getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount);
-                    game.getCumulativeTargetList().add(p);
-                    game.getCumulativeDamageTargetList().add(p);
+                    ((Player) p).getCharacterState().addDamage(game.getCurrentPlayer().getColor(), super.amount, game);
+                    game.getCumulativeTargetSet().add(p);
+                    game.getCumulativeDamageTargetSet().add(p);
                 });
 
     }

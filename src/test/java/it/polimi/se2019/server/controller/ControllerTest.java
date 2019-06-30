@@ -2,10 +2,13 @@ package it.polimi.se2019.server.controller;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.polimi.se2019.server.ServerApp;
+import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.*;
+import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
+import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.games.Targetable;
@@ -14,7 +17,9 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.server.playerActions.*;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.DeserializerConstants;
 import it.polimi.se2019.util.InternalMessage;
 import it.polimi.se2019.util.Request;
 import org.junit.Assert;
@@ -25,21 +30,20 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ControllerTest {
 
     private static final String TESTNICK0 = "testNick0";
     private static final String TESTNICK1 = "testNick1";
-    private static final String MOVEPLAYERACTION = "it.polimi.se2019.server.playerActions.MovePlayerAction";;
-    private static final String SHOOTPLAYERACTION = "it.polimi.se2019.server.playerActions.ShootPlayerAction";
-    private static final String GRABPLAYERACTION = "it.polimi.se2019.server.playerActions.GrabPlayerAction";
-    private static final String RELOADPLAYERACTION = "it.polimi.se2019.server.playerActions.ReloadPlayerAction";
+    private static final String MOVEPLAYERACTION = MovePlayerAction.class.getSimpleName();
+    private static final String SHOOTPLAYERACTION = ShootPlayerAction.class.getSimpleName();
+    private static final String GRABPLAYERACTION = GrabPlayerAction.class.getSimpleName();
+    private static final String RELOADPLAYERACTION = ReloadPlayerAction.class.getSimpleName();
+    private static final String SHOOTWEAPONSELECTION = ShootWeaponSelection.class.getSimpleName();
 
-    private GameManager gameManager = new GameManager();
+    private GameManager gameManager;
+    private Game game;
     private Controller controller;
     private Tile[][] tileMap;
     private Board board;
@@ -51,10 +55,16 @@ public class ControllerTest {
 
     @Before
     @SuppressWarnings("Duplicates")
-    public void setUp() throws GameManager.AlreadyPlayingException, GameManager.GameNotFoundException, PlayerNotFoundException {
+    public void setUp() throws GameManager.AlreadyPlayingException, GameManager.GameNotFoundException, PlayerNotFoundException, IOException {
         // GameManager and Game init
-        ServerApp serverApp = new ServerApp();
+        //ServerApp serverApp = new ServerApp();
+        gameManager = new GameManager();
         gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
+        gameManager.getMapPreference().add("0");
+
+        // Controller init
+        controller = new Controller(gameManager);
+        gameManager.setController(controller);
 
         int waitingListMaxSize = 5;
         for (int i = 0; i <= waitingListMaxSize; i++) {
@@ -67,7 +77,7 @@ public class ControllerTest {
             }
         }
 
-        Game game = gameManager.retrieveGame(TESTNICK0);
+        game = gameManager.retrieveGame(TESTNICK0);
 
         // Board init
         tileMap = new Tile[2][3];
@@ -95,11 +105,15 @@ public class ControllerTest {
         player1.getCharacterState().setTile(tileMap[0][1]);
 
         // initialize Weapons
-        factory.registerDeserializer("actions", new ActionsDeserializerSupplier());
-        factory.registerDeserializer("optionaleffects", new OptionalEffectDeserializerSupplier());
-        factory.registerDeserializer("actionunit", new ActionUnitDeserializerSupplier());
-        factory.registerDeserializer("effects", new EffectDeserializerSupplier());
-        factory.registerDeserializer("conditions", new ConditionDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.AMMOCRATEDECK, new AmmoCrateDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.POWERUPDECK, new PowerUpDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.WEAPONDECK, new WeaponDeckDeserializerSuppier());
+        factory.registerDeserializer(DeserializerConstants.WEAPON, new WeaponDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONS, new ActionsDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.OPTIONALEFFECTS, new OptionalEffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.ACTIONUNIT, new ActionUnitDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.EFFECTS, new EffectDeserializerSupplier());
+        factory.registerDeserializer(DeserializerConstants.CONDITIONS, new ConditionDeserializerSupplier());
 
         String path = "src/test/java/it/polimi/se2019/server/deserialize/data/cards.json";
         BufferedReader bufferedReader;
@@ -126,20 +140,20 @@ public class ControllerTest {
         // Set testNick0 as current player
         game.setCurrentPlayer(player0);
 
-        // Controller init
-        controller = new Controller(gameManager);
-
-        actualPlayerCommandHandler.register(controller);
+        //actualPlayerCommandHandler.register(controller);
     }
 
     @Test
     public void testMovePlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        controller.setControllerStateForGame(game, new WaitingForMainActions());
+
         Player player = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
 
         List<Targetable> targetableList = new ArrayList<>();
         targetableList.add(tileMap[0][1]);
 
         Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new MovePlayerAction(0)));
         command.put(MOVEPLAYERACTION, targetableList);
 
         InternalMessage message =  new InternalMessage(command);
@@ -151,23 +165,43 @@ public class ControllerTest {
     }
 
     @Test
-    public void testShootPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+    public void testShootWeaponSelection() throws GameManager.GameNotFoundException, PlayerNotFoundException {
         final int ACTIONUNITPOSITION = 0;
+
+        ControllerState waitingForMainActions = new WaitingForMainActions();
+        controller.setControllerStateForGame(game, waitingForMainActions);
 
         Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
 
         List<Targetable> targetableList = new ArrayList<>();
+        targetableList.add(weapon);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new ShootWeaponSelection(0)));
+        command.put(SHOOTWEAPONSELECTION, targetableList);
+
+        InternalMessage message = new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        ControllerState waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
+        controller.setControllerStateForGame(game, waitingForEffects);
+
+        targetableList = new ArrayList<>();
+
         targetableList.add(player1);
         targetableList.add(weapon);
         targetableList.add(weapon.getActionUnitList().get(ACTIONUNITPOSITION));
         targetableList.add(null);
         targetableList.add(null);
 
-        Map<String, List<Targetable>> command = new HashMap<>();
+        command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new ShootPlayerAction(0)));
         command.put(SHOOTPLAYERACTION, targetableList);
 
-        InternalMessage message = new InternalMessage(command);
-        Request request = new Request(message, TESTNICK0);
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
 
         actualPlayerCommandHandler.handleLocalRequest(request);
 
@@ -179,52 +213,125 @@ public class ControllerTest {
 
     @Test
     public void testGrabPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
-        // add weapon to tileMap[0][0] SpawnTile
-        List<Weapon> weaponList = new ArrayList<>();
-        weaponList.add(weapon);
+        ControllerState waitingForMainActions = new WaitingForMainActions();
+        controller.setControllerStateForGame(game, waitingForMainActions);
 
-        tileMap[0][0].setWeaponCrate(weaponList);
+        Deck<Weapon> weaponDeck =  DirectDeserializers.deserialzerWeaponDeck();
+
+        // add weapon to tileMap[0][0] SpawnTile
+
+
+        AmmoCrate ammoToGrab = getAmmoCrate("1_PowerUp_2_Red");
+
+        tileMap[0][1].setAmmoCrate(ammoToGrab);
 
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        player0.getCharacterState().setTile(tileMap[0][0]);
         player0.getCharacterState().addAmmo(getAmmoBag(3));
 
+        List<Weapon> weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
         List<Targetable> targetableList = new ArrayList<>();
-        targetableList.add(weapon);
+        targetableList.add(weaponList.get(0));
 
         Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
         command.put(GRABPLAYERACTION, targetableList);
 
         InternalMessage message = new InternalMessage(command);
         Request request = new Request(message, TESTNICK0);
 
         player0.getCharacterState().addAmmo(getAmmoBag(3));
+        player0.getCharacterState().getTile().setWeaponCrate(weaponList);
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player have two weapons
         Assert.assertEquals(2, player0.getCharacterState().getWeaponBag().size());
 
+        weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
+        targetableList = new ArrayList<>();
+        targetableList.add(weaponList.get(0));
+
+        command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+
         player0.getCharacterState().setAmmoBag(getAmmoBag(0));
+        player0.getCharacterState().getTile().setWeaponCrate(weaponList);
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player still have two weapons (unable to pay pickup cost)
         Assert.assertEquals(2, player0.getCharacterState().getWeaponBag().size());
 
+        weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
+        targetableList = new ArrayList<>();
+        targetableList.add(weaponList.get(0));
+
+        command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+
+        player0.getCharacterState().getTile().setWeaponCrate(weaponList);
         player0.getCharacterState().addAmmo(getAmmoBag(3));
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player have tree weapons
         Assert.assertEquals(3, player0.getCharacterState().getWeaponBag().size());
 
+        weaponList = new ArrayList<>();
+        weaponList.add(weaponDeck.drawCard());
+
+        targetableList = new ArrayList<>();
+        targetableList.add(weaponList.get(0));
+
+        command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new GrabPlayerAction(0)));
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+
         actualPlayerCommandHandler.handleLocalRequest(request);
 
         // assert player still have tree weapons (bag full)
         Assert.assertEquals(3, player0.getCharacterState().getWeaponBag().size());
-        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.BLUE));
-        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW));
+
+        controller.setControllerStateForGame(game, waitingForMainActions);
+
+        // test ammo pickup
+        player0.getCharacterState().setAmmoBag(getAmmoBag(0));
+        command.put(Constants.KEY_ORDER, Arrays.asList(new MovePlayerAction(0), new GrabPlayerAction(0)));
+        targetableList = new ArrayList<>();
+        targetableList.add(tileMap[0][1]);
+        command.put(MOVEPLAYERACTION, targetableList);
+        targetableList = new ArrayList<>();
+        targetableList.add(ammoToGrab);
+        command.put(GRABPLAYERACTION, targetableList);
+
+        message = new InternalMessage(command);
+        request = new Request(message, TESTNICK0);
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        Assert.assertEquals(tileMap[0][1], player0.getCharacterState().getTile());
+        Assert.assertEquals(2, (int) player0.getCharacterState().getAmmoBag().get(AmmoColor.RED));
     }
 
     @Test
     public void testReloadPlayerAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        ControllerState waitingForReload = new WaitingForReload();
+        controller.setControllerStateForGame(game, waitingForReload);
+
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
         player0.getCharacterState().addAmmo(getAmmoBag(3));
 
@@ -232,6 +339,7 @@ public class ControllerTest {
         targetableList.add(weapon);
 
         Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new ReloadPlayerAction(0)));
         command.putIfAbsent(RELOADPLAYERACTION, targetableList);
 
         weapon.setLoaded(false);
@@ -251,6 +359,30 @@ public class ControllerTest {
         Assert.assertTrue(player0.getCharacterState().getWeaponBag().get(0).isLoaded());
     }
 
+    @Test
+    public void testActionAvailability() throws GameManager.GameNotFoundException, PlayerNotFoundException, IllegalPlayerActionException {
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        player0.getCharacterState().getDamageBar().clear();
+
+        List<Targetable> targetableList = new ArrayList<>();
+        targetableList.add(tileMap[1][1]);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new MovePlayerAction(0), new GrabPlayerAction(0)));
+        command.put(MOVEPLAYERACTION, targetableList);
+        targetableList = new ArrayList<>();
+        targetableList.add(weapon);
+        command.put(GRABPLAYERACTION, targetableList);
+
+        InternalMessage message =  new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        actualPlayerCommandHandler.handleLocalRequest(request);
+        // not available action, so no move performed
+        Assert.assertSame(player0.getCharacterState().getTile(), tileMap[0][0]);
+
+    }
+
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {
         Map<AmmoColor, Integer> ammo = new HashMap<>();
         ammo.put(AmmoColor.BLUE, amountOfAmmoPerColor);
@@ -259,4 +391,16 @@ public class ControllerTest {
 
         return ammo;
     }
+
+    private AmmoCrate getAmmoCrate(String cardName) {
+        Deck<AmmoCrate> deck = DirectDeserializers.deserializeAmmoCrate();
+        AmmoCrate card = deck.drawCard();
+
+        while(!card.getName().equals(cardName)) {
+            card = deck.drawCard();
+        }
+
+        return card;
+    }
+
 }

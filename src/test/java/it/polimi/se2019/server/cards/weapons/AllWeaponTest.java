@@ -187,7 +187,7 @@ public class AllWeaponTest {
         targetableList.add(p2);
         targetableMap.put(CommandConstants.TARGETLIST, targetableList);
 
-        game.getCumulativeTargetList().add(p2);
+        game.getCumulativeTargetSet().add(p2);
         System.out.println("1)p2 in CumulativeTargetList");
         assertFalse(secondLock.check(game, targetableMap)); // p2 in CumulativeTargetList
 

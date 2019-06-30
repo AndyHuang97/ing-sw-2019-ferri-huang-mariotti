@@ -18,6 +18,8 @@ public class KillShotTrack extends PlayerEventListenable {
     private Integer killCounter;
     private Integer killsForFrenzy;
 
+    private boolean frenzyTriggered = false;
+
     /**
      * Default constructor.
      *
@@ -54,7 +56,7 @@ public class KillShotTrack extends PlayerEventListenable {
             prop.load(input);
             killsForFrenzy = Integer.parseInt(prop.getProperty("game.kills_for_frenzy"));
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             logger.warning(e.toString());
         }
 
@@ -65,16 +67,17 @@ public class KillShotTrack extends PlayerEventListenable {
      *
      * @param player is the player that was killed.
      * @param overkill indicates whether an overkill occurred.
+     * @return true if the death triggers the frenzy, false otherwise.
      */
     //TODO maybe add a PlayerNotDeadExcpetion
-    public void addDeath(Player player, boolean overkill) {
+    public boolean addDeath(Player player, boolean overkill) {
 
         EnumMap<PlayerColor, Integer> colorIntegerEnumMap;
 
         PlayerColor deadPlayerColor = player.getColor();
 
         // create the death message
-        PlayerDeath playerDeath = new PlayerDeath(player);
+        PlayerDeath playerDeath = new PlayerDeath(player, frenzyTriggered);
         if(!deathTrack.containsKey(killCounter)) {
             colorIntegerEnumMap = new EnumMap<>(PlayerColor.class);
             updateTrackSlotValue(overkill, deadPlayerColor, colorIntegerEnumMap, 0);
@@ -91,8 +94,14 @@ public class KillShotTrack extends PlayerEventListenable {
             }
         }
 
-        updateCounter();
+        boolean triggerFrenzy = updateCounter();
         notifyPlayerDeath(playerDeath);
+
+        if (triggerFrenzy) {
+            frenzyTriggered = true;
+        }
+
+        return triggerFrenzy;
     }
 
 
@@ -107,13 +116,15 @@ public class KillShotTrack extends PlayerEventListenable {
     }
 
 
-    public void updateCounter() {
+    public boolean updateCounter() {
         // when kill counter reaches the number for final frenzy, it stops adding.
         if (killCounter < killsForFrenzy-1) {
             killCounter++;
+            return false;
         }
         else {
             killCounter = killsForFrenzy - 1;
+            return true;
         }
     }
 

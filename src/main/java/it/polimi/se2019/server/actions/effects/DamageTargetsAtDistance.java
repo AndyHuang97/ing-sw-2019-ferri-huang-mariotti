@@ -22,7 +22,7 @@ public class DamageTargetsAtDistance extends Damage {
         List<Player> targetList = game.getBoard().getPlayersAtDistance(game, attackerTile, distance);
 
         targetList.forEach(p ->
-                p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), amount));
+                p.getCharacterState().addDamage(game.getCurrentPlayer().getColor(), amount, game));
 
     }
 }

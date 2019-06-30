@@ -23,7 +23,7 @@ public class MarkTargetList implements Effect {
         targetList.stream()
                 .forEach(p -> {
                     ((Player) p).getCharacterState().addMarker(game.getCurrentPlayer().getColor(), amount);
-                    game.getCumulativeTargetList().add(p);
+                    game.getCumulativeTargetSet().add(p);
                 });
 
     }

@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.playerActions;
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -10,98 +12,81 @@ import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.ErrorResponse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ShootPlayerAction extends PlayerAction {
 
-    private static final int TARGETPOSITIONINPARAMS = 0;
-    private static final int WEAPONPOSITIONINPARAMS = 1;
-    private static final int ACTIONUNITPOSITIONINPARAMS = 2;
-    private static final int TILEPOSITIONINPARAMS = 3;
-    private static final int EFFECTTILEPOSITIONINPARAMS = 4;
+    private static final String ERRORMESSAGE = "Shoot action failed";
 
-    private final String errorMessage = "Shoot action failed";
-    private Player target;
     private Weapon chosenWeapon;
     private ActionUnit chosenActionUnit;
-    private Tile chosenTile;
-    private Tile effectTile;
-
+    private Map<String, List<Targetable>> inputCommands;
 
     public ShootPlayerAction(Game game, Player player) { super(game, player); }
+    public ShootPlayerAction(int amount) { super(amount);}
 
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
-        target = (Player) params.get(TARGETPOSITIONINPARAMS);
-        chosenWeapon = (Weapon) params.get(WEAPONPOSITIONINPARAMS);
-        chosenActionUnit = (ActionUnit) params.get(ACTIONUNITPOSITIONINPARAMS);
-        chosenTile = (Tile) params.get(TILEPOSITIONINPARAMS);
-        effectTile = (Tile) params.get(EFFECTTILEPOSITIONINPARAMS);
+
+        inputCommands = buildCommandDict(params);
+
+        chosenWeapon = (Weapon) params.stream()
+                .filter(t -> getPlayer().getCharacterState().getWeaponBag().contains(t))
+                .findAny().orElse(null);
+
+        if (chosenWeapon != null) {
+            chosenActionUnit = (ActionUnit) params.stream()
+                    .filter(t -> chosenWeapon.getActionUnitList().contains(t) || chosenWeapon.getOptionalEffectList().contains(t))
+                    .findAny().orElse(null);
+        }
     }
 
     @Override
     public void run() {
         // since ActionUnit.run() signature changed we need to build a Map<String, List<Targetable>>
         // in order to run the action
-        Map<String, List<Targetable>> effectCommands = buildCommandDict();
-
-        chosenActionUnit.run(getGame(), effectCommands);
+        chosenActionUnit.run(getGame(), inputCommands);
     }
 
     @Override
     public boolean check() {
-        /**
-         * Check that target is in Player view
-         * Check that Player is using a valid weapon (and has ammo)
-         *  - check that target position matches the weapon requirement
-         */
-
         // Is weapon loaded?
+        if (chosenWeapon == null || chosenActionUnit == null) {
+            return false;
+        }
+        Logger.getGlobal().info("Valid weapon and action unit");
         if (!chosenWeapon.isLoaded()) {
-            System.out.println("lol");
             return false;
         }
 
         // Is chosenActionUnit in chosenWeapon?
+        /* should be already checked by unpack
         if (chosenWeapon.getActionUnitList().stream().noneMatch(availableActionUnit -> availableActionUnit == chosenActionUnit)) {
-            System.out.println("asd");
             return false;
         }
+         */
 
-        // build params for Condition (every possible Condition)
-        Map<String, List<Targetable>> conditionCommands = buildCommandDict();
-
-        return chosenActionUnit.check(getGame(), conditionCommands);
+        return chosenActionUnit.check(getGame(), inputCommands);
     }
 
-    private Map<String, List<Targetable>> buildCommandDict() {
-        Map<String, List<Targetable>> commandDict = new HashMap<>();
-
-        List<Targetable> targetList = new ArrayList<>();
-        targetList.add(target);
-
-        commandDict.put(CommandConstants.TARGETLIST, targetList);
-
-        List<Targetable> chosenTileList = new ArrayList<>();
-        chosenTileList.add(chosenTile);
-
-        commandDict.put(CommandConstants.TILE, chosenTileList);
-
-        List<Targetable> tileList = new ArrayList<>();
-        tileList.add(chosenTile);
-        tileList.add(effectTile);
-
-        commandDict.put(CommandConstants.TILELIST, tileList);
-
-        return commandDict;
-
+    public Weapon getChosenWeapon() {
+        return chosenWeapon;
     }
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return null;
+        return new ErrorResponse(ERRORMESSAGE);
+    }
+
+    @Override
+    public Card getCard() {
+        return chosenWeapon;
+    }
+
+    @Override
+    public String getId() {
+        return Constants.SHOOT;
     }
 }

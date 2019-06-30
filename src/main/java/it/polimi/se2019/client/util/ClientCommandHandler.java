@@ -15,7 +15,8 @@ public class ClientCommandHandler {
     }
 
     public void handle(Response request) {
-        Platform.runLater(() -> internalHandle(request));
+        if (this.view.isCliTrueGuiFalse()) internalHandle(request);
+        else Platform.runLater(() -> internalHandle(request));
     }
 
     private void internalHandle(Response request) {
@@ -24,14 +25,23 @@ public class ClientCommandHandler {
         }
         if (request.getSuccess()) {
             // game initialization
-            this.view.setGame(request.getGame());
-            try {
-                this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
-            } catch (PlayerNotFoundException e) {
-                Logger.getGlobal().warning(e.toString());
+            if (request.getGame() != null) {
+                this.view.setGame(request.getGame());
+                try {
+                    this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
+                } catch (PlayerNotFoundException e) {
+                    Logger.getGlobal().warning(e.toString());
+                }
             }
-
+            if (request.getUpdateData() != null) {
+                Logger.getGlobal().info("Update Data not null in command handler");
+                this.view.update(request);
+                request.getUpdateData().forEach(stateUpdate -> Logger.getGlobal().info("Received an update: "+stateUpdate.toString()));
+            } else {
+                Logger.getGlobal().info("Update Data is null");
+            }
             this.view.showGame();
+            this.view.showMessage(request.getMessage());
         }
     }
 }

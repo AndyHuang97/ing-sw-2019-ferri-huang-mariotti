@@ -1,6 +1,8 @@
 package it.polimi.se2019.server.games;
 
 import com.google.gson.Gson;
+import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -12,6 +14,7 @@ import it.polimi.se2019.util.Response;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GameManager {
@@ -21,8 +24,11 @@ public class GameManager {
 	private int waitingListStartTimerSize;
 	private int startTimerSeconds;
 	private List<Tuple> waitingList;
+	private Map<String, CommandHandler> playerCommandHandlerMap;
+	private List<String> mapPreference;
 	private String dumpName;
 	private int pingIntervalMilliseconds;
+	private Controller controller;
 
 	public class Tuple<X, Y> {
 		public final UserData userData;
@@ -34,8 +40,10 @@ public class GameManager {
 	}
 
 	public GameManager() {
-		gameList = new ArrayList<>();
-		waitingList = new ArrayList<>();
+		this.gameList = new ArrayList<>();
+		this.waitingList = new ArrayList<>();
+		this.mapPreference = new ArrayList<>();
+		this.playerCommandHandlerMap = new HashMap<>();
 	}
 
 	public void init(String dumpName) {
@@ -121,22 +129,38 @@ public class GameManager {
 	public void createGame() throws IndexOutOfBoundsException {
 		logger.info("Starting a new game");
 		//create the new game and reset waiting list, do not use it
-		Game newGame = new Game();
 		List<Player> playerList = new ArrayList<>();
+		Game newGame = new Game(playerList);
 		this.waitingList.forEach(tuple -> {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
 			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
 			// TODO: initialize character state or it is fine?
 			CharacterState characterState = new CharacterState();
-			playerList.add(new Player(UUID.randomUUID().toString(), true, tuple.userData, characterState, color));
+			Player player = new Player(UUID.randomUUID().toString(), true, tuple.userData, characterState, color);
+			playerList.add(player);
+			player.register(newGame);
+			characterState.register(newGame);
 			// register all players
 			newGame.register(tuple.commandHandler);
+			playerCommandHandlerMap.put(tuple.userData.getNickname(),tuple.commandHandler);
 		});
-		newGame.setPlayerList(playerList);
+
+		Map<String, Long> occurrences =
+				mapPreference.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+		Map.Entry<String, Long> max = occurrences.entrySet()
+				.stream()
+				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);
+		Logger.getGlobal().info("Map: "+max.getKey());
+		newGame.initGameObjects(max.getKey());
+		Logger.getGlobal().info("Game objects were loaded");
+		mapPreference = new ArrayList<>();
+
 		this.waitingList.forEach(tuple -> {
 			try {
-				tuple.commandHandler.update(new Response(newGame, true, ""));
+				tuple.commandHandler.register(controller);
+				tuple.commandHandler.update(new Response(newGame, true, Constants.RESPAWN));
+				Logger.getGlobal().info("Initialized game was broadcasted");
 			} catch (Observer.CommunicationError e) {
 				logger.info(e.getMessage());
 			}
@@ -148,7 +172,7 @@ public class GameManager {
 	private void delayedGameCreation(int previousGameListSize) throws IndexOutOfBoundsException {
 		logger.info("Starting game creation countdown (" + this.startTimerSeconds + "s)...");
 		try {
-			Thread.sleep(this.startTimerSeconds * 1000);
+			Thread.sleep((long) this.startTimerSeconds * 1000);
 		} catch(InterruptedException e) {
 			logger.info(e.toString());
 			Thread.currentThread().interrupt();
@@ -209,7 +233,20 @@ public class GameManager {
 		return waitingList;
 	}
 
+
+	public Map<String, CommandHandler> getPlayerCommandHandlerMap() {
+		return playerCommandHandlerMap;
+	}
+
+	public List<String> getMapPreference() {
+		return mapPreference;
+	}
+
 	public List<Game> getGameList() {
 		return gameList;
+	}
+
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
 }
