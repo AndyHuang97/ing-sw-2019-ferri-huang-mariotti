@@ -72,7 +72,8 @@ public class Controller implements Observer<Request> {
             // need to add a new method in CommandHandler for selection purposes.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
             setControllerStateForGame(game, newControllerState);
-            CommandHandler commandHandler = requestParser.getCommandHandler();
+            CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
+            Logger.getGlobal().info("Sending "+newControllerState.getClass().getSimpleName()+" to "+game.getCurrentPlayer().getUserData().getNickname());
             newControllerState.sendSelectionMessage(commandHandler);
 
 

@@ -118,7 +118,12 @@ public class GrabPlayerAction extends PlayerAction {
 
     @Override
     public Card getCard() {
-        return weaponToGrab;
+        if (weaponToGrab != null) {
+            return weaponToGrab;
+        }
+        else {
+            return ammoToGrab;
+        }
     }
 
     @Override

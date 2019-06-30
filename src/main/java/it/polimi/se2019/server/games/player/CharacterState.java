@@ -14,6 +14,7 @@ import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * This class contains the information about a character, it's meant to be serialized.
@@ -420,7 +421,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
 	    Response response = new Response(Arrays.asList(stateUpdate));
-
+	    Logger.getGlobal().info(response.getUpdateData().toString());
 	    notify(response);
     }
 

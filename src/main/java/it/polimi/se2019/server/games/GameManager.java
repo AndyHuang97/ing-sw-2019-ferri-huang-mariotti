@@ -24,6 +24,7 @@ public class GameManager {
 	private int waitingListStartTimerSize;
 	private int startTimerSeconds;
 	private List<Tuple> waitingList;
+	private Map<String, CommandHandler> playerCommandHandlerMap;
 	private List<String> mapPreference;
 	private String dumpName;
 	private int pingIntervalMilliseconds;
@@ -42,6 +43,7 @@ public class GameManager {
 		this.gameList = new ArrayList<>();
 		this.waitingList = new ArrayList<>();
 		this.mapPreference = new ArrayList<>();
+		this.playerCommandHandlerMap = new HashMap<>();
 	}
 
 	public void init(String dumpName) {
@@ -141,10 +143,9 @@ public class GameManager {
 			characterState.register(newGame);
 			// register all players
 			newGame.register(tuple.commandHandler);
+			playerCommandHandlerMap.put(tuple.userData.getNickname(),tuple.commandHandler);
 		});
-		//newGame.setPlayerList(playerList);
 
-		//TODO read mapIndex from players' preference
 		Map<String, Long> occurrences =
 				mapPreference.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting()));
 		Map.Entry<String, Long> max = occurrences.entrySet()
@@ -152,12 +153,14 @@ public class GameManager {
 				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);
 		Logger.getGlobal().info("Map: "+max.getKey());
 		newGame.initGameObjects(max.getKey());
+		Logger.getGlobal().info("Game objects were loaded");
 		mapPreference = new ArrayList<>();
 
 		this.waitingList.forEach(tuple -> {
 			try {
 				tuple.commandHandler.register(controller);
 				tuple.commandHandler.update(new Response(newGame, true, Constants.RESPAWN));
+				Logger.getGlobal().info("Initialized game was broadcasted");
 			} catch (Observer.CommunicationError e) {
 				logger.info(e.getMessage());
 			}
@@ -228,6 +231,11 @@ public class GameManager {
 	public List<Tuple> getWaitingList() {
 		// TODO: is that method useful? Other classes cannot use Tuple type! ANSWER: No it is not useful for anybody
 		return waitingList;
+	}
+
+
+	public Map<String, CommandHandler> getPlayerCommandHandlerMap() {
+		return playerCommandHandlerMap;
 	}
 
 	public List<String> getMapPreference() {

@@ -33,6 +33,13 @@ public class ClientCommandHandler {
                     Logger.getGlobal().warning(e.toString());
                 }
             }
+            if (request.getUpdateData() != null) {
+                Logger.getGlobal().info("Update Data not null in command handler");
+                this.view.update(request);
+                request.getUpdateData().forEach(stateUpdate -> Logger.getGlobal().info("Received an update: "+stateUpdate.toString()));
+            } else {
+                Logger.getGlobal().info("Update Data is null");
+            }
             this.view.showGame();
             this.view.showMessage(request.getMessage());
         }

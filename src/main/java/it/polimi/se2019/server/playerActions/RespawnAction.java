@@ -55,7 +55,7 @@ public class RespawnAction extends PlayerAction {
             getPlayer().getCharacterState().resetDamageBar();
 
             if (getGame().isFrenzy()) getPlayer().getCharacterState().swapValueBar(true);
-
+            Logger.getGlobal().info(getPlayer().getUserData().getNickname()+" has spawned in "+getPlayer().getCharacterState().getTile());
         } catch (TileNotFoundException e) {
             Logger.getGlobal().warning("Mismatch between powerUp's color and spawn tile's color.");
         }

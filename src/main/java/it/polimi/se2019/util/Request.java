@@ -3,7 +3,8 @@ package it.polimi.se2019.util;
 import com.google.gson.Gson;
 import it.polimi.se2019.server.net.CommandHandler;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.logging.Logger;
 
 /**
  * Request objects are used by the View to send data to the Controller
@@ -15,6 +16,16 @@ public class Request implements Serializable, NetMsg {
     private NetMessage netMessage;
     private String nickname;
     private CommandHandler commandHandler;
+    private static ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    private static ObjectOutputStream out;
+
+    static {
+        try {
+            out = new ObjectOutputStream(bos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Request(String nickname) {
         this.nickname = nickname;
@@ -50,19 +61,34 @@ public class Request implements Serializable, NetMsg {
         return this.nickname;
     }
 
-    @Override
-    public String serialize() {
+//    @Override
+//    public byte[] serialize() {
+//
+//
+//        try {
+//            out.writeObject(this);
+//            return bos.toByteArray();
+//        } catch (IOException e) {
+//            Logger.getGlobal().warning("Could not serialize the request: "+e.toString());
+//        }
+//        return new byte[0];
+//    }
 
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    @Override
-    public NetMsg deserialize(String msg) {
-
-        Gson gson = new Gson();
-        return gson.fromJson(msg, Request.class);
-    }
+//    @Override
+//    public NetMsg deserialize(byte[] message) {
+//
+////
+//        try {
+//            ByteArrayInputStream bis = new ByteArrayInputStream(message);
+//            ObjectInputStream in = new ObjectInputStream(bis);
+//            return (Request) in.readObject();
+//        }catch (IOException | ClassNotFoundException e) {
+//            Logger.getGlobal().warning("Could not deserialize the request: "+e.toString());
+//        }
+//        //TODO decide how to deal with this bad request
+//        return new Request(null);
+//
+//    }
 
     public CommandHandler getCommandHandler() {
         return commandHandler;
@@ -70,5 +96,17 @@ public class Request implements Serializable, NetMsg {
 
     public void setCommandHandler(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
+    }
+
+    @Override
+    public String serialize() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    @Override
+    public NetMsg deserialize(String message) {
+        Gson gson = new Gson();
+        return gson.fromJson(message, Request.class);
     }
 }

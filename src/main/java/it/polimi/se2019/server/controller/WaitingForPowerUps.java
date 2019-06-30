@@ -1,10 +1,12 @@
 package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playerActions.PowerUpAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 import sun.rmi.runtime.Log;
@@ -51,7 +53,7 @@ public class WaitingForPowerUps implements ControllerState {
             if (playerActions.stream().allMatch(playerAction ->
                     playerAction.getId().equals(Constants.POWERUP)
                                                     &&
-                    playerAction.getCard().getName().split("_")[1].equals(Constants.TARGETING_SCOPE))) {
+                            ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE)))) {
                 //TODO deal with ammo selection
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
                     playerActions.forEach(PlayerAction::run);
@@ -65,19 +67,23 @@ public class WaitingForPowerUps implements ControllerState {
 
         if (expectedPowerUp.equals(Constants.TAGBACK_GRENADE)) {
             Logger.getGlobal().info("inside Tagback");
-            if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP)
+            if (playerActions.stream().allMatch(playerAction ->
+                    playerAction.getId().equals(Constants.POWERUP)
                                                     &&
-                    playerAction.getCard().getName().split("_")[1].equals(Constants.TAGBACK_GRENADE))) {
+                            ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TAGBACK_GRENADE)))) {
                 Logger.getGlobal().info("Found a Tagback Grenade");
                 // this block of code will be executed either with a powerUp or with a NOP, in the latter case nothing
                 // is performed on the model, but it is still needed to ask the next player for input
                 Logger.getGlobal().info("PlayerActionCheck: " + playerActions.stream().allMatch(PlayerAction::check));
                 if (playerActions.stream().allMatch(PlayerAction::check)) {
-                    playerActions.forEach(PlayerAction::run);
+                    playerActions.forEach(PlayerAction::run); // needed to discard the powerup
 
                     Player poppedPlayer = playerStack.pop(); // pops the player that sent the correct powerUp to be consumed
                     Logger.getGlobal().info("Popped: "+poppedPlayer.getId());
                     playerStack.forEach(p -> Logger.getGlobal().info("Player at the top of the stack: "+playerStack.peek().getId()));
+                    // giving markers to the attacker
+                    playerActions.forEach(playerAction ->((PowerUpAction) playerAction).getPowerUpsToDiscard().forEach(powerUp -> playerStack.peek().getCharacterState().addMarker(poppedPlayer.getColor(), 1)));
+
                     List<Player> powerUpPlayers = game.getCumulativeDamageTargetSet().stream() // checks whether one of the attacked players has a Tagback Grenade
                             .map(t -> (Player) t)
                                     .filter(notCurrentPlayer -> !alreadyAskedPlayers.contains(notCurrentPlayer))
@@ -98,6 +104,7 @@ public class WaitingForPowerUps implements ControllerState {
                         return this;
                     }
                     Logger.getGlobal().info("CurrentActionUnitList size: " + game.getCurrentActionUnitsList().size());
+                    game.getCurrentActionUnitsList().forEach(au -> Logger.getGlobal().info(au.getId()));
                     player = playerStack.pop(); // should be the player that was performing the turn
                     Logger.getGlobal().info("Popped current player");
                     game.setCurrentPlayer(player);

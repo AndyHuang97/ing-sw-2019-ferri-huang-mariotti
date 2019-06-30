@@ -79,7 +79,8 @@ public class WaitingForMainActions implements ControllerState {
             }
             // no shoot weapon selection
             if (game.isFrenzy()) {
-                if (actionCounter == getCounterLimit(game, player)) {
+                Logger.getGlobal().info("action counter: "+actionCounter + "\tcounter limit: "+getCounterLimit(game, player) + "\tplayer "+player.getId());
+                if (actionCounter >= getCounterLimit(game, player)) {
                     if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                         // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
                         WaitingForRespawn newState = new WaitingForRespawn();
@@ -91,11 +92,11 @@ public class WaitingForMainActions implements ControllerState {
                         return new WaitingForMainActions(); // new player, reset all
                     }
                 } else {
-                    Logger.getGlobal().info("More actions left, get the next action");
+                    Logger.getGlobal().info("More actions left in frenzy, get the next action");
                     return this; // keeps track of the actionCounter for the current player
                 }
             } else { // not frenzy
-                if (actionCounter == getCounterLimit(game, player)) { // consumed all actions in normal mode, nextPlayer is delegated to WaitingForReload state
+                if (actionCounter >= getCounterLimit(game, player)) { // consumed all actions in normal mode, nextPlayer is delegated to WaitingForReload state
                     Logger.getGlobal().info("Not frenzy. No more actions, go to reload");
                     return new WaitingForReload(); // in normal mode, respawn is after Reload
                 } else { // still an action left
@@ -194,6 +195,7 @@ public class WaitingForMainActions implements ControllerState {
         if (!game.isFrenzy()) {
             return NORMAL_ACTION_NUMBER;
         } else {
+            Logger.getGlobal().info("is before frenzy activator: " + player.getCharacterState().isBeforeFrenzyActivator());
             if (player.getCharacterState().isBeforeFrenzyActivator()) {
                 return BEFORE_FRENZY_NUMBER;
             } else {

@@ -33,7 +33,7 @@ public class CLIView extends View {
 
     public void sendNOP() {
         getPlayerInput().put(Constants.NOP, new ArrayList<>());
-        getPlayerInput().put("keyOrder", Arrays.asList(Constants.NOP));
+        getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.NOP));
         sendInput();
     }
 
@@ -55,7 +55,7 @@ public class CLIView extends View {
                         if (toBeReloaded.equals("Y")) selectedReloadWeapons.add(wn);
                     });
                     getPlayerInput().put(Constants.RELOAD, selectedReloadWeapons);
-                    getPlayerInput().put("keyOrder", Arrays.asList("Reload"));
+                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.RELOAD));
                     sendInput();
                     break;
                 case Constants.SHOOT:
@@ -103,7 +103,7 @@ public class CLIView extends View {
                         }
                         shootList.add(selectedTileTarget);
                     }
-                    getPlayerInput().put("keyOrder", Arrays.asList(Constants.SHOOT));
+                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.SHOOT));
                     sendInput();
                     break;
                 case Constants.MAIN_ACTION:
@@ -214,7 +214,7 @@ public class CLIView extends View {
                                 break;
                         }
                     });
-                    getPlayerInput().put("keyOrder", doneActions);
+                    getPlayerInput().put(Constants.KEY_ORDER, doneActions);
                     sendInput();
                     break;
                 case Constants.RESPAWN:
@@ -223,7 +223,7 @@ public class CLIView extends View {
                         sendNOP();
                         return;
                     }
-                    getPlayerInput().put("keyOrder", Arrays.asList(Constants.RESPAWN));
+                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.RESPAWN));
                     getPlayerInput().put(Constants.RESPAWN, Arrays.asList(powerUpName));
                     sendInput();
                     break;
