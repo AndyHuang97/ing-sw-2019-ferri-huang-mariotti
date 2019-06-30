@@ -197,12 +197,22 @@ public class CLIView extends View {
                                 }));
                                 doneActions.add(Constants.GRAB);
                                 if (selectedGrabMode.equals("Weapon")) {
+                                    List<String> grabSwapWeapons = new ArrayList<>();
                                     String selectedWeaponGrab = utils.askUserInput("Choose a Weapon to grab", grabWeapons, true);
                                     if (selectedWeaponGrab.equals(Constants.NOP)) {
                                         sendNOP();
                                         return;
                                     }
-                                    getPlayerInput().put(Constants.GRAB, Arrays.asList(selectedWeaponGrab));
+                                    grabSwapWeapons.add(selectedWeaponGrab);
+                                    if (currentPlayer.getCharacterState().getWeaponBag().size() >= 3) {
+                                        String selectedWeaponSwap = utils.askUserInput("Choose a Weapon to discard", currentPlayer.getCharacterState().getWeaponBag().stream().map(w -> w.getName()).collect(Collectors.toList()), true);
+                                        if (selectedWeaponSwap.equals(Constants.NOP)) {
+                                            sendNOP();
+                                            return;
+                                        }
+                                        grabSwapWeapons.add(selectedWeaponSwap);
+                                    }
+                                    getPlayerInput().put(Constants.GRAB, grabSwapWeapons);
                                 } else if (selectedGrabMode.equals("Crate")) {
                                     String selectedCrateGrab = utils.askUserInput("Choose the Tile where the Crate is", new ArrayList<>(grabCrates.keySet()), true);
                                     if (selectedCrateGrab.equals(Constants.NOP)) {
