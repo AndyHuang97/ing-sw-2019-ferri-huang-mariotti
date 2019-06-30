@@ -138,6 +138,7 @@ public class GameManager {
 			Player player = new Player(UUID.randomUUID().toString(), true, tuple.userData, characterState, color);
 			playerList.add(player);
 			player.register(newGame);
+			characterState.register(newGame);
 			// register all players
 			newGame.register(tuple.commandHandler);
 		});

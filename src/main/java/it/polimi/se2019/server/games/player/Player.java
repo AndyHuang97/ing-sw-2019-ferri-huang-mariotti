@@ -5,7 +5,6 @@ import it.polimi.se2019.server.dataupdate.PlayerEventListener;
 import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Response;
@@ -108,7 +107,6 @@ public class Player extends Observable<Response> implements Targetable, PlayerEv
     public void onCharacterStateUpdate(CharacterStateUpdate characterStateUpdate) {
 	    // Send a Response to the Game telling that CharacterState of this Player changed
         List<StateUpdate> updateList = new ArrayList<>();
-        characterStateUpdate.setPlayer(this);
         updateList.add(characterStateUpdate);
         Response response = new Response(updateList);
 

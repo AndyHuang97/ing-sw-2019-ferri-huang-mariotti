@@ -9,7 +9,6 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.BoardDeserializer;
 import it.polimi.se2019.server.deserialize.DynamicDeserializerFactory;
 import it.polimi.se2019.server.deserialize.TileDeserializerSupplier;
-import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.board.Board;
@@ -33,16 +32,13 @@ public class Model implements LocalModel {
     private Game game;
 
     @Override
-    public void setCharacterState(CharacterState characterState, Player player) {
-        String playerNickname = player.getUserData().getNickname();
+    public void setCharacterState(CharacterState characterState) {
+        PlayerColor color = characterState.getColor();
 
         Player localPlayer;
-        try {
-            localPlayer = game.getPlayerByNickname(playerNickname);
-            localPlayer.setCharacterState(characterState);
-        } catch (PlayerNotFoundException e) {
-            // Throw appropriate exception
-        }
+        localPlayer = game.getPlayerByColor(color);
+
+        localPlayer.setCharacterState(characterState);
     }
 
     @Override

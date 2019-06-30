@@ -39,7 +39,7 @@ public class DataUpdateTest {
 
         player = new Player(PLAYERNICK, true, userData, characterState, PlayerColor.BLUE);
 
-        characterState.register(player);
+        characterState.register(game);
         player.register(game);
         game.register(view);
 

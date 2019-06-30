@@ -3,23 +3,23 @@ package it.polimi.se2019.server.games.player;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
-import it.polimi.se2019.server.dataupdate.PlayerEventListenable;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
-import it.polimi.se2019.server.playerActions.*;
+import it.polimi.se2019.server.playerActions.CompositeAction;
+import it.polimi.se2019.server.playerActions.MovePlayerAction;
+import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class contains the information about a character, it's meant to be serialized.
  * A read-only copy of this object should be stored in the client (view).
  */
-public class CharacterState extends PlayerEventListenable implements Serializable {
+public class CharacterState extends Observable<Response> implements Serializable {
 
 	public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
 	public static final int[] FRENZY_VALUE_BAR = {2,1,1,1};
@@ -36,6 +36,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	private Integer score;
 	private boolean firstSpawn;
 	private boolean connected;
+    private final PlayerColor color;
 
 	private boolean beforeFrenzyActivator;
 
@@ -56,6 +57,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.score = 0;
 		this.firstSpawn = true;
 		this.connected = true;
+		this.color = PlayerColor.BLUE;
 	}
 
 	/**
@@ -69,7 +71,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	 */
 	public CharacterState(int deaths, int[] valueBar, List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
 						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weaponBag,
-						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected) {
+						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected, PlayerColor color) {
         this.deaths = deaths;
         this.valueBar = valueBar;
 	    this.damageBar = damageBar;
@@ -80,6 +82,7 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.tile = tile;
 		this.score = score;
 		this.connected = connected;
+		this.color = color;
 	}
 
 	/**
@@ -404,7 +407,6 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 		this.connected = connected;
 	}
 
-
 	public void setBeforeFrenzyActivator(boolean beforeFrenzyActivator) {
 		this.beforeFrenzyActivator = beforeFrenzyActivator;
 		notifyCharacterStateChange();
@@ -417,7 +419,9 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	private void notifyCharacterStateChange() {
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
-	    notifyCharacterStateUpdate(stateUpdate);
+	    Response response = new Response(Arrays.asList(stateUpdate));
+
+	    notify(response);
     }
 
 	public boolean isFirstSpawn() {
@@ -432,4 +436,8 @@ public class CharacterState extends PlayerEventListenable implements Serializabl
 	public boolean isDead() {
 		return damageBar.size() >= 11;
 	}
+
+    public PlayerColor getColor() {
+        return color;
+    }
 }
