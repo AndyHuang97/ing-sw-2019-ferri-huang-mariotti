@@ -54,14 +54,14 @@ public class WaitingForEffects implements ControllerState {
                         //TODO check the amount of ammo to see directly whether more effects are to be expected?
                         if (game.getCurrentActionUnitsList().size()-1 >= shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
                             Logger.getGlobal().info("No more optional effects with NO damage");
-                            return swapBackToMainAction(game, storedWaitingForMainActions); // no more optional effect
+                            return swapBackToMainAction(game); // no more optional effect
                         } else { // more effects remaining
                             Logger.getGlobal().info("More optional effects left with NO damage");
                             return this;
                         }
                     } else { // no effects to choose from
                         game.getCumulativeDamageTargetSet().clear();
-                        return storedWaitingForMainActions;
+                        return swapBackToMainAction(game);
                     }
                 } else { // damage was dealt to someone
                     // Targeting Scope
@@ -95,7 +95,7 @@ public class WaitingForEffects implements ControllerState {
                     Logger.getGlobal().info("OptionalEffectList size: " + shootPlayerAction.getChosenWeapon().getOptionalEffectList().size());
                     if (game.getCurrentActionUnitsList().size()-1 >= shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
                         Logger.getGlobal().info("No more optional effects with damage");
-                        return swapBackToMainAction(game, storedWaitingForMainActions); // no more optional effect
+                        return swapBackToMainAction(game); // no more optional effect
                     } else { // more effects remaining
                         Logger.getGlobal().info("More optional effects left with damage");
                         game.getCumulativeDamageTargetSet().clear();
@@ -108,12 +108,8 @@ public class WaitingForEffects implements ControllerState {
                 return this;
             }
         } else if (playerActions.get(SHOOT_POSITION).getId().equals(Constants.NOP)) { // do not want to perform any shooting
-            if (!game.getCurrentActionUnitsList().isEmpty()) {
-                // at least one shot was performed
-                chosenWeapon.setLoaded(false);
-            }
             Logger.getGlobal().info("NOP detected");
-            return swapBackToMainAction(game, storedWaitingForMainActions);
+            return swapBackToMainAction(game);
         }
         Logger.getGlobal().info("Invalid action");
         return this;
@@ -132,18 +128,22 @@ public class WaitingForEffects implements ControllerState {
             //TODO check the amount of ammo to see directly whether more effects are to be expected?
             if (game.getCurrentActionUnitsList().size()-1 >= shootPlayerAction.getChosenWeapon().getOptionalEffectList().size()) { // -1 for the basic mode
                 Logger.getGlobal().info("No more optional effects left");
-                return swapBackToMainAction(game, storedWaitingForMainActions); // no more optional effect
+                return swapBackToMainAction(game); // no more optional effect
             } else { // more effects remaining
                 Logger.getGlobal().info("More optional effects left");
                 return this;
             }
         }
         Logger.getGlobal().info("OptionalEffectList was empty");
-        return swapBackToMainAction(game, storedWaitingForMainActions);
+        return swapBackToMainAction(game);
     }
 
-    private ControllerState swapBackToMainAction(Game game, ControllerState waitingForMainActions) {
+    private ControllerState swapBackToMainAction(Game game) {
+        if (!game.getCurrentActionUnitsList().isEmpty()) {
+            // at least one shot was performed
+            chosenWeapon.setLoaded(false);
+        }
         game.getCumulativeDamageTargetSet().clear();
-        return ((WaitingForMainActions)waitingForMainActions).nextPlayerOrReloadRespawn(game, game.getCurrentPlayer()); // should go back to the WaitingForMainActions it came from
+        return ((WaitingForMainActions) storedWaitingForMainActions).nextPlayerOrReloadRespawn(game, game.getCurrentPlayer()); // should go back to the WaitingForMainActions it came from
     }
 }

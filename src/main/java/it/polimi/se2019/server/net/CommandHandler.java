@@ -16,6 +16,7 @@ import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
+import sun.rmi.runtime.Log;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -210,6 +211,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         //showMessage(response.serialize());
         try {
             if (this.socketTrueRmiFalse) {
+                Logger.getGlobal().info(response.serialize());
                 socketClientHandler.send(response.serialize());
                 if (response.getMessage().equals("ping")) {
 

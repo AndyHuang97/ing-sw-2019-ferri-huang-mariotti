@@ -12,14 +12,14 @@ import it.polimi.se2019.util.ErrorResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class PowerUpAction extends PlayerAction {
 
-    private static final int POWERUP_POSITION = 0;
     private static final int MAIN_EFFECT = 0;
     private static final String ERRORMESSAGE = "PowerUp selection failed";
 
-    private PowerUp powerUpToDiscard;
+    private List<PowerUp> powerUpsToDiscard;
     private Map<String, List<Targetable>> inputCommands;
 
     public PowerUpAction(Game game, Player player) {
@@ -30,9 +30,10 @@ public class PowerUpAction extends PlayerAction {
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
         try {
-            powerUpToDiscard = (PowerUp) params.get(POWERUP_POSITION);
+            powerUpsToDiscard = params.stream().filter(t -> getPlayer().getCharacterState().getPowerUpBag().contains(t))
+                    .map(t -> (PowerUp) t).collect(Collectors.toList());
             inputCommands = buildCommandDict(params);
-            Logger.getGlobal().info(powerUpToDiscard.getId());
+            powerUpsToDiscard.forEach(p-> Logger.getGlobal().info(p.getId()));
         } catch (ClassCastException e) {
             throw new UnpackingException();
         }
@@ -40,17 +41,20 @@ public class PowerUpAction extends PlayerAction {
 
     @Override
     public void run() {
-        powerUpToDiscard.getActionUnitList().get(MAIN_EFFECT).run(getGame(), inputCommands);
-        getPlayer().getCharacterState().removePowerUp(powerUpToDiscard);
-        getGame().dicardPowerup(powerUpToDiscard);
+        powerUpsToDiscard.forEach(powerUp -> {
+            powerUp.getActionUnitList().get(MAIN_EFFECT).run(getGame(), inputCommands);
+            getGame().getCurrentActionUnitsList().remove(powerUp.getActionUnitList().get(MAIN_EFFECT));
+            getPlayer().getCharacterState().removePowerUp(powerUp);
+            getGame().discardPowerup(powerUp);
+        });
     }
 
     @Override
     public boolean check() {
-        Logger.getGlobal().info(String.valueOf(getPlayer().getCharacterState().getPowerUpBag().contains(powerUpToDiscard)));
-        return getPlayer().getCharacterState().getPowerUpBag().contains(powerUpToDiscard)
+        Logger.getGlobal().info(String.valueOf(getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)));
+        return getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)
                 &&
-                powerUpToDiscard.getActionUnitList().get(MAIN_EFFECT).check(getGame(), inputCommands);
+                powerUpsToDiscard.stream().allMatch(powerUp -> powerUp.getActionUnitList().get(MAIN_EFFECT).check(getGame(), inputCommands));
     }
 
     @Override
@@ -60,11 +64,15 @@ public class PowerUpAction extends PlayerAction {
 
     @Override
     public Card getCard() {
-        return powerUpToDiscard;
+        return null;
     }
 
     @Override
     public String getId() {
         return Constants.POWERUP;
+    }
+
+    public List<PowerUp> getPowerUpsToDiscard() {
+        return powerUpsToDiscard;
     }
 }

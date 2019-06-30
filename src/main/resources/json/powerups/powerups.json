@@ -353,15 +353,7 @@
         {
           "name": "Main Effect",
           "available": true,
-          "effectList": [
-            {
-              "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
-              "params": {
-                "amount": 1
-              }
-            }
-          ],
+          "effectList": [],
           "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
@@ -394,15 +386,7 @@
         {
           "name": "Main Effect",
           "available": true,
-          "effectList": [
-            {
-              "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
-              "params": {
-                "amount": 1
-              }
-            }
-          ],
+          "effectList": [],
           "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
@@ -435,15 +419,7 @@
         {
           "name": "Main Effect",
           "available": true,
-          "effectList": [
-            {
-              "name": "Mark target",
-              "class_name": "it.polimi.se2019.server.actions.effects.MarkTargetList",
-              "params": {
-                "amount": 1
-              }
-            }
-          ],
+          "effectList": [],
           "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,

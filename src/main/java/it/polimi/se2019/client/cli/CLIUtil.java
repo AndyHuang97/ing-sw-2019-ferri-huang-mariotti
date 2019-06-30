@@ -26,7 +26,7 @@ public class CLIUtil {
             Thread thread = new Thread(task);
             thread.setDaemon(true);
             thread.start();
-            return task.get(20, TimeUnit.SECONDS);
+            return task.get(200, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException | ExecutionException ex) {
             out.println("Input timeout reached");
             return Constants.NOP;

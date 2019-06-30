@@ -62,6 +62,11 @@ public class SocketClient implements NetworkClient {
                 String inputLine;
                 while ((inputLine = this.in.readLine()) != null) {
                     Response request = (Response) new Response(null, false, "").deserialize(inputLine);
+                    if (request == null) {
+                        Logger.getGlobal().info("Deserialization failed! Request was null");
+                    } else {
+
+                    }
                     // custom code to handle ping pong socket sequence
                     if (request.getMessage().equals("ping")) {
                         Map<String, List<String>> socketPayload = new HashMap<>();

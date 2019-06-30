@@ -11,6 +11,7 @@ import it.polimi.se2019.server.playerActions.PlayerAction;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/setUp them.
@@ -25,7 +26,8 @@ public class MessageParser {
             PlayerAction pa = (PlayerAction) t;
             System.out.println(pa.getId());
             //TODO use keyOrder
-            List<Targetable> params = message.getCommandParams(pa.getClass().getName());
+            Logger.getGlobal().info(pa.getClass().getSimpleName());
+            List<Targetable> params = message.getCommandParams(pa.getClass().getSimpleName());
             try {
                 Class<PlayerAction> classType = (Class<PlayerAction>) Class.forName(pa.getClass().getName());
 
