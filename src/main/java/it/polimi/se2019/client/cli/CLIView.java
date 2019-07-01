@@ -81,21 +81,22 @@ public class CLIView extends View {
                     getModel().getGame().getPlayerList().forEach(p -> {
                         if (!p.getId().equals(currentPlayer.getId())) shootPlayers.put(p.getUserData().getNickname(), p.getId());
                     });
+                    shootPlayers.put("n", "n");
                     for (int i = 0; i < actionUnit.getNumPlayerTargets(); i++) {
                         String selectedPlayerTarget = utils.askUserInput("Select a player #" + i + " to target", new ArrayList<>(shootPlayers.keySet()), true);
                         if (selectedPlayerTarget.equals(Constants.NOP)) {
                             sendNOP();
                             return;
                         }
-                        shootList.add(shootPlayers.get(selectedPlayerTarget));
+                        if (!selectedPlayerTarget.equals("n")) shootList.add(shootPlayers.get(selectedPlayerTarget));
                     }
                     for (int i = 0; i < actionUnit.getNumTileTargets(); i++) {
-                        String selectedTileTarget = utils.askUserInput("Select tile #" + i + " to target", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), false);
+                        String selectedTileTarget = utils.askUserInput("Select tile #" + i + " to target", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "n"), false);
                         if (selectedTileTarget.equals(Constants.NOP)) {
                             sendNOP();
                             return;
                         }
-                        shootList.add(selectedTileTarget);
+                        if (!selectedTileTarget.equals("n")) shootList.add(selectedTileTarget);
                     }
                     getPlayerInput().put(Constants.SHOOT, shootList);
                     getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.SHOOT));
