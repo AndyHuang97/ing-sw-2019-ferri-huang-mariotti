@@ -37,9 +37,15 @@ public class WaitingForReload implements ControllerState {
                     Logger.getGlobal().info("Someone was killed");
                     return newState.nextState(playerActions, game, player);
                 } else {
-                    game.nextCurrentPlayer();
-                    Logger.getGlobal().info("No one was killed");
-                    return new WaitingForMainActions();
+                    game.updateTurn();
+                    if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
+                        Logger.getGlobal().info("No one was killed, first spawn");
+                        return new WaitingForRespawn();
+                    }
+                    else {
+                        Logger.getGlobal().info("No one was killedm not first spawn");
+                        return new WaitingForMainActions();
+                    }
                 }
             }
         }

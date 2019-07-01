@@ -15,7 +15,7 @@ public enum AmmoColor implements Targetable {
 
     @Override
     public String getId() {
-        return null;
+        return color;
     }
 
     public String getColor() {

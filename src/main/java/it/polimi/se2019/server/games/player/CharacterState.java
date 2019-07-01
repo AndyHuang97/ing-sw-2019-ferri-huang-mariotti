@@ -97,17 +97,17 @@ public class CharacterState extends Observable<Response> implements Serializable
 		List<CompositeAction> possibleActions = new ArrayList<>();
 		possibleActions.add(new CompositeAction(PlayerAction.NOP));
 		possibleActions.add(new CompositeAction(PlayerAction.GRAB));
-		possibleActions.add(new CompositeAction(PlayerAction.SHOOT));
+		possibleActions.add(new CompositeAction(PlayerAction.SHOOT_WEAPON));
 		if (isFrenzy) {
 			possibleActions.add(new CompositeAction(PlayerAction.RELOAD, PlayerAction.SHOOT));
 			if (beforeFrenzyActivator) {
 				possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.RELOAD,
-						PlayerAction.SHOOT));
+						PlayerAction.SHOOT_WEAPON));
 				possibleActions.add(new CompositeAction(new MovePlayerAction(4)));
 				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.GRAB));
 			} else {
 				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.RELOAD,
-						PlayerAction.SHOOT));
+						PlayerAction.SHOOT_WEAPON));
 				possibleActions.add(new CompositeAction(new MovePlayerAction(3), PlayerAction.GRAB));
 			}
 		} else {
@@ -117,7 +117,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 			if (this.getDamageBar().size()>=3) {
 				possibleActions.add(new CompositeAction(new MovePlayerAction(2), PlayerAction.GRAB));
 				if (this.getDamageBar().size()>=6) {
-					possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.SHOOT));
+					possibleActions.add(new CompositeAction(new MovePlayerAction(1), PlayerAction.SHOOT_WEAPON));
 				}
 			}
 		}

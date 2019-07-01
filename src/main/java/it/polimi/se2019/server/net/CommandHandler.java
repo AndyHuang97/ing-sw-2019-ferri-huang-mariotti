@@ -60,6 +60,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         netMessage.getCommands().forEach((key, values) -> {
             List<Targetable> newValues = new ArrayList<>(); // moved it inside the for each, must be a new reference each time
             values.forEach((value) -> {
+                Logger.getGlobal().info("Looking for matching object to: "+value);
                 int oldSize = newValues.size();
                 Player playerTarget = game.getPlayerList().stream().filter(player -> player.getId().equals(value)).findAny().orElse(null);
                 if (playerTarget != null) {
@@ -77,6 +78,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                         .filter(Objects::nonNull)
                         .filter(tile -> !tile.isSpawnTile())
                         .map(tile -> tile.getAmmoCrate())
+                        .filter(Objects::nonNull)
                         .filter(ammoCrate -> ammoCrate.getId().equals(value)).findAny().orElse(null);
                 if (ammoCrateTarget != null) {
                     newValues.add(ammoCrateTarget);
@@ -97,9 +99,10 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 } else { // tries to get the weapon from a spwantile
                     weaponTarget = game.getBoard().getTileList().stream()
                             .filter(Objects::nonNull)
-                            .filter(tile -> tile.isSpawnTile())
-                            .map(tile -> tile.getWeaponCrate())
+                            .filter(Tile::isSpawnTile)
+                            .map(Tile::getWeaponCrate)
                             .map(weapons -> weapons.stream()
+                                    .filter(Objects::nonNull)
                                     .filter(weapon -> weapon.getId().equals(value))
                                     .findAny().orElse(null))
                             .filter(Objects::nonNull)
@@ -111,6 +114,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 }
                 // assuming that a weapon always precedes the action unit
                 if (newValues.size()>1) {
+                    Logger.getGlobal().info(newValues.get(0).getId());
                     ActionUnit actionUnitTarget = ((Weapon) newValues.get(0)).getActionUnitList().stream()
                             .filter(actionUnit -> actionUnit.getId().equals(value)).findAny().orElse(null);
                     if (actionUnitTarget != null) {
@@ -132,7 +136,8 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     newValues.add(playerActionTarget);
                     return;
                 }
-
+                //did not find any corresponding value
+                Logger.getGlobal().info(newCommands.toString());
                 if (oldSize == newValues.size()) {
                     throw new TargetableNotFoundException("Cannot find a targetable with id: " + value);
                 }

@@ -72,8 +72,8 @@ public class WaitingForRespawn implements ControllerState {
                     player = playerStack.pop();// gives back the player that was ending the turn
                     Logger.getGlobal().info("Popped player:" + player.getId());
                     player.getCharacterState().setFirstSpawn(false);
-                    game.setCurrentPlayerNotify(player);
-                    game.nextCurrentPlayer(); // resumes the turn cycle
+                    game.setCurrentPlayerNotify(player);// resumes the turn cycle
+                    game.updateTurn(); // resumes the turn cycle
                     Logger.getGlobal().info("Next Player: "+game.getCurrentPlayer().getId());
                     if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
                         return new WaitingForRespawn(); // if next player has not spawned yet

@@ -34,6 +34,8 @@ public class PowerUpAction extends PlayerAction {
         try {
             powerUpsToDiscard = params.stream().filter(t -> getPlayer().getCharacterState().getPowerUpBag().contains(t))
                     .map(t -> (PowerUp) t).collect(Collectors.toList());
+            Logger.getGlobal().info(powerUpsToDiscard.toString());
+            powerUpsToDiscard.forEach(powerUp -> System.out.println(powerUp.getId()));
             inputCommands = buildCommandDict(params);
             powerUpsToDiscard.forEach(p-> Logger.getGlobal().info(p.getId()));
         } catch (ClassCastException e) {
@@ -54,7 +56,9 @@ public class PowerUpAction extends PlayerAction {
     @Override
     public boolean check() {
         Logger.getGlobal().info(String.valueOf(getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)));
-        return getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)
+        return !powerUpsToDiscard.isEmpty()
+                &&
+                getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)
                 &&
                 powerUpsToDiscard.stream().allMatch(powerUp -> powerUp.getActionUnitList().get(MAIN_EFFECT).check(getGame(), inputCommands));
     }

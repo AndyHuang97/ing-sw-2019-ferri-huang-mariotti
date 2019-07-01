@@ -39,6 +39,7 @@ public class Model implements LocalModel {
         localPlayer = game.getPlayerByColor(color);
 
         localPlayer.setCharacterState(characterState);
+        Logger.getGlobal().info("Character update: " + localPlayer.getCharacterState().getColor() + "\ttile "+localPlayer.getCharacterState().getTile());
     }
 
     @Override

@@ -204,6 +204,7 @@ public class ControllerStateTest {
 
         System.out.println("1) NOP, weapon will not be loaded, no one died");
         reloadAction = new NoOperation(game, p1);
+        p2.getCharacterState().setFirstSpawn(false);
         playerActions.add(reloadAction);
         p1.getCharacterState().resetDamageBar();
         p2.getCharacterState().resetDamageBar();
@@ -491,6 +492,52 @@ public class ControllerStateTest {
         newState = waitingForMainActions.nextState(playerActions, game, p1);
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
         assertEquals(WaitingForMainActions.class, newState.getClass());
+
+        System.out.println("9) Received a Teleporter powerUp");
+        game.setCurrentPlayer(p1);
+        p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
+        game.setFrenzy(false);
+        waitingForMainActions = new WaitingForMainActions();
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        action = new PowerUpAction(game, p1);
+        PowerUp teleporter = getPowerUp("Red_Teleporter");
+        p1.getCharacterState().getPowerUpBag().add(teleporter);
+        targetableList = new ArrayList<>();
+        targetableList.add(teleporter);
+        targetableList.add(board.getTile(3,2));
+        action.unpack(targetableList);
+        playerActions.add(action);
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(waitingForMainActions, newState);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(board.getTile(3,2),p1.getCharacterState().getTile());
+
+        System.out.println("9) Received a Newton powerUp");
+        game.setCurrentPlayer(p1);
+        p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
+        game.setFrenzy(false);
+        waitingForMainActions = new WaitingForMainActions();
+        playerActions.clear();
+        p1.getCharacterState().setFirstSpawn(false);
+        p1.getCharacterState().setTile(board.getTile(0,0));
+        p2.getCharacterState().setFirstSpawn(false);
+        p2.getCharacterState().setTile(board.getTile(0,0));
+        action = new PowerUpAction(game, p1);
+        PowerUp newton = getPowerUp("Red_Newton");
+        p1.getCharacterState().getPowerUpBag().add(newton);
+        targetableList = new ArrayList<>();
+        targetableList.add(newton);
+        targetableList.add(p2);
+        targetableList.add(board.getTile(2,0));
+        action.unpack(targetableList);
+        playerActions.add(action);
+        newState = waitingForMainActions.nextState(playerActions, game, p1);
+        assertEquals(waitingForMainActions, newState);
+        assertEquals(p1.getId(), game.getCurrentPlayer().getId());
+        assertEquals(board.getTile(0,0),p1.getCharacterState().getTile());
+        assertEquals(board.getTile(2,0),p2.getCharacterState().getTile());
 
     }
 

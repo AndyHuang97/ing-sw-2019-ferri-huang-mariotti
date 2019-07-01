@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.games.Game;
@@ -10,6 +11,7 @@ import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.playerActions.CompositeAction;
 import it.polimi.se2019.server.playerActions.MovePlayerAction;
 import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playerActions.PowerUpAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
@@ -28,6 +30,7 @@ public class WaitingForMainActions implements ControllerState {
     private static final int NORMAL_ACTION_NUMBER = 2;
     private static final int BEFORE_FRENZY_NUMBER = 2;
     private static final int AFTER_FRENZY_NUMBER = 1;
+    private static final int POWERUP_POSITION = 0;
 
     /**
      *
@@ -48,6 +51,17 @@ public class WaitingForMainActions implements ControllerState {
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) throws ClassCastException {
         //TODO need to add all the error reports: commandHandler.reportError(playerAction.getErrorMessage());
+        if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.POWERUP)) {
+            PowerUp powerUp = ((PowerUpAction)playerActions.get(POWERUP_POSITION)).getPowerUpsToDiscard().get(POWERUP_POSITION);
+            if (powerUp.getName().split("_")[1].equals(Constants.TELEPORTER) || powerUp.getName().split("_")[1].equals(Constants.NEWTON)) {
+                Logger.getGlobal().info("Detected a " + powerUp.getId());
+                if (playerActions.stream().allMatch(PlayerAction::check)) {
+                    playerActions.forEach(PlayerAction::run);
+                }
+            }
+            return this;
+        }
+
         if (!checkPlayerActionAvailability(playerActions, game, player)) { // action was not even available
             Logger.getGlobal().info("Action not available");
             return this; // stay in the same state and do nothing, only wait for correct input

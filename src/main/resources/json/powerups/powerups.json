@@ -196,34 +196,32 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target ",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
               }
             }
           ],
           "conditionList": [
             {
-              "name": "One direction movement",
-              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
               }
             },
             {
-              "name": "Max distance x2",
+              "name": "MaxDistance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "maxDistance": 2
-              }
-            },
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
+                "amount": 2,
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "lazy": true
               }
             }
           ],
-          "numPlayerTargets" : 0,
+          "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
         },
@@ -256,34 +254,32 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target (",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
               }
             }
           ],
           "conditionList": [
             {
-              "name": "One direction movement",
-              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
               }
             },
             {
-              "name": "Max distance x2",
+              "name": "MaxDistance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "maxDistance": 2
-              }
-            },
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
+                "amount": 2,
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "lazy": true
               }
             }
           ],
-          "numPlayerTargets" : 0,
+          "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
         },
@@ -316,34 +312,32 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target (",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
               }
             }
           ],
           "conditionList": [
             {
-              "name": "One direction movement",
-              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
               }
             },
             {
-              "name": "Max distance x2",
+              "name": "MaxDistance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "maxDistance": 2
-              }
-            },
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
+                "amount": 2,
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "lazy": true
               }
             }
           ],
-          "numPlayerTargets" : 0,
+          "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
         },
@@ -475,20 +469,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target",
+              "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
+                "self": true,
+                "isTile": true
               }
             }
           ],
-          "conditionList": [
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
-              }
-            }
-          ],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 1,
           "playerSelectionFirst": false
@@ -506,7 +495,7 @@
           ],
           "conditionList": [],
           "numPlayerTargets" : 0,
-          "numTileTargets": 0,
+          "numTileTargets": 1,
           "playerSelectionFirst": true
         }
       ],
@@ -522,20 +511,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target",
+              "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
+                "self": true,
+                "isTile": true
               }
             }
           ],
-          "conditionList": [
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
-              }
-            }
-          ],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 1,
           "playerSelectionFirst": false
@@ -553,7 +537,7 @@
           ],
           "conditionList": [],
           "numPlayerTargets" : 0,
-          "numTileTargets": 0,
+          "numTileTargets": 1,
           "playerSelectionFirst": true
         }
       ],
@@ -569,20 +553,15 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target",
+              "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
+                "self": true,
+                "isTile": true
               }
             }
           ],
-          "conditionList": [
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
-              }
-            }
-          ],
+          "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 1,
           "playerSelectionFirst": false
@@ -600,7 +579,7 @@
           ],
           "conditionList": [],
           "numPlayerTargets" : 0,
-          "numTileTargets": 0,
+          "numTileTargets": 1,
           "playerSelectionFirst": true
         }
       ],
