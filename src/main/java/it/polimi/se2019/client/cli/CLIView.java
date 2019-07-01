@@ -97,6 +97,7 @@ public class CLIView extends View {
                         }
                         shootList.add(selectedTileTarget);
                     }
+                    getPlayerInput().put(Constants.SHOOT, shootList);
                     getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.SHOOT));
                     sendInput();
                     break;
