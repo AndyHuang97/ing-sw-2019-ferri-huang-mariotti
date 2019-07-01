@@ -99,7 +99,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void initGameObjects(String mapIndex) {
 
-		this.setCurrentPlayerNotify(playerList.get(0));
+		this.setCurrentPlayer(playerList.get(0));
 		//this.killshotTrack = new KillShotTrack(playerList);
 		new DirectDeserializers();
 		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));

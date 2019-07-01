@@ -16,7 +16,6 @@ import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 import java.util.logging.Logger;
