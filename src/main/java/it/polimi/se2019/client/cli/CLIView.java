@@ -233,6 +233,7 @@ public class CLIView extends View {
                                     sendNOP();
                                     return;
                                 }
+                                doneActions.add(Constants.POWERUP);
                                 if (selectedPowerUp.contains("Newton")) {
                                     Map<String, String> newtonPlayers = new HashMap<>();
                                     getModel().getGame().getPlayerList().forEach(p -> {
