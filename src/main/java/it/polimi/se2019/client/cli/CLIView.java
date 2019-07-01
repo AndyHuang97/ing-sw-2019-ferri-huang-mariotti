@@ -280,34 +280,52 @@ public class CLIView extends View {
                     sendInput();
                     break;
                 case Constants.TAGBACK_GRENADE:
-                    // TODO: Implement
+                    List<String> tagbackGrenadesToUse = new ArrayList<>();
+                    currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> up.getName().contains("TagbackGrenade")).forEach(up -> {
+                        String useTagbackGrenade = utils.askUserInput("Do you want to use the " + up.getName() + " powerup", Arrays.asList("Y", "N"), false);
+                        if (useTagbackGrenade.equals(Constants.NOP)) {
+                            sendNOP();
+                            return;
+                        }
+                        if (useTagbackGrenade.equals("Y")) tagbackGrenadesToUse.add(up.getName());
+                    });
+                    if (tagbackGrenadesToUse.isEmpty()) {
+                        sendNOP();
+                        return;
+                    }
+                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.POWERUP));
+                    getPlayerInput().put(Constants.POWERUP, tagbackGrenadesToUse);
+                    sendInput();
                     break;
                 case Constants.TARGETING_SCOPE:
-                    List<String> targetingScope = new ArrayList<>();
-                    Map<String, String> targetingScopeTargets = new HashMap<>();
-                    for (int i = 0; i < 12; i++) {
-                        targetingScopeTargets.put("Tile " + i, String.valueOf(i));
-                    }
+                    List<String> targetingScopesToUse = new ArrayList<>();
+                    Map<String, String> targetingScopePlayers = new HashMap<>();
                     getModel().getGame().getPlayerList().forEach(p -> {
-                        if (!p.getId().equals(currentPlayer.getId())) targetingScopeTargets.put("Player " + p.getUserData().getNickname(), p.getId());
+                        if (!p.getId().equals(currentPlayer.getId())) targetingScopePlayers.put(p.getUserData().getNickname(), p.getId());
                     });
                     currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> up.getName().contains("TargetingScope")).forEach(up -> {
-                        targetingScope.add(up.getName());
-                        String selectedGenericTarget = utils.askUserInput("Select a user or tile to target with the " + up.getName() + " powerup or n not to use it", new ArrayList<>(targetingScopeTargets.keySet()), true);
-                        if (selectedGenericTarget.equals(Constants.NOP) || selectedGenericTarget.equals("n")) {
+                        String selectedTargetingScopePlayer = utils.askUserInput("Select a user to target with the " + up.getName() + " powerup or n not to use it", new ArrayList<>(targetingScopePlayers.keySet()), true);
+                        if (selectedTargetingScopePlayer.equals(Constants.NOP)) {
                             sendNOP();
                             return;
                         }
-                        targetingScope.add(targetingScopeTargets.get(selectedGenericTarget));
-                        String selectedAmmoColor = utils.askUserInput("Select an ammo color to use with with the " + up.getName() + " powerup", Arrays.asList(AmmoColor.BLUE.getColor(), AmmoColor.RED.getColor(), AmmoColor.YELLOW.getColor()), true);
-                        if (selectedAmmoColor.equals(Constants.NOP)) {
-                            sendNOP();
-                            return;
+                        if (!selectedTargetingScopePlayer.equals("n")) {
+                            targetingScopesToUse.add(up.getName());
+                            String selectedAmmoColor = utils.askUserInput("Select an ammo color to use with with the " + up.getName() + " powerup", Arrays.asList(AmmoColor.BLUE.getColor(), AmmoColor.RED.getColor(), AmmoColor.YELLOW.getColor()), true);
+                            if (selectedAmmoColor.equals(Constants.NOP)) {
+                                sendNOP();
+                                return;
+                            }
+                            targetingScopesToUse.add(selectedAmmoColor);
+                            targetingScopesToUse.add(targetingScopePlayers.get(selectedTargetingScopePlayer));
                         }
-                        targetingScope.add(selectedAmmoColor);
                     });
-                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.TARGETING_SCOPE));
-                    getPlayerInput().put(Constants.TARGETING_SCOPE, targetingScope);
+                    if (targetingScopesToUse.isEmpty()) {
+                        sendNOP();
+                        return;
+                    }
+                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.POWERUP));
+                    getPlayerInput().put(Constants.POWERUP, targetingScopesToUse);
                     sendInput();
                     break;
             }
