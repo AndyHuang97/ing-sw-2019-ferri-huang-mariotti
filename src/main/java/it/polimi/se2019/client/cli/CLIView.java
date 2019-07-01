@@ -249,7 +249,7 @@ public class CLIView extends View {
                                         sendNOP();
                                         return;
                                     }
-                                    getPlayerInput().put(Constants.POWERUP, Arrays.asList(selectedPowerUp, selectedNewtonPlayer, selectedNewtonTile));
+                                    getPlayerInput().put(Constants.POWERUP, Arrays.asList(selectedPowerUp, newtonPlayers.get(selectedNewtonPlayer), selectedNewtonTile));
                                 } else if (selectedPowerUp.contains("Teleporter")) {
                                     String selectedTeleportTile = utils.askUserInput("Pick a tile where to teleport", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), false);
                                     if (selectedTeleportTile.equals(Constants.NOP)) {
