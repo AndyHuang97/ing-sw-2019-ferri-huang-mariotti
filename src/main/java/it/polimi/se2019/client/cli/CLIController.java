@@ -130,7 +130,7 @@ public class CLIController {
             }
         }
         utils.print("\n");
-        List<String> symbols = Arrays.asList("◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "☠", "☼");
+        List<String> symbols = new LinkedList<>(Arrays.asList("◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "☠", "☼"));
         utils.println("+---+---+---+---+---+---+---+---+---+---+---+---+");
         utils.println("|   |   |   |   |   |   |   |   |   |   |   |   |");
         p.getCharacterState().getDamageBar().forEach(c -> {
