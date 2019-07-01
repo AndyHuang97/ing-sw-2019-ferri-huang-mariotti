@@ -9,6 +9,7 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.socket.SocketServer;
 import it.polimi.se2019.server.playerActions.PlayerAction;
@@ -113,21 +114,24 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     }
                 }
                 // assuming that a weapon always precedes the action unit
-                if (newValues.size()>1) {
-                    Logger.getGlobal().info(newValues.get(0).getId());
-                    ActionUnit actionUnitTarget = ((Weapon) newValues.get(0)).getActionUnitList().stream()
-                            .filter(actionUnit -> actionUnit.getId().equals(value)).findAny().orElse(null);
-                    if (actionUnitTarget != null) {
-                        newValues.add(actionUnitTarget);
-                        return;
-                    } else {
-                        actionUnitTarget = ((Weapon) newValues.get(0)).getOptionalEffectList().stream()
+                try {
+                    if (!newValues.isEmpty()) {
+                        ActionUnit actionUnitTarget = ((Weapon) newValues.get(0)).getActionUnitList().stream()
                                 .filter(actionUnit -> actionUnit.getId().equals(value)).findAny().orElse(null);
                         if (actionUnitTarget != null) {
                             newValues.add(actionUnitTarget);
                             return;
+                        } else {
+                            actionUnitTarget = ((Weapon) newValues.get(0)).getOptionalEffectList().stream()
+                                    .filter(actionUnit -> actionUnit.getId().equals(value)).findAny().orElse(null);
+                            if (actionUnitTarget != null) {
+                                newValues.add(actionUnitTarget);
+                                return;
+                            }
                         }
                     }
+                } catch (ClassCastException e) {
+                    //got to next value
                 }
                 //converts the KeyOrder
                 PlayerAction playerActionTarget = PlayerAction.getAllPossibleActions().stream()
@@ -135,6 +139,14 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 if (playerActionTarget != null) {
                     newValues.add(playerActionTarget);
                     return;
+                }
+                //converts the ammo color
+                try {
+                    AmmoColor ammoColorTarget = AmmoColor.valueOf(value);
+                    newValues.add(ammoColorTarget);
+                    return;
+                }catch (IllegalArgumentException e) {
+
                 }
                 //did not find any corresponding value
                 Logger.getGlobal().info(newCommands.toString());
