@@ -23,7 +23,6 @@ public class MessageParser {
         List<PlayerAction> playerActions = new ArrayList<>();
         for (Targetable t : message.getCommands().get(Constants.KEY_ORDER)){
             PlayerAction pa = (PlayerAction) t;
-            Logger.getGlobal().info(pa.getId());
             Logger.getGlobal().info(pa.getClass().getSimpleName());
             List<Targetable> params = message.getCommandParams(pa.getClass().getSimpleName());
             try {

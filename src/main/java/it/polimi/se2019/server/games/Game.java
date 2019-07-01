@@ -11,6 +11,7 @@ import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -21,6 +22,7 @@ import it.polimi.se2019.util.Response;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class contains data and logic of a game. In the MVC pattern this class implements a big chunk of the
@@ -116,6 +118,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 		initBoard();
 		initPlayerPowerUps();
+		initPlayerAmmoBag();
 	}
 
 	private void initBoard() {
@@ -141,6 +144,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 					}
 				});
 
+	}
+
+	public void initPlayerAmmoBag() {
+		this.getPlayerList().stream()
+				.forEach(p -> {
+					Stream.of(AmmoColor.values()).forEach(color -> p.getCharacterState().getAmmoBag().put(color,1));
+				});
 	}
 
 	public void givePowerUpToPlayer(Player player) {

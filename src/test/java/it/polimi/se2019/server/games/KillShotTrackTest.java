@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 
 public class KillShotTrackTest {
@@ -104,7 +103,7 @@ public class KillShotTrackTest {
         Assert.assertEquals(3, p2DeathValue.intValue());
         Assert.assertEquals(2, p5DeathValue.intValue());
     }
-
+/*
     @Test
     public void testUpdateKillCounter() {
 
@@ -122,7 +121,7 @@ public class KillShotTrackTest {
                 });
 
     }
-
+*/
     @Test
     public void testSetDeathTrack() {
         Map<Integer, EnumMap<PlayerColor, Integer>> expectedDeathTrack = new HashMap<>();

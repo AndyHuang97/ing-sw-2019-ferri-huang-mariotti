@@ -47,6 +47,7 @@ public class ControllerStateTest {
 
         // prepares all objects of the game, weaponcrates and ammocrates, powerups for the players
         game.initGameObjects("0");
+
     }
 
     @After
@@ -362,6 +363,8 @@ public class ControllerStateTest {
         playerActions.clear();
         p1.getCharacterState().setTile(board.getTile(0,0));
         p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,0);
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.BLUE,0);
+        p1.getCharacterState().getAmmoBag().put(AmmoColor.YELLOW,0);
         p1.getCharacterState().getPowerUpBag().clear();
         action = new MovePlayerAction(game, p1);
         targetableList = new ArrayList<>();

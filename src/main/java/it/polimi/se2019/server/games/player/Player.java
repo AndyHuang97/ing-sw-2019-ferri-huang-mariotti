@@ -1,21 +1,16 @@
 package it.polimi.se2019.server.games.player;
 
-import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
-import it.polimi.se2019.server.dataupdate.PlayerEventListener;
-import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 
  */
-public class Player extends Observable<Response> implements Targetable, PlayerEventListener {
+public class Player extends Observable<Response> implements Targetable, Observer<PlayerDeath> {
 
 	private boolean active;
 	private UserData userData;
@@ -102,19 +97,8 @@ public class Player extends Observable<Response> implements Targetable, PlayerEv
 		this.color = color;
 	}
 
-
     @Override
-    public void onCharacterStateUpdate(CharacterStateUpdate characterStateUpdate) {
-	    // Send a Response to the Game telling that CharacterState of this Player changed
-        List<StateUpdate> updateList = new ArrayList<>();
-        updateList.add(characterStateUpdate);
-        Response response = new Response(updateList);
-
-        notify(response);
-    }
-
-    @Override
-    public void onPlayerDeath(PlayerDeath playerDeath) {
-	    characterState.updateScore(playerDeath, color);
+    public void update(PlayerDeath playerDeath) throws CommunicationError {
+        characterState.updateScore(playerDeath, color);
     }
 }

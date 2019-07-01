@@ -152,7 +152,8 @@ public class GameManager {
 				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);
 		Logger.getGlobal().info("Map: "+max.getKey());
 		newGame.initGameObjects(max.getKey());
-		Logger.getGlobal().info("Game objects were loaded");
+        newGame.getBoard().register(newGame);
+        Logger.getGlobal().info("Game objects were loaded");
 		mapPreference = new ArrayList<>();
 
 		this.waitingList.forEach(tuple -> {
