@@ -5,6 +5,7 @@ import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.dataupdate.CurrentPlayerStateUpdate;
+import it.polimi.se2019.server.dataupdate.CurrentWeaponUnpdate;
 import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
 import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.deserialize.DirectDeserializers;
@@ -192,10 +193,6 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setCurrentPlayer(Player currentPlayer) {
         if (currentPlayer.getActive()) this.currentPlayer = currentPlayer;
         else throw new IllegalStateException();
-    }
-
-	public void setCurrentPlayerNotify(Player currentPlayer) {
-	    setCurrentPlayer(currentPlayer);
 
         CurrentPlayerStateUpdate currentPlayerUpdate = new CurrentPlayerStateUpdate(currentPlayer);
 
@@ -208,7 +205,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		int newIndex = playerList.indexOf(currentPlayer) + 1;
 		if(newIndex >= playerList.size()) {newIndex = 0;}
 		//currentPlayer = playerList.get(newIndex);
-        setCurrentPlayerNotify(playerList.get(newIndex));
+        setCurrentPlayer(playerList.get(newIndex));
 	}
 
 	public Date getStartDate() {
@@ -310,6 +307,11 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setCurrentWeapon(Weapon currentWeapon) {
 		this.currentWeapon = currentWeapon;
+
+		StateUpdate currentWeaponUpdate = new CurrentWeaponUnpdate(currentWeapon);
+        Response response = new Response(Arrays.asList(currentWeaponUpdate));
+
+        notify(response);
 	}
 
 	public List<ActionUnit> getCurrentActionUnitsList() {

@@ -96,7 +96,7 @@ public class WaitingForPowerUps implements ControllerState {
                         alreadyAskedPlayers.forEach(player1 -> Logger.getGlobal().info("AlreadyAskedPlayer: "+player1.getId()));
                         playerStack.push(powerUpPlayers.get(0));
                         alreadyAskedPlayers.add(powerUpPlayers.get(0));
-                        game.setCurrentPlayerNotify(powerUpPlayers.get(0));
+                        game.setCurrentPlayer(powerUpPlayers.get(0));
                         Logger.getGlobal().info("More visible people with Tagback Grenade");
                         return this;
                     }
@@ -105,7 +105,7 @@ public class WaitingForPowerUps implements ControllerState {
 
                     Player originalPlayer = playerStack.pop(); // should be the player that was performing the turn
                     Logger.getGlobal().info("Popped current player");
-                    game.setCurrentPlayerNotify(originalPlayer);
+                    game.setCurrentPlayer(originalPlayer);
                     alreadyAskedPlayers.clear();
                     Logger.getGlobal().info("Tagback grenade going back to WaitingForEffects");
                     return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);

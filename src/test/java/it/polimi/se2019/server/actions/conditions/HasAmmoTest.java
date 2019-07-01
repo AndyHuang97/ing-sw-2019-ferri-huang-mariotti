@@ -74,7 +74,7 @@ public class HasAmmoTest {
     @Test
     public void testHasAmmo() {
         Condition condition;
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
         EnumMap<AmmoColor, Integer> ammoBag = new EnumMap<>(AmmoColor.class);
         ammoBag.putIfAbsent(AmmoColor.BLUE, 3);
         ammoBag.putIfAbsent(AmmoColor.RED, 3);

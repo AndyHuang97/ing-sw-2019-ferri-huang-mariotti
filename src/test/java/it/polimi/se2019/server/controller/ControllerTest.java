@@ -138,7 +138,7 @@ public class ControllerTest {
         player0.getCharacterState().addAmmo(getAmmoBag(3));
 
         // Set testNick0 as current player
-        game.setCurrentPlayerNotify(player0);
+        game.setCurrentPlayer(player0);
 
         //actualPlayerCommandHandler.register(controller);
     }

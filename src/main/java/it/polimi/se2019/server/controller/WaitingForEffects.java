@@ -85,7 +85,7 @@ public class WaitingForEffects implements ControllerState {
                         newState.getPlayerStack().push(player); // storing the player that was executing the turn
                         newState.getPlayerStack().push(powerUpPlayers.get(0));
                         newState.getAlreadyAskedPlayers().add(powerUpPlayers.get(0));
-                        game.setCurrentPlayerNotify(powerUpPlayers.get(0)); // giving control to another player
+                        game.setCurrentPlayer(powerUpPlayers.get(0)); // giving control to another player
                         return newState;
                     }
                     // no need to go to WaitingForPowerUps state

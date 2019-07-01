@@ -11,6 +11,7 @@ import it.polimi.se2019.util.ErrorResponse;
 import java.util.List;
 
 public class NoOperation extends PlayerAction {
+    public static final String ERRORMESSAGE = "Unable to send no operation, something went wrong";
 
     public NoOperation(Game game, Player player) {super(game, player);}
     public NoOperation(int amount) {
@@ -34,7 +35,7 @@ public class NoOperation extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return new ErrorResponse("No operation");
+        return new ErrorResponse(ERRORMESSAGE);
     }
 
     @Override

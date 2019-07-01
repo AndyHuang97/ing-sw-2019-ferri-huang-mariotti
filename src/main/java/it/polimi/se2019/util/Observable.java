@@ -1,10 +1,11 @@
 package it.polimi.se2019.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Observable<T> {
-    private transient final List<Observer<T>> observers = new ArrayList<>();
+public abstract class Observable<T> implements Serializable {
+    private final transient List<Observer<T>> observers = new ArrayList<>();
 
     public void register(Observer<T> observer){
         synchronized (observers) {
@@ -29,5 +30,4 @@ public abstract class Observable<T> {
             }
         }
     }
-
 }

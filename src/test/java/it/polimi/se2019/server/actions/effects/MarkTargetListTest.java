@@ -76,7 +76,7 @@ public class MarkTargetListTest {
         Effect effect = new MarkTargetList(2);
         List<Targetable> targetList = new ArrayList<>();
         targets.put("targetList", targetList);
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
 
         targetList.addAll(Arrays.asList(p2, p3, p4));
         effect.run(game, targets);

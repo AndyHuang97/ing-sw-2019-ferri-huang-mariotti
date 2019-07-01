@@ -83,7 +83,7 @@ public class MoveTargetTest {
         List<Targetable> target = new ArrayList<>();
         targets.put(CommandConstants.TILELIST, tile);
         targets.put(CommandConstants.TARGETLIST, target);
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
 
         tile.add(tileMap[0][2]);
         target.add(p2);

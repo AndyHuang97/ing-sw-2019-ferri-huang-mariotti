@@ -81,7 +81,7 @@ public class IsTargetInActionUnitTargetListTest {
 
         list.add(p2);
         targets.put(CommandConstants.TARGETLIST, list);
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
 
         ActionUnit actionUnit = new ActionUnit(true,"Basic Mode", null, null, 0,0,true);
         actionUnit.setCommands(targets);

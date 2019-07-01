@@ -80,7 +80,7 @@ public class PlayerNotInRoomTest {
         List<Targetable> room = new ArrayList<>();
         targets.put(CommandConstants.TILELIST, room);
 
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
         room.add(tileMap[1][0]);
         assertFalse(condition.check(game, targets));
         room.clear();
