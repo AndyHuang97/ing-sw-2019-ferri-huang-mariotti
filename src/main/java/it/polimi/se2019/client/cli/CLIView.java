@@ -270,7 +270,8 @@ public class CLIView extends View {
                 case Constants.RESPAWN:
                     String powerUpName = utils.askUserInput("Choose a Power Up to respawn", currentPlayer.getCharacterState().getPowerUpBag().stream().map(u -> u.getName()).collect(Collectors.toList()), true);
                     if (powerUpName.equals(Constants.NOP)) {
-                        sendNOP();
+                        utils.println("Exiting...");
+                        System.exit(0);
                         return;
                     }
                     getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.RESPAWN));

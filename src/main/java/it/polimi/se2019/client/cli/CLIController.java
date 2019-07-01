@@ -43,6 +43,7 @@ public class CLIController {
                                     weaponCreates.append(handleWeapons(tileMap[x][y].getWeaponCrate()));
                                 }
                                 view.getModel().getGame().getPlayerList().forEach(p -> {
+                                    System.out.println(p.getCharacterState().getTile());
                                     if (p.getCharacterState().getTile() != null && tileMap[x][y].getId().equals(p.getCharacterState().getTile().getId())) {
                                         if (lineSize[0] < 6) {
                                             replacement.get(0).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "●" + Colors.RESET);
