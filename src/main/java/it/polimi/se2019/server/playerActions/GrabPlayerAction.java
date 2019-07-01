@@ -178,6 +178,8 @@ public class GrabPlayerAction extends PlayerAction {
             weaponCrate.remove(weaponToGrab);
 
             getGame().getBoard().setWeaponCrate(x, y, weaponCrate);
+
+            getGame().getBoard().setWeaponCrate(x, y, weaponCrate);
         }
 
         else if (ammoToGrab != null) {

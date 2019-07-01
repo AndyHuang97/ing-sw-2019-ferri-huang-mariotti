@@ -166,8 +166,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 				if (tile.isSpawnTile()) {
 					List<Weapon> weaponCrate = tile.getWeaponCrate();
 
-					List<Weapon> updatedWeaponCrate = new ArrayList<>();
-
+					List<Weapon> updatedWeaponCrate = new ArrayList<>(weaponCrate);
+					/*
 					for (Weapon weapon : weaponCrate) {
 						if (weapon == null) {
 							updatedWeaponCrate.add(drawWeaponFromDeck());
@@ -175,6 +175,11 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 							updatedWeaponCrate.add(weapon);
 						}
 					}
+					*/
+
+					while (updatedWeaponCrate.size() < 3) {
+					    updatedWeaponCrate.add(drawWeaponFromDeck());
+                    }
 
 					getBoard().setWeaponCrate(tile.getxPosition(), tile.getyPosition(), updatedWeaponCrate);
 				} else {
