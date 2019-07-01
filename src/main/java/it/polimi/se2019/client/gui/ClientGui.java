@@ -45,11 +45,10 @@ public class ClientGui extends Application {
 
         //testing
 
-        //view.setPlayerColor(PlayerColor.GREEN);
-        //((Model)view.getModel()).initGame();
-        //view.showGame();
-
-        //view.showMessage(Constants.POWERUP);
+        view.setPlayerColor(PlayerColor.GREEN);
+        ((Model)view.getModel()).initGame();
+        view.showGame();
+        ((Model) view.getModel()).boardDeserialize();
 
     }
 
