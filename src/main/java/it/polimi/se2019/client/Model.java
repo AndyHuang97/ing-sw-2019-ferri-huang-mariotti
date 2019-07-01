@@ -81,7 +81,7 @@ public class Model implements LocalModel {
         Player p5 = new Player(UUID.randomUUID().toString(), true, new UserData("Abbacchio"), new CharacterState(), PlayerColor.PURPLE);
         p5.getCharacterState().setTile(game.getBoard().getTile(2,2));
         game.setPlayerList(Arrays.asList(p1,p2,p3,p4));
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
         Weapon w1 = new Weapon(null, "SledgeHammer", null
                 , null, null);
         w1.setLoaded(true);

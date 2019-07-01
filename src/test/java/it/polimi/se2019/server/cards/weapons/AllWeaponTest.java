@@ -120,7 +120,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Lock_Rifle")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
         p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -230,7 +230,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Machine_Gun")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
         p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -401,7 +401,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("THOR")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -580,7 +580,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Plasma_Gun")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -713,7 +713,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Whisper")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -785,7 +785,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Electroscythe")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -910,7 +910,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Tractor_Beam")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1036,7 +1036,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Vortex_Cannon")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1192,7 +1192,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Furnace")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1334,7 +1334,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Heatseeker")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1393,7 +1393,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Hellion")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1535,7 +1535,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Flamethrower")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1675,7 +1675,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Grenade_Launcher")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1783,7 +1783,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Rocket_Launcher")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -1943,7 +1943,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Railgun")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -2065,7 +2065,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Cyberblade")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -2206,7 +2206,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("ZX-2")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -2311,7 +2311,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Shotgun")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -2409,7 +2409,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Power_Glove")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -2569,7 +2569,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Shockwave")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();
@@ -2698,7 +2698,7 @@ public class AllWeaponTest {
         Weapon weapon = weaponList.stream().filter(w -> w.getName().equals("Sledgehammer")).findFirst().orElse(null);
         System.out.println(weapon.getName());
 
-        game.setCurrentPlayerNotify(p1); // the attacker
+        game.setCurrentPlayer(p1); // the attacker
         p1.getCharacterState().setTile(tileMap[0][0]);
 		p1.getCharacterState().addWeapon(weapon);
         p2.getCharacterState().resetDamageBar();

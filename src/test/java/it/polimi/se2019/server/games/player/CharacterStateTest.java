@@ -10,7 +10,6 @@ import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.LinkType;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.board.RoomColor;
-import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Assert;
@@ -196,7 +195,7 @@ public class CharacterStateTest {
         Game game = new Game();
         Player player = new Player("TESTNICK", true, null, characterState, PlayerColor.BLUE);
         game.setPlayerList(Arrays.asList(player));
-        game.setCurrentPlayerNotify(player);
+        game.setCurrentPlayer(player);
 
         Assert.assertEquals(3, characterState.getPowerUpBag().size());
         Assert.assertTrue(hasAmmo.check(game, null));

@@ -77,7 +77,7 @@ public class DamageRoomTest {
         Effect effect = new DamageRoom(1);
         List<Targetable> tile = new ArrayList<>();
         targets.put(CommandConstants.TILELIST, tile);
-        game.setCurrentPlayerNotify(p4);
+        game.setCurrentPlayer(p4);
 
         tile.add(tileMap[1][0]);
         effect.run(game, targets);
@@ -89,7 +89,7 @@ public class DamageRoomTest {
         assertEquals(PlayerColor.GREY, p2.getCharacterState().getDamageBar().get(0));
 
         // player is inside the target room
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
         p1.getCharacterState().resetDamageBar();
         p2.getCharacterState().resetDamageBar();
         effect.run(game, targets);

@@ -87,13 +87,13 @@ public class GameTest {
         Player p1 = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
         p1.setActive(true);
 
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
 
         assertEquals(p1, game.getCurrentPlayer());
 
         Player p2 = new Player(UUID.randomUUID().toString(), false, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
         p2.setActive(false);
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
         assertEquals(p1, game.getCurrentPlayer());
 
     }
@@ -103,7 +103,7 @@ public class GameTest {
 
         Player nextPlayer = new Player(UUID.randomUUID().toString(), true, new UserData("Nick"), new CharacterState(), PlayerColor.BLUE);
 
-        game.setCurrentPlayerNotify(nextPlayer);
+        game.setCurrentPlayer(nextPlayer);
 
         assertEquals(nextPlayer, game.getCurrentPlayer());
     }

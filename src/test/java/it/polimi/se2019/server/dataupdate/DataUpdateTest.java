@@ -10,12 +10,35 @@ import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.users.UserData;
+import it.polimi.se2019.util.Observable;
+import it.polimi.se2019.util.Observer;
+import it.polimi.se2019.util.Response;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+class Forwarder extends Observable<Response> implements Observer<Response> {
+    @Override
+    public void update(Response message) throws CommunicationError {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(message);
+
+            ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+            Response deserialized = (Response) objectInputStream.readObject();
+
+            notify(deserialized);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("OPS");
+        }
+
+    }
+}
 
 public class DataUpdateTest {
     private static final String PLAYERNICK1 = "testPlayer";
@@ -23,6 +46,7 @@ public class DataUpdateTest {
 
     private Player player1;
     private View view;
+    private Forwarder forwarder;
     private CharacterState characterState1;
     private Game game;
 
@@ -30,6 +54,9 @@ public class DataUpdateTest {
     public void setUp() {
         // Initialize the view
         view = new CLIView();
+
+        // Initialize the forwarder
+        forwarder = new Forwarder();
 
         // Initialize Game and Player
         game = new Game();
@@ -45,7 +72,8 @@ public class DataUpdateTest {
 
         characterState1.register(game);
         player1.register(game);
-        game.register(view);
+        game.register(forwarder);
+        forwarder.register(view);
 
         List<Player> playerList = new ArrayList<>();
         playerList.add(player1);

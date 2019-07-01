@@ -51,7 +51,7 @@ public class SortTileTest {
         p1.setCharacterState(new CharacterState());
         p1.getCharacterState().setTile(tileMap[0][0]);
         p1.setActive(true);
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
     }
 
     @Test

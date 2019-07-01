@@ -76,7 +76,7 @@ public class DamageTargetListTest {
         Effect effect = new DamageTargetList(2, null);
         List<Targetable> targetList = new ArrayList<>();
         targets.put("targetList", targetList);
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
 
         targetList.addAll(Arrays.asList(p2, p3, p4));
         effect.run(game, targets);

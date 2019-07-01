@@ -54,7 +54,7 @@ public class IsTargetListInDirectionTest {
         p4 = new Player(UUID.randomUUID().toString(), true, new UserData("D"), new CharacterState(), PlayerColor.GREY);
         p4.getCharacterState().setTile(tileMap[0][1]);
         game.setPlayerList(new ArrayList<>(Arrays.asList(p1,p2,p3,p4)));
-        game.setCurrentPlayerNotify(p1);
+        game.setCurrentPlayer(p1);
 
         list = new ArrayList<>();
     }
@@ -119,7 +119,7 @@ public class IsTargetListInDirectionTest {
         targets.put("direction", direction);
         Assert.assertEquals(false, condition.check(game, targets));
 
-        game.setCurrentPlayerNotify(p3);
+        game.setCurrentPlayer(p3);
         targetList = Arrays.asList(p1, p2);
         targets.put("targetList", targetList);
         direction = Arrays.asList(Direction.SOUTH);

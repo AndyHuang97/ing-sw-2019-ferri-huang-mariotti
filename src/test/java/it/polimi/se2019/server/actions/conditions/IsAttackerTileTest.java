@@ -79,9 +79,9 @@ public class IsAttackerTileTest {
         list.add(tileMap[0][1]);
         targets.put(CommandConstants.TILELIST, list);
 
-        game.setCurrentPlayerNotify(p4);
+        game.setCurrentPlayer(p4);
         Assert.assertEquals(true, condition.check(game, targets));
-        game.setCurrentPlayerNotify(p3);
+        game.setCurrentPlayer(p3);
         Assert.assertEquals(false, condition.check(game, targets));
     }
 
@@ -91,9 +91,9 @@ public class IsAttackerTileTest {
         list.add(tileMap[0][1]);
         targets.put(CommandConstants.TILELIST, list);
 
-        game.setCurrentPlayerNotify(p3);
+        game.setCurrentPlayer(p3);
         Assert.assertEquals(true, condition.check(game, targets));
-        game.setCurrentPlayerNotify(p4);
+        game.setCurrentPlayer(p4);
         Assert.assertEquals(false, condition.check(game, targets));
     }
 }
