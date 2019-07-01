@@ -58,7 +58,7 @@ public class CLIView extends View {
                     getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.RELOAD));
                     sendInput();
                     break;
-                case Constants.SHOOT:
+                case Constants.SHOOT_WEAPON:
                     List<String> shootList = new LinkedList<>();
                     Weapon currentWeapon = getModel().getGame().getCurrentWeapon();
                     shootList.add(currentWeapon.getName());
@@ -97,28 +97,29 @@ public class CLIView extends View {
                         }
                         shootList.add(selectedTileTarget);
                     }
-                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.SHOOT));
+                    getPlayerInput().put(Constants.SHOOT_WEAPON, shootList);
+                    getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.SHOOT_WEAPON));
                     sendInput();
                     break;
                 case Constants.MAIN_ACTION:
                     Map<String, List<String>> possibleActions = new HashMap<>();
                     if (getModel().getGame().isFrenzy()) {
                         if (currentPlayer.getCharacterState().isBeforeFrenzyActivator()) {
-                            possibleActions.put(">↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT_WEAPON));
+                            possibleActions.put(">↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT));
                             possibleActions.put(">>>>", Arrays.asList(Constants.MOVE));
                             possibleActions.put(">>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
                         } else {
-                            possibleActions.put(">>↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT_WEAPON));
+                            possibleActions.put(">>↺\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.RELOAD, Constants.SHOOT));
                             possibleActions.put(">>>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
                         }
                     } else {
                         possibleActions.put(">>>", Arrays.asList(Constants.MOVE));
                         possibleActions.put(">✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
-                        possibleActions.put("\uD83D\uDF8B", Arrays.asList(Constants.SHOOT_WEAPON));
+                        possibleActions.put("\uD83D\uDF8B", Arrays.asList(Constants.SHOOT));
                         if (currentPlayer.getCharacterState().getDeaths() > 2)
                             possibleActions.put(">>✋", Arrays.asList(Constants.MOVE, Constants.GRAB));
                         if (currentPlayer.getCharacterState().getDeaths() > 5)
-                            possibleActions.put(">\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.SHOOT_WEAPON));
+                            possibleActions.put(">\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.SHOOT));
                     }
                     if (currentPlayer.getCharacterState().getPowerUpBag().stream().anyMatch(up -> up.getName().contains("Newton") || up.getName().contains("Teleporter"))) possibleActions.put("PowerUp", Arrays.asList(Constants.POWERUP));
                     possibleActions.put("Skip", Arrays.asList(Constants.NOP));
@@ -127,6 +128,7 @@ public class CLIView extends View {
                         sendNOP();
                         return;
                     }
+                    int[] virtualTileCoords = new int[] {currentPlayer.getCharacterState().getTile().getxPosition(), currentPlayer.getCharacterState().getTile().getyPosition()};
                     List<String> doneActions = new ArrayList<>();
                     possibleActions.get(actionInput).forEach(action -> {
                         switch (action) {
@@ -137,6 +139,13 @@ public class CLIView extends View {
                                     return;
                                 }
                                 if (selectedMoveTile.equals("n")) break;
+                                try {
+                                    int[] coords = Util.convertToCoords(Integer.parseInt(selectedMoveTile));
+                                    virtualTileCoords[0] = coords[0];
+                                    virtualTileCoords[1] = coords[1];
+                                } catch (Exception ex) {
+                                    logger.info("invalid virtual tile");
+                                }
                                 doneActions.add(Constants.MOVE);
                                 getPlayerInput().put(Constants.MOVE, Arrays.asList(selectedMoveTile));
                                 break;
@@ -155,7 +164,7 @@ public class CLIView extends View {
                                 doneActions.add(Constants.RELOAD);
                                 getPlayerInput().put(Constants.RELOAD, selectedReloadWeaponsMA);
                                 break;
-                            case Constants.SHOOT_WEAPON:
+                            case Constants.SHOOT:
                                 Map<String, Weapon> weapons = new HashMap<>();
                                 currentPlayer.getCharacterState().getWeaponBag().forEach(w -> {
                                     weapons.put(w.getName(), w);
@@ -168,32 +177,14 @@ public class CLIView extends View {
                                     return;
                                 }
                                 if (selectedShootWeapon.equals("n")) break;
-                                doneActions.add(Constants.SHOOT_WEAPON);
-                                getPlayerInput().put(Constants.SHOOT_WEAPON, Arrays.asList(selectedShootWeapon));
+                                doneActions.add(Constants.SHOOT);
+                                getPlayerInput().put(Constants.SHOOT, Arrays.asList(selectedShootWeapon));
                                 break;
                             case Constants.GRAB:
-                                String selectedGrabMode = utils.askUserInput("Do you want to grab a Weapon or a Crate or n not to grab", Arrays.asList("Weapon", "Crate", "n"), true);
-                                if (selectedGrabMode.equals(Constants.NOP)) {
-                                    sendNOP();
-                                    return;
-                                }
-                                if (selectedGrabMode.equals("n")) break;
-                                Tile[][] tileMap = getModel().getGame().getBoard().getTileMap();
-                                List<String> grabWeapons = new ArrayList<>();
-                                Map<String, String> grabCrates = new HashMap<>();
-                                IntStream.range(0, tileMap[0].length).forEach(y -> IntStream.range(0, tileMap.length).forEach(x -> {
-                                    if (tileMap[x][y] != null) {
-                                        if (!tileMap[x][y].isSpawnTile()) {
-                                            grabCrates.put(String.valueOf(Util.convertToIndex(x, y)), tileMap[x][y].getAmmoCrate().getName());
-                                        } else {
-                                            tileMap[x][y].getWeaponCrate().forEach(w -> grabWeapons.add(w.getName()));
-                                        }
-                                    }
-                                }));
-                                doneActions.add(Constants.GRAB);
-                                if (selectedGrabMode.equals("Weapon")) {
+                                Tile virtualTile = getModel().getGame().getBoard().getTile(virtualTileCoords[0], virtualTileCoords[1]);
+                                if (!virtualTile.getWeaponCrate().isEmpty()) {
                                     List<String> grabSwapWeapons = new ArrayList<>();
-                                    String selectedWeaponGrab = utils.askUserInput("Choose a Weapon to grab", grabWeapons, true);
+                                    String selectedWeaponGrab = utils.askUserInput("Choose a Weapon to grab", virtualTile.getWeaponCrate().stream().map(w -> w.getName()).collect(Collectors.toList()), true);
                                     if (selectedWeaponGrab.equals(Constants.NOP)) {
                                         sendNOP();
                                         return;
@@ -207,14 +198,11 @@ public class CLIView extends View {
                                         }
                                         grabSwapWeapons.add(selectedWeaponSwap);
                                     }
+                                    doneActions.add(Constants.GRAB);
                                     getPlayerInput().put(Constants.GRAB, grabSwapWeapons);
-                                } else if (selectedGrabMode.equals("Crate")) {
-                                    String selectedCrateGrab = utils.askUserInput("Choose the Tile where the Crate is", new ArrayList<>(grabCrates.keySet()), false);
-                                    if (selectedCrateGrab.equals(Constants.NOP)) {
-                                        sendNOP();
-                                        return;
-                                    }
-                                    getPlayerInput().put(Constants.GRAB, Arrays.asList(grabCrates.get(selectedCrateGrab)));
+                                } else if (virtualTile.getAmmoCrate() != null) {
+                                    doneActions.add(Constants.GRAB);
+                                    getPlayerInput().put(Constants.GRAB, Arrays.asList(virtualTile.getAmmoCrate().getName()));
                                 }
                                 break;
                             case Constants.POWERUP:
