@@ -41,11 +41,8 @@ public class CharacterState extends Observable<Response> implements Serializable
 
 	private boolean beforeFrenzyActivator;
 
-	/**
-	 * Default constructor
-	 *
-	 */
 
+	// TODO: remove this constructor
 	public CharacterState() {
 		this.deaths = 0;
 		this.valueBar = NORMAL_VALUE_BAR;
@@ -59,6 +56,22 @@ public class CharacterState extends Observable<Response> implements Serializable
 		this.firstSpawn = true;
 		this.connected = true;
 		this.color = PlayerColor.BLUE;
+	}
+
+	public CharacterState(PlayerColor color) {
+		this.deaths = 0;
+		this.valueBar = NORMAL_VALUE_BAR;
+		this.damageBar = new ArrayList<>();
+		this.markerBar = initMarkerBar();
+		this.ammoBag = initAmmoBag();
+		this.weaponBag = new ArrayList<>();
+		this.powerUpBag = new ArrayList<>();
+		this.tile = null;
+		this.score = 0;
+		this.firstSpawn = true;
+		this.connected = true;
+		this.color = color;
+
 	}
 
 	/**
