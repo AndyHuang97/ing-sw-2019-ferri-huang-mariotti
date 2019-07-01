@@ -1254,7 +1254,7 @@
               }
             }
           ],
-          "numPlayerTargets" : 2,
+          "numPlayerTargets" : 0,
           "numTileTargets": 2,
           "playerSelectionFirst": true
         }

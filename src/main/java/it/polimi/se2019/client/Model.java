@@ -54,6 +54,7 @@ public class Model implements LocalModel {
 
     @Override
     public Board getBoard() {
+        Logger.getGlobal().info("Updating the board ...");
         return getGame().getBoard();
     }
 

@@ -16,6 +16,7 @@ public class Constants {
     public static final String BOARD_PATH = "/images/playerBoards/PlayerBoard_";
     public static final String ACTION_BUTTONS = "/fxml/ActionButtons";
     public static final String SOFACHROMERG_FONT = "/css/sofachromerg.ttf";
+    public static final String SELECTION_NODE = "selection-node";
     public static final String NORMAL = "_Normal";
     public static final String FRENZY = "_Frenzy";
     public static final String RMI = "RMI";

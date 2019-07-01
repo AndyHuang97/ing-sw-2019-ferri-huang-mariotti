@@ -1596,8 +1596,8 @@ public class AllWeaponTest {
         System.out.println("4) System all green");
         targetableList = new ArrayList<>();
         targetableMap = new HashMap<>();
-        targetableList.add(tileMap[0][1]);
         targetableList.add(tileMap[0][2]);
+        targetableList.add(tileMap[0][1]);
         targetableMap.put(CommandConstants.TILELIST, targetableList);
         targetableList = new ArrayList<>();
         p2.getCharacterState().setTile(tileMap[0][1]);

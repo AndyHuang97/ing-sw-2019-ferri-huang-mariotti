@@ -12,6 +12,7 @@ import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public abstract class View extends Observable implements Observer<Response> {
 
@@ -72,6 +73,7 @@ public abstract class View extends Observable implements Observer<Response> {
     public void sendInput() {
         System.out.println(">>> Sending: " + getPlayerInput());
         if (model.getGame().getCurrentPlayer().getUserData().getNickname().equals(nickname)) {
+//            System.out.println("WARNING: Commented send for gui local testing, go to View.sendInput and comment it");
             networkClient.send(new Request(new NetMessage(playerInput), nickname));
         } else {
             System.out.println("Wait for your turn!");

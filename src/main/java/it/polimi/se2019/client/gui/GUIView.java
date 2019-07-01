@@ -37,8 +37,21 @@ public class GUIView extends View {
     @Override
     public void showMessage(String message) {
         switch (message) {
+            case Constants.MAIN_ACTION:
+                guiController.getActionTileController();
+                return;
             case Constants.RESPAWN:
                 guiController.getActionTileController().getPowerUpForRespawn();
+                return;
+            case Constants.RELOAD:
+
+                return;
+            case Constants.SHOOT:
+                return;
+
+            case Constants.TARGETING_SCOPE:
+
+            case Constants.TAGBACK_GRENADE:
         }
     }
 

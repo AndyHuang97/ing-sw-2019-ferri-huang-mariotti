@@ -237,7 +237,7 @@ public class ActionTileController {
         confirmButton.setDisable(true);
 
         myPowerUps.setDisable(false);
-        myPowerUps.getStyleClass().add("my-node");
+        myPowerUps.getStyleClass().add(Constants.SELECTION_NODE);
         showMyPowerups();
         ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RESPAWN, new ArrayList<>());
 
@@ -261,7 +261,7 @@ public class ActionTileController {
         confirmButton.setDisable(false);
 
         myWeapons.setDisable(false);
-        myWeapons.getStyleClass().add("my-node");
+        myWeapons.getStyleClass().add(Constants.SELECTION_NODE);
         showMyUnloadedWeapons();
         ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RELOAD, new ArrayList<>());
 
@@ -285,7 +285,7 @@ public class ActionTileController {
         cancelButton.setDisable(false);
 
         myWeapons.setDisable(false);
-        myWeapons.getStyleClass().add("my-node");
+        myWeapons.getStyleClass().add(Constants.SELECTION_NODE);
         showMyLoadedWeapons();
         view.getInputRequested().add(this::getActionUnit);
 
@@ -415,22 +415,22 @@ public class ActionTileController {
             t = view.getModel().getGame().getBoard().getTile(coords[0], coords[1]);
         }
 
-        System.out.println("Grab: "+t);
+        Logger.getGlobal().info("Grab: "+t);
         try {
             int[] coords = view.getModel().getGame().getBoard().getTilePosition(t);
             if (t.isSpawnTile()) {
-                System.out.println("spawn tile");
+                Logger.getGlobal().info("spawn tile");
                 String roomColor = t.getRoomColor().getColor();
                 Optional<GridPane> optGrid = weaponCrateList.stream()
                         .filter(wc -> wc.getId().split("Weapons")[0].equalsIgnoreCase(roomColor))
                         .findFirst();
                 if (optGrid.isPresent()){
                     optGrid.get().setDisable(false);
-                    optGrid.get().getStyleClass().add("my-node");
+                    optGrid.get().getStyleClass().add(Constants.SELECTION_NODE);
                 }
             }
             else {
-                System.out.println("normal tile");
+                Logger.getGlobal().info("normal tile");
                 ammoGrid.toFront();
                 ammoGrid.setDisable(false);
                 ammoGrid.setVisible(true);
@@ -438,7 +438,7 @@ public class ActionTileController {
                 Node n = hBox.getChildren().get(0);
                 ((AnchorPane) n).getChildren().get(0).setDisable(false);
 
-                n.getStyleClass().add("my-node");
+                n.getStyleClass().add(Constants.SELECTION_NODE);
             }
         } catch (TileNotFoundException e) {
             logger.warning(e.toString());
@@ -519,7 +519,7 @@ public class ActionTileController {
                     iv.setOpacity(1.0);
                     iv.setDisable(false);
 
-                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myPowerUps, Constants.POWERUP);
+                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myPowerUps, Constants.RESPAWN);
                 });
     }
 

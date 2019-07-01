@@ -6,6 +6,7 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.util.CommandConstants;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -21,9 +22,14 @@ public class IsUnidirectional implements Condition {
         List<Tile> tileList = targets.get(CommandConstants.TILELIST).stream()
                 .map(t->(Tile)t)
                 .collect(Collectors.toList());
+        Comparator<Tile> tileComparator = (t1, t2) -> {
+            Integer d1 = game.getBoard().getTileTree().distance(attackerTile,t1);
+            Integer d2 = game.getBoard().getTileTree().distance(attackerTile,t2);
+            return d1.compareTo(d2);
+        };
+        tileList.sort(tileComparator);
         try {
             Direction dir = game.getBoard().getDirection(attackerTile, firstTile);
-
             Logger.getGlobal().info("Unidirectional: " +
                     game.getBoard().isOneDirectionList(dir, attackerTile, tileList));
             return game.getBoard().isOneDirectionList(dir, attackerTile, tileList);

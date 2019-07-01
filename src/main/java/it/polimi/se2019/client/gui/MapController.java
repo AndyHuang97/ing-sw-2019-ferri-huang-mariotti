@@ -354,27 +354,23 @@ public class MapController {
 
         view.getModel().getGame().getPlayerList().stream()
                 .forEach(p -> {
-                    try {
-                        int[] coords = view.getModel().getGame().getBoard().getTilePosition(p.getCharacterState().getTile());
-                        VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
-                        vbox.setDisable(false);
+                    int[] coords = {p.getCharacterState().getTile().getxPosition(), p.getCharacterState().getTile().getyPosition()};
+                    VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
+                    vbox.setDisable(false);
 
-                        HBox firstRow = (HBox) vbox.getChildren().get(1);
-                        HBox secondRow = (HBox) vbox.getChildren().get(2);
+                    HBox firstRow = (HBox) vbox.getChildren().get(1);
+                    HBox secondRow = (HBox) vbox.getChildren().get(2);
 
-                        firstRow.setDisable(false);
-                        secondRow.setDisable(false);
+                    firstRow.setDisable(false);
+                    secondRow.setDisable(false);
 
-                        boolean isSecondRow = firstRow.getChildren().stream()
-                                .allMatch(Node::isVisible);
-                        if (!isSecondRow) {
-                            addPlayerCircle(firstRow, p);
-                        }
-                        else {
-                            addPlayerCircle(secondRow, p);
-                        }
-                    } catch (TileNotFoundException e) {
-                        logger.warning(e.toString());
+                    boolean isSecondRow = firstRow.getChildren().stream()
+                            .allMatch(Node::isVisible);
+                    if (!isSecondRow) {
+                        addPlayerCircle(firstRow, p);
+                    }
+                    else {
+                        addPlayerCircle(secondRow, p);
                     }
                 });
     }
