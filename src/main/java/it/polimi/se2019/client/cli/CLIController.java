@@ -180,8 +180,13 @@ public class CLIController {
         }
         result.append("|\n");
         result.append("+------------------------+\n");
-        result.append("|                        |\n");
-        result.append("|                        |\n");
+        for (int i = 0; i < 3; i++) {
+            if (i < c.getActionUnitList().size()) {
+                if (c.getActionUnitList().get(i).getName().length() > 22) result.append("| " + c.getActionUnitList().get(i).getName().substring(0, 19) + "... |\n");
+                else result.append("| " + String.format("%-22s", c.getActionUnitList().get(i).getName()) + " |\n");
+            } else result.append("|                        |\n");
+        }
+        result.append("|          " + utils.getPrintableRoomColor(c.getPowerUpColor().getColor()) + "■" + Colors.RESET + " x1          |\n");
         result.append("+------------------------+\n");
         return result.toString();
     }
@@ -195,8 +200,32 @@ public class CLIController {
         }
         result.append("|\n");
         result.append("+------------------+\n");
-        result.append("|                  |\n");
-        result.append("|                  |\n");
+        result.append("| Pickup: ");
+        for (int i = 0; i < 4; i++) {
+            if (i < c.getPickUpCost().size()) result.append(utils.getPrintableRoomColor(c.getPickUpCost().get(i).getColor()) + "■ " + Colors.RESET);
+            else result.append("  ");
+        }
+        result.append(" |\n| Reload: ");
+        for (int i = 0; i < 4; i++) {
+            if (i < c.getReloadCost().size()) result.append(utils.getPrintableRoomColor(c.getReloadCost().get(i).getColor()) + "■ " + Colors.RESET);
+            else result.append("  ");
+        }
+        if (c.isLoaded()) result.append(" |\n| Is Loaded: " + Colors.GREEN + "●" + Colors.RESET + "     |\n");
+        else result.append("|\n| Is Loaded: " + Colors.RED + "●" + Colors.RESET + "     |\n");
+        result.append("+------------------+\n");
+        for (int i = 0; i < 3; i++) {
+            if (i < c.getActionUnitList().size()) {
+                if (c.getActionUnitList().get(i).getName().length() > 16) result.append("| " + c.getActionUnitList().get(i).getName().substring(0, 13) + "... |\n");
+                else result.append("| " + String.format("%-16s", c.getActionUnitList().get(i).getName()) + " |\n");
+            } else result.append("|                  |\n");
+        }
+        result.append("+------------------+\n");
+        for (int i = 0; i < 3; i++) {
+            if (i < c.getOptionalEffectList().size()) {
+                if (c.getOptionalEffectList().get(i).getName().length() > 16) result.append("| " + c.getOptionalEffectList().get(i).getName().substring(0, 13) + "... |\n");
+                else result.append("| " + String.format("%-16s", c.getOptionalEffectList().get(i).getName()) + " |\n");
+            } else result.append("|                  |\n");
+        }
         result.append("+------------------+\n");
         return result.toString();
     }
