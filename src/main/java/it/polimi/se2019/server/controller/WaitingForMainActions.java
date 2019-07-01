@@ -90,6 +90,8 @@ public class WaitingForMainActions implements ControllerState {
                 Weapon chosenWeapon = (Weapon) shootWeaponSelection.getCard(); // cannot return null because of the if...
                 Logger.getGlobal().info("Detected ShootWeaponSelection");
                 game.getCurrentActionUnitsList().clear();
+                // adding this to store the weapon currently in use by the player currently playing
+                game.setCurrentWeapon(chosenWeapon);
                 return new WaitingForEffects(chosenWeapon, this);
             }
             // no shoot weapon selection
