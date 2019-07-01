@@ -158,7 +158,10 @@ public class GameManager {
 		this.waitingList.forEach(tuple -> {
 			try {
 				tuple.commandHandler.register(controller);
-				tuple.commandHandler.update(new Response(newGame, true, Constants.RESPAWN));
+				tuple.commandHandler.update(new Response(newGame, true, ""));
+				if (tuple.userData.getNickname().equals(newGame.getCurrentPlayer().getUserData().getNickname())) {
+					tuple.commandHandler.update(new Response(null, true, Constants.RESPAWN));
+				}
 				Logger.getGlobal().info("Initialized game was broadcasted");
 			} catch (Observer.CommunicationError e) {
 				logger.info(e.getMessage());

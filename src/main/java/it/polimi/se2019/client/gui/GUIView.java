@@ -50,9 +50,6 @@ public class GUIView extends View {
     @Override
     public void showGame() {
 
-        // the next line is used for testing purposes only.
-        //((Model)super.getModel()).boardDeserialize();
-
         this.initRootLayout();
         this.showGameBoard();
 

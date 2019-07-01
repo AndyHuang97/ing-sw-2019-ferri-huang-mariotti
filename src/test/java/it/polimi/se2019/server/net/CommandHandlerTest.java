@@ -90,13 +90,18 @@ public class CommandHandlerTest {
         action.add(POWERUP);
         clientCommands.put(KEY_ORDER, action);
         PowerUp powerUp = getPowerUp("Red_Teleporter");
+        PowerUp newton = getPowerUp("Red_Newton");
+        p1.getCharacterState().getPowerUpBag().clear();
         p1.getCharacterState().getPowerUpBag().add(powerUp);
+        p1.getCharacterState().getPowerUpBag().add(newton);
         List<String> powerUpList = new ArrayList<>();
         powerUpList.add("Red_Teleporter");
+        powerUpList.add("Red_Newton");
         clientCommands.put(POWERUP, powerUpList);
         netMessage = new NetMessage(clientCommands);
         InternalMessage internalMessage = commandHandler.convertNetMessage(netMessage, game);
         assertEquals(powerUp, internalMessage.getCommands().get(POWERUP).get(0));
+        assertEquals(newton, internalMessage.getCommands().get(POWERUP).get(1));
         assertEquals(PlayerAction.POWERUP, internalMessage.getCommands().get(KEY_ORDER).get(0));
     }
 
@@ -125,6 +130,7 @@ public class CommandHandlerTest {
         action.add(SHOOT_WEAPON);
         clientCommands.put(KEY_ORDER, action);
         Weapon weapon = getWeapon("Lock_Rifle");
+        p1.getCharacterState().getWeaponBag().clear();
         p1.getCharacterState().getWeaponBag().add(weapon);
         List<String> weaponList = new ArrayList<>();
         weaponList.add("Lock_Rifle");
@@ -149,33 +155,46 @@ public class CommandHandlerTest {
         assertEquals(PlayerAction.SHOOT_WEAPON, internalMessage.getCommands().get(KEY_ORDER).get(0));
     }
 
-//    @Test
-//    public void testActionUnit() {
-//        NetMessage netMessage;
-//        Map<String, List<String>> clientCommands = new HashMap<>();
-//        List<String> action = new ArrayList<>();
-//        action.add(SHOOT);
-//        clientCommands.put(KEY_ORDER, action);
-//        Weapon weapon = getWeapon("Lock_Rifle");
-//        p1.getCharacterState().getWeaponBag().add(weapon);
-//        List<String> weaponList = new ArrayList<>();
-//        weaponList.add("Lock_Rifle");
-//        weaponList.add("Basic Mode");
-//        System.out.println(weaponList);
-//        clientCommands.put(SHOOT, weaponList);
-//        netMessage = new NetMessage(clientCommands);
-//        InternalMessage internalMessage = commandHandler.convertNetMessage(netMessage, game);
-//        assertEquals(weapon, internalMessage.getCommands().get(SHOOT).get(0));
-//        assertEquals(PlayerAction.SHOOT, internalMessage.getCommands().get(KEY_ORDER).get(0));
-//    }
-
     @Test
-    public void testKeyOrder() {
-
+    public void testActionUnit() {
+        NetMessage netMessage;
+        Map<String, List<String>> clientCommands = new HashMap<>();
+        List<String> action = new ArrayList<>();
+        action.add(SHOOT);
+        clientCommands.put(KEY_ORDER, action);
+        Weapon weapon = getWeapon("Lock_Rifle");
+        p1.getCharacterState().getWeaponBag().clear();
+        p1.getCharacterState().getWeaponBag().add(weapon);
+        List<String> weaponList = new ArrayList<>();
+        weaponList.add("Lock_Rifle");
+        weaponList.add("Basic Mode");
+        System.out.println(weaponList);
+        clientCommands.put(SHOOT, weaponList);
+        netMessage = new NetMessage(clientCommands);
+        InternalMessage internalMessage = commandHandler.convertNetMessage(netMessage, game);
+        assertEquals(weapon, internalMessage.getCommands().get(SHOOT).get(0));
+        assertEquals(PlayerAction.SHOOT, internalMessage.getCommands().get(KEY_ORDER).get(0));
     }
 
     @Test
     public void testAmmoColor() {
+        NetMessage netMessage;
+        Map<String, List<String>> clientCommands = new HashMap<>();
+        List<String> action = new ArrayList<>();
+        action.add(POWERUP);
+        clientCommands.put(KEY_ORDER, action);
+        PowerUp powerUp = getPowerUp("Red_TargetingScope");
+        p1.getCharacterState().getPowerUpBag().clear();
+        p1.getCharacterState().getPowerUpBag().add(powerUp);
+        List<String> powerUpList = new ArrayList<>();
+        powerUpList.add("Red_TargetingScope");
+        powerUpList.add("P2");
+        powerUpList.add("RED");
+        clientCommands.put(POWERUP, powerUpList);
+        netMessage = new NetMessage(clientCommands);
+        InternalMessage internalMessage = commandHandler.convertNetMessage(netMessage, game);
+        assertEquals(powerUp, internalMessage.getCommands().get(POWERUP).get(0));
+        assertEquals(PlayerAction.POWERUP, internalMessage.getCommands().get(KEY_ORDER).get(0));
 
     }
 

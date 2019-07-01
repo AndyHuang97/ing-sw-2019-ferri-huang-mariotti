@@ -21,11 +21,9 @@ public class MessageParser {
 
     public List<PlayerAction> parse(InternalMessage message, Game game, Player player) throws MessageParseException, UnpackingException {
         List<PlayerAction> playerActions = new ArrayList<>();
-        //for (String k : message.getCommands().keySet()) {
         for (Targetable t : message.getCommands().get(Constants.KEY_ORDER)){
             PlayerAction pa = (PlayerAction) t;
-            System.out.println(pa.getId());
-            //TODO use keyOrder
+            Logger.getGlobal().info(pa.getId());
             Logger.getGlobal().info(pa.getClass().getSimpleName());
             List<Targetable> params = message.getCommandParams(pa.getClass().getSimpleName());
             try {
