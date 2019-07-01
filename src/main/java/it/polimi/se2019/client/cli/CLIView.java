@@ -20,8 +20,6 @@ import java.util.stream.IntStream;
 public class CLIView extends View {
     private static final Logger logger = Logger.getLogger(CLIView.class.getName());
     CLIUtil utils = new CLIUtil();
-    Weapon weaponInUse;
-    Boolean usedBasicEffect;
 
 
     public CLIView() {
@@ -62,17 +60,11 @@ public class CLIView extends View {
                     break;
                 case Constants.SHOOT:
                     List<String> shootList = new LinkedList<>();
-                    List<ActionUnit> actionUnits;
-                    String question;
-                    shootList.add(weaponInUse.getName());
-                    if (usedBasicEffect) {
-                        question = "Which optional effect do you want to use";
-                        actionUnits = weaponInUse.getOptionalEffectList();
-                    } else {
-                        question = "Which basic effect do you want to use";
-                        actionUnits = weaponInUse.getActionUnitList();
-                    }
-                    String selectedActionUnit = utils.askUserInput(question, actionUnits.stream().map(au -> au.getName()).collect(Collectors.toList()), true);
+                    Weapon currentWeapon = getModel().getGame().getCurrentWeapon();
+                    shootList.add(currentWeapon.getName());
+                    List<ActionUnit> actionUnits = currentWeapon.getActionUnitList().stream().filter(au -> !getModel().getGame().getCurrentActionUnitsList().contains(au)).collect(Collectors.toList());
+                    actionUnits.addAll(currentWeapon.getOptionalEffectList().stream().filter(au -> !getModel().getGame().getCurrentActionUnitsList().contains(au)).collect(Collectors.toList()));
+                    String selectedActionUnit = utils.askUserInput("Which effect do you want to use", actionUnits.stream().map(au -> au.getName()).collect(Collectors.toList()), true);
                     if (selectedActionUnit.equals(Constants.NOP)) {
                         sendNOP();
                         return;
@@ -178,7 +170,6 @@ public class CLIView extends View {
                                 if (selectedShootWeapon.equals("n")) break;
                                 doneActions.add(Constants.SHOOT_WEAPON);
                                 getPlayerInput().put(Constants.SHOOT_WEAPON, Arrays.asList(selectedShootWeapon));
-                                weaponInUse = weapons.get(selectedShootWeapon);
                                 break;
                             case Constants.GRAB:
                                 String selectedGrabMode = utils.askUserInput("Do you want to grab a Weapon or a Crate or n not to grab", Arrays.asList("Weapon", "Crate", "n"), true);
@@ -218,7 +209,7 @@ public class CLIView extends View {
                                     }
                                     getPlayerInput().put(Constants.GRAB, grabSwapWeapons);
                                 } else if (selectedGrabMode.equals("Crate")) {
-                                    String selectedCrateGrab = utils.askUserInput("Choose the Tile where the Crate is", new ArrayList<>(grabCrates.keySet()), true);
+                                    String selectedCrateGrab = utils.askUserInput("Choose the Tile where the Crate is", new ArrayList<>(grabCrates.keySet()), false);
                                     if (selectedCrateGrab.equals(Constants.NOP)) {
                                         sendNOP();
                                         return;

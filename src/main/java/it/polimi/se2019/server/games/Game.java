@@ -38,6 +38,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
 	private List<ActionUnit> currentActionUnitsList;
+	private Weapon currentWeapon;
 	private Set<Targetable> cumulativeDamageTargetSet;
 	private Set<Targetable> cumulativeTargetSet;
 	private boolean frenzy;
@@ -57,6 +58,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
+		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
 		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
@@ -73,6 +75,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
+		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
 		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
@@ -89,6 +92,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = powerupDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
 		this.currentActionUnitsList = new ArrayList<>();
+		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
 		this.cumulativeTargetSet = new HashSet<>();
 	}
@@ -288,6 +292,14 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setPowerupDeck(Deck<PowerUp> powerupDeck) {
 		this.powerupDeck = powerupDeck;
+	}
+
+	public Weapon getCurrentWeapon() {
+		return currentWeapon;
+	}
+
+	public void setCurrentWeapon(Weapon currentWeapon) {
+		this.currentWeapon = currentWeapon;
 	}
 
 	public List<ActionUnit> getCurrentActionUnitsList() {
