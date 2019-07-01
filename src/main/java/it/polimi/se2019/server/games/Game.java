@@ -11,6 +11,7 @@ import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -21,6 +22,7 @@ import it.polimi.se2019.util.Response;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class contains data and logic of a game. In the MVC pattern this class implements a big chunk of the
@@ -38,6 +40,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Deck<PowerUp> powerupDeck;
 	private Deck<AmmoCrate> ammoCrateDeck;
 	private List<ActionUnit> currentActionUnitsList;
+	private Weapon currentWeapon;
 	private Set<Targetable> cumulativeDamageTargetSet;
 	private Set<Targetable> cumulativeTargetSet;
 	private boolean frenzy;
@@ -57,6 +60,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
+		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
 		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
@@ -73,6 +77,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = null;
 		this.ammoCrateDeck = null;
 		this.currentActionUnitsList = new ArrayList<>();
+		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
 		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
@@ -89,6 +94,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerupDeck = powerupDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
 		this.currentActionUnitsList = new ArrayList<>();
+		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
 		this.cumulativeTargetSet = new HashSet<>();
 	}
@@ -112,6 +118,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 		initBoard();
 		initPlayerPowerUps();
+		initPlayerAmmoBag();
 	}
 
 	private void initBoard() {
@@ -137,6 +144,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 					}
 				});
 
+	}
+
+	public void initPlayerAmmoBag() {
+		this.getPlayerList().stream()
+				.forEach(p -> {
+					Stream.of(AmmoColor.values()).forEach(color -> p.getCharacterState().getAmmoBag().put(color,1));
+				});
 	}
 
 	public void givePowerUpToPlayer(Player player) {
@@ -288,6 +302,14 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setPowerupDeck(Deck<PowerUp> powerupDeck) {
 		this.powerupDeck = powerupDeck;
+	}
+
+	public Weapon getCurrentWeapon() {
+		return currentWeapon;
+	}
+
+	public void setCurrentWeapon(Weapon currentWeapon) {
+		this.currentWeapon = currentWeapon;
 	}
 
 	public List<ActionUnit> getCurrentActionUnitsList() {

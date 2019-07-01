@@ -141,6 +141,8 @@ public class WaitingForEffects implements ControllerState {
             // at least one shot was performed
             chosenWeapon.setLoaded(false);
         }
+        // added this to reset the current weapon in use by the current player
+        game.setCurrentWeapon(null);
         game.getCumulativeDamageTargetSet().clear();
         return ((WaitingForMainActions) storedWaitingForMainActions).nextPlayerOrReloadRespawn(game, game.getCurrentPlayer()); // should go back to the WaitingForMainActions it came from
     }

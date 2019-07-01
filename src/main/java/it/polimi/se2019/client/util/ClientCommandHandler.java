@@ -21,6 +21,7 @@ public class ClientCommandHandler {
     }
 
     private synchronized void internalHandle(Response request) {
+        System.out.println(request.serialize());
         if (request.getSuccess()) {
             // game initialization
             if (request.getGame() != null) {

@@ -81,6 +81,7 @@ public class WaitingForMainActions implements ControllerState {
         if (playerActions.stream().allMatch(PlayerAction::check)) {
             playerActions.forEach(PlayerAction::run);
             updateCounter();
+            Logger.getGlobal().info("action counter: "+actionCounter + "\tcounter limit: "+getCounterLimit(game, player) + "\tplayer "+player.getUserData().getNickname());
 
             PlayerAction shootWeaponSelection = playerActions.stream().filter(playerAction -> playerAction.getId().equals(Constants.SHOOT_WEAPON))
                     .findFirst().orElse(null);
@@ -89,11 +90,12 @@ public class WaitingForMainActions implements ControllerState {
                 Weapon chosenWeapon = (Weapon) shootWeaponSelection.getCard(); // cannot return null because of the if...
                 Logger.getGlobal().info("Detected ShootWeaponSelection");
                 game.getCurrentActionUnitsList().clear();
+                // adding this to store the weapon currently in use by the player currently playing
+                game.setCurrentWeapon(chosenWeapon);
                 return new WaitingForEffects(chosenWeapon, this);
             }
             // no shoot weapon selection
             if (game.isFrenzy()) {
-                Logger.getGlobal().info("action counter: "+actionCounter + "\tcounter limit: "+getCounterLimit(game, player) + "\tplayer "+player.getId());
                 if (actionCounter >= getCounterLimit(game, player)) {
                     if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                         // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
@@ -183,8 +185,8 @@ public class WaitingForMainActions implements ControllerState {
                                                 .findFirst().orElseThrow(IllegalStateException::new);
                                         int distance = game.getBoard().getTileTree()
                                                 .distance(mpa.getPlayer().getCharacterState().getTile(), mpa.getMoveList().get(0));
-                                        Logger.getGlobal().info("possible:" + possiblePlayerAction.getAmount());
-                                        Logger.getGlobal().info("distance:" + distance);
+                                        Logger.getGlobal().info("allowed distance :" + possiblePlayerAction.getAmount());
+                                        Logger.getGlobal().info("actual distance:" + distance);
                                         if (possiblePlayerAction.getAmount() < distance || distance == -1) {
                                             // the predicate that checks the distance, if the selected tile gives a
                                             // greater distance then the action is not allowed

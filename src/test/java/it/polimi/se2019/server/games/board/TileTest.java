@@ -29,13 +29,13 @@ public class TileTest {
         game = new Game();
         tileMap = new Tile[2][2];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
-        tileMap[0][0] = new NormalTile(RoomColor.RED, links00, null);
+        tileMap[0][0] = new Tile(RoomColor.RED, links00, null);
         LinkType[] links01 = {LinkType.DOOR, LinkType.DOOR, LinkType.WALL, LinkType.WALL};
-        tileMap[0][1] = new NormalTile(RoomColor.YELLOW, links01, null);
+        tileMap[0][1] = new Tile(RoomColor.YELLOW, links01, null);
         LinkType[] links10 = {LinkType.WALL, LinkType.WALL, LinkType.OPEN, LinkType.DOOR};
-        tileMap[1][0] = new NormalTile(RoomColor.BLUE, links10, null);
+        tileMap[1][0] = new Tile(RoomColor.BLUE, links10, null);
         LinkType[] links11 = {LinkType.OPEN, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][1] = new NormalTile(RoomColor.BLUE, links11, null);
+        tileMap[1][1] = new Tile(RoomColor.BLUE, links11, null);
         board = new Board("",tileMap);
         game.setBoard(board);
 

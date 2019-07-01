@@ -32,17 +32,17 @@ public class IsTargetNotInActionUnitTargetListTest {
         game = new Game();
         tileMap = new Tile[2][3];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
-        tileMap[0][0] = new NormalTile(RoomColor.RED, links00, null);
+        tileMap[0][0] = new Tile(RoomColor.RED, links00, null);
         LinkType[] links01 = {LinkType.DOOR, LinkType.DOOR, LinkType.OPEN, LinkType.WALL};
-        tileMap[0][1] = new NormalTile(RoomColor.YELLOW, links01, null);
+        tileMap[0][1] = new Tile(RoomColor.YELLOW, links01, null);
         LinkType[] links10 = {LinkType.WALL, LinkType.WALL, LinkType.OPEN, LinkType.DOOR};
-        tileMap[1][0] = new NormalTile(RoomColor.BLUE, links10, null);
+        tileMap[1][0] = new Tile(RoomColor.BLUE, links10, null);
         LinkType[] links11 = {LinkType.OPEN, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][1] = new NormalTile(RoomColor.BLUE, links11, null);
+        tileMap[1][1] = new Tile(RoomColor.BLUE, links11, null);
         LinkType[] links02 = {LinkType.OPEN, LinkType.DOOR, LinkType.WALL, LinkType.WALL};
-        tileMap[0][2] = new NormalTile(RoomColor.YELLOW, links02, null);
+        tileMap[0][2] = new Tile(RoomColor.YELLOW, links02, null);
         LinkType[] links12 = {LinkType.WALL, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][2] = new NormalTile(RoomColor.WHITE, links12, null);
+        tileMap[1][2] = new Tile(RoomColor.WHITE, links12, null);
         board = new Board("",tileMap);
         game.setBoard(board);
 
