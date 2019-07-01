@@ -37,6 +37,8 @@ public class CLIView extends View {
         sendInput();
     }
 
+
+
     @Override
     @SuppressWarnings("Duplicates")
     public void showMessage(String message) {
@@ -64,8 +66,10 @@ public class CLIView extends View {
                     shootList.add(currentWeapon.getName());
                     List<ActionUnit> actionUnits = currentWeapon.getActionUnitList().stream().filter(au -> !getModel().getGame().getCurrentActionUnitsList().contains(au)).collect(Collectors.toList());
                     actionUnits.addAll(currentWeapon.getOptionalEffectList().stream().filter(au -> !getModel().getGame().getCurrentActionUnitsList().contains(au)).collect(Collectors.toList()));
-                    String selectedActionUnit = utils.askUserInput("Which effect do you want to use", actionUnits.stream().map(au -> au.getName()).collect(Collectors.toList()), true);
-                    if (selectedActionUnit.equals(Constants.NOP)) {
+                    List<String> validActionUnits = actionUnits.stream().map(au -> au.getName()).collect(Collectors.toList());
+                    validActionUnits.add("n");
+                    String selectedActionUnit = utils.askUserInput("Which effect do you want to use", validActionUnits, true);
+                    if (selectedActionUnit.equals(Constants.NOP) || selectedActionUnit.equals("n")) {
                         sendNOP();
                         return;
                     }
@@ -82,21 +86,25 @@ public class CLIView extends View {
                         if (!p.getId().equals(currentPlayer.getId())) shootPlayers.put(p.getUserData().getNickname(), p.getId());
                     });
                     shootPlayers.put("n", "n");
-                    for (int i = 0; i < actionUnit.getNumPlayerTargets(); i++) {
-                        String selectedPlayerTarget = utils.askUserInput("Select a player #" + i + " to target", new ArrayList<>(shootPlayers.keySet()), true);
-                        if (selectedPlayerTarget.equals(Constants.NOP)) {
-                            sendNOP();
-                            return;
+                    int[] targetsSize = new int[] {actionUnit.getNumPlayerTargets(), actionUnit.getNumTileTargets()};
+                    String[] messages = new String[] {"Select a player #%d to target", "Select tile #%d to target"};
+                    List<String>[] answers = new List[] {new ArrayList<>(shootPlayers.keySet()), Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "n")};
+                    boolean[] type = new boolean[] {true, false};
+                    int start;
+                    if (actionUnit.isPlayerSelectionFirst()) start = 0;
+                    else start = -1;
+                    for (int j = start; j < start + 2; j++) {
+                        for (int i = 0; i < targetsSize[Math.abs(j)]; i++) {
+                            String selectedTarget = utils.askUserInput(String.format(messages[Math.abs(j)], i), answers[Math.abs(j)], type[Math.abs(j)]);
+                            if (selectedTarget.equals(Constants.NOP)) {
+                                sendNOP();
+                                return;
+                            }
+                            if (!selectedTarget.equals("n")) {
+                                if (type[Math.abs(j)]) shootList.add(shootPlayers.get(selectedTarget));
+                                else shootList.add(selectedTarget);
+                            }
                         }
-                        if (!selectedPlayerTarget.equals("n")) shootList.add(shootPlayers.get(selectedPlayerTarget));
-                    }
-                    for (int i = 0; i < actionUnit.getNumTileTargets(); i++) {
-                        String selectedTileTarget = utils.askUserInput("Select tile #" + i + " to target", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "n"), false);
-                        if (selectedTileTarget.equals(Constants.NOP)) {
-                            sendNOP();
-                            return;
-                        }
-                        if (!selectedTileTarget.equals("n")) shootList.add(selectedTileTarget);
                     }
                     getPlayerInput().put(Constants.SHOOT, shootList);
                     getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.SHOOT));
