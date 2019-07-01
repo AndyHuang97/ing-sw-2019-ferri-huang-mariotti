@@ -58,7 +58,7 @@ public class RmiClient implements NetworkClient {
         @Override
         public void send(String rawRequest) throws RemoteException {
             Response request = (Response) new Response(null, false, "").deserialize(rawRequest);
-            commandHandler.handle(request);
+            if (!request.getMessage().equals("ping")) commandHandler.handle(request);
         }
 
 

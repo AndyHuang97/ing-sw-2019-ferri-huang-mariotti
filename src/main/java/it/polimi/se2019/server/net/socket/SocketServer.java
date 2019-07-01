@@ -56,11 +56,12 @@ public class SocketServer {
                     Request request = (Request) new Request(new NetMessage(null), null).deserialize(inputLine);
                     if (request.getNetMessage().getCommands().containsKey("pong")) {
                         this.echo = true;
+                    } else {
+                        String uuid = String.valueOf(UUID.randomUUID());
+                        logger.info(uuid);
+                        this.commandHandler.handle(request);
+                        logger.info(uuid);
                     }
-                    String uuid = String.valueOf(UUID.randomUUID());
-                    logger.info(uuid);
-                    this.commandHandler.handle(request);
-                    logger.info(uuid);
                 }
 
                 in.close();
@@ -85,7 +86,7 @@ public class SocketServer {
                     }
                 }
                 if (!this.echo) {
-                    throw new IOException("dwe");
+                    throw new IOException("Ping Timeout!");
                 }
             }
         }

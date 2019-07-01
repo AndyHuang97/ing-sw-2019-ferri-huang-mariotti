@@ -15,14 +15,12 @@ public class ClientCommandHandler {
     }
 
     public void handle(Response request) {
-        if (this.view.isCliTrueGuiFalse()) internalHandle(request);
+
+        if (this.view.isCliTrueGuiFalse()) new Thread(() -> internalHandle(request)).start();
         else Platform.runLater(() -> internalHandle(request));
     }
 
-    private void internalHandle(Response request) {
-        if (request.getMessage().equals("ping")) {
-            return;
-        }
+    private synchronized void internalHandle(Response request) {
         if (request.getSuccess()) {
             // game initialization
             if (request.getGame() != null) {

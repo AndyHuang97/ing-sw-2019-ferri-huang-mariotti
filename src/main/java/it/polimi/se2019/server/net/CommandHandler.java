@@ -169,8 +169,6 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
             } catch (GameManager.GameNotFoundException | GameManager.AlreadyPlayingException | PlayerNotFoundException e) {
                 logger.info(e.getMessage());
             }
-        } else if (message.getCommands().containsKey("pong")) {
-            // do nothing?
         } else {
             try {
                 Game game = ServerApp.gameManager.retrieveGame(nickname);
@@ -211,11 +209,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         //showMessage(response.serialize());
         try {
             if (this.socketTrueRmiFalse) {
-                Logger.getGlobal().info(response.serialize());
                 socketClientHandler.send(response.serialize());
-                if (response.getMessage().equals("ping")) {
-
-                }
             } else {
                 rmiClientWorker.send(response.serialize());
             }
