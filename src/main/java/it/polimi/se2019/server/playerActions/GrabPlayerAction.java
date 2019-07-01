@@ -15,6 +15,7 @@ import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class GrabPlayerAction extends PlayerAction {
 
@@ -71,14 +72,18 @@ public class GrabPlayerAction extends PlayerAction {
             playerPosition = getPlayer().getCharacterState().getTile();
         }
 
+        Logger.getGlobal().info(playerPosition.getId());
         if (weaponToGrab != null) {
             List<Weapon> weaponCrate = playerPosition.getWeaponCrate();
 
             // assert that the weapon is available in the SpawnTile
             boolean isWeaponAvailable = false;
             try {
+                Logger.getGlobal().info("Weapon to grab " + weaponToGrab.getId());
                 for (Weapon weapon : weaponCrate) {
-                    if (weapon == weaponToGrab) {
+                    Logger.getGlobal().info("Weapon in bag " + weapon.getId());
+                    if (weapon.equals(weaponToGrab)) {
+                        Logger.getGlobal().info("Weapon is available: " + weapon.getId());
                         isWeaponAvailable = true;
                     }
                 }
@@ -93,7 +98,7 @@ public class GrabPlayerAction extends PlayerAction {
                 boolean isWeaponToDiscardInWeaponBag = false;
 
                 for (Weapon weapon : getPlayer().getCharacterState().getWeaponBag()) {
-                    if (weapon == weaponToDiscard) {
+                    if (weapon.equals(weaponToDiscard)) {
                         isWeaponToDiscardInWeaponBag = true;
                     }
                 }
@@ -111,6 +116,7 @@ public class GrabPlayerAction extends PlayerAction {
             for (Map.Entry<AmmoColor, Integer> cost : pickupCost.entrySet()) {
                 try {
                     if (cost.getValue() > availableAmmo.get(cost.getKey())) {
+                        Logger.getGlobal().info("Not enough ammo!");
                         return false;
                     }
                 } catch (NullPointerException e) {
@@ -127,7 +133,7 @@ public class GrabPlayerAction extends PlayerAction {
             // check if player is asking to grab ammo in his tile,
             // furthermore should check the conditions of the ActionUnits in ammoToGrab but
             // there are no condition in AmmoCrates
-            return (ammoCrate == ammoToGrab);
+            return (ammoCrate.equals(ammoToGrab));
         }
 
         return false;

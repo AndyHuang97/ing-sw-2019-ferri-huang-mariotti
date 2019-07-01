@@ -3,6 +3,7 @@ package it.polimi.se2019.server.games;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -19,6 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class GameTest {
 
     Game game;
+    Player p1, p2, p3, p4, p5;
 
     @Before
     public void setUp() {
@@ -26,7 +28,9 @@ public class GameTest {
         Player p1 = new Player(UUID.randomUUID().toString(),true, new UserData("Nick1"), new CharacterState(), PlayerColor.BLUE);
         Player p2 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick2"), new CharacterState(), PlayerColor.GREEN);
         Player p3 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick3"), new CharacterState(), PlayerColor.PURPLE);
-        game.getPlayerList().addAll(Arrays.asList(p1,p2,p3));
+        Player p4 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick4"), new CharacterState(), PlayerColor.GREEN);
+        Player p5 = new Player(UUID.randomUUID().toString(),false, new UserData("Nick5"), new CharacterState(), PlayerColor.YELLOW);
+        game.getPlayerList().addAll(Arrays.asList(p1,p2,p3,p4,p5));
     }
 
     @After
@@ -62,6 +66,14 @@ public class GameTest {
                     assertTrue(t.getAmmoCrate() != null);
                     assertEquals(0, t.getWeaponCrate().size());
                 });
+    }
+
+    @Test
+    public void testInitPlayerAmmoBag() {
+        game.initPlayerAmmoBag();
+        assertTrue(game.getPlayerList().stream().allMatch(player -> player.getCharacterState().getAmmoBag().get(AmmoColor.RED).equals(1) &&
+                player.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).equals(1) && player.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).equals(1)));
+
     }
 
 

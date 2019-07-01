@@ -5,7 +5,7 @@ import it.polimi.se2019.server.exceptions.MessageParseException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.board.NormalTile;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.board.RoomColor;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
@@ -38,7 +38,7 @@ public class MessageParserTest {
 
         // build a message
         List<Targetable> targetableList = new ArrayList<>();
-        Tile tile = new NormalTile(RoomColor.BLUE, null, null);
+        Tile tile = new Tile(RoomColor.BLUE, null, null);
         targetableList.add(tile);
 
         Map<String, List<Targetable>> command = new HashMap<>();
