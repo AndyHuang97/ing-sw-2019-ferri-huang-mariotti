@@ -223,6 +223,12 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
          * Response on move done
          */
         //showMessage(response.serialize());
+        /*
+        String serializedResponse = response.serialize();
+        if (!serializedResponse.equals("{\"success\":false,\"message\":\"ping\"}")){
+            System.out.println(serializedResponse);
+        }
+        */
         try {
             if (this.socketTrueRmiFalse) {
                 socketClientHandler.send(response.serialize());
