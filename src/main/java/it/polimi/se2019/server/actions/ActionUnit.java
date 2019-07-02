@@ -33,12 +33,13 @@ public class ActionUnit implements Targetable {
 	 * @param numTileTargets
 	 * @param playerSelectionFirst
 	 */
-	public ActionUnit(boolean available, String name, List<Effect> effectList, List<Condition> conditionList, int numPlayerTargets, int numTileTargets, boolean playerSelectionFirst) {
+	public ActionUnit(boolean available, String name, String description, List<Effect> effectList, List<Condition> conditionList, int numPlayerTargets, int numTileTargets, boolean playerSelectionFirst) {
 		/*
 		TODO: remove and available or justify them!
 		 */
 		this.available = available;
 		this.name = name;
+		this.description = description;
 		this.effectList = effectList;
 		this.conditionList = conditionList;
 		this.numPlayerTargets = numPlayerTargets;

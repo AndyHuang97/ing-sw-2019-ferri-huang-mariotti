@@ -102,10 +102,10 @@ public class Model implements LocalModel {
         p5.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w4));
 
         List<ActionUnit> actionUnitList = new ArrayList<>();
-        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null, 2,2,true));
-        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null, 2,1,false));
+        actionUnitList.add(new ActionUnit(true,"Basic mode", "", null, null, 2,2,true));
+        actionUnitList.add(new ActionUnit(true,"Alternate mode", "", null, null, 2,1,false));
         List<ActionUnit> optionalEffectList = new ArrayList<>();
-        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null, 2,2,true));
+        optionalEffectList.add(new ActionUnit(true,"Optional effect", "", null, null, 2,2,true));
         p1.getCharacterState().getWeaponBag().stream()
                 .forEach(w -> {
                     w.setActionUnitList(actionUnitList);

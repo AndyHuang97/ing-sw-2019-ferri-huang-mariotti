@@ -325,7 +325,8 @@ public class CLIView extends View {
 
     @Override
     public void reportError(String error) {
-
+        logger.info(error);
+        utils.println(error);
     }
 
     @Override

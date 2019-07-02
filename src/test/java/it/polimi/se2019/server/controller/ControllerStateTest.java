@@ -586,7 +586,7 @@ public class ControllerStateTest {
         targetableList = new ArrayList<>();
         playerActions.add(action);
         game.getCurrentActionUnitsList().clear();
-        game.getCurrentActionUnitsList().add(new ActionUnit(true, "", null, null, 0,0,false));
+        game.getCurrentActionUnitsList().add(new ActionUnit(true, "", "", null, null, 0,0,false));
         newState = waitingForEffects.nextState(playerActions, game, p1);
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
         assertFalse(weapon.isLoaded());
@@ -604,7 +604,7 @@ public class ControllerStateTest {
         targetableList = new ArrayList<>();
         playerActions.add(action);
         game.getCurrentActionUnitsList().clear();
-        game.getCurrentActionUnitsList().add(new ActionUnit(true, "", null, null, 0,0,false));
+        game.getCurrentActionUnitsList().add(new ActionUnit(true, "", "", null, null, 0,0,false));
         newState = waitingForEffects.nextState(playerActions, game, p1);
         assertEquals(waitingForEffects, newState);
 
@@ -631,7 +631,7 @@ public class ControllerStateTest {
         assertEquals(weapon, action.getCard());
         playerActions.add(action);
         game.getCurrentActionUnitsList().clear();
-        game.getCurrentActionUnitsList().add(new ActionUnit(true, "", null, null, 0,0,false));
+        game.getCurrentActionUnitsList().add(new ActionUnit(true, "", "", null, null, 0,0,false));
         newState = waitingForEffects.nextState(playerActions, game, p1);
         assertEquals(p1.getId(), game.getCurrentPlayer().getId());
         assertFalse(weapon.isLoaded());

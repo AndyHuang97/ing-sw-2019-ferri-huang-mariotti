@@ -61,7 +61,7 @@ public class Board extends Observable<Response> {
     public Tile getTileFromID(String id) {
         for (int x = 0; x < tileMap.length; x++) {
             for (int y = 0; y < tileMap[x].length; y++) {
-                if (tileMap[x][y].getId() == id) return tileMap[x][y];
+                if (tileMap[x][y].getId().equals(id)) return tileMap[x][y];
             }
         }
 
