@@ -12,6 +12,7 @@ import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public class GameManager {
 	}
 
 	public void init(String dumpName) {
-		try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+		try (InputStream input = GameManager.class.getClassLoader().getResource("config.properties").openStream()) {
 			Properties prop = new Properties();
 			// load a properties file
 			prop.load(input);
@@ -60,15 +61,19 @@ public class GameManager {
 		}
 		this.dumpName = dumpName;
 		try {
-			BufferedReader br  = new BufferedReader(new FileReader(dumpName));
-			//Read JSON file
-			try {
-				Gson gson = new Gson();
-				this.gameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
-			} finally {
-				br.close();
+			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {
+				BufferedReader br = new BufferedReader(new FileReader(new File(GameManager.class.getClassLoader().getResource(dumpName).toURI())));
+				//Read JSON file
+				try {
+					Gson gson = new Gson();
+					this.gameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
+				} finally {
+					br.close();
+				}
+			} else {
+				logger.info("No gamefile, skip loading saved games!");
 			}
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			logger.info("Error while loading gamefile, skip loading saved games!");
 		}
 	}
@@ -77,7 +82,7 @@ public class GameManager {
 		//System.out.println(dumpName);
 		logger.info("Saving games to file");
 		try {
-			FileWriter writer = new FileWriter(this.dumpName);
+			FileWriter writer = new FileWriter(new File(GameManager.class.getClassLoader().getResource(this.dumpName).toURI()));
 			// Write file
 			try {
 				Gson gson = new Gson();
@@ -86,7 +91,7 @@ public class GameManager {
 				writer.close();
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			logger.info("Error while saving games to file");
 		}
 	}

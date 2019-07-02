@@ -26,7 +26,7 @@ public class SocketClient implements NetworkClient {
 
     @Override
     public void start(View view) {
-        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+        try (InputStream input = SocketClient.class.getClassLoader().getResource("config.properties").openStream()) {
             Properties prop = new Properties();
             prop.load(input);
             int socketPort = Integer.parseInt(prop.getProperty("socket.port"));

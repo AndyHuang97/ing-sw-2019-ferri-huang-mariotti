@@ -5,6 +5,7 @@ import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.player.AmmoColor;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
@@ -125,9 +126,9 @@ public class CLIUtil {
     }
 
     public String loadMapString(String mapNumber) {
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/text/maps/map" + mapNumber + ".txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(CLIUtil.class.getClassLoader().getResource("text/maps/map" + mapNumber + ".txt").toURI())))) {
             return br.lines().collect(Collectors.joining("\n"));
-        } catch (IOException ex) {
+        } catch (IOException | URISyntaxException ex) {
             logger.info(ex.toString());
             return "";
         }

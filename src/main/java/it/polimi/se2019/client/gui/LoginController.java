@@ -35,7 +35,7 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+        try (InputStream input = LoginController.class.getClassLoader().getResource("config.properties").openStream()) {
             Properties prop = new Properties();
             prop.load(input);
             ip.setText(prop.getProperty("server.host"));

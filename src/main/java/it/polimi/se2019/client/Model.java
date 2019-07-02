@@ -21,8 +21,10 @@ import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.LocalModel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -185,11 +187,11 @@ public class Model implements LocalModel {
         BoardDeserializer boardDeserializer = new BoardDeserializer();
         factory.registerDeserializer("tile", new TileDeserializerSupplier());
 
-        String path = "src/main/resources/json/maps/map0.json";
+        String path = "json/maps/map0.json";
 
         Board board = null;
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(Model.class.getClassLoader().getResource(path).toURI())))) {
 
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
@@ -215,7 +217,7 @@ public class Model implements LocalModel {
                                     }
                                 }
                             }));
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | URISyntaxException e) {
             Logger.getGlobal().warning(e.toString());
         }
     }

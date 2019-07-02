@@ -56,7 +56,7 @@ public class KillShotTrack {
      *
      */
     private void loadConfig() {
-        try(InputStream input = new FileInputStream("src/main/resources/config.properties")){
+        try(InputStream input = KillShotTrack.class.getClassLoader().getResource("config.properties").openStream()){
             Properties prop = new Properties();
             prop.load(input);
             killsForFrenzy = Integer.parseInt(prop.getProperty("game.kills_for_frenzy"));
