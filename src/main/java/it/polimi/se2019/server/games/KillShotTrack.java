@@ -10,14 +10,15 @@ import it.polimi.se2019.util.Response;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Logger;
 
-public class KillShotTrack {
+public class KillShotTrack implements Serializable {
 
     private static final Logger logger = Logger.getLogger(KillShotTrack.class.getName());
 
-    private List<it.polimi.se2019.util.Observer> observerList = new ArrayList<>();
+    private transient List<it.polimi.se2019.util.Observer> observerList = new ArrayList<>();
 
     private Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack;
     private Integer killCounter;

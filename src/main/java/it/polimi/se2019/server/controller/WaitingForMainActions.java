@@ -3,15 +3,14 @@ package it.polimi.se2019.server.controller;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
-import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.CompositeAction;
-import it.polimi.se2019.server.playerActions.MovePlayerAction;
-import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.server.playerActions.PowerUpAction;
+import it.polimi.se2019.server.playeractions.CompositeAction;
+import it.polimi.se2019.server.playeractions.MovePlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PowerUpAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
@@ -25,7 +24,7 @@ import java.util.stream.Stream;
  * This ControllerState represent the turn phase after the movement phase, the player should be able to shoot or grab
  * or reload so this ControllerState will allow those actions.
  */
-public class WaitingForMainActions implements ControllerState {
+public class WaitingForMainActions extends ControllerState {
 
     private static final int NORMAL_ACTION_NUMBER = 2;
     private static final int BEFORE_FRENZY_NUMBER = 2;
@@ -38,7 +37,6 @@ public class WaitingForMainActions implements ControllerState {
      */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
-
         try {
             commandHandler.update(new Response(null, true, Constants.MAIN_ACTION));
         } catch (Observer.CommunicationError error) {
@@ -55,7 +53,7 @@ public class WaitingForMainActions implements ControllerState {
             PowerUp powerUp = ((PowerUpAction)playerActions.get(POWERUP_POSITION)).getPowerUpsToDiscard().get(POWERUP_POSITION);
             if (powerUp.getName().split("_")[1].equals(Constants.TELEPORTER) || powerUp.getName().split("_")[1].equals(Constants.NEWTON)) {
                 Logger.getGlobal().info("Detected a " + powerUp.getId());
-                if (playerActions.stream().allMatch(PlayerAction::check)) {
+                if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                     playerActions.forEach(PlayerAction::run);
                 }
             }
@@ -78,7 +76,7 @@ public class WaitingForMainActions implements ControllerState {
                 return new WaitingForMainActions(); // new player reset all
             }
         }
-        if (playerActions.stream().allMatch(PlayerAction::check)) {
+        if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
             playerActions.forEach(PlayerAction::run);
             updateCounter();
             Logger.getGlobal().info("action counter: "+actionCounter + "\tcounter limit: "+getCounterLimit(game, player) + "\tplayer "+player.getUserData().getNickname());
@@ -152,11 +150,9 @@ public class WaitingForMainActions implements ControllerState {
     /**
      * The checkPlayerActionAvailability method controls whether the input action that is being processed
      * is an action contained in the permitted action list of the sender player.
-     * It throws an IllegalPlayerActionException when the action is not allowed.
      * @param playerActionList the action that was passed as input from the client.
      * @param game is the game related to the sender of the input.
      * @param player is the sender of the action.
-     * @throws IllegalPlayerActionException is thrown when an input action is not in the list of possible actions
      */
     private boolean checkPlayerActionAvailability(List<PlayerAction> playerActionList, Game game, Player player)  {
         List<CompositeAction> possibleActions = player.getCharacterState().getPossibleActions(game.isFrenzy());

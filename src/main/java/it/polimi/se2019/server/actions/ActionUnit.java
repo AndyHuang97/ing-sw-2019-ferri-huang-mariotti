@@ -4,9 +4,7 @@ import it.polimi.se2019.server.actions.conditions.Condition;
 import it.polimi.se2019.server.actions.effects.Effect;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.util.CommandConstants;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -50,11 +48,15 @@ public class ActionUnit implements Targetable {
 
 	public boolean check(Game game, Map<String, List<Targetable>> targets) {
 		for (Condition c : conditionList) {
-		    boolean result = c.check(game, targets);
+			try {
+				boolean result = c.check(game, targets);
 
-		    if (!result) {
-		        return false;
-            }
+				if (!result) {
+					return false;
+				}
+			} catch (IndexOutOfBoundsException e) {
+				return false;
+			}
         }
         return true;
 	}

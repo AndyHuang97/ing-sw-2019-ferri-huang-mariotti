@@ -1,14 +1,13 @@
 package it.polimi.se2019.server.controller;
 
 
-import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.exceptions.MessageParseException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Request;
 import it.polimi.se2019.util.RequestParser;
@@ -70,16 +69,17 @@ public class Controller implements Observer<Request> {
             //TODO avoid using the update CommandHandler's update method, it shall be called only by notifications from the model
             // need to add a new method in CommandHandler for selection purposes.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
-            setControllerStateForGame(game, newControllerState);
+
             CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
+            controllerState.sendErrorMessages(commandHandler);
+
+            setControllerStateForGame(game, newControllerState);
+
             Logger.getGlobal().info("Sending "+newControllerState.getClass().getSimpleName()+" to "+game.getCurrentPlayer().getUserData().getNickname());
             newControllerState.sendSelectionMessage(commandHandler);
 
-
         } catch (GameManager.GameNotFoundException | MessageParseException | UnpackingException e) {
 
-        } catch (IllegalPlayerActionException e) {
-            System.out.println("Send illegal action error...");
         }
     }
 

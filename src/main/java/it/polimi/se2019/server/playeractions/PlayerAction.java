@@ -1,6 +1,5 @@
-package it.polimi.se2019.server.playerActions;
+package it.polimi.se2019.server.playeractions;
 
-import it.polimi.se2019.server.actions.Action;
 import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -11,10 +10,7 @@ import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.CommandConstants;
 import it.polimi.se2019.util.ErrorResponse;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,15 +23,9 @@ public abstract class PlayerAction implements Targetable {
     private CommandHandler commandHandler;
     private int amount;
 
-    @Deprecated
-    private Action action;
+    private static final String DEFAULT_ERROR = "Action failed";
+    private String errorToReport;
 
-    @Deprecated
-    public PlayerAction(Game game, Player player, Action action) {
-        this.game = game;
-        this.player = player;
-        this.action = action;
-    }
 
     public PlayerAction(Game game, Player player) {
         this.game = game;
@@ -57,7 +47,13 @@ public abstract class PlayerAction implements Targetable {
 
     public abstract boolean check();
 
-    public abstract ErrorResponse getErrorMessage();
+    public ErrorResponse getErrorMessage() {
+        if (errorToReport != null) {
+            return new ErrorResponse(errorToReport);
+        } else {
+            return new ErrorResponse(DEFAULT_ERROR);
+        }
+    }
 
     public abstract Card getCard();
 
@@ -77,18 +73,16 @@ public abstract class PlayerAction implements Targetable {
         this.player = player;
     }
 
-    // TODO: remove getActionNumber
-    public Action getAction() {
-        return action;
-    }
-
-    // TODO: remove setActionNumber
-    public void setAction(Action action) {
-        this.action = action;
-    }
-
     public int getAmount() {
         return amount;
+    }
+
+    public String getErrorToReport() {
+        return errorToReport;
+    }
+
+    public void setErrorToReport(String errorToReport) {
+        this.errorToReport = errorToReport;
     }
 
     public Map<String, List<Targetable>> buildCommandDict(List<Targetable> params) {
@@ -123,5 +117,27 @@ public abstract class PlayerAction implements Targetable {
 
     public static List<PlayerAction> getAllPossibleActions() {
         return Arrays.asList(MOVE, GRAB, SHOOT, RELOAD, POWERUP, NOP, RESPAWN, SHOOT_WEAPON);
+    }
+
+    protected static String buildErrorMessage(List<String> stringList) {
+        final Character SPACE = ' ';
+        final Character POINT = '.';
+
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<String> iterator = stringList.iterator();
+
+        while (iterator.hasNext()) {
+            String string = iterator.next();
+
+            stringBuilder.append(string);
+
+            if (iterator.hasNext()) {
+                stringBuilder.append(SPACE);
+            } else {
+                stringBuilder.append(POINT);
+            }
+        }
+
+        return stringBuilder.toString();
     }
 }

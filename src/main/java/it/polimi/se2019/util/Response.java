@@ -13,7 +13,7 @@ public class Response implements Serializable, NetMsg {
     private Game game;
     private boolean success;
     private String message;
-    private static Gson gson;
+    //private static Gson gson;
 
     private List<StateUpdate> updateData;
 
