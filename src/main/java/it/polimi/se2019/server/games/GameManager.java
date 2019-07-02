@@ -140,13 +140,15 @@ public class GameManager {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
 			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
-			// TODO: initialize character state or it is fine?
+
 			CharacterState characterState = new CharacterState(color);
 			Player player = new Player(UUID.randomUUID().toString(), true, tuple.userData, characterState, color);
 			playerList.add(player);
+
+			// register game in the player and his commandHandler
 			player.register(newGame);
 			characterState.register(newGame);
-			// register all players
+			// register all commandHandlers to the game
 			newGame.register(tuple.commandHandler);
 			playerCommandHandlerMap.put(tuple.userData.getNickname(),tuple.commandHandler);
 		});
@@ -157,8 +159,11 @@ public class GameManager {
 				.max(Comparator.comparing(Map.Entry::getValue)).orElseThrow(IllegalStateException::new);
 		Logger.getGlobal().info("Map: "+max.getKey());
 		newGame.initGameObjects(max.getKey());
-        newGame.getBoard().register(newGame);
         Logger.getGlobal().info("Game objects were loaded");
+
+		newGame.getBoard().register(newGame);
+        newGame.getKillshotTrack().register(newGame);
+
 		mapPreference = new ArrayList<>();
 
 		this.waitingList.forEach(tuple -> {

@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.playerActions;
+package it.polimi.se2019.server.playeractions;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.Card;
@@ -7,7 +7,6 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,29 +48,12 @@ public class MovePlayerAction extends PlayerAction {
 
     @Override
     public boolean check() {
-        /*
-        Board board = getGame().getBoard();
-
-        Tile arrivalTile = moveList.get(0);
-        Tile startingTile = getPlayer().getCharacterState().getTile();
-
-        Graph<Tile> graph = board.generateGraph();
-
-        return graph.isReachable(arrivalTile, startingTile, steps);
-
-         */
-
         Tile arrivalTile = moveList.get(TILEPOSITION);
 
         // set the VirtualPlayerPosition so that GrabPlayerAction can access the final position during check phase
         getGame().setVirtualPlayerPosition(arrivalTile);
 
         return true;
-    }
-
-    @Override
-    public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERRORMESSAGE);
     }
 
     @Override

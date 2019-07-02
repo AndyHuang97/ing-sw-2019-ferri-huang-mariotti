@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.playerActions;
+package it.polimi.se2019.server.playeractions;
 
 import java.util.ArrayList;
 import java.util.List;

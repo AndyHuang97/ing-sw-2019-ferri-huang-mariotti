@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.playerActions;
+package it.polimi.se2019.server.playeractions;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.ActionUnit;
@@ -7,18 +7,17 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.CommandConstants;
-import it.polimi.se2019.util.ErrorResponse;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class ShootPlayerAction extends PlayerAction {
 
-    private static final String ERRORMESSAGE = "Shoot action failed";
+    private static final String DEFAULT_ERROR_MESSAGE = "Shoot action failed";
+    private static final String NOT_LOADED = "is not loaded,";
+    private static final String RELOAD_REMAINDER = "please_reload_first";
 
     private Weapon chosenWeapon;
     private ActionUnit chosenActionUnit;
@@ -61,23 +60,11 @@ public class ShootPlayerAction extends PlayerAction {
             return false;
         }
 
-        // Is chosenActionUnit in chosenWeapon?
-        /* should be already checked by unpack
-        if (chosenWeapon.getActionUnitList().stream().noneMatch(availableActionUnit -> availableActionUnit == chosenActionUnit)) {
-            return false;
-        }
-         */
-
         return chosenActionUnit.check(getGame(), inputCommands);
     }
 
     public Weapon getChosenWeapon() {
         return chosenWeapon;
-    }
-
-    @Override
-    public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERRORMESSAGE);
     }
 
     @Override

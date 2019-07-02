@@ -1,4 +1,4 @@
-package it.polimi.se2019.server.playerActions;
+package it.polimi.se2019.server.playeractions;
 
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.ActionUnit;
@@ -11,18 +11,27 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.ErrorResponse;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class GrabPlayerAction extends PlayerAction {
 
-    private static final int ITEMPOSITION = 0;
-    private static final int OPTIONALITEM = 1;
-    private static final int MAXWEAPONINBAG = 3;
-    private static final String ERRORMESSAGE = "Grab action failed";
+    private static final String DEFAULT_ERROR_MESSAGE = "Grab action failed";
+    private static final String NOT_IN = "is not in";
+    private static final String[] TILE_SELECT = {"your tile", "the tile you're trying to move"};
+    private static final int TILE = 0;
+    private static final int VIRTUAL_TILE = 1;
+    private static final String ALREADY_HAVE = "you already have";
+    private static final String DROP_WEAPON_REMINDER = "select a valid weapon to drop";
+    private static final String NO_AMMO = "Not enough ammo to pickup";
+    private static final String WEAPONS = "weapons";
+
+    private static final int ITEM_POSITION = 0;
+    private static final int OPTIONAL_ITEM = 1;
+    private static final int MAX_WEAPON_IN_BAG = 3;
 
     private Weapon weaponToGrab;
     private Weapon weaponToDiscard;
@@ -38,19 +47,19 @@ public class GrabPlayerAction extends PlayerAction {
         boolean optionalCastError = false;
 
         try {
-            weaponToGrab = (Weapon) params.get(ITEMPOSITION);
+            weaponToGrab = (Weapon) params.get(ITEM_POSITION);
         } catch (ClassCastException e) {
             weaponCastError = true;
         }
 
         try {
-            ammoToGrab = (AmmoCrate) params.get(ITEMPOSITION);
+            ammoToGrab = (AmmoCrate) params.get(ITEM_POSITION);
         } catch (ClassCastException e) {
             ammoCastError = true;
         }
 
         try {
-             weaponToDiscard = (Weapon) params.get(OPTIONALITEM);
+             weaponToDiscard = (Weapon) params.get(OPTIONAL_ITEM);
         } catch (IndexOutOfBoundsException | ClassCastException e) {
             optionalCastError = true;
         }
@@ -67,12 +76,16 @@ public class GrabPlayerAction extends PlayerAction {
     public boolean check() {
         // access the player position that will be set during run phase
         Tile playerPosition = getGame().getVirtualPlayerPosition();
+        // tileSelect is used to select the right string TILE_SELECT and generate a correct error message
+        int tileSelect = TILE;
 
         if (playerPosition == null) {
             playerPosition = getPlayer().getCharacterState().getTile();
+            tileSelect = VIRTUAL_TILE;
         }
 
         Logger.getGlobal().info(playerPosition.getId());
+
         if (weaponToGrab != null) {
             List<Weapon> weaponCrate = playerPosition.getWeaponCrate();
 
@@ -80,10 +93,13 @@ public class GrabPlayerAction extends PlayerAction {
             boolean isWeaponAvailable = false;
             try {
                 Logger.getGlobal().info("Weapon to grab " + weaponToGrab.getId());
+
                 for (Weapon weapon : weaponCrate) {
                     Logger.getGlobal().info("Weapon in bag " + weapon.getId());
+
                     if (weapon.equals(weaponToGrab)) {
                         Logger.getGlobal().info("Weapon is available: " + weapon.getId());
+
                         isWeaponAvailable = true;
                     }
                 }
@@ -94,7 +110,7 @@ public class GrabPlayerAction extends PlayerAction {
             // assert that player have 2 or less weapons
             int weaponBagSize = getPlayer().getCharacterState().getWeaponBag().size();
 
-            if (weaponBagSize == 3 && weaponToDiscard != null) {
+            if (weaponBagSize == MAX_WEAPON_IN_BAG && weaponToDiscard != null) {
                 boolean isWeaponToDiscardInWeaponBag = false;
 
                 for (Weapon weapon : getPlayer().getCharacterState().getWeaponBag()) {
@@ -103,9 +119,13 @@ public class GrabPlayerAction extends PlayerAction {
                     }
                 }
 
-                if (!isWeaponToDiscardInWeaponBag) return false;
+                if (!isWeaponToDiscardInWeaponBag) {
+                    setErrorToReport(buildErrorMessage(Arrays.asList(DEFAULT_ERROR_MESSAGE, ALREADY_HAVE, ((Integer) MAX_WEAPON_IN_BAG).toString(), WEAPONS, DROP_WEAPON_REMINDER)));
+                    return false;
+                }
 
-            } else if (weaponBagSize >= MAXWEAPONINBAG) {
+            } else if (weaponBagSize >= MAX_WEAPON_IN_BAG) {
+                setErrorToReport(buildErrorMessage(Arrays.asList(DEFAULT_ERROR_MESSAGE, ALREADY_HAVE, ((Integer) MAX_WEAPON_IN_BAG).toString(), WEAPONS, DROP_WEAPON_REMINDER)));
                 return false;
             }
 
@@ -117,12 +137,15 @@ public class GrabPlayerAction extends PlayerAction {
                 try {
                     if (cost.getValue() > availableAmmo.get(cost.getKey())) {
                         Logger.getGlobal().info("Not enough ammo!");
+                        setErrorToReport(buildErrorMessage(Arrays.asList(DEFAULT_ERROR_MESSAGE, NO_AMMO, weaponToGrab.getId())));
                         return false;
                     }
                 } catch (NullPointerException e) {
                     return false;
                 }
             }
+
+            setErrorToReport(buildErrorMessage(Arrays.asList(DEFAULT_ERROR_MESSAGE, weaponToGrab.getId(), NOT_IN, TILE_SELECT[tileSelect])));
 
             return isWeaponAvailable;
         }
@@ -137,11 +160,6 @@ public class GrabPlayerAction extends PlayerAction {
         }
 
         return false;
-    }
-
-    @Override
-    public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERRORMESSAGE);
     }
 
     @Override

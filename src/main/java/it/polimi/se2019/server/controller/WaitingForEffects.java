@@ -5,8 +5,8 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.server.playerActions.ShootPlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
+import it.polimi.se2019.server.playeractions.ShootPlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class WaitingForEffects implements ControllerState {
+public class WaitingForEffects extends ControllerState {
 
     private static final int SHOOT_POSITION = 0;
 
@@ -41,10 +41,11 @@ public class WaitingForEffects implements ControllerState {
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
         // in this state the controller is expecting to receive a ShootPlayerAction
         if (playerActions.get(SHOOT_POSITION).getId().equals(Constants.SHOOT)) {
-            if (playerActions.stream().allMatch(PlayerAction::check)) {
+            if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                 playerActions.forEach(PlayerAction::run); // there is actually only one action in the list
 
                 shootPlayerAction = (ShootPlayerAction) playerActions.get(SHOOT_POSITION);
+
                 if (game.getCumulativeDamageTargetSet().isEmpty()){ // means no damage was dealt with the run of the action
 
                     if(!shootPlayerAction.getChosenWeapon().getOptionalEffectList().isEmpty()) {

@@ -6,18 +6,20 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.*;
-import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
 import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.board.*;
+import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.LinkType;
+import it.polimi.se2019.server.games.board.RoomColor;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.*;
+import it.polimi.se2019.server.playeractions.*;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.DeserializerConstants;
 import it.polimi.se2019.util.InternalMessage;
@@ -360,7 +362,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testActionAvailability() throws GameManager.GameNotFoundException, PlayerNotFoundException, IllegalPlayerActionException {
+    public void testActionAvailability() throws GameManager.GameNotFoundException, PlayerNotFoundException {
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
         player0.getCharacterState().getDamageBar().clear();
 

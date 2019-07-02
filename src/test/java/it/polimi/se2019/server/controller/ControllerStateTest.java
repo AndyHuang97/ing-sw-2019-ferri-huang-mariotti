@@ -15,7 +15,7 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
-import it.polimi.se2019.server.playerActions.*;
+import it.polimi.se2019.server.playeractions.*;
 import it.polimi.se2019.server.users.UserData;
 import org.junit.After;
 import org.junit.Before;
@@ -715,7 +715,7 @@ public class ControllerStateTest {
         ((WaitingForMainActions)waitingForMainActions).updateCounter();
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,2);
-        newState = waitingForEffects.nextState(playerActions, game, p1);
+        newState = waitingForEffects.nextState(playeractions, game, p1);
         assertEquals(WaitingForMainActions.class, newState.getClass());
 
 
@@ -730,7 +730,7 @@ public class ControllerStateTest {
         p1.getCharacterState().getAmmoBag().put(AmmoColor.RED,1);
         p1.getCharacterState().setFirstSpawn(false);
         p2.getCharacterState().addDamage(PlayerColor.BLUE,11,game);
-        newState = waitingForEffects.nextState(playerActions, game, p1);
+        newState = waitingForEffects.nextState(playeractions, game, p1);
         assertEquals(WaitingForReload.class, newState.getClass());
         //2assertEquals(WaitingForRespawn.class, newState.getClass());
         //2assertEquals(p2, game.getCurrentPlayer());
