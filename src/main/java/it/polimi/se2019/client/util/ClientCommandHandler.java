@@ -39,8 +39,12 @@ public class ClientCommandHandler {
             } else {
                 Logger.getGlobal().info("Update Data is null");
             }
-            this.view.showGame();
-            this.view.showMessage(request.getMessage());
+            if (request.getSuccess()) {
+                this.view.showGame();
+                this.view.showMessage(request.getMessage());
+            } else {
+                this.view.reportError(request.getMessage());
+            }
         }
     }
 }
