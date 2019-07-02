@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.net.socket;
 
-import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.NetMessage;
 import it.polimi.se2019.util.Request;
@@ -82,7 +81,7 @@ public class SocketServer {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
-                        // useless
+                        Thread.currentThread().interrupt();
                     }
                 }
                 if (!this.echo) {
