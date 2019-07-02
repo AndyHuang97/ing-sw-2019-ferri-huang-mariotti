@@ -64,8 +64,9 @@ public class WaitingForEffects implements ControllerState {
                 } else { // damage was dealt to someone
                     // Targeting Scope
                     if (player.getCharacterState().getPowerUpBag().stream()
-                            .anyMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE))) {
-                        Logger.getGlobal().info("Attacker has a targetingScope");
+                            .anyMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE))
+                            && player.getCharacterState().getAmmoBag().keySet().stream().anyMatch(color ->player.getCharacterState().getAmmoBag().get(color)>0)) {
+                        Logger.getGlobal().info("Attacker has a TargetingScope and at least one ammo");
                         return new WaitingForPowerUps(Constants.TARGETING_SCOPE, this); // power up on current player
                     }
                     // Tagback Grenade
