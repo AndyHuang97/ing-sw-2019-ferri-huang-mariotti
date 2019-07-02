@@ -3,6 +3,8 @@ package it.polimi.se2019.client.gui;
 import it.polimi.se2019.client.Model;
 import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -41,16 +43,21 @@ public class ClientGui extends Application {
 
         view = new GUIView(primaryStage);
 
-//        showLogin();
+        showLogin();
 
         //testing
-
-        view.setPlayerColor(PlayerColor.GREEN);
-        ((Model)view.getModel()).initGame();
-        view.showGame();
-        view.showMessage(Constants.RESPAWN);
-        view.setNickname("Giorno");
-        ((Model) view.getModel()).boardDeserialize();
+//        view.setPlayerColor(PlayerColor.GREEN);
+//        ((Model)view.getModel()).initGame();
+//        view.showGame();
+//        view.showMessage(Constants.TARGETING_SCOPE);
+//        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
+//        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
+//        view.getModel().getGame().setCurrentWeapon(weapon);
+//        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
+//        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
+//        view.showMessage(Constants.SHOOT);
+//        view.setNickname("Giorno");
+//        ((Model) view.getModel()).boardDeserialize();
 
     }
 

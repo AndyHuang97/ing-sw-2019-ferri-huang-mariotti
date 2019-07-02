@@ -67,7 +67,7 @@ public class PlayerBoardController {
     }
 
     /**
-     * Initializes the marker bar.
+     * Initializes the marker bar, it only loads the correct images.
      * @param color is the color of the client.
      */
     public void initMarkerPane(PlayerColor color) {
@@ -86,7 +86,6 @@ public class PlayerBoardController {
      * Initializes the main player board.
      * @param player is the owner of this board.
      */
-    @FXML
     public void showPlayerBoard(Player player) {
         ImageView iv = (ImageView) main.getChildren().get(0);
 
