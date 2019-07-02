@@ -106,8 +106,10 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void initGameObjects(String mapIndex) {
 
-		this.setCurrentPlayer(playerList.get(0));
-		//this.killshotTrack = new KillShotTrack(playerList);
+	    // trick to avoid notify before everything is initialized
+		this.currentPlayer = playerList.get(0);
+		this.killshotTrack = new KillShotTrack(playerList);
+
 		new DirectDeserializers();
 		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
 		this.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrate());
@@ -167,15 +169,6 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 					List<Weapon> weaponCrate = tile.getWeaponCrate();
 
 					List<Weapon> updatedWeaponCrate = new ArrayList<>(weaponCrate);
-					/*
-					for (Weapon weapon : weaponCrate) {
-						if (weapon == null) {
-							updatedWeaponCrate.add(drawWeaponFromDeck());
-						} else {
-							updatedWeaponCrate.add(weapon);
-						}
-					}
-					*/
 
 					while (updatedWeaponCrate.size() < 3) {
 					    updatedWeaponCrate.add(drawWeaponFromDeck());

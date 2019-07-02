@@ -12,7 +12,7 @@ import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.socket.SocketServer;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;

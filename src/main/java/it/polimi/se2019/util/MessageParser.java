@@ -6,7 +6,7 @@ import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

@@ -4,14 +4,14 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
 import java.util.List;
 import java.util.logging.Logger;
 
-public class WaitingForReload implements ControllerState {
+public class WaitingForReload extends ControllerState {
 
     private static final int RELOAD_POSITION = 0;
 
@@ -29,7 +29,7 @@ public class WaitingForReload implements ControllerState {
 
         if (playerActions.get(RELOAD_POSITION).getId().equals(Constants.RELOAD) ||
                 playerActions.get(RELOAD_POSITION).getId().equals(Constants.NOP)) {
-            if (playerActions.stream().allMatch(PlayerAction::check)) {
+            if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                 playerActions.stream().forEach(PlayerAction::run);
 
                 if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {

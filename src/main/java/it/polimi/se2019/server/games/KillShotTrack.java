@@ -10,14 +10,15 @@ import it.polimi.se2019.util.Response;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Logger;
 
-public class KillShotTrack {
+public class KillShotTrack implements Serializable {
 
     private static final Logger logger = Logger.getLogger(KillShotTrack.class.getName());
 
-    private List<it.polimi.se2019.util.Observer> observerList = new ArrayList<>();
+    private transient List<it.polimi.se2019.util.Observer> observerList = new ArrayList<>();
 
     private Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack;
     private Integer killCounter;
@@ -56,7 +57,7 @@ public class KillShotTrack {
      *
      */
     private void loadConfig() {
-        try(InputStream input = new FileInputStream("src/main/resources/config.properties")){
+        try(InputStream input = KillShotTrack.class.getClassLoader().getResource("config.properties").openStream()){
             Properties prop = new Properties();
             prop.load(input);
             killsForFrenzy = Integer.parseInt(prop.getProperty("game.kills_for_frenzy"));

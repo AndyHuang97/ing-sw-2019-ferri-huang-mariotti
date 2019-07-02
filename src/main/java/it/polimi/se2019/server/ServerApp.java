@@ -33,7 +33,7 @@ public class ServerApp {
          *  - Deserialize saved games
          *  - Wait for players to reconnect (connect the players views with the virtual-views)
          */
-        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+        try (InputStream input = ServerApp.class.getClassLoader().getResource("config.properties").openStream()) {
             Properties prop = new Properties();
             // load a properties file
             prop.load(input);

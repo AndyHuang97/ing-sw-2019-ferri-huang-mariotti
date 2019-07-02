@@ -4,8 +4,8 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.server.playerActions.PowerUpAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PowerUpAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
@@ -16,7 +16,7 @@ import java.util.Stack;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class WaitingForPowerUps implements ControllerState {
+public class WaitingForPowerUps extends ControllerState {
 
     private static final int POWERUP_POSITION = 0;
 
@@ -52,7 +52,7 @@ public class WaitingForPowerUps implements ControllerState {
                     playerAction.getId().equals(Constants.POWERUP)
                                                     &&
                             ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE)))) {
-                if (playerActions.stream().allMatch(PlayerAction::check)) {
+                if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                     playerActions.forEach(PlayerAction::run);
                     Logger.getGlobal().info("Targeting Scope going back to WaitingForEffects");
                     return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);
@@ -71,8 +71,8 @@ public class WaitingForPowerUps implements ControllerState {
                 Logger.getGlobal().info("Found a Tagback Grenade");
                 // this block of code will be executed either with a powerUp or with a NOP, in the latter case nothing
                 // is performed on the model, but it is still needed to ask the next player for input
-                Logger.getGlobal().info("PlayerActionCheck: " + playerActions.stream().allMatch(PlayerAction::check));
-                if (playerActions.stream().allMatch(PlayerAction::check)) {
+                Logger.getGlobal().info("PlayerActionCheck: " + playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError));
+                if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                     playerActions.forEach(PlayerAction::run); // needed to discard the powerup
 
                     Player poppedPlayer = playerStack.pop(); // pops the player that sent the correct powerUp to be consumed

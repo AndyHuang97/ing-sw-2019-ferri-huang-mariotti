@@ -6,9 +6,9 @@ import it.polimi.se2019.server.dataupdate.CharacterStateUpdate;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.PlayerDeath;
 import it.polimi.se2019.server.games.board.Tile;
-import it.polimi.se2019.server.playerActions.CompositeAction;
-import it.polimi.se2019.server.playerActions.MovePlayerAction;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.CompositeAction;
+import it.polimi.se2019.server.playeractions.MovePlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Response;
 

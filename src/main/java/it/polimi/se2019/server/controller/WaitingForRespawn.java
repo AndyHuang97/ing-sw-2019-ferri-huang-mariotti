@@ -4,7 +4,7 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
@@ -13,7 +13,7 @@ import java.util.Stack;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class WaitingForRespawn implements ControllerState {
+public class WaitingForRespawn extends ControllerState {
 
     private static final int POWERUP_POSITION = 0;
     private Stack<Player> playerStack = new Stack<>();
