@@ -64,17 +64,21 @@ public class Controller implements Observer<Request> {
 
             ControllerState controllerState = getStateFromGame(game);
 
+            CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
+            requestUpdate(commandHandler);
+
             // nextState handles the input and returns a new State, then a message is sent from the new state;
             // if any model changes happened, the update will be sent before the selection message.
             //TODO avoid using the update CommandHandler's update method, it shall be called only by notifications from the model
             // need to add a new method in CommandHandler for selection purposes.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
 
-            CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
+
             controllerState.sendErrorMessages(commandHandler);
 
             setControllerStateForGame(game, newControllerState);
 
+            requestUpdate(commandHandler);
             Logger.getGlobal().info("Sending "+newControllerState.getClass().getSimpleName()+" to "+game.getCurrentPlayer().getUserData().getNickname());
             newControllerState.sendSelectionMessage(commandHandler);
 
@@ -112,4 +116,13 @@ public class Controller implements Observer<Request> {
     public void setControllerStateForGame(Game game, ControllerState controllerState) {
         controllerStateMap.put(game, controllerState);
     }
+
+    private void requestUpdate(CommandHandler commandHandler) {
+        try {
+            commandHandler.sendBuffer();
+        } catch (CommunicationError e) {
+            Logger.getGlobal().info("Unable to send update trigger command");
+        }
+    }
+
 }

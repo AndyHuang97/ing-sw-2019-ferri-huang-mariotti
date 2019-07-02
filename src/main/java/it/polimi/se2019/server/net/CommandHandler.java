@@ -4,6 +4,7 @@ import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.GameManager;
@@ -29,6 +30,8 @@ import java.util.logging.Logger;
 public class CommandHandler extends Observable<Request> implements Observer<Response> {
 
     private static final Logger logger = Logger.getLogger(CommandHandler.class.getName());
+
+    List<StateUpdate> updateBuffer = new ArrayList<>();
 
     private boolean socketTrueRmiFalse;
     private SocketServer.ClientHandler socketClientHandler;
@@ -223,12 +226,45 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
          * Response on move done
          */
         //showMessage(response.serialize());
-        /*
+
         String serializedResponse = response.serialize();
         if (!serializedResponse.equals("{\"success\":false,\"message\":\"ping\"}")){
             System.out.println(serializedResponse);
         }
-        */
+
+        // buffered update
+        if (response.getUpdateData() != null) {
+            List<StateUpdate> stateUpdateList = response.getUpdateData();
+
+            for (StateUpdate stateUpdate : stateUpdateList) {
+                addUpdateToBuffer(stateUpdate);
+            }
+        } else {
+            sendResponse(response);
+        }
+
+    }
+
+    public void addUpdateToBuffer(StateUpdate stateUpdate) {
+        updateBuffer.add(stateUpdate);
+    }
+
+    public void resetBuffer() {
+        updateBuffer = new ArrayList<>();
+    }
+
+    public void sendBuffer() throws CommunicationError {
+        System.out.println("SENDIG THE UPDATEBUFFER!!!!!!!!!!!!!!!!!!!!");
+
+        if (updateBuffer.size() != 0) {
+            Response response = new Response(updateBuffer);
+            resetBuffer();
+
+            sendResponse(response);
+        }
+    }
+
+    public void sendResponse(Response response) throws CommunicationError {
         try {
             if (this.socketTrueRmiFalse) {
                 socketClientHandler.send(response.serialize());
@@ -238,11 +274,5 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         } catch (Exception e) {
             throw new CommunicationError(e.getMessage());
         }
-    }
-
-    public void reportError(ErrorResponse errorResponse) {
-        /**
-         * print error message
-         */
     }
 }
