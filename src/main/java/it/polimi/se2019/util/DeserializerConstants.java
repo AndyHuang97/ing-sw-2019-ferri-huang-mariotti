@@ -4,6 +4,7 @@ public class DeserializerConstants {
     public static final String ACTIONS = "actions";
     public static final String ACTIONUNIT = "actionunit";
     public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
     public static final String AVAILABLE = "available";
     public static final String EFFECTLIST = "effectList";
     public static final String CONDITIONLIST = "conditionList";

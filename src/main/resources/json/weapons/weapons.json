@@ -596,12 +596,12 @@
     {
       "type": "weapon",
       "name": "Electroscythe",
-      "description": "Deal 1 damage to every other player on your square.",
       "pickUpCost": [],
       "reloadCost": ["BLUE"],
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 1 damage to every other player on your square.",
           "available": true,
           "effectList": [
             {
