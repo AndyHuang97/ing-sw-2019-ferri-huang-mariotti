@@ -230,10 +230,12 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
          */
         //showMessage(response.serialize());
 
+        /*
         String serializedResponse = response.serialize();
         if (!serializedResponse.equals("{\"success\":false,\"message\":\"ping\"}")){
             System.out.println(serializedResponse);
         }
+        */
 
         // buffered update
         if (response.getUpdateData() != null) {
@@ -257,9 +259,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     }
 
     public void sendBuffer() throws CommunicationError {
-        System.out.println("SENDIG THE UPDATEBUFFER!!!!!!!!!!!!!!!!!!!!");
-
-        if (updateBuffer.size() != 0) {
+        if (updateBuffer.isEmpty()) {
             Response response = new Response(updateBuffer);
             resetBuffer();
 
