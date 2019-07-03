@@ -156,7 +156,7 @@ public class GrabPlayerAction extends PlayerAction {
             // check if player is asking to grab ammo in his tile,
             // furthermore should check the conditions of the ActionUnits in ammoToGrab but
             // there are no condition in AmmoCrates
-            return (ammoCrate.equals(ammoToGrab));
+            return (ammoCrate.getId().equals(ammoToGrab.getId()));
         }
 
         return false;

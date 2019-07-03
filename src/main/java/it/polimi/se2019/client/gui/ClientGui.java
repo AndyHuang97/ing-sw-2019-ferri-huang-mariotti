@@ -45,7 +45,7 @@ public class ClientGui extends Application {
 
         showLogin();
 
-        //testing
+//        //testing
 //        view.setPlayerColor(PlayerColor.GREEN);
 //        ((Model)view.getModel()).initGame();
 //        view.showGame();

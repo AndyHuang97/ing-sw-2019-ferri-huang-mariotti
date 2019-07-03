@@ -13,7 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Util {
 
@@ -75,7 +77,8 @@ public class Util {
     }
 
     public static String getCorrectPlayerBoardMode(Player player) {
-        return player.getCharacterState().getValueBar() == CharacterState.NORMAL_VALUE_BAR ?
+
+        return Arrays.equals(player.getCharacterState().getValueBar(),CharacterState.NORMAL_VALUE_BAR) ?
                 Constants.NORMAL : Constants.FRENZY;
     }
 

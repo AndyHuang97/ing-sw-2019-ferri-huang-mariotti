@@ -103,7 +103,7 @@ public class CLIUtil {
         }
     }
 
-    public void printBanner() {
+    public synchronized void printBanner() {
         out.println("      ___    ____  ____  _______   _____    __    _____   _____ ");
         out.println("     /   |  / __ \\/ __ \\/ ____/ | / /   |  / /   /  _/ | / /   |");
         out.println("    / /| | / / / / /_/ / __/ /  |/ / /| | / /    / //  |/ / /| |");
@@ -119,6 +119,10 @@ public class CLIUtil {
             Thread.currentThread().interrupt();
             logger.info(ex.toString());
         }
+    }
+
+    public Boolean canReload(List<AmmoColor> reloadCost, Map<AmmoColor, Integer> ammoBag, List<PowerUp> powerUpBag) {
+        return !reloadCost.stream().anyMatch(c -> (!ammoBag.containsKey(c) || ammoBag.get(c) <= 0) && !powerUpBag.stream().anyMatch(u -> u.getPowerUpColor().equals(c)));
     }
 
     public String loadMapString(String mapNumber) {
@@ -190,6 +194,6 @@ public class CLIUtil {
         return colorDict.get(color);
     }
 
-    public void print(String content) { out.print(content); }
-    public void println(String content) { out.println(content); }
+    public synchronized void print(String content) { out.print(content); }
+    public synchronized void println(String content) { out.println(content); }
 }

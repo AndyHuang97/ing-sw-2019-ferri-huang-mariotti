@@ -18,7 +18,6 @@ public class GUIView extends View {
     private GUIController guiController;
     private BorderPane rootLayout = null;
     private Stage primaryStage;
-    private String message;
 
     public GUIView() {
         this.setCliTrueGuiFalse(false);
@@ -39,31 +38,38 @@ public class GUIView extends View {
 
     @Override
     public void showMessage(String message) {
-        this.message = message;
         switch (message) {
             case Constants.MAIN_ACTION:
+                guiController.storeMessage(message);
                 guiController.showActionButtons();
                 guiController.showPowerUps(Arrays.asList(Constants.TELEPORTER, Constants.NEWTON));
                 guiController.showPass();
                 return;
             case Constants.RESPAWN:
+                guiController.storeMessage(message);
                 guiController.getPowerUpForRespawn();
                 return;
             case Constants.RELOAD:
-                guiController.getReload();
+                guiController.storeMessage(message);
                 guiController.showPass();
+                guiController.getReload();
                 return;
             case Constants.SHOOT:
+                guiController.storeMessage(message);
                 guiController.getActionUnit();
                 guiController.showPass();
                 return;
             case Constants.TARGETING_SCOPE:
+                guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TARGETING_SCOPE));
                 guiController.showPass();
                 return;
             case Constants.TAGBACK_GRENADE:
+                guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TAGBACK_GRENADE));
                 guiController.showPass();
+                return;
+            default:
                 return;
         }
     }
@@ -168,9 +174,5 @@ public class GUIView extends View {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }

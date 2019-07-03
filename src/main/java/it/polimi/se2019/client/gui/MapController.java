@@ -257,6 +257,7 @@ public class MapController {
                                     .findFirst();
                             if (optGrid.isPresent()){
                                 GridPane actualGrid = optGrid.get();
+                                actualGrid.getChildren().forEach(node -> node.setVisible(false));
                                 IntStream.range(0, tileMap[x][y].getWeaponCrate().size())
                                         .forEach(i -> {
                                             ImageView iv = (ImageView) actualGrid.getChildren().get(i);

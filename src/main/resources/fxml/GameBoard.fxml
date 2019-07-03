@@ -336,7 +336,7 @@
                      <children>
                         <AnchorPane maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -346,17 +346,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
@@ -416,7 +416,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="46.0" layoutY="10.0" maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -426,17 +426,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
@@ -493,7 +493,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="46.0" layoutY="10.0" maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -503,17 +503,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
@@ -570,7 +570,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="46.0" layoutY="10.0" maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -580,17 +580,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>

@@ -44,6 +44,7 @@ public class GUIController {
     private List<PlayerBoardController> pbControllerList;
     private MapController mapController;
     private Map<String, List<String>> intermediateInput = new HashMap<>();
+    private String message;
     private boolean initialized;
 
     private GridPane progressBar;
@@ -214,7 +215,7 @@ public class GUIController {
                 playerController.initMarkerPane(pc);
 
                 if (pc != view.getPlayerColor()) {
-                    // gets the anchorPane containing the imageview
+                    // gets the anchorPane containing the image view
                     AnchorPane box = (AnchorPane) rightVBox.getChildren().get(i);
                     box.setVisible(true);
                     playerBoardPane = (AnchorPane) box.getChildren().get(1);
@@ -251,10 +252,10 @@ public class GUIController {
                 showName(game.getPlayerByColor(pc), (Label) nameBox.getChildren().get(0));
                 showScore(game.getPlayerByColor(pc),(Label) scoreBox.getChildren().get(0));
                 showAmmo(game.getPlayerByColor(pc), ammoPane);
+
                 showOpponentUnloadedWeapons(game.getPlayerByColor(pc), i);
                 i++;
             }else {
-//                showActionButtons(game.getPlayerByColor(pc));
                 actionButtons.setDisable(true);
                 showName(game.getPlayerByColor(pc), myName);
                 showAmmo(game.getPlayerByColor(pc), myAmmo);
@@ -313,6 +314,7 @@ public class GUIController {
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
         myWeapons.setDisable(true);
+        myWeapons.getChildren().forEach(node -> node.setVisible(false));
         if (!myWeapons.getStyleClass().isEmpty()) {
             myWeapons.getStyleClass().remove(0);
         }
@@ -334,6 +336,7 @@ public class GUIController {
                 });
 
         myPowerUps.setDisable(true);
+        myPowerUps.getChildren().forEach(node -> node.setVisible(false));
         if (!myPowerUps.getStyleClass().isEmpty()) {
             myPowerUps.getStyleClass().remove(0);
         }
@@ -365,7 +368,8 @@ public class GUIController {
      */
     public void showName(Player player, Label name) {
         name.setText(player.getUserData().getNickname());
-        name.getStyleClass().add("name");
+        boolean result = name.getStyleClass().add("name");
+//        Logger.getGlobal().info("Setting style class to name label: " + result);
         Util.setLabelColor(name, player.getColor());
     }
 
@@ -392,7 +396,7 @@ public class GUIController {
      */
     public void showOpponentUnloadedWeapons(Player player, int i) {
         GridPane unloadedWeapons = (GridPane)((AnchorPane)rightVBox.getChildren().get(i)).getChildren().get(0);
-        List<Weapon> weaponBag =player.getCharacterState().getWeaponBag();
+        List<Weapon> weaponBag = player.getCharacterState().getWeaponBag();
         IntStream.range(0, weaponBag.size())
                 .forEach(x -> {
                     if (weaponBag.get(x) != null) {
@@ -496,7 +500,8 @@ public class GUIController {
         handleReset();
         view.getInputRequested().clear();
         intermediateInput.clear();
-        view.showMessage(((GUIView)view).getMessage());
+        Logger.getGlobal().info("Cancelling, show message: "+message);
+        view.showMessage(message);
     }
 
     public void handleReset() {
@@ -516,6 +521,10 @@ public class GUIController {
 
         actionButtons.setDisable(false);
         mapController.resetGrids();
+    }
+
+    public void storeMessage(String message) {
+        this.message = message;
     }
 
     /**
@@ -679,8 +688,8 @@ public class GUIController {
 
     @FXML
     public void handlePass() {
-        ((GUIView)view).getGuiController().handleCancel();
-        actionButtons.setDisable(true);
+
+        message = "";
         addKeyOrderAction(NOP);
         intermediateInput.put(NOP, new ArrayList<>());
         intermediateInput.keySet().stream()
@@ -688,6 +697,8 @@ public class GUIController {
         view.sendInput();
         intermediateInput.clear();
         pass.setDisable(true);
+
+        handleCancel();
     }
 
     private void addKeyOrderAction(String key) {
@@ -798,8 +809,6 @@ public class GUIController {
 
     public void getPowerUpForRespawn() {
 
-//        addKeyOrderAction(RESPAWN);
-
         infoText.setText("Select 1 powerup ");
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
@@ -808,14 +817,11 @@ public class GUIController {
         myPowerUps.getStyleClass().add(Constants.SELECTION_NODE);
         myPowerUps.getChildren().stream().forEach(node -> node.getStyleClass().add(Constants.CSS_HOVERING));
         showMyPowerups(RESPAWN);
-//        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RESPAWN, new ArrayList<>());
 
         setUpProgressBar(1);
     }
 
     public void getReload() {
-
-//        addKeyOrderAction(RELOAD);
 
         infoText.setText("Select 1 weapon ");
         cancelButton.setDisable(false);
@@ -826,9 +832,6 @@ public class GUIController {
         myWeapons.getChildren().stream().forEach(node -> node.getStyleClass().add(Constants.CSS_HOVERING));
 
         showMyUnloadedWeapons();
-//        ((GUIView)view).getGuiController().getIntermediateInput().putIfAbsent(Constants.RELOAD, new ArrayList<>());
-
-        setUpProgressBar(3);
 
     }
 
@@ -968,21 +971,30 @@ public class GUIController {
                 .collect(Collectors.toList()).get(0).getCharacterState();
         List<Weapon> myWeaponsModel = myCharacterState.getWeaponBag();
 
-        IntStream.range(0, myWeaponsModel.size())
-                .forEach(i -> {
-                    ImageView iv = null;
-                    iv = (ImageView) myWeapons.getChildren().get(i);
-                    if (!myWeaponsModel.get(i).isLoaded()) {
-                        iv.setOpacity(1.0);
-                        iv.setDisable(false);
-                        iv.setVisible(true);
-                    }
-                    else {
-                        iv.setVisible(false);
-                    }
+        if (myWeaponsModel.stream().noneMatch(weapon -> !weapon.isLoaded())) {
+            cancelButton.setDisable(true);
+            pass.setDisable(true);
+            Logger.getGlobal().info("No weapons to reload");
+            handlePass();
 
-                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD, () -> {});
-                });
+        } else {
+            IntStream.range(0, myWeaponsModel.size())
+                    .forEach(i -> {
+                        ImageView iv = null;
+                        iv = (ImageView) myWeapons.getChildren().get(i);
+                        if (!myWeaponsModel.get(i).isLoaded()) {
+                            iv.setOpacity(1.0);
+                            iv.setDisable(false);
+                            iv.setVisible(true);
+                        } else {
+                            iv.setVisible(false);
+                        }
+
+                        ((GUIView) view).getGuiController().setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD, () -> {
+                        });
+                    });
+            setUpProgressBar(myWeaponsModel.size());
+        }
     }
 
     /**
@@ -1020,6 +1032,7 @@ public class GUIController {
         CharacterState myCharacterState =  view.getModel().getGame().getPlayerByColor(view.getPlayerColor()).getCharacterState();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
+        cancelButton.setDisable(false);
         myPowerUps.getChildren().forEach(node -> node.setVisible(false));
         IntStream.range(0, myPowerUpsModel.size())
                 .forEach(i -> {
@@ -1036,23 +1049,24 @@ public class GUIController {
         CharacterState myCharacterState =  view.getModel().getGame().getPlayerByColor(view.getPlayerColor()).getCharacterState();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
+        cancelButton.setDisable(false);
         myPowerUps.setDisable(false);
         myPowerUps.getStyleClass().add(Constants.SELECTION_NODE);
         myPowerUps.getChildren().forEach(node -> {
             node.setDisable(true);
-            node.setVisible(false);
+            node.setOpacity(0.6);
             node.setOpacity(CLICKED_OPACITY);
         });
         myPowerUps.getChildren().stream().map(n -> (ImageView) n)
                 .filter(iv -> powerUpList.contains(((NamedImage)iv.getImage()).getName().split("_")[1]))
                 .forEach(iv -> {
-                    iv.setVisible(true);
                     iv.setOpacity(1.0);
                     iv.setDisable(false);
                     iv.getStyleClass().add(Constants.CSS_HOVERING);
                     ((GUIView) view).getGuiController().setCardSelectionBehavior(iv, myPowerUps, POWERUP, () -> {
                         PowerUp powerUp = myPowerUpsModel.stream().filter(pU -> pU.getName().equals(((NamedImage)iv.getImage()).getName())).findFirst().orElse(null);
                         if (powerUp != null) {
+                            iv.setVisible(true);
                             if (powerUp.getActionUnitList().get(ACTIONUNIT_POSITION).getNumPlayerTargets() > 0) {
                                 view.getInputRequested().add(() -> getTarget(POWERUP, powerUp.getActionUnitList().get(ACTIONUNIT_POSITION).getNumPlayerTargets()));
                             }

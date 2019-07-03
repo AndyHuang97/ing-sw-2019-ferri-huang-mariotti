@@ -90,7 +90,6 @@ public class PlayerBoardController {
         ImageView iv = (ImageView) main.getChildren().get(0);
 
         iv.setImage(getPlayerBoardImage(player.getColor(), Util.getCorrectPlayerBoardMode(player)));
-
         // in frenzy mode, the damage bar needs some resizing and repositioning
         if (Util.getCorrectPlayerBoardMode(player).equalsIgnoreCase(Constants.FRENZY)) {
             damageBar.setPrefWidth(315);

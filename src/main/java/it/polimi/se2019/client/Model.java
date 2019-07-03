@@ -75,7 +75,7 @@ public class Model implements LocalModel {
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
         p1.getCharacterState().setTile(game.getBoard().getTile(0,0));
-        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Mista"), new CharacterState(), PlayerColor.BLUE);
+        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("P2"), new CharacterState(), PlayerColor.BLUE);
         p2.getCharacterState().setTile(game.getBoard().getTile(0,0));
         Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Narancia"), new CharacterState(), PlayerColor.YELLOW);
         p3.getCharacterState().setTile(game.getBoard().getTile(1,1));
