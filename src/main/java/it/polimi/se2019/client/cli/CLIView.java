@@ -316,6 +316,17 @@ public class CLIView extends View {
                     getPlayerInput().put(Constants.POWERUP, targetingScopesToUse);
                     sendInput();
                     break;
+                case Constants.FINISHGAME:
+                    utils.println("\n\nScoreboard:\n");
+                    Comparator<Player> compareByScore = (Player p1, Player p2) -> p1.getCharacterState().getScore().compareTo( p2.getCharacterState().getScore());
+                    getModel().getGame().getPlayerList().sort(compareByScore);
+                    for (int i = 0; i < getModel().getGame().getPlayerList().size(); i++) {
+                        Player p = getModel().getGame().getPlayerList().get(i);
+                        utils.println(i + ". " + p.getUserData().getNickname() + " (" + p.getCharacterState().getScore() + "pts)");
+                    }
+                    utils.println("\nBye bye!");
+                    System.exit(0);
+                    break;
             }
         } catch (PlayerNotFoundException ex) {
             logger.info(ex.getMessage());

@@ -3,6 +3,8 @@ package it.polimi.se2019.server.games;
 import com.google.gson.Gson;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.controller.Controller;
+import it.polimi.se2019.server.controller.WaitingForMainActions;
+import it.polimi.se2019.server.controller.WaitingForRespawn;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -195,6 +197,21 @@ public class GameManager {
 		}
 	}
 
+	public void terminateGame(Game game) {
+		logger.info("Terminating a game, users will be notified");
+		game.getPlayerList().forEach(p -> {
+			try {
+				playerCommandHandlerMap.get(p.getUserData().getNickname()).update(new Response(null, true, Constants.FINISHGAME));
+			} catch (Observer.CommunicationError ex) {
+				logger.info(ex.getMessage());
+				logger.info("Cannot notify " + p.getUserData().getNickname() + " of game end");
+			}
+			playerCommandHandlerMap.remove(p.getUserData().getNickname());
+		});
+		logger.info("Notified");
+		this.gameList.remove(game);
+	}
+
 
 	public class IsClientAlive extends TimerTask {
 		private String nickname;
@@ -212,11 +229,35 @@ public class GameManager {
                 try {
                     this.commandHandler.update(new Response(null, false, "ping"));
                 } catch (Observer.CommunicationError ex) {
-                    logger.info(ex.getMessage());
+					this.timer.cancel();
+					this.timer.purge();
                     logger.info("User " + this.nickname + " disconnected");
-                    //TODO: handle disconnection
-                    this.timer.cancel();
-                    this.timer.purge();
+                    Game currentGame = retrieveGame(this.nickname);
+                    currentGame.deregister(this.commandHandler);
+                    playerCommandHandlerMap.remove(this.nickname);
+                    // in case of less than 3 players quit the game and announce the winner etc
+                    if (currentGame.getPlayerList().size() <= 3) terminateGame(currentGame);
+                    else {
+						currentGame.getPlayerByNickname(nickname).setActive(false);
+						if (currentGame.getCurrentPlayer().getUserData().getNickname().equals(this.nickname)) {
+							if (currentGame.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+								WaitingForRespawn newState = new WaitingForRespawn();
+								Logger.getGlobal().info("Someone was killed");
+								newState.nextState(new ArrayList<>(), currentGame, currentGame.getPlayerByNickname(nickname));
+							} else {
+								currentGame.updateTurn();
+								if (currentGame.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
+									Logger.getGlobal().info("No one was killed, first spawn");
+									new WaitingForRespawn();
+								}
+								else {
+									Logger.getGlobal().info("No one was killed, not first spawn");
+									new WaitingForMainActions();
+								}
+							}
+						}
+                    }
+
                 }
             } catch (Exception ex) {
 		        logger.info(ex.getMessage());

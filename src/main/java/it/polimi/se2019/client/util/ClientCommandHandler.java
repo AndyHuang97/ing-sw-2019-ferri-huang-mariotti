@@ -15,9 +15,14 @@ public class ClientCommandHandler {
     }
 
     public void handle(Response request) {
-
-        if (this.view.isCliTrueGuiFalse()) new Thread(() -> internalHandle(request)).start();
-        else Platform.runLater(() -> internalHandle(request));
+        if (request.getSuccess() && request.getMessage().equals(Constants.FINISHGAME)) {
+            this.view.showMessage(request.getMessage());
+        } else if (!request.getSuccess()) {
+            this.view.reportError(request.getMessage());
+        } else {
+            if (this.view.isCliTrueGuiFalse()) new Thread(() -> internalHandle(request)).start();
+            else Platform.runLater(() -> internalHandle(request));
+        }
     }
 
     private synchronized void internalHandle(Response request) {

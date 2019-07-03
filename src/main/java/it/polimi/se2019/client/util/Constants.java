@@ -39,6 +39,7 @@ public class Constants {
     public static final String TELEPORTER = "Teleporter";
     public static final String NEWTON = "Newton";
     public static final String TARGETING_SCOPE = "TargetingScope";
+    public static final String FINISHGAME = "FinishGame";
     public static final double buttonOpacity = 0.45;
     public static final double onClickedOpacity = 0.6;
     public static final String map0 = "0";
