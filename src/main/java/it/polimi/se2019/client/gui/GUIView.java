@@ -9,13 +9,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 public class GUIView extends View {
 
     private GUIController guiController;
-    private BorderPane rootLayout;
+    private BorderPane rootLayout = null;
     private Stage primaryStage;
+    private String message;
 
     public GUIView() {
         this.setCliTrueGuiFalse(false);
@@ -36,22 +39,32 @@ public class GUIView extends View {
 
     @Override
     public void showMessage(String message) {
+        this.message = message;
         switch (message) {
             case Constants.MAIN_ACTION:
-                guiController.getActionTileController();
+                guiController.showActionButtons();
+                guiController.showPowerUps(Arrays.asList(Constants.TELEPORTER, Constants.NEWTON));
+                guiController.showPass();
                 return;
             case Constants.RESPAWN:
-                guiController.getActionTileController().getPowerUpForRespawn();
+                guiController.getPowerUpForRespawn();
                 return;
             case Constants.RELOAD:
-
+                guiController.getReload();
+                guiController.showPass();
                 return;
             case Constants.SHOOT:
+                guiController.getActionUnit();
+                guiController.showPass();
                 return;
-
             case Constants.TARGETING_SCOPE:
-
+                guiController.showPowerUps(Collections.singletonList(Constants.TARGETING_SCOPE));
+                guiController.showPass();
+                return;
             case Constants.TAGBACK_GRENADE:
+                guiController.showPowerUps(Collections.singletonList(Constants.TAGBACK_GRENADE));
+                guiController.showPass();
+                return;
         }
     }
 
@@ -63,15 +76,19 @@ public class GUIView extends View {
     @Override
     public void showGame() {
 
-        this.initRootLayout();
-        this.showGameBoard();
+        if (rootLayout == null) {
+            this.initRootLayout();
+            this.initGameBoard();
+            this.getPrimaryStage().setResizable(false);
+            this.getPrimaryStage().setFullScreen(true);
+            this.getPrimaryStage().sizeToScene();
+        }
+        this.getGuiController().showMap();
+        this.getGuiController().showPlayerBoards();
+        this.getGuiController().showMyCards();
 
-        this.getPrimaryStage().setResizable(false);
-        this.getPrimaryStage().setFullScreen(true);
-        this.getPrimaryStage().sizeToScene();
+
         this.getPrimaryStage().show();
-        // TODO: redraw gameboard
-
     }
 
     public void initRootLayout() {
@@ -91,11 +108,11 @@ public class GUIView extends View {
         }
     }
 
-    public void showGameBoard() {
+    private void initGameBoard() {
 
         try{
             FXMLLoader gbLoader = new FXMLLoader();
-            gbLoader.setLocation(ClientGui.class.getResource("/fxml/GameBoard.fxml"));
+            gbLoader.setLocation(getClass().getResource("/fxml/GameBoard.fxml"));
             AnchorPane gameBoard = gbLoader.load();
             guiController = gbLoader.getController();
             guiController.setView(this);
@@ -106,7 +123,7 @@ public class GUIView extends View {
 
             // initialization of the map must precede the initialization of the player boards
 
-            guiController.init(getModel().getGame().getPlayerByColor(getPlayerColor()));
+            guiController.init();
 
         } catch(IOException e) {
             Logger.getGlobal().warning(e.toString());
@@ -151,5 +168,9 @@ public class GUIView extends View {
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

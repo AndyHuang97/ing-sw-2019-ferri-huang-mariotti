@@ -26,7 +26,7 @@ public class GrabPlayerAction extends PlayerAction {
     private static final int VIRTUAL_TILE = 1;
     private static final String ALREADY_HAVE = "you already have";
     private static final String DROP_WEAPON_REMINDER = "select a valid weapon to drop";
-    private static final String NO_AMMO = "Not enough ammo to pickup";
+    private static final String NO_AMMO = "not enough ammo to pickup";
     private static final String WEAPONS = "weapons";
 
     private static final int ITEM_POSITION = 0;

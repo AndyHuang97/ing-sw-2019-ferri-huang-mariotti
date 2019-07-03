@@ -42,22 +42,6 @@
           "numPlayerTargets" : 1,
           "numTileTargets": 0,
           "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -102,22 +86,6 @@
             }
           ],
           "numPlayerTargets" : 1,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
         }
@@ -166,22 +134,6 @@
           "numPlayerTargets" : 1,
           "numTileTargets": 0,
           "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -224,22 +176,6 @@
           "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -282,22 +218,6 @@
           "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -340,22 +260,6 @@
           "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -369,22 +273,6 @@
           "name": "Main Effect",
           "available": true,
           "effectList": [],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
           "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
@@ -406,22 +294,6 @@
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -435,22 +307,6 @@
           "name": "Main Effect",
           "available": true,
           "effectList": [],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
           "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
@@ -481,22 +337,6 @@
           "numPlayerTargets" : 0,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 1,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -523,22 +363,6 @@
           "numPlayerTargets" : 0,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 1,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -565,22 +389,6 @@
           "numPlayerTargets" : 0,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 1,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""

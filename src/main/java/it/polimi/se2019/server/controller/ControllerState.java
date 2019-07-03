@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class ControllerState {
-    static private List<String> errorMessages = new ArrayList<>();
+    private static List<String> errorMessages = new ArrayList<>();
 
     /**
      *
@@ -34,7 +34,7 @@ public abstract class ControllerState {
     public abstract ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player);
 
     public void sendErrorMessages(CommandHandler commandHandler) {
-        final Character[] DASH_SPACE = {'-', ' '};
+        final String DASH_SPACE = "- ";
         final Character NEWLINE = '\n';
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -44,6 +44,8 @@ public abstract class ControllerState {
             stringBuilder.append(error);
             stringBuilder.append(NEWLINE);
         }
+
+        System.out.println(stringBuilder.toString());
 
         try {
             commandHandler.update(new Response(null, false, stringBuilder.toString()));

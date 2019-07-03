@@ -75,6 +75,8 @@ public class Controller implements Observer<Request> {
 
             setControllerStateForGame(game, newControllerState);
 
+            requestUpdate(game);
+
             Logger.getGlobal().info("Sending "+newControllerState.getClass().getSimpleName()+" to "+game.getCurrentPlayer().getUserData().getNickname());
             newControllerState.sendSelectionMessage(commandHandler);
 
@@ -112,4 +114,19 @@ public class Controller implements Observer<Request> {
     public void setControllerStateForGame(Game game, ControllerState controllerState) {
         controllerStateMap.put(game, controllerState);
     }
+
+    private void requestUpdate(Game currentGame) {
+        Map<String, CommandHandler> commandHandlerMap = gameManager.getPlayerCommandHandlerMap();
+        for (Player player : currentGame.getPlayerList()) {
+
+            CommandHandler commandHandler = commandHandlerMap.get(player.getUserData().getNickname());
+
+            try {
+                commandHandler.sendBuffer();
+            } catch (CommunicationError e) {
+                Logger.getGlobal().info("Unable to send update trigger command");
+            }
+        }
+    }
+
 }
