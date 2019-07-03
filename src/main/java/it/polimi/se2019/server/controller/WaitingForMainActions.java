@@ -138,8 +138,14 @@ public class WaitingForMainActions extends ControllerState {
             }
             else {// no one died
                 game.updateTurn();
-                Logger.getGlobal().info("No one died. No more actions");
-                return new WaitingForMainActions();
+                if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
+                    Logger.getGlobal().info("No one was killed, first spawn");
+                    return new WaitingForRespawn();
+                }
+                else {
+                    Logger.getGlobal().info("No one was killed, not first spawn");
+                    return new WaitingForMainActions();
+                }
             }
         } else {
             Logger.getGlobal().info("Still have some actions left");
