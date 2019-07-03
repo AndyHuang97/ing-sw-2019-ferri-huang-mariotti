@@ -2,7 +2,7 @@
   "id" : "3",
   "tiles": [
     {
-      "type": "Tile",
+      "type": "NormalTile",
       "pos": [
         0,
         0
