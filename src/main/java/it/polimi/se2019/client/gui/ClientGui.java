@@ -49,13 +49,13 @@ public class ClientGui extends Application {
 //        view.setPlayerColor(PlayerColor.GREEN);
 //        ((Model)view.getModel()).initGame();
 //        view.showGame();
-////        view.showMessage(Constants.RELOAD);
-//        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
-//        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
-//        view.getModel().getGame().setCurrentWeapon(weapon);
-//        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
-//        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
-//        view.showMessage(Constants.SHOOT);
+//        view.showMessage(Constants.TARGETING_SCOPE);
+////        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
+////        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
+////        view.getModel().getGame().setCurrentWeapon(weapon);
+////        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
+////        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
+////        view.showMessage(Constants.SHOOT);
 //        view.setNickname("Giorno");
 ////        view.showGame();
 //        ((Model) view.getModel()).boardDeserialize();
@@ -93,15 +93,6 @@ public class ClientGui extends Application {
 
     public void setLoginController(LoginController loginController) {
         this.loginController = loginController;
-    }
-
-
-
-    /**
-     * Sends input via network.
-     */
-    public void sendInput(){
-
     }
 
     /**
