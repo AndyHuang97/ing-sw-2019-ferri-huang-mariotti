@@ -10,13 +10,12 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ErrorResponse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ReloadPlayerAction extends PlayerAction {
-    private static final String ERRORMESSAGE = "Reload action failed";
+    private static final String ERROR_MESSAGE = "Reload action failed:";
+    private static final String NOT_ENOUGH = "not enough";
+    private static final String AMMO = "ammo";
 
     private List<Weapon> weaponToReload = new ArrayList<>();
 
@@ -71,6 +70,7 @@ public class ReloadPlayerAction extends PlayerAction {
                 Integer availableAmount = actualAmmo.get(ammoColor.getKey());
 
                 if (availableAmount < neededAmount) {
+                    setErrorToReport(buildErrorMessage(Arrays.asList(ERROR_MESSAGE, NOT_ENOUGH, ammoColor.getKey().getColor(), AMMO)));
                     return false;
                 }
 
@@ -84,7 +84,7 @@ public class ReloadPlayerAction extends PlayerAction {
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERRORMESSAGE);
+        return new ErrorResponse(ERROR_MESSAGE);
     }
 
     @Override

@@ -9,17 +9,16 @@ import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.util.ErrorResponse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class PowerUpAction extends PlayerAction {
 
     private static final int MAIN_EFFECT = 0;
-    private static final String ERRORMESSAGE = "PowerUp selection failed";
+    private static final String ERROR_MESSAGE = "PowerUp selection failed:";
+    private static final String NO_SELECTION_REMINDER = "no PowerUp selected";
+    private static final String NOT_IN_BAG_REMINDER = "selected PowerUps are not in your bag";
 
     private List<PowerUp> powerUpsToDiscard;
     private Map<String, List<Targetable>> inputCommands;
@@ -56,16 +55,22 @@ public class PowerUpAction extends PlayerAction {
     @Override
     public boolean check() {
         Logger.getGlobal().info(String.valueOf(getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)));
-        return !powerUpsToDiscard.isEmpty()
-                &&
-                getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)
-                &&
-                powerUpsToDiscard.stream().allMatch(powerUp -> powerUp.getActionUnitList().get(MAIN_EFFECT).check(getGame(), inputCommands));
+
+        if (powerUpsToDiscard.isEmpty()) {
+            setErrorToReport(buildErrorMessage(Arrays.asList(ERROR_MESSAGE, NO_SELECTION_REMINDER)));
+            return false;
+        }
+        else if (!getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)) {
+            setErrorToReport(buildErrorMessage(Arrays.asList(ERROR_MESSAGE, NOT_IN_BAG_REMINDER)));
+            return false;
+        }
+
+        return powerUpsToDiscard.stream().allMatch(powerUp -> powerUp.getActionUnitList().get(MAIN_EFFECT).check(getGame(), inputCommands));
     }
 
     @Override
     public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERRORMESSAGE);
+        return new ErrorResponse(ERROR_MESSAGE);
     }
 
     @Override
