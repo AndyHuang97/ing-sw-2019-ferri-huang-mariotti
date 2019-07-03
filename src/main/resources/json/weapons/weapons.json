@@ -1199,6 +1199,7 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": true
               }
             },
             {
@@ -1276,6 +1277,7 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": true
               }
             }
           ],
@@ -2006,6 +2008,7 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": true
               }
             },
             {
@@ -2216,6 +2219,7 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": true
               }
             }
           ],

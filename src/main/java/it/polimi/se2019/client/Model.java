@@ -118,7 +118,9 @@ public class Model implements LocalModel {
         List<ActionUnit> powerUpActionList = new ArrayList<>();
         powerUpActionList.add(new ActionUnit(true,"Basic mode", null, null,null, 1,2,true));
         PowerUp newton = new PowerUp(powerUpActionList, "Blue_Newton", AmmoColor.BLUE);
-        PowerUp targetingScope =  new PowerUp(powerUpActionList, "Red_TargetingScope", AmmoColor.RED);
+        List<ActionUnit> targetingScopeList = new ArrayList<>();
+        targetingScopeList.add(new ActionUnit(true,"Basic mode", null, null,null, 1,0,true));
+        PowerUp targetingScope =  new PowerUp(targetingScopeList, "Red_TargetingScope", AmmoColor.RED);
         List<ActionUnit> powerUpActionList1 = new ArrayList<>();
         powerUpActionList1.add(new ActionUnit(true,"Basic mode", null, null,null, 0,1,true));
         PowerUp teleporter = new PowerUp(powerUpActionList1, "Yellow_TagbackGrenade", AmmoColor.YELLOW);

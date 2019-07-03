@@ -57,10 +57,12 @@ public class PowerUpAction extends PlayerAction {
 
         if (powerUpsToDiscard.isEmpty()) {
             setErrorToReport(buildErrorMessage(Arrays.asList(ERROR_MESSAGE, NO_SELECTION_REMINDER)));
+            Logger.getGlobal().info("No selection");
             return false;
         }
         else if (!getPlayer().getCharacterState().getPowerUpBag().containsAll(powerUpsToDiscard)) {
             setErrorToReport(buildErrorMessage(Arrays.asList(ERROR_MESSAGE, NOT_IN_BAG_REMINDER)));
+            Logger.getGlobal().info("PowerUp not in bag");
             return false;
         }
 

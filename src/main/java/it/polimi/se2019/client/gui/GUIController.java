@@ -521,6 +521,7 @@ public class GUIController {
 
         actionButtons.setDisable(false);
         mapController.resetGrids();
+        resetAmmoStyle();
     }
 
     public void storeMessage(String message) {
@@ -628,7 +629,9 @@ public class GUIController {
 
     public void addInput(String key, String id) {
         intermediateInput.putIfAbsent(key, new ArrayList<>());
-        intermediateInput.get(key).add(id);
+        if (!intermediateInput.get(key).contains(id)) {
+            intermediateInput.get(key).add(id);
+        }
         System.out.println("Added: " + key + " " + id);
     }
 
@@ -917,7 +920,7 @@ public class GUIController {
      *
      */
     public void showGrabbableCards() {
-        Tile t = null;
+        Tile t;
         if (view.getPlayerInput().isEmpty()){
             t  = view.getModel().getGame().getCurrentPlayer().getCharacterState().getTile();
         }
@@ -950,11 +953,13 @@ public class GUIController {
                 HBox hBox = (HBox) mapController.getAmmoGrid().getChildren().get(Util.convertToIndex(coords[0], coords[1]));
                 Node node = hBox.getChildren().get(0);
                 ImageView iv = (ImageView) ((AnchorPane) node).getChildren().get(0);
+                hBox.setDisable(false);
+                node.setDisable(false);
                 iv.setDisable(false);
 
                 node.getStyleClass().add(Constants.SELECTION_NODE);
                 node.getStyleClass().add(CSS_HOVERING);
-                ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, hBox, Constants.GRAB, () -> {});
+                ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, node, Constants.GRAB, () -> {});
             }
         } catch (TileNotFoundException e) {
             logger.warning(e.toString());
@@ -1051,10 +1056,11 @@ public class GUIController {
 
         cancelButton.setDisable(false);
         myPowerUps.setDisable(false);
-        myPowerUps.getStyleClass().add(Constants.SELECTION_NODE);
+        if (!myPowerUpsModel.isEmpty()) {
+            myPowerUps.getStyleClass().add(Constants.SELECTION_NODE);
+        }
         myPowerUps.getChildren().forEach(node -> {
             node.setDisable(true);
-            node.setOpacity(0.6);
             node.setOpacity(CLICKED_OPACITY);
         });
         myPowerUps.getChildren().stream().map(n -> (ImageView) n)
@@ -1062,7 +1068,7 @@ public class GUIController {
                 .forEach(iv -> {
                     iv.setOpacity(1.0);
                     iv.setDisable(false);
-                    iv.getStyleClass().add(Constants.CSS_HOVERING);
+                    iv.getStyleClass().add(CSS_HOVERING);
                     ((GUIView) view).getGuiController().setCardSelectionBehavior(iv, myPowerUps, POWERUP, () -> {
                         PowerUp powerUp = myPowerUpsModel.stream().filter(pU -> pU.getName().equals(((NamedImage)iv.getImage()).getName())).findFirst().orElse(null);
                         if (powerUp != null) {
@@ -1073,11 +1079,75 @@ public class GUIController {
                             if (powerUp.getActionUnitList().get(ACTIONUNIT_POSITION).getNumTileTargets() > 0) {
                                 view.getInputRequested().add(() -> getShootTile(POWERUP, powerUp.getActionUnitList().get(ACTIONUNIT_POSITION).getNumTileTargets()));
                             }
+                            if (powerUp.getId().split("_")[1].equals(TARGETING_SCOPE)) {
+                                view.getInputRequested().add(this::getAmmo);
+                            }
+
                         }
 
                         view.askInput();
                     });
                 });
+    }
+
+    public void getAmmo() {
+        myAmmo.getStyleClass().add(SELECTION_NODE);
+        myAmmo.getChildren().forEach(node -> {
+            node.setDisable(false);
+            node.getStyleClass().add(CSS_HOVERING);
+        });
+        myAmmo.getChildren().get(0).setOnMouseClicked(event ->  {
+            myAmmo.getChildren().get(0).setDisable(true);
+            myAmmo.getChildren().get(0).setOpacity(Constants.CLICKED_OPACITY);
+
+            Util.ifFirstSelection(confirmButton, progressBar);
+            Util.updateCircle(progressBar);
+
+            if (Util.isLastSelection(progressBar)) {
+                myAmmo.setDisable(true);
+            }
+            addInput(POWERUP, "BLUE");
+        });
+        myAmmo.getChildren().get(1).setOnMouseClicked(event ->  {
+            myAmmo.getChildren().get(1).setDisable(true);
+            myAmmo.getChildren().get(1).setOpacity(Constants.CLICKED_OPACITY);
+
+            Util.ifFirstSelection(confirmButton, progressBar);
+            Util.updateCircle(progressBar);
+
+            if (Util.isLastSelection(progressBar)) {
+                myAmmo.setDisable(true);
+            }
+            addInput(POWERUP, "RED");
+        });
+        myAmmo.getChildren().get(2).setOnMouseClicked(event ->  {
+            myAmmo.getChildren().get(2).setDisable(true);
+            myAmmo.getChildren().get(2).setOpacity(Constants.CLICKED_OPACITY);
+
+            Util.ifFirstSelection(confirmButton, progressBar);
+            Util.updateCircle(progressBar);
+
+            if (Util.isLastSelection(progressBar)) {
+                myAmmo.setDisable(true);
+            }
+            addInput(POWERUP, "YELLOW");
+        });
+
+        setUpProgressBar(1);
+    }
+
+    public void resetAmmoStyle() {
+        myAmmo.setDisable(false);
+        if (!myAmmo.getStyleClass().isEmpty()) {
+            myAmmo.getStyleClass().remove(0);
+        }
+        myAmmo.getChildren().forEach(node -> {
+            node.setOpacity(1.0);
+            node.setDisable(false);
+            if (!node.getStyleClass().isEmpty()) {
+                node.getStyleClass().remove(0);
+            }
+        });
     }
 
 
