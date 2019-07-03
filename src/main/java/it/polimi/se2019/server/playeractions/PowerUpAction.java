@@ -7,7 +7,6 @@ import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -66,11 +65,6 @@ public class PowerUpAction extends PlayerAction {
         }
 
         return powerUpsToDiscard.stream().allMatch(powerUp -> powerUp.getActionUnitList().get(MAIN_EFFECT).check(getGame(), inputCommands));
-    }
-
-    @Override
-    public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERROR_MESSAGE);
     }
 
     @Override

@@ -9,7 +9,6 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,11 +70,6 @@ public class RespawnAction extends PlayerAction {
     public boolean check() {
         setErrorToReport(buildErrorMessage(Arrays.asList(ERROR_MESSAGE, NOT_IN_BAG_REMINDER)));
         return getPlayer().getCharacterState().getPowerUpBag().contains(powerUpToDiscard);
-    }
-
-    @Override
-    public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERROR_MESSAGE);
     }
 
     @Override

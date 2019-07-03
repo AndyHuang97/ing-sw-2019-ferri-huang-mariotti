@@ -8,7 +8,6 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.util.ErrorResponse;
 
 import java.util.*;
 
@@ -80,11 +79,6 @@ public class ReloadPlayerAction extends PlayerAction {
         }
 
         return true;
-    }
-
-    @Override
-    public ErrorResponse getErrorMessage() {
-        return new ErrorResponse(ERROR_MESSAGE);
     }
 
     @Override
