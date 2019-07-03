@@ -71,12 +71,12 @@ public class Controller implements Observer<Request> {
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
 
             CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
-
             controllerState.sendErrorMessages(commandHandler);
 
             setControllerStateForGame(game, newControllerState);
 
-            requestUpdate(commandHandler);
+            requestUpdate(game);
+
             Logger.getGlobal().info("Sending "+newControllerState.getClass().getSimpleName()+" to "+game.getCurrentPlayer().getUserData().getNickname());
             newControllerState.sendSelectionMessage(commandHandler);
 
@@ -115,11 +115,17 @@ public class Controller implements Observer<Request> {
         controllerStateMap.put(game, controllerState);
     }
 
-    private void requestUpdate(CommandHandler commandHandler) {
-        try {
-            commandHandler.sendBuffer();
-        } catch (CommunicationError e) {
-            Logger.getGlobal().info("Unable to send update trigger command");
+    private void requestUpdate(Game currentGame) {
+        Map<String, CommandHandler> commandHandlerMap = gameManager.getPlayerCommandHandlerMap();
+        for (Player player : currentGame.getPlayerList()) {
+
+            CommandHandler commandHandler = commandHandlerMap.get(player.getUserData().getNickname());
+
+            try {
+                commandHandler.sendBuffer();
+            } catch (CommunicationError e) {
+                Logger.getGlobal().info("Unable to send update trigger command");
+            }
         }
     }
 
