@@ -853,7 +853,7 @@ public class GUIController {
 
     public void getActionUnit() {
 
-        addKeyOrderAction(SHOOT);
+//        addKeyOrderAction(SHOOT);
 
         infoText.setText("Select 1 effect: ");
         cancelButton.setDisable(false);
@@ -861,7 +861,6 @@ public class GUIController {
         Weapon weapon = view.getModel().getGame().getCurrentWeapon();
         if (weapon != null) {
             actionUnitPane.setVisible(true);
-            addInput(SHOOT, weapon.getId());
             IntStream.range(0, weapon.getActionUnitList().size() + weapon.getOptionalEffectList().size())
                     .forEach(i -> {
                         Button b = (Button) actionUnitPane.getChildren().get(i);
@@ -870,22 +869,23 @@ public class GUIController {
                         if (i < weapon.getActionUnitList().size()) {
                             b.setText(weapon.getActionUnitList().get(i).getName());
 
-                            setActionUnitButton(b, weapon.getActionUnitList(), i);
+                            setActionUnitButton(b, weapon.getActionUnitList(), i, weapon.getId());
 
                         } else {
                             b.setText(weapon.getOptionalEffectList().get(i - weapon.getActionUnitList().size()).getName());
 
-                            setActionUnitButton(b, weapon.getOptionalEffectList(), weapon.getActionUnitList().size()-i);
+                            setActionUnitButton(b, weapon.getOptionalEffectList(), weapon.getActionUnitList().size()-i,weapon.getId());
                         }
                     });
         }
     }
 
-    public void setActionUnitButton(Button b, List<ActionUnit> actionUnitList, int i) {
+    public void setActionUnitButton(Button b, List<ActionUnit> actionUnitList, int i, String weaponID) {
         b.setOnAction(event -> {
             // adds the action unit in the input list
+            addInput(SHOOT, weaponID);
             ((GUIView)view).getGuiController().getIntermediateInput().get(Constants.SHOOT).add(b.getText());
-
+            addKeyOrderAction(SHOOT);
             view.getInputRequested().add(() -> getTarget(SHOOT, actionUnitList.get(i).getNumPlayerTargets()));
             view.getInputRequested().add(() -> getShootTile(SHOOT, actionUnitList.get(i).getNumTileTargets()));
 
