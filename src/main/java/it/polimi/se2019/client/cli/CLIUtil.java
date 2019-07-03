@@ -29,8 +29,8 @@ public class CLIUtil {
             thread.start();
             return task.get(300, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException | ExecutionException ex) {
+            logger.info(ex.getMessage());
             out.println("Input timeout reached");
-            Thread.currentThread().interrupt();
             return Constants.NOP;
         }
     }
@@ -116,8 +116,7 @@ public class CLIUtil {
         try {
             Thread.currentThread().join();
         } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            logger.info(ex.toString());
+            logger.info(ex.getMessage());
         }
     }
 

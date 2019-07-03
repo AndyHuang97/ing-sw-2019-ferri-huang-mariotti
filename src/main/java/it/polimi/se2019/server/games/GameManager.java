@@ -95,6 +95,7 @@ public class GameManager {
 			}
 
 		} catch (IOException | URISyntaxException e) {
+			logger.info(e.getMessage());
 			logger.info("Error while saving games to file");
 		}
 	}
@@ -190,8 +191,7 @@ public class GameManager {
 		try {
 			Thread.sleep((long) this.startTimerSeconds * 1000);
 		} catch(InterruptedException e) {
-			logger.info(e.toString());
-			Thread.currentThread().interrupt();
+			logger.info(e.getMessage());
 		}
 		if (previousGameListSize == this.gameList.size()) {
 			createGame();

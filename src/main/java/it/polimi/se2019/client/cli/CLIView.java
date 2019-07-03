@@ -85,16 +85,19 @@ public class CLIView extends View {
                     getModel().getGame().getPlayerList().forEach(p -> {
                         if (!p.getId().equals(currentPlayer.getId())) shootPlayers.put(p.getUserData().getNickname(), p.getId());
                     });
-                    shootPlayers.put("n", "n");
                     int[] targetsSize = new int[] {actionUnit.getNumPlayerTargets(), actionUnit.getNumTileTargets()};
                     String[] messages = new String[] {"Select a player #%d to target", "Select tile #%d to target"};
-                    List<String>[] answers = new List[] {new ArrayList<>(shootPlayers.keySet()), Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "n")};
+                    List<String>[] answers = new List[] {new ArrayList<>(shootPlayers.keySet()), new ArrayList<>(Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"))};
                     boolean[] type = new boolean[] {true, false};
+                    shootPlayers.put("n", "n");
                     int start;
                     if (actionUnit.isPlayerSelectionFirst()) start = 0;
                     else start = -1;
                     for (int j = start; j < start + 2; j++) {
                         for (int i = 0; i < targetsSize[Math.abs(j)]; i++) {
+                            if ((j != start || i != 0) && !answers[Math.abs(j)].contains("n")) {
+                                answers[Math.abs(j)].add("n");
+                            }
                             String selectedTarget = utils.askUserInput(String.format(messages[Math.abs(j)], i), answers[Math.abs(j)], type[Math.abs(j)]);
                             if (selectedTarget.equals(Constants.NOP)) {
                                 sendNOP();
