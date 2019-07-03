@@ -259,7 +259,9 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     }
 
     public void sendBuffer() throws CommunicationError {
-        if (updateBuffer.isEmpty()) {
+        //System.out.println("SENDIG THE UPDATEBUFFER!!!!!!!!!!!!!!!!!!!!");
+
+        if (updateBuffer.size() != 0) {
             Response response = new Response(updateBuffer);
             resetBuffer();
 
