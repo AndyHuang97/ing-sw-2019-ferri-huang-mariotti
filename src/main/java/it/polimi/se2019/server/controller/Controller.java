@@ -111,7 +111,7 @@ public class Controller implements Observer<Request> {
      * @param game the kay you need to set the associated value
      * @param controllerState the ControllerState you want to correspond to the key
      */
-    public void setControllerStateForGame(Game game, ControllerState controllerState) {
+    public synchronized void setControllerStateForGame(Game game, ControllerState controllerState) {
         controllerStateMap.put(game, controllerState);
     }
 

@@ -236,23 +236,25 @@ public class GameManager {
                     currentGame.deregister(this.commandHandler);
                     playerCommandHandlerMap.remove(this.nickname);
                     // in case of less than 3 players quit the game and announce the winner etc
-                    if (currentGame.getPlayerList().size() <= 3) terminateGame(currentGame);
-                    else {
+                    if (currentGame.getPlayerList().stream().filter(p -> p.getActive()).collect(Collectors.toList()).size() == 3) {
+                    	terminateGame(currentGame);
+					} else if (currentGame.getPlayerList().stream().filter(p -> p.getActive()).collect(Collectors.toList()).size() > 3) {
 						currentGame.getPlayerByNickname(nickname).setActive(false);
 						if (currentGame.getCurrentPlayer().getUserData().getNickname().equals(this.nickname)) {
+							// TODO: fix this
 							if (currentGame.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
 								WaitingForRespawn newState = new WaitingForRespawn();
 								Logger.getGlobal().info("Someone was killed");
-								newState.nextState(new ArrayList<>(), currentGame, currentGame.getPlayerByNickname(nickname));
+								controller.setControllerStateForGame(currentGame, newState.nextState(new ArrayList<>(), currentGame, currentGame.getPlayerByNickname(nickname)));
 							} else {
 								currentGame.updateTurn();
 								if (currentGame.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
 									Logger.getGlobal().info("No one was killed, first spawn");
-									new WaitingForRespawn();
+									controller.setControllerStateForGame(currentGame, new WaitingForRespawn());
 								}
 								else {
 									Logger.getGlobal().info("No one was killed, not first spawn");
-									new WaitingForMainActions();
+									controller.setControllerStateForGame(currentGame, new WaitingForMainActions());
 								}
 							}
 						}

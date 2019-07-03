@@ -43,7 +43,7 @@ public class WaitingForReload extends ControllerState {
                         return new WaitingForRespawn();
                     }
                     else {
-                        Logger.getGlobal().info("No one was killedm not first spawn");
+                        Logger.getGlobal().info("No one was killed, not first spawn");
                         return new WaitingForMainActions();
                     }
                 }
