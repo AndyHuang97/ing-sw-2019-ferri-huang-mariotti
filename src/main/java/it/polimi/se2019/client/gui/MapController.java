@@ -257,7 +257,7 @@ public class MapController {
                                     .findFirst();
                             if (optGrid.isPresent()){
                                 GridPane actualGrid = optGrid.get();
-                                IntStream.range(0, 3)
+                                IntStream.range(0, tileMap[x][y].getWeaponCrate().size())
                                         .forEach(i -> {
                                             ImageView iv = (ImageView) actualGrid.getChildren().get(i);
                                             if (tileMap[x][y].getWeaponCrate().get(i) != null) {
@@ -328,11 +328,13 @@ public class MapController {
      */
     public void showPlayers() {
 
+        resetPlayerGridStyle();
         view.getModel().getGame().getPlayerList().stream()
                 .filter(player -> player.getCharacterState().getTile() != null)
                 .forEach(p -> {
                     int[] coords = {p.getCharacterState().getTile().getxPosition(), p.getCharacterState().getTile().getyPosition()};
                     VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
+                    Logger.getGlobal().info(p.getUserData().getNickname()+"-> x: "+coords[0]+"; y: "+coords[1]);
                     vbox.setDisable(false);
 
                     HBox firstRow = (HBox) vbox.getChildren().get(1);

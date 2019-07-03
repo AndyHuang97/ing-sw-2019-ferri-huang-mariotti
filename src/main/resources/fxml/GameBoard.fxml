@@ -336,7 +336,7 @@
                      <children>
                         <AnchorPane maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -416,7 +416,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="46.0" layoutY="10.0" maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -493,7 +493,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="46.0" layoutY="10.0" maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -570,7 +570,7 @@
                         </AnchorPane>
                         <AnchorPane layoutX="46.0" layoutY="10.0" maxWidth="584.0" minHeight="150.0" prefHeight="167.0" prefWidth="585.0" visible="false">
                            <children>
-                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0">
+                              <GridPane hgap="11.0" layoutX="46.0" layoutY="20.0" prefHeight="125.0" prefWidth="298.0" visible="false">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

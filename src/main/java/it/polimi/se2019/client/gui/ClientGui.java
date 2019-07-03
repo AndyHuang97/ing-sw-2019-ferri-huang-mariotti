@@ -49,14 +49,17 @@ public class ClientGui extends Application {
 //        view.setPlayerColor(PlayerColor.GREEN);
 //        ((Model)view.getModel()).initGame();
 //        view.showGame();
-//        view.showMessage(Constants.TARGETING_SCOPE);
+//        view.showMessage(Constants.MAIN_ACTION);
+//
+//
 //        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
-//        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
-//        view.getModel().getGame().setCurrentWeapon(weapon);
-//        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
-//        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
-//        view.showMessage(Constants.SHOOT);
+////        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
+////        view.getModel().getGame().setCurrentWeapon(weapon);
+////        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
+////        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
+////        view.showMessage(Constants.SHOOT);
 //        view.setNickname("Giorno");
+//        view.showGame();
 //        ((Model) view.getModel()).boardDeserialize();
 
     }

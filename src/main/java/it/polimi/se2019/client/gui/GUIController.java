@@ -14,7 +14,6 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
-import it.polimi.se2019.server.playerActions.PlayerAction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -687,6 +686,7 @@ public class GUIController {
         intermediateInput.keySet().stream()
                 .forEach(k -> view.getPlayerInput().put(k, intermediateInput.get(k)));
         view.sendInput();
+        intermediateInput.clear();
         pass.setDisable(true);
     }
 
@@ -1020,6 +1020,7 @@ public class GUIController {
         CharacterState myCharacterState =  view.getModel().getGame().getPlayerByColor(view.getPlayerColor()).getCharacterState();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
 
+        myPowerUps.getChildren().forEach(node -> node.setVisible(false));
         IntStream.range(0, myPowerUpsModel.size())
                 .forEach(i -> {
                     ImageView iv = (ImageView) myPowerUps.getChildren().get(i);
@@ -1037,9 +1038,10 @@ public class GUIController {
 
         myPowerUps.setDisable(false);
         myPowerUps.getStyleClass().add(Constants.SELECTION_NODE);
-        myPowerUps.getChildren().stream().forEach(n -> {
-            n.setDisable(true);
-            n.setOpacity(CLICKED_OPACITY);
+        myPowerUps.getChildren().forEach(node -> {
+            node.setDisable(true);
+            node.setVisible(false);
+            node.setOpacity(CLICKED_OPACITY);
         });
         myPowerUps.getChildren().stream().map(n -> (ImageView) n)
                 .filter(iv -> powerUpList.contains(((NamedImage)iv.getImage()).getName().split("_")[1]))

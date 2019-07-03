@@ -216,9 +216,9 @@ public class Model implements LocalModel {
                                                         new Weapon(null, "ZX-2", null
                                                                 , null, null),
                                                         new Weapon(null, "Plasma_Gun", null
-                                                                , null, null),
-                                                        new Weapon(null, "Heatseeker", null
-                                                                , null, null)));
+                                                                , null, null)
+//                                                        ,new Weapon(null, "Heatseeker", null, null, null)
+                                                        ));
                                     }
                                 }
                             }));
