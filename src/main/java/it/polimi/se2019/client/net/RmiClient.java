@@ -27,7 +27,7 @@ public class RmiClient implements NetworkClient {
 
     @Override
     public void start(View view) {
-        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+        try (InputStream input = RmiClient.class.getClassLoader().getResource("config.properties").openStream()) {
             Properties prop = new Properties();
             prop.load(input);
             int rmiPort = Integer.parseInt(prop.getProperty("rmi.port"));

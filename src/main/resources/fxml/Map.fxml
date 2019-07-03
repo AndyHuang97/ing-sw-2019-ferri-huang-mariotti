@@ -478,17 +478,17 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="81.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="16.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
@@ -505,17 +505,17 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fitHeight="85.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+            <ImageView fitHeight="85.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" visible="false">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="1">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" visible="false" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" GridPane.rowIndex="2">
+            <ImageView fitHeight="85.0" fitWidth="65.0" layoutX="31.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="90.0" visible="false" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
@@ -532,7 +532,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <ImageView fitHeight="80.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" rotate="270.0">
+            <ImageView fitHeight="80.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" visible="false">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
@@ -540,7 +540,7 @@
                   <Insets top="-7.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="1">
+            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" visible="false" GridPane.rowIndex="1">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>
@@ -548,7 +548,7 @@
                   <Insets top="-7.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" GridPane.rowIndex="2">
+            <ImageView fitHeight="80.0" fitWidth="85.0" layoutX="26.0" layoutY="65.0" pickOnBounds="true" preserveRatio="true" rotate="270.0" visible="false" GridPane.rowIndex="2">
                <image>
                   <Image url="@../images/weapons/Sledgehammer.png" />
                </image>

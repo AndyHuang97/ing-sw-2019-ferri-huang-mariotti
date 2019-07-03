@@ -21,8 +21,10 @@ import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.LocalModel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -102,20 +104,25 @@ public class Model implements LocalModel {
         p5.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w4));
 
         List<ActionUnit> actionUnitList = new ArrayList<>();
-        actionUnitList.add(new ActionUnit(true,"Basic mode", "", null, null, 2,2,true));
-        actionUnitList.add(new ActionUnit(true,"Alternate mode", "", null, null, 2,1,false));
+        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null,null, 2,2,true));
+        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null,null, 2,1,false));
         List<ActionUnit> optionalEffectList = new ArrayList<>();
-        optionalEffectList.add(new ActionUnit(true,"Optional effect", "", null, null, 2,2,true));
+        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null,null, 2,2,true));
         p1.getCharacterState().getWeaponBag().stream()
                 .forEach(w -> {
                     w.setActionUnitList(actionUnitList);
                     w.setOptionalEffectList(optionalEffectList);
                 });
 
-        p1.getCharacterState().setPowerUpBag(Arrays.asList(
-                new PowerUp(null, "Blue_Newton", AmmoColor.BLUE),
-                new PowerUp(null, "Red_Newton", AmmoColor.RED),
-                new PowerUp(null, "Yellow_Teleporter", AmmoColor.YELLOW)));
+
+        List<ActionUnit> powerUpActionList = new ArrayList<>();
+        powerUpActionList.add(new ActionUnit(true,"Basic mode", null, null,null, 1,2,true));
+        PowerUp newton = new PowerUp(powerUpActionList, "Blue_Newton", AmmoColor.BLUE);
+        PowerUp targetingScope =  new PowerUp(powerUpActionList, "Red_TargetingScope", AmmoColor.RED);
+        List<ActionUnit> powerUpActionList1 = new ArrayList<>();
+        powerUpActionList1.add(new ActionUnit(true,"Basic mode", null, null,null, 0,1,true));
+        PowerUp teleporter = new PowerUp(powerUpActionList1, "Yellow_TagbackGrenade", AmmoColor.YELLOW);
+        p1.getCharacterState().setPowerUpBag(Arrays.asList(newton, targetingScope,teleporter));
 
         p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
         p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));
@@ -185,11 +192,11 @@ public class Model implements LocalModel {
         BoardDeserializer boardDeserializer = new BoardDeserializer();
         factory.registerDeserializer("tile", new TileDeserializerSupplier());
 
-        String path = "src/main/resources/json/maps/map0.json";
+        String path = "json/maps/map0.json";
 
         Board board = null;
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(Model.class.getClassLoader().getResource(path).toURI())))) {
 
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
@@ -209,13 +216,13 @@ public class Model implements LocalModel {
                                                         new Weapon(null, "ZX-2", null
                                                                 , null, null),
                                                         new Weapon(null, "Plasma_Gun", null
-                                                                , null, null),
-                                                        new Weapon(null, "Heatseeker", null
-                                                                , null, null)));
+                                                                , null, null)
+//                                                        ,new Weapon(null, "Heatseeker", null, null, null)
+                                                        ));
                                     }
                                 }
                             }));
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | URISyntaxException e) {
             Logger.getGlobal().warning(e.toString());
         }
     }
