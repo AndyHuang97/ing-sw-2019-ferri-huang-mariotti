@@ -12,7 +12,6 @@ import it.polimi.se2019.util.Response;
  */
 public class Player extends Observable<Response> implements Targetable, Observer<PlayerDeath> {
 
-	private boolean active;
 	private UserData userData;
 	private CharacterState characterState;
 	private PlayerColor color;
@@ -25,13 +24,11 @@ public class Player extends Observable<Response> implements Targetable, Observer
 
 	/**
 	 * Default constructor
-	 * @param active
 	 * @param userData
 	 * @param characterState
 	 * @param color
 	 */
 	public Player(String id, boolean active, UserData userData, CharacterState characterState, PlayerColor color) {
-		this.active = active;
 		this.userData = userData;
 		this.id = id;
 		this.characterState = characterState;
@@ -51,14 +48,14 @@ public class Player extends Observable<Response> implements Targetable, Observer
 	 * @return true if the player is active, false otherwise
 	 */
 	public boolean getActive() {
-		return active;
+		return characterState.isConnected();
 	}
 
 	/**
 	 * @param active
 	 */
 	public void setActive(boolean active) {
-		this.active = active;
+		characterState.setConnected(active);
 	}
 
 	/**

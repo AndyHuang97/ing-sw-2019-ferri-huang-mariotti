@@ -73,7 +73,7 @@ public class WaitingForEffects extends ControllerState {
                     // Tagback Grenade
                     game.getCumulativeDamageTargetSet().forEach(t -> Logger.getGlobal().info("DamagedTarget: "+t.getId()));
                     List<Player> powerUpPlayers = game.getCumulativeDamageTargetSet().stream() // checks whether one of the attacked players has a Tagback Grenade
-                            .map(t -> (Player) t)
+                            .map(t -> (Player) t).filter(Player::getActive)
                             .filter(notCurrentPlayer -> !notCurrentPlayer.equals(player)) // gets the targets who can see the attacker
                             .filter(p -> p.getCharacterState().getTile().getVisibleTargets(game).contains(player))
                             .filter(p -> p.getCharacterState().getPowerUpBag().stream()

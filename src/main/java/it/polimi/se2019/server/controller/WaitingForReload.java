@@ -32,7 +32,7 @@ public class WaitingForReload extends ControllerState {
             if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                 playerActions.stream().forEach(PlayerAction::run);
 
-                if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+                if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                     WaitingForRespawn newState = new WaitingForRespawn();
                     Logger.getGlobal().info("Someone was killed");
                     return newState.nextState(playerActions, game, player);

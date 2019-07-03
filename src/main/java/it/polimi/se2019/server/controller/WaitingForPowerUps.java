@@ -82,7 +82,7 @@ public class WaitingForPowerUps extends ControllerState {
                     playerActions.forEach(playerAction ->((PowerUpAction) playerAction).getPowerUpsToDiscard().forEach(powerUp -> playerStack.peek().getCharacterState().addMarker(poppedPlayer.getColor(), 1)));
 
                     List<Player> powerUpPlayers = game.getCumulativeDamageTargetSet().stream() // checks whether one of the attacked players has a Tagback Grenade
-                            .map(t -> (Player) t)
+                            .map(t -> (Player) t).filter(Player::getActive)
                                     .filter(notCurrentPlayer -> !alreadyAskedPlayers.contains(notCurrentPlayer))
                                     .filter(notCurrentPlayer -> !notCurrentPlayer.equals(playerStack.peek())) // gets the targets who can see the attacker
                                     .filter(p -> p.getCharacterState().getTile().getVisibleTargets(game).contains(playerStack.peek()))

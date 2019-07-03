@@ -201,13 +201,9 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void nextCurrentPlayer() {
 		// this takes into account if the next player is active or not
-		int newIndex = playerList.indexOf(this.currentPlayer) + 1;
-		if(newIndex >= playerList.size()) {newIndex = 0;}
-		while (!playerList.get(newIndex).getActive()) {
-			newIndex++;
-			if(newIndex >= playerList.size()) {newIndex = 0;}
-		}
-        setCurrentPlayer(playerList.get(newIndex));
+		int newIndex = getActivePlayerList().indexOf(this.currentPlayer) + 1;
+		if (newIndex >= getActivePlayerList().size()) {newIndex = 0;}
+        setCurrentPlayer(getActivePlayerList().get(newIndex));
 	}
 
 	public Date getStartDate() {
@@ -220,6 +216,10 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public List<Player> getPlayerList() {
 		return playerList;
+	}
+
+	public List<Player> getActivePlayerList() {
+		return playerList.stream().filter(Player::getActive).collect(Collectors.toList());
 	}
 
 	public void setPlayerList(List<Player> playerList) {

@@ -115,9 +115,9 @@ public class Controller implements Observer<Request> {
         controllerStateMap.put(game, controllerState);
     }
 
-    private void requestUpdate(Game currentGame) {
+    public void requestUpdate(Game currentGame) {
         Map<String, CommandHandler> commandHandlerMap = gameManager.getPlayerCommandHandlerMap();
-        for (Player player : currentGame.getPlayerList()) {
+        for (Player player : currentGame.getActivePlayerList()) {
 
             CommandHandler commandHandler = commandHandlerMap.get(player.getUserData().getNickname());
 

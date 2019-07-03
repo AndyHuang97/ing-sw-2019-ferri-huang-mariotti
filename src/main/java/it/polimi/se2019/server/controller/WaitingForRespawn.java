@@ -21,6 +21,7 @@ public class WaitingForRespawn extends ControllerState {
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try { // asks the current player for a power up
+            Logger.getGlobal().info("Sending respawn selection message...");
             commandHandler.update(new Response(null, true, Constants.RESPAWN));
         } catch (Observer.CommunicationError e) {
             Logger.getGlobal().warning(e.getMessage());
@@ -60,8 +61,8 @@ public class WaitingForRespawn extends ControllerState {
                         return this; // tries to get input again for the dead player
                     }
                 }
-                if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) { // if someone is dead
-                    List<Player> deadPlayers = game.getPlayerList().stream()
+                if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) { // if someone is dead
+                    List<Player> deadPlayers = game.getActivePlayerList().stream()
                             .filter(p -> p.getCharacterState().isDead()).collect(Collectors.toList());
                     playerStack.push(deadPlayers.get(0)); // pushes the dead player to respawn
                     Logger.getGlobal().info("Pushed player:" + deadPlayers.get(0).getId());

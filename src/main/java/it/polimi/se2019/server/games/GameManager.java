@@ -3,6 +3,7 @@ package it.polimi.se2019.server.games;
 import com.google.gson.Gson;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.controller.Controller;
+import it.polimi.se2019.server.controller.ControllerState;
 import it.polimi.se2019.server.controller.WaitingForMainActions;
 import it.polimi.se2019.server.controller.WaitingForRespawn;
 import it.polimi.se2019.server.games.player.CharacterState;
@@ -236,33 +237,41 @@ public class GameManager {
                     currentGame.deregister(this.commandHandler);
                     playerCommandHandlerMap.remove(this.nickname);
                     // in case of less than 3 players quit the game and announce the winner etc
-                    if (currentGame.getPlayerList().stream().filter(p -> p.getActive()).collect(Collectors.toList()).size() == 3) {
+                    if (currentGame.getActivePlayerList().size() == 3) {
                     	terminateGame(currentGame);
-					} else if (currentGame.getPlayerList().stream().filter(p -> p.getActive()).collect(Collectors.toList()).size() > 3) {
+					} else if (currentGame.getActivePlayerList().size() > 3) {
 						currentGame.getPlayerByNickname(nickname).setActive(false);
+						Logger.getGlobal().info("Current player disconnected: "+nickname + "\tisActive: "+currentGame.getPlayerByNickname(nickname).getActive());
 						if (currentGame.getCurrentPlayer().getUserData().getNickname().equals(this.nickname)) {
-							// TODO: fix this
-							if (currentGame.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+							ControllerState newControllerState;
+							if (currentGame.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
 								WaitingForRespawn newState = new WaitingForRespawn();
 								Logger.getGlobal().info("Someone was killed");
-								controller.setControllerStateForGame(currentGame, newState.nextState(new ArrayList<>(), currentGame, currentGame.getPlayerByNickname(nickname)));
+								newControllerState = newState.nextState(new ArrayList<>(), currentGame, currentGame.getPlayerByNickname(nickname));
 							} else {
 								currentGame.updateTurn();
 								if (currentGame.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
 									Logger.getGlobal().info("No one was killed, first spawn");
-									controller.setControllerStateForGame(currentGame, new WaitingForRespawn());
+									newControllerState = new WaitingForRespawn();
 								}
 								else {
 									Logger.getGlobal().info("No one was killed, not first spawn");
-									controller.setControllerStateForGame(currentGame, new WaitingForMainActions());
+									newControllerState = new WaitingForMainActions();
 								}
 							}
+							Logger.getGlobal().info("Next current player is: " + currentGame.getCurrentPlayer().getUserData().getNickname());
+							Logger.getGlobal().info("Next state is " + newControllerState.getClass().getSimpleName());
+							controller.setControllerStateForGame(currentGame, newControllerState);
+							controller.requestUpdate(currentGame);
+							Logger.getGlobal().info("Trying to send a selection message");
+							CommandHandler commandHandler = playerCommandHandlerMap.get(currentGame.getCurrentPlayer().getUserData().getNickname());
+							newControllerState.sendSelectionMessage(commandHandler);
 						}
                     }
 
                 }
             } catch (Exception ex) {
-		        logger.info(ex.getMessage());
+		        logger.info(ex.getCause().getMessage());
             }
 		}
 	}

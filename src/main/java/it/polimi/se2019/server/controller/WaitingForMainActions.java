@@ -95,7 +95,7 @@ public class WaitingForMainActions extends ControllerState {
             // no shoot weapon selection
             if (game.isFrenzy()) {
                 if (actionCounter >= getCounterLimit(game, player)) {
-                    if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+                    if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                         // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
                         WaitingForRespawn newState = new WaitingForRespawn();
                         Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
@@ -126,7 +126,7 @@ public class WaitingForMainActions extends ControllerState {
     public ControllerState nextPlayerOrReloadRespawn(Game game, Player player) {
         if (actionCounter >= getCounterLimit(game, player)) { // no actions left
             game.getCurrentActionUnitsList().clear();
-            if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+            if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                 if (game.isFrenzy()) {
                     WaitingForRespawn newState = new WaitingForRespawn();
                     Logger.getGlobal().info("Someone was killed in frenzy. No more actions");

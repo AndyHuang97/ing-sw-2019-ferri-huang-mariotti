@@ -440,6 +440,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 
 	public void setConnected(boolean connected) {
 		this.connected = connected;
+		notifyCharacterStateChange();
 	}
 
 	public void setBeforeFrenzyActivator(boolean beforeFrenzyActivator) {
