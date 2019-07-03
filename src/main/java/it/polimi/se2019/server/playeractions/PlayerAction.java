@@ -23,7 +23,7 @@ public abstract class PlayerAction implements Targetable {
     private CommandHandler commandHandler;
     private int amount;
 
-    private static final String DEFAULT_ERROR = "Action failed";
+    private static final String DEFAULT_ERROR = "Action failed!";
     private String errorToReport;
 
 

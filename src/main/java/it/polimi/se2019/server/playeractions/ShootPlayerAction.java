@@ -9,15 +9,18 @@ import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class ShootPlayerAction extends PlayerAction {
 
-    private static final String DEFAULT_ERROR_MESSAGE = "Shoot action failed";
+    private static final String DEFAULT_ERROR_MESSAGE = "Shoot action failed:";
     private static final String NOT_LOADED = "is not loaded,";
-    private static final String RELOAD_REMAINDER = "please_reload_first";
+    private static final String RELOAD_REMAINDER = "please reload first";
+    private static final String NO_WEAPON_SELECTED = "no weapon selected";
+    private static final String NO_MODE_SELECTED = "no fire mode selected";
 
     private Weapon chosenWeapon;
     private ActionUnit chosenActionUnit;
@@ -52,11 +55,17 @@ public class ShootPlayerAction extends PlayerAction {
     @Override
     public boolean check() {
         // Is weapon loaded?
-        if (chosenWeapon == null || chosenActionUnit == null) {
+        if (chosenWeapon == null) {
+            setErrorToReport(buildErrorMessage(Arrays.asList(DEFAULT_ERROR_MESSAGE, NO_WEAPON_SELECTED)));
+            return false;
+        }
+        else if (chosenActionUnit == null) {
+            setErrorToReport(buildErrorMessage(Arrays.asList(DEFAULT_ERROR_MESSAGE, NO_MODE_SELECTED)));
             return false;
         }
         Logger.getGlobal().info("Valid weapon and action unit");
         if (!chosenWeapon.isLoaded()) {
+            setErrorToReport(buildErrorMessage(Arrays.asList(DEFAULT_ERROR_MESSAGE, chosenWeapon.getName(), NOT_LOADED, RELOAD_REMAINDER)));
             return false;
         }
 
