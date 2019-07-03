@@ -7,7 +7,6 @@ import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -108,6 +107,8 @@ public class KillShotTrack implements Serializable {
         }
 
         notifyKillShotTrackChange();
+
+        player.getCharacterState().resetDamageBar();
 
         return triggerFrenzy;
     }

@@ -64,6 +64,12 @@ public class WaitingForPowerUps extends ControllerState {
 
         if (expectedPowerUp.equals(Constants.TAGBACK_GRENADE)) {
             Logger.getGlobal().info("inside Tagback");
+            // could receive a pass(NOP) message to skip the selection of powerUp
+            if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
+                Logger.getGlobal().info("Detected a NOP for Targeting Scope");
+                return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);
+            }
+
             if (playerActions.stream().allMatch(playerAction ->
                     playerAction.getId().equals(Constants.POWERUP)
                                                     &&

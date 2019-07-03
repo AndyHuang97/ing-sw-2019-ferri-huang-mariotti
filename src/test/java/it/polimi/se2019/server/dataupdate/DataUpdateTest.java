@@ -23,7 +23,7 @@ import java.util.List;
 
 class Forwarder extends Observable<Response> implements Observer<Response> {
     @Override
-    public void update(Response message) throws CommunicationError {
+    public void update(Response message) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);

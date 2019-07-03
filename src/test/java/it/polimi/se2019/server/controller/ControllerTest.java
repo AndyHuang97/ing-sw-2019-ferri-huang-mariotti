@@ -385,6 +385,34 @@ public class ControllerTest {
 
     }
 
+    @Test
+    public void testRespawnAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        ControllerState waitingForMainAction = new WaitingForMainActions();
+        controller.setControllerStateForGame(game, waitingForMainAction);
+
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
+
+        player0.getCharacterState().setFirstSpawn(false);
+        player0.getCharacterState().setFirstSpawn(false);
+
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new NoOperation(0)));
+        command.put(Constants.NOP, new ArrayList<>());
+
+        InternalMessage message = new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        ((WaitingForMainActions) waitingForMainAction).updateCounter();
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        ControllerState nextState = waitingForMainAction.nextState(Arrays.asList(new NoOperation(game, player0)), game, player0);
+
+        System.out.println(nextState);
+    }
+
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {
         Map<AmmoColor, Integer> ammo = new HashMap<>();
         ammo.put(AmmoColor.BLUE, amountOfAmmoPerColor);

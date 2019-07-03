@@ -95,7 +95,7 @@ public class Player extends Observable<Response> implements Targetable, Observer
 	}
 
     @Override
-    public void update(PlayerDeath playerDeath) throws CommunicationError {
+    public void update(PlayerDeath playerDeath) {
         characterState.updateScore(playerDeath, color);
     }
 }

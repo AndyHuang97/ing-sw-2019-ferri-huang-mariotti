@@ -289,14 +289,14 @@ public class MapController {
                     ImageView iv = (ImageView) sp.getChildren().get(0);
                     Label points = (Label) sp.getChildren().get(1);
 
-                    EnumMap<PlayerColor, Integer> colorIntegerEnumMap = kt.getDeathTrack().get(i-offset);
+                    Map<PlayerColor, Integer> colorIntegerMap = kt.getDeathTrack().get(i-offset);
                     if (i < kt.getKillCounter() + offset) { //shows player tokens
                         Optional<PlayerColor> optPc= Arrays.stream(PlayerColor.values())
-                                .filter(colorIntegerEnumMap::containsKey)
+                                .filter(colorIntegerMap::containsKey)
                                 .findFirst();
                         if (optPc.isPresent()) {
                             iv.setImage(Util.getPlayerToken(optPc.get()));
-                            points.setText(colorIntegerEnumMap.get(optPc.get()).toString());
+                            points.setText(colorIntegerMap.get(optPc.get()).toString());
                         }
                     }
                     else { //shows skulls and frenzy pane
@@ -308,8 +308,8 @@ public class MapController {
                                 iv = (ImageView) sp.getChildren().get(0);
                                 points = (Label) sp.getChildren().get(1);
                                 iv.setImage(Util.getPlayerToken(pc));
-                                if (colorIntegerEnumMap.get(pc) != null) {
-                                    points.setText(colorIntegerEnumMap.get(pc).toString());
+                                if (colorIntegerMap.get(pc) != null) {
+                                    points.setText(colorIntegerMap.get(pc).toString());
                                 }
                                 else {
                                     points.setText("0");

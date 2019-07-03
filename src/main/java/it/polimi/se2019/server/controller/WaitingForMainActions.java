@@ -67,7 +67,15 @@ public class WaitingForMainActions extends ControllerState {
         // could receive a pass(NOP) message to skip the turn
         if (playerActions.get(0).getId().equals(Constants.NOP)) {
             Logger.getGlobal().info("Detected a NOP");
+            if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+                // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
+                WaitingForRespawn newState = new WaitingForRespawn();
+                Logger.getGlobal().info("Someone was killed before NOP");
+                return newState.nextState(playerActions, game, player);
+            }
+
             game.updateTurn();
+
             if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
                 Logger.getGlobal().info("Next player has never spawned until now");
                 return new WaitingForRespawn(); // first spawn
