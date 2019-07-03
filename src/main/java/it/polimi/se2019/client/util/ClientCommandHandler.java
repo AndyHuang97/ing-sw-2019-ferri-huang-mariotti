@@ -14,35 +14,54 @@ public class ClientCommandHandler {
         this.view = view;
     }
 
+    private void gameStart(Response request) {
+        // game initialization
+        this.view.setGame(request.getGame());
+        try {
+            this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
+        } catch (PlayerNotFoundException e) {
+            Logger.getGlobal().warning(e.toString());
+        }
+        this.view.showGame();
+    }
+
+    private void gameUpdate(Response request) {
+        Logger.getGlobal().info("Update Data not null in command handler");
+        this.view.update(request);
+        request.getUpdateData().forEach(stateUpdate -> Logger.getGlobal().info("Received an update: " + stateUpdate.toString()));
+        this.view.showGame();
+    }
+
     public void handle(Response request) {
-        if (request.getSuccess() && request.getMessage().equals(Constants.FINISHGAME)) {
-            this.view.showMessage(request.getMessage());
-        } else if (!request.getSuccess()) {
-            this.view.reportError(request.getMessage());
+        if (view.isCliTrueGuiFalse()) {
+            if (request.getSuccess() && request.getMessage().equals(Constants.FINISHGAME)) {
+                this.view.showMessage(request.getMessage());
+            } else if (request.getSuccess() && request.getGame() != null) {
+                gameStart(request);
+            } else if (request.getSuccess() && request.getUpdateData() != null) {
+                gameUpdate(request);
+            } else if (!request.getSuccess()) {
+                this.view.reportError(request.getMessage());
+            } else {
+                new Thread(() -> internalCliHandle(request)).start();
+            }
         } else {
-            if (this.view.isCliTrueGuiFalse()) new Thread(() -> internalHandle(request)).start();
-            else Platform.runLater(() -> internalHandle(request));
+            Platform.runLater(() -> internalGuiHandle(request));
         }
     }
 
-    private synchronized void internalHandle(Response request) {
-        System.out.println(request.serialize());
+    private synchronized void internalCliHandle(Response request) {
+        this.view.showMessage(request.getMessage());
+    }
+
+    private synchronized void internalGuiHandle(Response request) {
         if (request.getSuccess()) {
             // game initialization
             if (request.getGame() != null) {
-                this.view.setGame(request.getGame());
-                try {
-                    this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
-                } catch (PlayerNotFoundException e) {
-                    Logger.getGlobal().warning(e.toString());
-                }
-                this.view.showGame();
+                gameStart(request);
             }
             if (request.getUpdateData() != null) {
-                Logger.getGlobal().info("Update Data not null in command handler");
-                this.view.update(request);
-                request.getUpdateData().forEach(stateUpdate -> Logger.getGlobal().info("Received an update: "+stateUpdate.toString()));
-                this.view.showGame();
+                gameUpdate(request);
             }
             this.view.showMessage(request.getMessage());
         } else {

@@ -172,8 +172,10 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     Game currentGame = ServerApp.gameManager.retrieveGame(nickname);
                     if (!currentGame.getPlayerByNickname(nickname).getCharacterState().isConnected()) {
                         logger.info("User " + nickname + " reconnected");
-                        // TODO: finish this
                         currentGame.register(this);
+                        ServerApp.gameManager.getPlayerCommandHandlerMap().put(nickname, this);
+                        this.register(ServerApp.controller);
+                        currentGame.getPlayerByNickname(nickname).setActive(true);
                         try {
                             update(new Response(ServerApp.gameManager.retrieveGame(nickname), true, "welcome back"));
                         } catch (CommunicationError e) {
