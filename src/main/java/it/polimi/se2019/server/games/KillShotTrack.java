@@ -2,6 +2,7 @@ package it.polimi.se2019.server.games;
 
 import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
 import it.polimi.se2019.server.dataupdate.StateUpdate;
+import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.util.Observer;
@@ -121,10 +122,25 @@ public class KillShotTrack implements Serializable {
 
         notifyKillShotTrackChange();
 
-        // reset dead player damage bar
-        //player.getCharacterState().resetDamageBar();
-
         return triggerFrenzy;
+    }
+
+    /**
+     * This method should be called at the end of the game to collect points from all player that took damage
+     * and are on the field at this time.
+     *
+     * @param playerList list of the players you need to collect points from
+     */
+    public void killPlayersAndGetScore(List<Player> playerList) {
+        for (Player player : playerList) {
+
+            CharacterState characterState = player.getCharacterState();
+
+            if (!characterState.getDamageBar().isEmpty()) {
+                PlayerDeath playerDeath = new PlayerDeath(player, frenzyTriggered);
+                notify(playerDeath);
+            }
+        }
     }
 
     /**

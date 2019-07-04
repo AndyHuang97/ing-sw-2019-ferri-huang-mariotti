@@ -160,7 +160,6 @@ public class GameManager {
 				writer.close();
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.info("Error while saving games to file");
 		}
 	}
@@ -305,6 +304,7 @@ public class GameManager {
 						// in case of less than 3 players quit the game and announce the winner etc
 						if (currentGame.getActivePlayerList().size() <= 3) {
 							logger.info("User " + nickname + " disconnected, game is going to terminate");
+							currentGame.getPlayerByNickname(nickname).setActive(false);
 							terminateGame(currentGame);
 						} else {
 							logger.info("User " + nickname + " disconnected, game is going to continue");

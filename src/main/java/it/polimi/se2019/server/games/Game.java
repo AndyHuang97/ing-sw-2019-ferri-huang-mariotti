@@ -201,9 +201,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void nextCurrentPlayer() {
 		// this takes into account if the next player is active or not
-		int newIndex = getActivePlayerList().indexOf(this.currentPlayer) + 1;
-		if (newIndex >= getActivePlayerList().size()) {newIndex = 0;}
-        setCurrentPlayer(getActivePlayerList().get(newIndex));
+		int newIndex = playerList.indexOf(this.currentPlayer) + 1;
+		if(newIndex >= playerList.size()) {newIndex = 0;}
+		while (!playerList.get(newIndex).getActive()) {
+			newIndex++;
+			if(newIndex >= playerList.size()) {newIndex = 0;}
+		}
+		setCurrentPlayer(playerList.get(newIndex));
 	}
 
 	public Date getStartDate() {
@@ -229,8 +233,24 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public List<Player> getRanking() {
 		List<Player> ranking = new ArrayList<>();
 		ranking.addAll(playerList);
+
+		// it's the end of the game, get points from the players who got damages on their boards
+        killshotTrack.killPlayersAndGetScore(playerList);
+        // the score of each player has been updated, time to calculate the bonus points on the KillShotTrack
+        Map<PlayerColor, Integer> killShotTracBonusPoints = killshotTrack.calculateScore();
+
+        for (Map.Entry<PlayerColor, Integer> entry : killShotTracBonusPoints.entrySet()) {
+            CharacterState characterState = getPlayerByColor(entry.getKey()).getCharacterState();
+
+            characterState.setScore(characterState.getScore() + entry.getValue());
+        }
+
+        Map<Integer, List<Player>> scorePlayersMap = new HashMap<>();
+
+        // the final players scores have been calculated, let's sort the array
 		Comparator<Player> scoreComparator = (p1, p2) ->  p1.getCharacterState().getScore().compareTo(p2.getCharacterState().getScore());
 		ranking.sort(scoreComparator.reversed());
+
 		return ranking;
 	}
 
@@ -322,13 +342,6 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
 		this.currentActionUnitsList = currentActionUnitsList;
-	}
-
-	@Deprecated
-	public void performMove(String action) {
-		Response response = new Response(new Game(), true, "");
-		notify(response);
-
 	}
 
 	public boolean isFrenzy() {
