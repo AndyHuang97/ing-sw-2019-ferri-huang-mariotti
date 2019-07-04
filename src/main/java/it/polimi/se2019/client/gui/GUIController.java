@@ -87,8 +87,6 @@ public class GUIController {
     @FXML
     private AnchorPane actionButtons;
     @FXML
-    private GridPane rankingGrid;
-    @FXML
     private FlowPane actionUnitPane;
     @FXML
     private AnchorPane normalActionTile;
@@ -382,8 +380,7 @@ public class GUIController {
      */
     public void showName(Player player, Label name) {
         name.setText(player.getUserData().getNickname());
-        boolean result = name.getStyleClass().add("name");
-//        Logger.getGlobal().info("Setting style class to name label: " + result);
+        name.getStyleClass().add("name");
         Util.setLabelColor(name, player.getColor());
     }
 
