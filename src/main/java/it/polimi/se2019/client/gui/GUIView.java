@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -77,7 +78,7 @@ public class GUIView extends View {
                 guiController.showPass();
                 return;
             case Constants.FINISHGAME:
-
+                guiController.showRanking();
             default:
                 return;
         }
@@ -88,6 +89,7 @@ public class GUIView extends View {
         if (!error.equals("")) {
             Logger.getGlobal().info("Reporting error: " + error);
             Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initModality(Modality.WINDOW_MODAL);
             alert.initOwner(primaryStage);
             alert.setTitle("Action failed!");
             alert.setHeaderText("The cause of the failure is:");
@@ -100,7 +102,6 @@ public class GUIView extends View {
     public void showGame() {
 
         if (rootLayout == null) {
-            this.initRootLayout();
             this.initGameBoard();
             this.getPrimaryStage().setResizable(false);
             this.getPrimaryStage().setFullScreen(true);
@@ -114,24 +115,6 @@ public class GUIView extends View {
         this.getPrimaryStage().show();
     }
 
-    public void initRootLayout() {
-        try{
-            // Load root layout from fxml file
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/RootLayout.fxml"));
-            rootLayout = loader.load();
-
-            // Set the scene containing the root layout
-            Scene scene = new Scene(rootLayout);
-            scene.getStylesheets().add("/css/root.css");
-            rootLayout.setId("game-background");
-            primaryStage.setScene(scene);
-
-        } catch(IOException e) {
-            Logger.getGlobal().warning(e.toString());
-        }
-    }
-
     private void initGameBoard() {
 
         try{
@@ -143,6 +126,12 @@ public class GUIView extends View {
             setGuiController(guiController);
 
             // Set the scene containing the root layout
+            rootLayout = new BorderPane();
+            rootLayout.setPrefSize(1280, 768);
+            Scene scene = new Scene(rootLayout);
+            scene.getStylesheets().add("/css/root.css");
+            rootLayout.setId("game-background");
+            primaryStage.setScene(scene);
             rootLayout.setCenter(gameBoard);
 
             // initialization of the map must precede the initialization of the player boards

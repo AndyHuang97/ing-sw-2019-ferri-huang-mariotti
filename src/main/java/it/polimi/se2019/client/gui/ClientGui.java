@@ -50,7 +50,7 @@ public class ClientGui extends Application {
 //        view.setPlayerColor(PlayerColor.GREEN);
 //        ((Model)view.getModel()).initGame();
 //        view.showGame();
-//        view.showMessage(Constants.TAGBACK_GRENADE);
+//        view.showMessage(Constants.FINISHGAME);
 ////        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
 ////        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
 ////        view.getModel().getGame().setCurrentWeapon(weapon);
@@ -58,7 +58,7 @@ public class ClientGui extends Application {
 ////        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
 ////        view.showMessage(Constants.SHOOT);
 //        view.setNickname("Giorno");
-////        view.showGame();
+//        view.showGame();
 
 
     }

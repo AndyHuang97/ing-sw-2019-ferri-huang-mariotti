@@ -115,11 +115,13 @@ public class PlayerBoardController {
 
         List<PlayerColor> damageBarModel = player.getCharacterState().getDamageBar();
 
+        damageBar.getChildren().forEach(n -> n.setVisible(false));
         IntStream.range(0, damageBarModel.size())
                 .forEach(i -> {
                     ImageView iv = (ImageView) this.damageBar.getChildren().get(i);
                     Image token = Util.getPlayerToken(damageBarModel.get(i));
                     iv.setImage(token);
+                    iv.setVisible(true);
                 });
     }
 
