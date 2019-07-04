@@ -359,7 +359,6 @@ public class CharacterState extends Observable<Response> implements Serializable
 	public void updateScore(PlayerDeath message, PlayerColor playerColor) {
 
 		if(playerColor != message.getDeadPlayer() && message.getDamageBar().contains(playerColor)) {
-			//TODO will need to modify it when GameMode is implmented (no  first attack bonus in FinalFrenzy).
 			// first attack bonus
 			if(message.getDamageBar().get(FIRST_ATTACKER) == playerColor && !message.isDeathDuringFrenzy()) {
 				score += 1;
@@ -367,6 +366,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 
 			int deaths = message.getDeaths();
 			int rank = message.rankedAttackers().indexOf(playerColor);
+
 			if (deaths+rank < message.getValueBar().length) {
 				score += message.getValueBar()[deaths+rank];
 			}
@@ -456,7 +456,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
 	    Response response = new Response(Arrays.asList(stateUpdate));
-	    Logger.getGlobal().info("Character state update: " + response.serialize());
+//	    Logger.getGlobal().info("Character state update: " + response.serialize());
 	    notify(response);
     }
 

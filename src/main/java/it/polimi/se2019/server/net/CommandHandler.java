@@ -4,6 +4,8 @@ import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.controller.ControllerState;
+import it.polimi.se2019.server.controller.WaitingForMainActions;
 import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
@@ -181,6 +183,13 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                         } catch (CommunicationError e) {
                             logger.info(e.getMessage());
                         }
+                        //TODO turn handling on reconnection
+                        if (!currentGame.getCurrentPlayer().getActive()) {
+                            currentGame.setCurrentPlayer(currentGame.getPlayerByNickname(nickname));
+                            ControllerState newControllerState = new WaitingForMainActions();
+                            ServerApp.controller.setControllerStateForGame(currentGame, newControllerState);
+                            newControllerState.sendSelectionMessage(this);
+                        }
                     } else {
                         logger.info("User " + nickname + " already connected");
                     }
@@ -197,9 +206,10 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
             try {
                 Game game = ServerApp.gameManager.retrieveGame(nickname);
                 request.setInternalMessage(convertNetMessage(message, game));
-                // TODO: process command, notify(request)?
                 Logger.getGlobal().info("Notifying request to the controller: " + request.getNickname());
-                handleLocalRequest(request);
+                request.setCommandHandler(this);
+                notify(request);
+//                handleLocalRequest(request);
 
             } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
                 logger.info(e.getMessage());
@@ -212,7 +222,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
         // here it needs to parse the message!
         notify(request);
-
+        
         // TODO update shouldn't be called from here, but from the Model with its notify, and it should receive a Response
         //update(new Response(new Game(), true, request.getNickname()));
     }

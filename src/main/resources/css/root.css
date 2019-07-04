@@ -9,10 +9,18 @@
     -fx-stroke-width: 2;
 }
 
-#background {
+#login-background {
     -fx-background-image: url("/images/loginBackground.png");
     -fx-background-repeat: stretch;
-    -fx-background-size: 900 506;
+    -fx-background-size: 800 600;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
+#game-background {
+    -fx-background-image: url("/images/gameBackground.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 1280 768;
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }

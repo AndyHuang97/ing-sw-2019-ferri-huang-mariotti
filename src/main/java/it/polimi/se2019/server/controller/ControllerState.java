@@ -57,8 +57,17 @@ public abstract class ControllerState {
 
     }
 
+
+    /**
+     * Adds an error message to the list of stored error messages (errorMessages). These messages will be sent to the
+     * Views by the Controller and showed to the player, then the stored error messages will be flushed.
+     *
+     * @param errorMessage the message that will be stored
+     */
     public static void addErrorMessage(String errorMessage) {
-        errorMessages.add(errorMessage);
+        if (!errorMessages.stream().anyMatch(storedMessage -> storedMessage.equals(errorMessage))) {
+            errorMessages.add(errorMessage);
+        }
     }
 
     public static boolean checkPlayerActionAndSaveError(PlayerAction playerAction) {

@@ -25,6 +25,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 import java.util.*;
@@ -148,6 +149,8 @@ public class GUIController {
      *
      */
     public void setInfoPaneStyle() {
+        infoText.setWrapText(true);
+        infoText.setTextAlignment(TextAlignment.CENTER);
         infoPane.getStyleClass().add("info-pane");
     }
 
@@ -512,14 +515,13 @@ public class GUIController {
                     c.setVisible(false);
                 });
         infoText.setText("Select an action");
-        actionButtons.setDisable(false);
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
         actionUnitPane.setVisible(false);
 
         showMyCards();
 
-        actionButtons.setDisable(false);
+        actionButtons.setDisable(true);
         mapController.resetGrids();
         resetAmmoStyle();
     }
@@ -724,7 +726,7 @@ public class GUIController {
         mapController.getTileGrid().setDisable(false);
         mapController.getTileGrid().setVisible(true);
 
-        infoText.setText("Select 1 tile ");
+        infoText.setText("Select one tile ");
         cancelButton.setDisable(false);
 
         setUpProgressBar(1);
@@ -749,6 +751,7 @@ public class GUIController {
 
 
         infoText.setText("Select 1 tile ");
+        confirmButton.setDisable(true);
         cancelButton.setDisable(false);
 
         setUpProgressBar(amount);
@@ -761,6 +764,7 @@ public class GUIController {
         mapController.getPlayerGrid().setVisible(true);
 
         infoText.setText("Select " + amount + " players");
+        confirmButton.setDisable(true);
         cancelButton.setDisable(false);
 
         mapController.getPlayerGrid().getChildren().stream()
@@ -803,16 +807,13 @@ public class GUIController {
 
         addKeyOrderAction(GRAB);
 
-        infoText.setText("Select 1 card ");
+        infoText.setText("Select one card to grab ");
         cancelButton.setDisable(false);
         showGrabbableCards();
-
-        setUpProgressBar(1);
     }
 
     public void getPowerUpForRespawn() {
 
-        infoText.setText("Select 1 powerup ");
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
 
@@ -826,7 +827,7 @@ public class GUIController {
 
     public void getReload() {
 
-        infoText.setText("Select 1 weapon ");
+        infoText.setText("Select one or more weapons to reload");
         cancelButton.setDisable(false);
         confirmButton.setDisable(false);
 
@@ -842,7 +843,7 @@ public class GUIController {
 
         addKeyOrderAction(SHOOT_WEAPON);
 
-        infoText.setText("Select 1 weapon");
+        infoText.setText("Select one weapon to start shooting");
         cancelButton.setDisable(false);
 
         myWeapons.setDisable(false);
@@ -856,9 +857,6 @@ public class GUIController {
 
     public void getActionUnit() {
 
-//        addKeyOrderAction(SHOOT);
-
-        infoText.setText("Select 1 effect: ");
         cancelButton.setDisable(false);
 
         Weapon weapon = view.getModel().getGame().getCurrentWeapon();
@@ -877,7 +875,7 @@ public class GUIController {
                         } else {
                             b.setText(weapon.getOptionalEffectList().get(i - weapon.getActionUnitList().size()).getName());
 
-                            setActionUnitButton(b, weapon.getOptionalEffectList(), weapon.getActionUnitList().size()-i,weapon.getId());
+                            setActionUnitButton(b, weapon.getOptionalEffectList(), i-weapon.getActionUnitList().size(), weapon.getId());
                         }
                     });
         }
@@ -889,8 +887,12 @@ public class GUIController {
             addInput(SHOOT, weaponID);
             ((GUIView)view).getGuiController().getIntermediateInput().get(Constants.SHOOT).add(b.getText());
             addKeyOrderAction(SHOOT);
-            view.getInputRequested().add(() -> getTarget(SHOOT, actionUnitList.get(i).getNumPlayerTargets()));
-            view.getInputRequested().add(() -> getShootTile(SHOOT, actionUnitList.get(i).getNumTileTargets()));
+            if (actionUnitList.get(i).getNumPlayerTargets() > 0) {
+                view.getInputRequested().add(() -> getTarget(SHOOT, actionUnitList.get(i).getNumPlayerTargets()));
+            }
+            if (actionUnitList.get(i).getNumTileTargets() > 0) {
+                view.getInputRequested().add(() -> getShootTile(SHOOT, actionUnitList.get(i).getNumTileTargets()));
+            }
 
             view.askInput();
         });
@@ -933,16 +935,42 @@ public class GUIController {
         try {
             int[] coords = view.getModel().getGame().getBoard().getTilePosition(t);
             if (t.isSpawnTile()) {
-                Logger.getGlobal().info("spawn tile");
+
                 String roomColor = t.getRoomColor().getColor();
+                Logger.getGlobal().info("spawn tile " + roomColor);
                 Optional<GridPane> optGrid = mapController.getWeaponCrateList().stream()
                         .filter(wc -> wc.getId().split("Weapons")[0].equalsIgnoreCase(roomColor))
                         .findFirst();
                 if (optGrid.isPresent()){
-                    optGrid.get().setDisable(false);
-                    optGrid.get().getStyleClass().add(Constants.SELECTION_NODE);
-                    optGrid.get().getChildren().stream().forEach(node -> node.getStyleClass().add(CSS_HOVERING));
-                    optGrid.get().getChildren().stream().forEach(node -> ((GUIView)view).getGuiController().setCardSelectionBehavior((ImageView)node, optGrid.get(), Constants.GRAB, () -> {}));
+                    GridPane weaponCrate = optGrid.get();
+                    Logger.getGlobal().info("Found weapon crate: " + weaponCrate.getId());
+                    weaponCrate.setDisable(false);
+                    weaponCrate.getStyleClass().add(SELECTION_NODE);
+                    if(view.getModel().getGame().getCurrentPlayer().getCharacterState().getWeaponBag().size() == 3) {
+                        setUpProgressBar(2);
+                    } else {
+                        setUpProgressBar(1);
+                    }
+                    weaponCrate.getChildren().forEach(node -> node.getStyleClass().add(CSS_HOVERING));
+                    weaponCrate.getChildren().forEach(node -> {
+                        node.setDisable(false);
+                        setCardSelectionBehavior((ImageView) node, weaponCrate, GRAB, () -> {
+                            //additional behaviour
+                            if (view.getModel().getGame().getCurrentPlayer().getCharacterState().getWeaponBag().size() == 3) {
+                                infoText.setText("Select a weapon to discard");
+                                weaponCrate.setDisable(true);
+                                myWeapons.getStyleClass().add(Constants.SELECTION_NODE);
+                                myWeapons.getChildren().forEach(weapon -> {
+                                    weapon.setDisable(false);
+                                    weapon.setOpacity(1.0);
+                                    weapon.getStyleClass().add(CSS_HOVERING);
+                                });
+                                myWeapons.setDisable(false);
+                                Logger.getGlobal().info("Give behavior to weapons in hand ... ");
+                                myWeapons.getChildren().forEach(weapon -> setCardSelectionBehavior((ImageView) weapon, myWeapons, GRAB, () -> {}));
+                            }
+                        });
+                    });
                 }
             }
             else {
@@ -959,7 +987,9 @@ public class GUIController {
 
                 node.getStyleClass().add(Constants.SELECTION_NODE);
                 node.getStyleClass().add(CSS_HOVERING);
-                ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, node, Constants.GRAB, () -> {});
+                setCardSelectionBehavior(iv, node, Constants.GRAB, () -> {});
+
+                setUpProgressBar(1);
             }
         } catch (TileNotFoundException e) {
             logger.warning(e.toString());
@@ -995,10 +1025,10 @@ public class GUIController {
                             iv.setVisible(false);
                         }
 
-                        ((GUIView) view).getGuiController().setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD, () -> {
+                        setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD, () -> {
                         });
                     });
-            setUpProgressBar(myWeaponsModel.size());
+            setUpProgressBar((int)myWeaponsModel.stream().filter(weapon -> !weapon.isLoaded()).count());
         }
     }
 
@@ -1025,7 +1055,7 @@ public class GUIController {
                         iv.setDisable(false);
                     }
 
-                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myWeapons, SHOOT_WEAPON, () -> {});
+                    setCardSelectionBehavior(iv, myWeapons, SHOOT_WEAPON, () -> {});
                 });
     }
 
@@ -1046,7 +1076,7 @@ public class GUIController {
                     iv.setOpacity(1.0);
                     iv.setDisable(false);
 
-                    ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, myPowerUps, playerAction, () -> {});
+                    setCardSelectionBehavior(iv, myPowerUps, playerAction, () -> {});
                 });
     }
 
@@ -1069,7 +1099,7 @@ public class GUIController {
                     iv.setOpacity(1.0);
                     iv.setDisable(false);
                     iv.getStyleClass().add(CSS_HOVERING);
-                    ((GUIView) view).getGuiController().setCardSelectionBehavior(iv, myPowerUps, POWERUP, () -> {
+                    setCardSelectionBehavior(iv, myPowerUps, POWERUP, () -> {
                         PowerUp powerUp = myPowerUpsModel.stream().filter(pU -> pU.getName().equals(((NamedImage)iv.getImage()).getName())).findFirst().orElse(null);
                         if (powerUp != null) {
                             iv.setVisible(true);
@@ -1082,15 +1112,14 @@ public class GUIController {
                             if (powerUp.getId().split("_")[1].equals(TARGETING_SCOPE)) {
                                 view.getInputRequested().add(this::getAmmo);
                             }
-
                         }
-
                         view.askInput();
                     });
                 });
     }
 
     public void getAmmo() {
+        infoText.setText("Select 1 ammo");
         myAmmo.getStyleClass().add(SELECTION_NODE);
         myAmmo.getChildren().forEach(node -> {
             node.setDisable(false);
