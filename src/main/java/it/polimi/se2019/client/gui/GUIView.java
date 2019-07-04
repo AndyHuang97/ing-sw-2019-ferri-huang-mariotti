@@ -40,31 +40,37 @@ public class GUIView extends View {
     public void showMessage(String message) {
         switch (message) {
             case Constants.MAIN_ACTION:
+                guiController.setInfoText("Select one action or powerup");
                 guiController.storeMessage(message);
                 guiController.showActionButtons();
                 guiController.showPowerUps(Arrays.asList(Constants.TELEPORTER, Constants.NEWTON));
                 guiController.showPass();
                 return;
             case Constants.RESPAWN:
+                guiController.setInfoText("Select one powerup for respawn");
                 guiController.storeMessage(message);
                 guiController.getPowerUpForRespawn();
                 return;
             case Constants.RELOAD:
+                guiController.setInfoText("Select one or more weapons to reload");
                 guiController.storeMessage(message);
                 guiController.showPass();
                 guiController.getReload();
                 return;
             case Constants.SHOOT:
+                guiController.setInfoText("Select one effect");
                 guiController.storeMessage(message);
                 guiController.getActionUnit();
                 guiController.showPass();
                 return;
             case Constants.TARGETING_SCOPE:
+                guiController.setInfoText("Select one or more Targeting Scopes");
                 guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TARGETING_SCOPE));
                 guiController.showPass();
                 return;
             case Constants.TAGBACK_GRENADE:
+                guiController.setInfoText("Select one or more Tagback Grenades");
                 guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TAGBACK_GRENADE));
                 guiController.showPass();

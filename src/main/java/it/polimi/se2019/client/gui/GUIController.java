@@ -25,6 +25,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 import java.util.*;
@@ -148,6 +149,8 @@ public class GUIController {
      *
      */
     public void setInfoPaneStyle() {
+        infoText.setWrapText(true);
+        infoText.setTextAlignment(TextAlignment.CENTER);
         infoPane.getStyleClass().add("info-pane");
     }
 
@@ -512,14 +515,13 @@ public class GUIController {
                     c.setVisible(false);
                 });
         infoText.setText("Select an action");
-        actionButtons.setDisable(false);
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
         actionUnitPane.setVisible(false);
 
         showMyCards();
 
-        actionButtons.setDisable(false);
+        actionButtons.setDisable(true);
         mapController.resetGrids();
         resetAmmoStyle();
     }
@@ -724,7 +726,7 @@ public class GUIController {
         mapController.getTileGrid().setDisable(false);
         mapController.getTileGrid().setVisible(true);
 
-        infoText.setText("Select 1 tile ");
+        infoText.setText("Select one tile ");
         cancelButton.setDisable(false);
 
         setUpProgressBar(1);
@@ -749,6 +751,7 @@ public class GUIController {
 
 
         infoText.setText("Select 1 tile ");
+        confirmButton.setDisable(true);
         cancelButton.setDisable(false);
 
         setUpProgressBar(amount);
@@ -761,6 +764,7 @@ public class GUIController {
         mapController.getPlayerGrid().setVisible(true);
 
         infoText.setText("Select " + amount + " players");
+        confirmButton.setDisable(true);
         cancelButton.setDisable(false);
 
         mapController.getPlayerGrid().getChildren().stream()
@@ -803,7 +807,7 @@ public class GUIController {
 
         addKeyOrderAction(GRAB);
 
-        infoText.setText("Select 1 card ");
+        infoText.setText("Select one card to grab ");
         cancelButton.setDisable(false);
         showGrabbableCards();
     }
@@ -824,7 +828,7 @@ public class GUIController {
 
     public void getReload() {
 
-        infoText.setText("Select 1 weapon ");
+        infoText.setText("Select one or more weapons to reload");
         cancelButton.setDisable(false);
         confirmButton.setDisable(false);
 
@@ -840,7 +844,7 @@ public class GUIController {
 
         addKeyOrderAction(SHOOT_WEAPON);
 
-        infoText.setText("Select 1 weapon");
+        infoText.setText("Select one weapon to start shooting");
         cancelButton.setDisable(false);
 
         myWeapons.setDisable(false);
@@ -854,9 +858,6 @@ public class GUIController {
 
     public void getActionUnit() {
 
-//        addKeyOrderAction(SHOOT);
-
-        infoText.setText("Select 1 effect: ");
         cancelButton.setDisable(false);
 
         Weapon weapon = view.getModel().getGame().getCurrentWeapon();
@@ -952,15 +953,25 @@ public class GUIController {
                         setUpProgressBar(1);
                     }
                     weaponCrate.getChildren().forEach(node -> node.getStyleClass().add(CSS_HOVERING));
-                    weaponCrate.getChildren().forEach(node -> setCardSelectionBehavior((ImageView)node, weaponCrate, GRAB, () -> {
-                        if (view.getModel().getGame().getCurrentPlayer().getCharacterState().getWeaponBag().size() == 3) {
-                            myWeapons.getStyleClass().add(Constants.SELECTION_NODE);
-                            myWeapons.getChildren().forEach(weapon -> weapon.getStyleClass().add(CSS_HOVERING));
-                            myWeapons.setDisable(false);
-                            Logger.getGlobal().info("Give behavior to weapons in hand ... ");
-                            myWeapons.getChildren().forEach(weapon -> setCardSelectionBehavior((ImageView)weapon, myWeapons, GRAB, () -> {}));
-                        }
-                    }));
+                    weaponCrate.getChildren().forEach(node -> {
+                        node.setDisable(false);
+                        setCardSelectionBehavior((ImageView) node, weaponCrate, GRAB, () -> {
+                            //additional behaviour
+                            if (view.getModel().getGame().getCurrentPlayer().getCharacterState().getWeaponBag().size() == 3) {
+                                infoText.setText("Select a weapon to discard");
+                                weaponCrate.setDisable(true);
+                                myWeapons.getStyleClass().add(Constants.SELECTION_NODE);
+                                myWeapons.getChildren().forEach(weapon -> {
+                                    weapon.setDisable(false);
+                                    weapon.setOpacity(1.0);
+                                    weapon.getStyleClass().add(CSS_HOVERING);
+                                });
+                                myWeapons.setDisable(false);
+                                Logger.getGlobal().info("Give behavior to weapons in hand ... ");
+                                myWeapons.getChildren().forEach(weapon -> setCardSelectionBehavior((ImageView) weapon, myWeapons, GRAB, () -> {}));
+                            }
+                        });
+                    });
                 }
             }
             else {
@@ -1018,7 +1029,7 @@ public class GUIController {
                         setCardSelectionBehavior(iv, myWeapons, Constants.RELOAD, () -> {
                         });
                     });
-            setUpProgressBar(myWeaponsModel.size());
+            setUpProgressBar((int)myWeaponsModel.stream().filter(weapon -> !weapon.isLoaded()).count());
         }
     }
 
@@ -1102,15 +1113,14 @@ public class GUIController {
                             if (powerUp.getId().split("_")[1].equals(TARGETING_SCOPE)) {
                                 view.getInputRequested().add(this::getAmmo);
                             }
-
                         }
-
                         view.askInput();
                     });
                 });
     }
 
     public void getAmmo() {
+        infoText.setText("Select 1 ammo");
         myAmmo.getStyleClass().add(SELECTION_NODE);
         myAmmo.getChildren().forEach(node -> {
             node.setDisable(false);

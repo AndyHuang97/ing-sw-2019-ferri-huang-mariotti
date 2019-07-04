@@ -43,21 +43,21 @@ public class ClientGui extends Application {
 
         view = new GUIView(primaryStage);
 
-//        showLogin();
+        showLogin();
 
         //testing
-        view.setPlayerColor(PlayerColor.GREEN);
-        ((Model)view.getModel()).initGame();
-        view.showGame();
-        view.showMessage(Constants.TARGETING_SCOPE);
-//        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
-//        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
-//        view.getModel().getGame().setCurrentWeapon(weapon);
-//        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
-//        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
-//        view.showMessage(Constants.SHOOT);
-        view.setNickname("Giorno");
+//        view.setPlayerColor(PlayerColor.GREEN);
+//        ((Model)view.getModel()).initGame();
 //        view.showGame();
+//        view.showMessage(Constants.TAGBACK_GRENADE);
+////        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
+////        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
+////        view.getModel().getGame().setCurrentWeapon(weapon);
+////        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
+////        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
+////        view.showMessage(Constants.SHOOT);
+//        view.setNickname("Giorno");
+////        view.showGame();
 
 
     }

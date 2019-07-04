@@ -124,7 +124,7 @@ public class Model implements LocalModel {
         List<ActionUnit> powerUpActionList1 = new ArrayList<>();
         powerUpActionList1.add(new ActionUnit(true,"Basic mode", null, null,null, 0,1,true));
         PowerUp teleporter = new PowerUp(powerUpActionList1, "Yellow_TagbackGrenade", AmmoColor.YELLOW);
-        p1.getCharacterState().setPowerUpBag(Arrays.asList(newton, targetingScope,teleporter));
+        p1.getCharacterState().setPowerUpBag(Arrays.asList(newton, targetingScope,teleporter,targetingScope));
 
         p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
         p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));
@@ -174,18 +174,18 @@ public class Model implements LocalModel {
         p4.getCharacterState().setScore(4);
         p5.getCharacterState().setScore(5);
 
-        KillShotTrack kt = new KillShotTrack(game.getPlayerList());
-        kt.addDeath(p1, false);
-        kt.addDeath(p2, true);
-        kt.addDeath(p3, true);
-        kt.addDeath(p4, true);
-        kt.addDeath(p5, true);
-        kt.addDeath(p1, false);
-        kt.addDeath(p2, true);
-        kt.addDeath(p3, true);
-        kt.addDeath(p4, true);
-        kt.addDeath(p5, true);
-        game.setKillshotTrack(kt);
+//        KillShotTrack kt = new KillShotTrack(game.getPlayerList());
+//        kt.addDeath(p1, false);
+//        kt.addDeath(p2, true);
+//        kt.addDeath(p3, true);
+//        kt.addDeath(p4, true);
+//        kt.addDeath(p5, true);
+//        kt.addDeath(p1, false);
+//        kt.addDeath(p2, true);
+//        kt.addDeath(p3, true);
+//        kt.addDeath(p4, true);
+//        kt.addDeath(p5, true);
+//        game.setKillshotTrack(kt);
 
     }
 

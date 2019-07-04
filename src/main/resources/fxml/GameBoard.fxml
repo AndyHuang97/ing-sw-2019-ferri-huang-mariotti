@@ -85,7 +85,7 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <VBox fx:id="playerInfoBox" alignment="CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="163.0">
+                              <VBox fx:id="playerInfoBox" alignment="TOP_CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="163.0">
                                  <children>
                                     <AnchorPane prefHeight="35.0">
                                        <children>
@@ -123,15 +123,14 @@
                                           </HBox>
                                        </children>
                                     </GridPane>
-                                    <AnchorPane prefHeight="160.0" prefWidth="163.0">
+                                    <HBox alignment="CENTER" prefHeight="33.0" prefWidth="163.0" style="-fx-background-color: grey; -fx-background-radius: 20;">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="33.0" prefWidth="163.0" style="-fx-background-color: grey; -fx-background-radius: 20;" AnchorPane.bottomAnchor="0.0">
-                                             <children>
-                                                <Label fx:id="myScore" text="Score" textFill="WHITE" />
-                                             </children>
-                                          </HBox>
+                                          <Label fx:id="myScore" text="Score" textFill="WHITE" />
                                        </children>
-                                    </AnchorPane>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
                                  </children>
                               </VBox>
                               <VBox alignment="TOP_RIGHT">
@@ -260,7 +259,7 @@
                                     </HBox>
                                     <HBox alignment="TOP_RIGHT" prefHeight="138.0">
                                        <children>
-                                          <GridPane fx:id="myWeapons" hgap="10.0" prefWidth="225.0">
+                                          <GridPane fx:id="myWeapons" hgap="5.0" prefWidth="225.0">
                                             <columnConstraints>
                                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -286,34 +285,52 @@
                                                    </image>
                                                 </ImageView>
                                              </children>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
                                           </GridPane>
                                           <GridPane fx:id="myPowerUps" alignment="CENTER" hgap="10.0" prefWidth="250.0">
                                             <columnConstraints>
                                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <ImageView fitHeight="110.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
                                                    <GridPane.margin>
-                                                      <Insets left="11.0" />
+                                                      <Insets />
                                                    </GridPane.margin>
                                                 </ImageView>
-                                                <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                                    <image>
                                                       <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
+                                                   <GridPane.margin>
+                                                      <Insets />
+                                                   </GridPane.margin>
                                                 </ImageView>
-                                                <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                                    <image>
                                                       <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
+                                                   <GridPane.margin>
+                                                      <Insets />
+                                                   </GridPane.margin>
+                                                </ImageView>
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" layoutX="135.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                                                   <image>
+                                                      <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
+                                                   </image>
+                                                   <GridPane.margin>
+                                                      <Insets />
+                                                   </GridPane.margin>
                                                 </ImageView>
                                              </children>
                                              <HBox.margin>

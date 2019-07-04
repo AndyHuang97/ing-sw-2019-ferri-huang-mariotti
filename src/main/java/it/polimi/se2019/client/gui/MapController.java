@@ -518,8 +518,11 @@ public class MapController {
                     }
                     wc.getChildren().stream()
                             .forEach(n -> {
-                                n.setDisable(false);
+                                n.setDisable(true);
                                 n.setOpacity(1.0);
+                                if(!n.getStyleClass().isEmpty()) {
+                                    n.getStyleClass().remove(0);
+                                }
                             });
                 });
     }
