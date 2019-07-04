@@ -13,24 +13,34 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * This class represents the kill shot track, it's used to keep track of the deaths and the player that made the kill.
+ * At the end of the game it's used to calculate a bonus score for the players that made most kills.
+ * KillShotTrack it's also a big part of the model because manages the death of the players and triggers the frenzy mode.
+ * This class should be observed by Game and by all Player in the game because it sends updates on changes to himself and
+ * triggers score update on the players.
+ */
 public class KillShotTrack implements Serializable {
-
+    // needed to send log dta to the server
     private static final Logger logger = Logger.getLogger(KillShotTrack.class.getName());
 
+    // needed for internal observable implementation
     private transient List<it.polimi.se2019.util.Observer> observerList = new ArrayList<>();
 
-    public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
+    // needed to calculate the bonus points at the end of the game
+    private static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
 
     private Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack;
     private Integer killCounter;
     private Integer killsForFrenzy;
 
+    // needed to correctly send data during frenzy mode
     private boolean frenzyTriggered = false;
 
     /**
-     * Default constructor.
+     * Use this constructor while initializing a KillShotTrack for a new game.
      *
-     * @param playerList
+     * @param playerList the list of players of the new game (they will be registered as observers)
      */
     public KillShotTrack(List<Player> playerList) {
         this.deathTrack = new HashMap<>();
@@ -40,11 +50,11 @@ public class KillShotTrack implements Serializable {
     }
 
     /**
-     * Constructor used for loading a saved game.
+     * Use this constructor to reinitialize a KillShotTrack while loading a saved game
      *
-     * @param deathTrack
-     * @param playerList
-     * @param killCounter
+     * @param deathTrack state of the deathTrack when the was stop
+     * @param playerList list of the players when the game was stop
+     * @param killCounter killCounter value when the game was stop
      */
     public KillShotTrack(Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack, List<Player> playerList, Integer killCounter) {
         this.deathTrack = deathTrack;
@@ -55,7 +65,6 @@ public class KillShotTrack implements Serializable {
 
     /**
      * Loads configuration parameters.
-     *
      */
     private void loadConfig() {
         try(InputStream input = KillShotTrack.class.getClassLoader().getResource("config.properties").openStream()){
@@ -76,12 +85,12 @@ public class KillShotTrack implements Serializable {
      * @param overkill indicates whether an overkill occurred.
      * @return true if the death triggers the frenzy, false otherwise.
      */
-    //TODO maybe add a PlayerNotDeadExcpetion
     public boolean addDeath(Player player, boolean overkill) {
 
         EnumMap<PlayerColor, Integer> colorIntegerEnumMap;
 
-        PlayerColor killerPlayerColor = player.getCharacterState().getDamageBar().get(11);
+        // get the eleventh value to know who caused the Fatal Shot
+        PlayerColor killerPlayerColor = player.getCharacterState().getDamageBar().get(10);
 
         // create the death message
         PlayerDeath playerDeath = new PlayerDeath(player, frenzyTriggered);
@@ -112,14 +121,16 @@ public class KillShotTrack implements Serializable {
 
         notifyKillShotTrackChange();
 
+        // reset dead player damage bar
         player.getCharacterState().resetDamageBar();
 
         return triggerFrenzy;
     }
 
     /**
-     * Calculate the score of each player for the kill shot track
-     * @return map that associate the color of a player with the points it gets for the kills done
+     * Calculate the score of each player for the kill shot track.
+     *
+     * @return map that associate the color of a player with the points it gets for the kills done during the game
      */
     public Map<PlayerColor, Integer> calculateScore() {
 
@@ -185,6 +196,13 @@ public class KillShotTrack implements Serializable {
 
     }
 
+    /**
+     * Method used by calculateScore() in order to solve ties between a set player with the same kill number.
+     * The tie is broken by giving the player that made a kill first priority over the others.
+     *
+     * @param playerColors list of the colors of tied players
+     * @return the color of the player that wins the tie (the one wo killed someone first)
+     */
     private PlayerColor tieBreaker(List<PlayerColor> playerColors) {
         for (Integer index : deathTrack.keySet()) {
             Map<PlayerColor, Integer> killEntry = deathTrack.get(index);
@@ -200,6 +218,16 @@ public class KillShotTrack implements Serializable {
     }
 
 
+    /**
+     * This method is used by addDeath to alter the value of the EnumMap(s) that is the value of the Map deathTrack.
+     * This method adds an entry (or update it) that should represent a box in the kill shot track.
+     * It's generic and can be used to edit every EnumMap.
+     *
+     * @param overkill if true adds two skulls else just one
+     * @param killerPlayerColor the color of the skulls to add
+     * @param colorIntegerEnumMap the reference of the data to update (should be the value of an entry in deathTrack)
+     * @param baseValue the number of the skulls of kill's color already on the track
+     */
     private void updateTrackSlotValue(boolean overkill, PlayerColor killerPlayerColor, Map<PlayerColor, Integer> colorIntegerEnumMap,
                               Integer baseValue) {
         if(!overkill) {
@@ -211,6 +239,14 @@ public class KillShotTrack implements Serializable {
     }
 
 
+    /**
+     * This method is used to increase the kill counter. The kill counter should be updated only using this method
+     * because it will stop the counter if it reaches the number of killsForFrenzy (a value set by loadConfig()).
+     * This method will return true if the frenzy mode should be activated.
+     *
+     * @return true if killCounter reached the killsForFrenzy number (and the frenzy mode should be triggered), false
+     *         otherwise
+     */
     private boolean updateCounter() {
         // when kill counter reaches the number for final frenzy, it stops adding.
         if (killCounter < killsForFrenzy-1) {
@@ -223,6 +259,12 @@ public class KillShotTrack implements Serializable {
         }
     }
 
+    /**
+     * Set a list of player as observers for the KillShotTrack. Once set the players will receive updates
+     * on their scores for every death.
+     *
+     * @param playerList the list of players that needs to observe KillShotTrack
+     */
     public void registerAllPlayers(List<Player> playerList) {
         for(Player p : playerList) {
             register(p);
@@ -251,12 +293,24 @@ public class KillShotTrack implements Serializable {
         return killsForFrenzy;
     }
 
+    /**
+     * This method is used to resgister an observer to this object.
+     *
+     * @param observer the observer to register
+     */
     public void register(Observer observer) {
         synchronized (observerList) {
             observerList.add(observer);
         }
     }
 
+    /**
+     * This method is used to call the update method of the registered observer to notify a player death (represented
+     * by a PlayerDeath object). Since not all observer registered are waiting for a player death this method
+     * will dynamically select the appropriate ones from them.
+     *
+     * @param playerDeath contains the data to send to the observers
+     */
     private void notify(PlayerDeath playerDeath) {
         for (Observer observer : observerList) {
             try {
@@ -268,6 +322,13 @@ public class KillShotTrack implements Serializable {
         }
     }
 
+    /**
+     * This method is used to call the update method of the registered observer to notify a change in the KillShotTrack
+     * inside a Response object. Since not all observer registered are waiting this kind of data this method
+     * will dynamically select the appropriate ones from them.
+     *
+     * @param response contains the data to send to the observers
+     */
     private void notify(Response response) {
         for (Observer observer : observerList) {
             try {
@@ -279,6 +340,10 @@ public class KillShotTrack implements Serializable {
         }
     }
 
+    /**
+     * This method is used to tell the KillShot track to send an update to his observers about a change in it's
+     * state. A StateUpdate of the killShotTrack will be created and put inside a Response, then the Response will be sent.
+     */
     private void notifyKillShotTrackChange() {
         StateUpdate killShotTrackUpdate = new KillShotTrackUpdate(this);
         Response response = new Response(Arrays.asList(killShotTrackUpdate));
