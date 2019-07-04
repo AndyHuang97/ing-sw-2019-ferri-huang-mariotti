@@ -456,7 +456,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 	    CharacterStateUpdate stateUpdate = new CharacterStateUpdate(this);
 
 	    Response response = new Response(Arrays.asList(stateUpdate));
-	    Logger.getGlobal().info("Character state update: " + response.serialize());
+//	    Logger.getGlobal().info("Character state update: " + response.serialize());
 	    notify(response);
     }
 
