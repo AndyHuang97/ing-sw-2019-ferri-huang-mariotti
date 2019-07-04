@@ -37,8 +37,6 @@ public class SocketServer {
         private PrintWriter out;
         private BufferedReader in;
         private CommandHandler commandHandler;
-        private Boolean echo;
-        private Boolean firstEcho = true;
 
         private ClientHandler(Socket socket) {
             this.clientSocket = socket;
@@ -54,15 +52,7 @@ public class SocketServer {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     Request request = (Request) new Request(new NetMessage(null), null).deserialize(inputLine);
-                    if (request.getNetMessage().getCommands().containsKey("pong")) {
-                        echo = true;
-                        firstEcho = true;
-                    } else {
-                        String uuid = String.valueOf(UUID.randomUUID());
-                        logger.info(uuid);
-                        this.commandHandler.handle(request);
-                        logger.info(uuid);
-                    }
+                    this.commandHandler.handle(request);
                 }
 
                 in.close();
@@ -75,22 +65,6 @@ public class SocketServer {
 
         public void send(String message) throws IOException {
             out.println(message);
-            Response response = (Response) new Response(null, false, "").deserialize(message);
-            if (response.getMessage().equals("ping")) {
-                long startTime = System.currentTimeMillis();
-                echo = false;
-                while (!echo && (System.currentTimeMillis() - startTime) < 1000 ) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
-                        logger.info(ex.getMessage());
-                    }
-                }
-                if (!echo) {
-                    if (firstEcho) firstEcho = false;
-                    else throw new IOException("Ping Timeout!");
-                }
-            }
         }
     }
 }

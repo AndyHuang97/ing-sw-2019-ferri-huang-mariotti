@@ -30,6 +30,12 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
         boolean available = json.get(DeserializerConstants.AVAILABLE).getAsBoolean();
         JsonArray jsonEffectArray = json.get(DeserializerConstants.EFFECTLIST).getAsJsonArray();
         JsonArray jsonConditionArray = json.get(DeserializerConstants.CONDITIONLIST).getAsJsonArray();
+        boolean unidirectional;
+        try {
+            unidirectional = json.get(DeserializerConstants.UNIDIRECTIONAL).getAsBoolean();
+        } catch (Exception ex) {
+            unidirectional = false;
+        }
         int numPlayerTargets = json.get(DeserializerConstants.NUMPLAYERTARGETS).getAsInt();
         int numTileTargets = json.get(DeserializerConstants.NUMTILETARGETS).getAsInt();
         boolean playerSelectionFirst = json.get(DeserializerConstants.PLAYERSELECTIONFIRST).getAsBoolean();
@@ -69,6 +75,6 @@ public class ActionUnitDeserializer implements RandomDeserializer<ActionUnit> {
             conditionArrayList.add(conditionObject);
         }
 
-        return new ActionUnit(available, name, description, effectArrayList, conditionArrayList, numPlayerTargets, numTileTargets, playerSelectionFirst);
+        return new ActionUnit(available, name, description, effectArrayList, conditionArrayList, unidirectional, numPlayerTargets, numTileTargets, playerSelectionFirst);
     }
 }

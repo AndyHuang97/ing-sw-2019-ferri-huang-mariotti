@@ -21,6 +21,7 @@ import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -38,6 +39,8 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     private boolean socketTrueRmiFalse;
     private SocketServer.ClientHandler socketClientHandler;
     private RmiClientInterface rmiClientWorker;
+    private Boolean echo;
+    private Boolean firstEcho = true;
 
 
     // just for tests
@@ -168,12 +171,16 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         // log request
         NetMessage message = request.getNetMessage();
         String nickname = request.getNickname();
-        if (message.getCommands().containsKey("connect")) {
+        if (message.getCommands().containsKey("pong")) {
+            echo = true;
+            firstEcho = true;
+        } else if (message.getCommands().containsKey("connect")) {
             try {
                 if (ServerApp.gameManager.isUserInGameList(nickname)) {
                     Game currentGame = ServerApp.gameManager.retrieveGame(nickname);
                     if (!currentGame.getPlayerByNickname(nickname).getCharacterState().isConnected()) {
                         logger.info("User " + nickname + " reconnected");
+                        ServerApp.gameManager.startPingDaemon(nickname, this);
                         currentGame.register(this);
                         ServerApp.gameManager.getPlayerCommandHandlerMap().put(nickname, this);
                         this.register(ServerApp.controller);
@@ -285,10 +292,33 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
             if (this.socketTrueRmiFalse) {
                 socketClientHandler.send(response.serialize());
             } else {
-                rmiClientWorker.send(response.serialize());
+                new Thread(() -> {
+                    try {
+                        rmiClientWorker.send(response.serialize());
+                    } catch (Exception e) {
+                        // do nothing
+                    }
+                }).start();
             }
         } catch (Exception e) {
             throw new CommunicationError(e.getMessage());
+        }
+    }
+
+    public void ping() throws CommunicationError {
+        sendResponse(new Response(null, false, "ping"));
+        long startTime = System.currentTimeMillis();
+        echo = false;
+        while (!echo && (System.currentTimeMillis() - startTime) < 1000 ) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                logger.info(ex.getMessage());
+            }
+        }
+        if (!echo) {
+            if (firstEcho) firstEcho = false;
+            else throw new CommunicationError("Ping Timeout!");
         }
     }
 }

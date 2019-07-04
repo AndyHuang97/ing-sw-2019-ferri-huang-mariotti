@@ -83,7 +83,7 @@ public class IsTargetInActionUnitTargetListTest {
         targets.put(CommandConstants.TARGETLIST, list);
         game.setCurrentPlayer(p1);
 
-        ActionUnit actionUnit = new ActionUnit(true,"Basic Mode", "", null, null, 0,0,true);
+        ActionUnit actionUnit = new ActionUnit(true,"Basic Mode", "", null, null, false, 0,0,true);
         actionUnit.setCommands(targets);
         game.getCurrentActionUnitsList().add(actionUnit);
 

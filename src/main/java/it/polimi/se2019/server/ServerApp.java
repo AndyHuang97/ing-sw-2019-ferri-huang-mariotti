@@ -19,8 +19,11 @@ public class ServerApp {
     public static Controller controller;
     public static GameManager gameManager = new GameManager();
 
+
     public static void main(String[] args) throws IOException {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %5$s%6$s%n");
+        System.setProperty("sun.rmi.transport.tcp.handshakeTimeout", "1000");
+        System.setProperty("sun.rmi.transport.tcp.readTimeout", "1000");
         /**
          * Initialize all the server's components:
          *  - Model

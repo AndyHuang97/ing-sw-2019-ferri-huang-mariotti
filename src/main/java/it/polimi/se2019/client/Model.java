@@ -104,10 +104,10 @@ public class Model implements LocalModel {
         p5.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w4));
 
         List<ActionUnit> actionUnitList = new ArrayList<>();
-        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null,null, 2,2,true));
-        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null,null, 2,1,false));
+        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null,null, false, 2,2,true));
+        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null,null, false, 2,1,false));
         List<ActionUnit> optionalEffectList = new ArrayList<>();
-        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null,null, 2,2,true));
+        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null,null, false, 2,2,true));
         p1.getCharacterState().getWeaponBag().stream()
                 .forEach(w -> {
                     w.setActionUnitList(actionUnitList);
@@ -116,13 +116,13 @@ public class Model implements LocalModel {
 
 
         List<ActionUnit> powerUpActionList = new ArrayList<>();
-        powerUpActionList.add(new ActionUnit(true,"Basic mode", null, null,null, 1,2,true));
+        powerUpActionList.add(new ActionUnit(true,"Basic mode", null, null,null, false, 1,2,true));
         PowerUp newton = new PowerUp(powerUpActionList, "Blue_Newton", AmmoColor.BLUE);
         List<ActionUnit> targetingScopeList = new ArrayList<>();
-        targetingScopeList.add(new ActionUnit(true,"Basic mode", null, null,null, 1,0,true));
+        targetingScopeList.add(new ActionUnit(true,"Basic mode", null, null,null, false, 1,0,true));
         PowerUp targetingScope =  new PowerUp(targetingScopeList, "Red_TargetingScope", AmmoColor.RED);
         List<ActionUnit> powerUpActionList1 = new ArrayList<>();
-        powerUpActionList1.add(new ActionUnit(true,"Basic mode", null, null,null, 0,1,true));
+        powerUpActionList1.add(new ActionUnit(true,"Basic mode", null, null,null, false, 0,1,true));
         PowerUp teleporter = new PowerUp(powerUpActionList1, "Yellow_TagbackGrenade", AmmoColor.YELLOW);
         p1.getCharacterState().setPowerUpBag(Arrays.asList(newton, targetingScope,teleporter,targetingScope));
 
