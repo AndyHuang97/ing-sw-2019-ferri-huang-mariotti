@@ -279,7 +279,7 @@ public class MapController {
      *
      */
     public void showKillShotTrack() {
-        KillShotTrack kt = view.getModel().getGame().getKillshotTrack();
+        KillShotTrack kt = view.getModel().getGame().getKillShotTrack();
 
         int offset = killShotTrackPane.getChildren().size() - kt.getKillsForFrenzy();
 

@@ -39,14 +39,6 @@ public class GameTest {
     }
 
     @Test
-    public void testGenerateGameData() {
-
-        GameData gameData = game.generateGameData();
-
-        assertEquals(game.getStartDate(), gameData.getStartDate());
-    }
-
-    @Test
     public void testInitGameObjects() {
         game.initGameObjects("0");
         assertEquals("0", game.getBoard().getId());
@@ -66,16 +58,11 @@ public class GameTest {
                     assertTrue(t.getAmmoCrate() != null);
                     assertEquals(0, t.getWeaponCrate().size());
                 });
-    }
 
-    @Test
-    public void testInitPlayerAmmoBag() {
-        game.initPlayerAmmoBag();
         assertTrue(game.getPlayerList().stream().allMatch(player -> player.getCharacterState().getAmmoBag().get(AmmoColor.RED).equals(1) &&
                 player.getCharacterState().getAmmoBag().get(AmmoColor.YELLOW).equals(1) && player.getCharacterState().getAmmoBag().get(AmmoColor.BLUE).equals(1)));
 
     }
-
 
     @Test
     public void testUpdateTurn() {
@@ -145,9 +132,9 @@ public class GameTest {
 
         Integer killShots = 1;
 
-        game.getKillshotTrack().setKillCounter(killShots);
+        game.getKillShotTrack().setKillCounter(killShots);
 
-        assertEquals(killShots, game.getKillshotTrack().getKillCounter());
+        assertEquals(killShots, game.getKillShotTrack().getKillCounter());
     }
 
     @Test
@@ -165,8 +152,8 @@ public class GameTest {
 
         Deck<PowerUp> powerupDeck = new Deck<>(null);
 
-        game.setPowerupDeck(powerupDeck);
+        game.setPowerUpDeck(powerupDeck);
 
-        assertEquals(powerupDeck, game.getPowerupDeck());
+        assertEquals(powerupDeck, game.getPowerUpDeck());
     }
 }

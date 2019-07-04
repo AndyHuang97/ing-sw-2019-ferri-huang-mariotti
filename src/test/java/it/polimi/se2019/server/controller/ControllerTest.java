@@ -145,7 +145,7 @@ public class ControllerTest {
         killShotTrack = new KillShotTrack(Arrays.asList(player0, player1));
         killShotTrack.register(game);
 
-        game.setKillshotTrack(killShotTrack);
+        game.setKillShotTrack(killShotTrack);
     }
 
     @Test
