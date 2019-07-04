@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 
@@ -66,7 +67,7 @@ public class ClientGui extends Application {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/Login.fxml"));
-            AnchorPane login = loader.load();
+            Pane login = loader.load();
             LoginController controller = loader.getController();
             controller.setView(view);
             this.setLoginController(controller);
@@ -77,6 +78,8 @@ public class ClientGui extends Application {
             controller.setLoginStage(loginStage);
 
             Scene scene = new Scene(login);
+            scene.getStylesheets().add("/css/root.css");
+            login.setId("login-background");
             loginStage.setScene(scene);
             loginStage.initOwner(primaryStage);
             loginStage.setResizable(false);

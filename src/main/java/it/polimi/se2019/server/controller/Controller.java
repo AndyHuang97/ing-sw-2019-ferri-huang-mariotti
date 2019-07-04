@@ -66,9 +66,8 @@ public class Controller implements Observer<Request> {
 
             // nextState handles the input and returns a new State, then a message is sent from the new state;
             // if any model changes happened, the update will be sent before the selection message.
-            //TODO avoid using the update CommandHandler's update method, it shall be called only by notifications from the model
-            // need to add a new method in CommandHandler for selection purposes.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
+            this.saveGames(controllerState, newControllerState);
 
             CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
             controllerState.sendErrorMessages(commandHandler);
@@ -126,6 +125,14 @@ public class Controller implements Observer<Request> {
             } catch (CommunicationError e) {
                 Logger.getGlobal().info("Unable to send update trigger command");
             }
+        }
+    }
+
+    public void saveGames(ControllerState oldControllerState, ControllerState newControllerState) {
+        if ((oldControllerState.getClass().equals(WaitingForMainActions.class) && oldControllerState.getClass().equals(newControllerState.getClass()) && !oldControllerState.equals(newControllerState))||
+                (oldControllerState.getClass().equals(WaitingForReload.class) && newControllerState.getClass().equals(WaitingForMainActions.class)) ||
+                (oldControllerState.getClass().equals(WaitingForRespawn.class) && newControllerState.getClass().equals(WaitingForMainActions.class))) {
+            gameManager.dumpToFile();
         }
     }
 

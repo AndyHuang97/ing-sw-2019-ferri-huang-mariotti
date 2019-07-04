@@ -4,6 +4,7 @@ import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -75,6 +76,8 @@ public class GUIView extends View {
                 guiController.showPowerUps(Collections.singletonList(Constants.TAGBACK_GRENADE));
                 guiController.showPass();
                 return;
+            case Constants.FINISHGAME:
+
             default:
                 return;
         }
@@ -82,7 +85,15 @@ public class GUIView extends View {
 
     @Override
     public void reportError(String error) {
-
+        if (!error.equals("")) {
+            Logger.getGlobal().info("Reporting error: " + error);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(primaryStage);
+            alert.setTitle("Action failed!");
+            alert.setHeaderText("The cause of the failure is:");
+            alert.setContentText(error);
+            alert.showAndWait();
+        }
     }
 
     @Override
@@ -113,6 +124,7 @@ public class GUIView extends View {
             // Set the scene containing the root layout
             Scene scene = new Scene(rootLayout);
             scene.getStylesheets().add("/css/root.css");
+            rootLayout.setId("game-background");
             primaryStage.setScene(scene);
 
         } catch(IOException e) {

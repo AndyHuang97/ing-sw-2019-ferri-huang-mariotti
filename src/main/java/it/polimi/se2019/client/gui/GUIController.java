@@ -814,7 +814,6 @@ public class GUIController {
 
     public void getPowerUpForRespawn() {
 
-        infoText.setText("Select 1 powerup ");
         cancelButton.setDisable(true);
         confirmButton.setDisable(true);
 
