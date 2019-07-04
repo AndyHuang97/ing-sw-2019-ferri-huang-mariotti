@@ -25,6 +25,7 @@ import java.util.stream.Stream;
  * or reload so this ControllerState will allow those actions.
  */
 public class WaitingForMainActions extends ControllerState {
+    private static final String MOVE_ACTION_ERROR_MESSAGE = "Move action failed!";
 
     private static final int NORMAL_ACTION_NUMBER = 2;
     private static final int BEFORE_FRENZY_NUMBER = 2;
@@ -206,6 +207,9 @@ public class WaitingForMainActions extends ControllerState {
                                         return true;
                                     });
                             Logger.getGlobal().info(String.valueOf(res));
+
+                            if (!res) addErrorMessage(MOVE_ACTION_ERROR_MESSAGE);
+
                             return res; // the result of the the internal anyMatch, it is returned as value of the external anyMatch
                         }
                 );

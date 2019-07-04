@@ -56,7 +56,7 @@ public class WaitingForRespawn extends ControllerState {
                         if (playerActions.get(POWERUP_POSITION).check()) {
                             Player respawningPlayer = playerStack.pop(); // pops the dead player that is respawning and get his input
                             Logger.getGlobal().info("Popped player:" + respawningPlayer.getUserData().getNickname());
-                            playerActions.get(POWERUP_POSITION).run(); // spawns the player
+
 
                             boolean isOverkill = respawningPlayer.getCharacterState().getDamageBar().size() > 11;
 
@@ -73,6 +73,7 @@ public class WaitingForRespawn extends ControllerState {
                             }
 
                             game.addDeath(respawningPlayer, isOverkill);
+                            playerActions.get(POWERUP_POSITION).run(); // spawns the player
                         }
                     } else {
                         Logger.getGlobal().info("Expecting a correct input from a dead player.");

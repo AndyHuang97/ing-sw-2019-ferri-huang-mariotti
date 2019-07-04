@@ -122,7 +122,7 @@ public class KillShotTrack implements Serializable {
         notifyKillShotTrackChange();
 
         // reset dead player damage bar
-        player.getCharacterState().resetDamageBar();
+        //player.getCharacterState().resetDamageBar();
 
         return triggerFrenzy;
     }
