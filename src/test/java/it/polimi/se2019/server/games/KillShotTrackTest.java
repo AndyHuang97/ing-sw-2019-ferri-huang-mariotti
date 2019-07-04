@@ -18,6 +18,7 @@ public class KillShotTrackTest {
     Player p1, p2, p3, p4 ,p5;
     PlayerColor pc1, pc3, pc4;
     List<PlayerColor> damageBar;
+    Game game;
 
     @Before
     public void setUp() {
@@ -33,6 +34,8 @@ public class KillShotTrackTest {
         p2.getCharacterState().setDamageBar(damageBar);
         p5.getCharacterState().setDamageBar(damageBar);
         kt = new KillShotTrack(new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5)));
+
+        game = new Game(null, Arrays.asList(p1,p2,p3,p4,p5), p1, null, kt, null, null, null);
     }
 
     @After
@@ -63,65 +66,62 @@ public class KillShotTrackTest {
 
     @Test
     public void testAddDeath_NoOverkill() {
+        PlayerColor playerColor = p1.getColor();
+
+        p2.getCharacterState().addDamage(playerColor,11, game);
 
         kt.setKillCounter(0);
         kt.addDeath(p2,false);
 
         Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
         Map<PlayerColor, Integer> deathSlot = deathTrack.get(0);
-        Integer deathValue = deathSlot.get(p2.getColor());
+        Integer deathValue = deathSlot.get(playerColor);
 
         Assert.assertEquals(1, deathValue.intValue());
     }
 
     @Test
     public void testAddDeath_Overkill() {
+        PlayerColor playerColor = p1.getColor();
+
+        p2.getCharacterState().addDamage(playerColor,12, game);
 
         kt.setKillCounter(1);
         kt.addDeath(p2, true);
 
         Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
         Map<PlayerColor, Integer> deathSlot = deathTrack.get(1);
-        Integer deathValue = deathSlot.get(p2.getColor());
+        Integer deathValue = deathSlot.get(playerColor);
 
         Assert.assertEquals(2, deathValue.intValue());
     }
 
     @Test
     public void testAddDeath_FinalFrenzy() {
-
         kt.setKillCounter(kt.getKillsForFrenzy()-1);
-        kt.addDeath(p2, false);
-        kt.addDeath(p2, true);
-        kt.addDeath(p5, true);
+
+        p2.getCharacterState().resetDamageBar();
+        p2.getCharacterState().addDamage(p3.getColor(), 11, game);
+        game.addDeath(p2, false);
+
+        p2.getCharacterState().resetDamageBar();
+        p2.getCharacterState().addDamage(p3.getColor(), 12, game);
+        game.addDeath(p2, true);
+
+        p5.getCharacterState().resetDamageBar();
+        p5.getCharacterState().addDamage(p4.getColor(), 12, game);
+        game.addDeath(p5, true);
 
         Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack = kt.getDeathTrack();
+
         Map<PlayerColor, Integer> trackSlot = deathTrack.get(kt.getKillsForFrenzy()-1);
-        Integer p2DeathValue = trackSlot.get(p2.getColor());
-        Integer p5DeathValue = trackSlot.get(p5.getColor());
+        Integer p2DeathValue = trackSlot.get(p3.getColor());
+        Integer p5DeathValue = trackSlot.get(p4.getColor());
 
         Assert.assertEquals(3, p2DeathValue.intValue());
         Assert.assertEquals(2, p5DeathValue.intValue());
     }
-/*
-    @Test
-    public void testUpdateKillCounter() {
 
-        kt.setKillCounter(0);
-
-        IntStream.range(0, 10)
-                .forEach(i -> {
-                    if (i < kt.getKillsForFrenzy()) {
-                        Assert.assertEquals(i, kt.getKillCounter().intValue());
-                    }
-                    else {
-                        Assert.assertEquals(7, kt.getKillCounter().intValue());
-                    }
-                    kt.updateCounter();
-                });
-
-    }
-*/
     @Test
     public void testSetDeathTrack() {
         Map<Integer, EnumMap<PlayerColor, Integer>> expectedDeathTrack = new HashMap<>();
