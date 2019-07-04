@@ -15,7 +15,6 @@ import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -55,47 +54,113 @@ public class GameManager {
 			Properties prop = new Properties();
 			// load a properties file
 			prop.load(input);
-			this.waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
-			this.waitingListStartTimerSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_start_timer_size"));
-			this.startTimerSeconds = Integer.parseInt(prop.getProperty("game_manager.start_timer_seconds"));
-			this.pingIntervalMilliseconds = Integer.parseInt(prop.getProperty("game_manager.ping_interval_milliseconds"));
+			waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
+			waitingListStartTimerSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_start_timer_size"));
+			startTimerSeconds = Integer.parseInt(prop.getProperty("game_manager.start_timer_seconds"));
+			pingIntervalMilliseconds = Integer.parseInt(prop.getProperty("game_manager.ping_interval_milliseconds"));
 		} catch (IOException ex) {
 			logger.info(ex.toString());
 		}
 		this.dumpName = dumpName;
 		try {
 			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {
-				BufferedReader br = new BufferedReader(new FileReader(new File(GameManager.class.getClassLoader().getResource(dumpName).toURI())));
+				logger.info("Loading saved games from: " + GameManager.class.getClassLoader().getResource(dumpName).toString());
+				BufferedReader br = new BufferedReader(new InputStreamReader(GameManager.class.getClassLoader().getResource(dumpName).openStream()));
 				//Read JSON file
+				List<Game> tmpGameList = new ArrayList<>();
 				try {
 					Gson gson = new Gson();
-					this.gameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
+					tmpGameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
 				} finally {
 					br.close();
 				}
+				// this is to rebuild the games with all the notify etc
+				tmpGameList.forEach(tmpGame -> {
+					logger.info("Restoring a new game with users: " + String.join(", ", tmpGame.getPlayerList().stream().map(player -> player.getUserData().getNickname()).collect(Collectors.toList())));
+					// first we build the players
+					List<Player> newPlayerList = new ArrayList<>();
+					tmpGame.getPlayerList().forEach(tmpPlayer -> {
+						CharacterState tmpCharacterState = tmpPlayer.getCharacterState();
+						CharacterState newCharacterState = new CharacterState(tmpCharacterState.getDeaths(), tmpCharacterState.getValueBar(),
+								tmpCharacterState.getDamageBar(), tmpCharacterState.getMarkerBar(), tmpCharacterState.getAmmoBag(),
+								tmpCharacterState.getWeaponBag(), tmpCharacterState.getPowerUpBag(), tmpCharacterState.getTile(),
+								tmpCharacterState.getScore(), false, tmpCharacterState.getColor());
+						Player newPlayer = new Player(tmpPlayer.getId(), false, tmpPlayer.getUserData(), newCharacterState, tmpPlayer.getColor());
+						newPlayerList.add(newPlayer);
+					});
+					// then the kill shot tracker
+					KillShotTrack newKillShotTrack = new KillShotTrack(tmpGame.getKillshotTrack().getDeathTrack(), newPlayerList, tmpGame.getKillshotTrack().getKillCounter());
+					// then the game
+					Game newGame = new Game(tmpGame.getStartDate(), newPlayerList, newPlayerList.stream().filter(player -> player.getId().equals(tmpGame.getCurrentPlayer().getId())).findAny().orElseThrow(() -> new NullPointerException("player not found")),
+							tmpGame.getBoard(), newKillShotTrack, tmpGame.getWeaponDeck(), tmpGame.getPowerupDeck(), tmpGame.getAmmoCrateDeck());
+					// at the end we register all we need to register
+					newGame.getPlayerList().forEach(newPlayer -> {
+						// register game in the player
+						newPlayer.register(newGame);
+						newPlayer.getCharacterState().register(newGame);
+					});
+					newGame.getBoard().register(newGame);
+					newKillShotTrack.register(newGame);
+					gameList.add(newGame);
+				});
+				logger.info("Done with restoration!");
 			} else {
 				logger.info("No gamefile, skip loading saved games!");
 			}
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException | NullPointerException ex) {
+			ex.printStackTrace();
 			logger.info("Error while loading gamefile, skip loading saved games!");
 		}
 	}
 
-	public void dumpToFile() {
-		//System.out.println(dumpName);
-		logger.info("Saving games to file");
+	public void dumpToFile(Game game) {
+		internalDumpToFile(game, false);
+	}
+
+	public void dumpToFile(Game game, boolean deleteGame) {
+		internalDumpToFile(game, deleteGame);
+	}
+
+	private void internalDumpToFile(Game game, boolean deleteGame) {
 		try {
-			FileWriter writer = new FileWriter(new File(GameManager.class.getClassLoader().getResource(this.dumpName).toURI()));
+			List<Game> tmpGameList = new ArrayList<>();
+			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(GameManager.class.getClassLoader().getResource(dumpName).openStream()));
+				//Read JSON file
+				try {
+					Gson gson = new Gson();
+					tmpGameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
+				} finally {
+					br.close();
+				}
+			}
+			if (tmpGameList.stream().anyMatch(tGame -> tGame.getStartDate().equals(game.getStartDate()))) {
+				for (int i = 0; i < tmpGameList.size(); i++) {
+					if (tmpGameList.get(i).getStartDate().equals(game.getStartDate())) {
+						if (deleteGame) {
+							logger.info("Removing a game from file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
+							tmpGameList.set(i, null);
+						} else {
+							logger.info("Updating a game to file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
+							tmpGameList.set(i, game);
+						}
+					}
+				}
+				while (tmpGameList.remove(null)) {}
+			} else {
+				logger.info("Saving a new game to file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
+				tmpGameList.add(game);
+			}
+			FileWriter writer = new FileWriter(new File(GameManager.class.getClassLoader().getResource(dumpName).getPath()));
 			// Write file
 			try {
 				Gson gson = new Gson();
-				writer.write(gson.toJson(gameList.toArray()));
+				writer.write(gson.toJson(tmpGameList.toArray()));
 			} finally {
 				writer.close();
 			}
-
-		} catch (IOException | URISyntaxException e) {
-			logger.info(e.getMessage());
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			logger.info("Error while saving games to file");
 		}
 	}
@@ -140,7 +205,7 @@ public class GameManager {
 		//create the new game and reset waiting list, do not use it
 		List<Player> playerList = new ArrayList<>();
 		Game newGame = new Game(playerList);
-		this.waitingList.forEach(tuple -> {
+		waitingList.forEach(tuple -> {
 			PlayerColor color = Stream.of(PlayerColor.values()).filter(
 					playerColor -> playerList.stream().noneMatch(player -> player.getColor().equals(playerColor))
 			).findAny().orElseThrow(() -> new IndexOutOfBoundsException("Too many players!"));
@@ -182,18 +247,19 @@ public class GameManager {
 				logger.info(e.getMessage());
 			}
 		});
-		this.gameList.add(newGame);
-		this.waitingList = new ArrayList<>();
+		gameList.add(newGame);
+		waitingList = new ArrayList<>();
+		dumpToFile(newGame);
 	}
 
 	private void delayedGameCreation(int previousGameListSize) throws IndexOutOfBoundsException {
-		logger.info("Starting game creation countdown (" + this.startTimerSeconds + "s)...");
+		logger.info("Starting game creation countdown (" + startTimerSeconds + "s)...");
 		try {
-			Thread.sleep((long) this.startTimerSeconds * 1000);
+			Thread.sleep((long) startTimerSeconds * 1000);
 		} catch(InterruptedException e) {
 			logger.info(e.getMessage());
 		}
-		if (previousGameListSize == this.gameList.size()) {
+		if (previousGameListSize == gameList.size() && waitingList.size() >= 3) {
 			createGame();
 		}
 	}
@@ -210,7 +276,8 @@ public class GameManager {
 			playerCommandHandlerMap.remove(p.getUserData().getNickname());
 		});
 		logger.info("Notified");
-		this.gameList.remove(game);
+		gameList.remove(game);
+		dumpToFile(game, true);
 	}
 
 
@@ -228,47 +295,56 @@ public class GameManager {
 		public void run(){
 		    try {
                 try {
-                    this.commandHandler.update(new Response(null, false, "ping"));
+                    commandHandler.update(new Response(null, false, "ping"));
                 } catch (Observer.CommunicationError ex) {
-					this.timer.cancel();
-					this.timer.purge();
-                    logger.info("User " + this.nickname + " disconnected");
-                    Game currentGame = retrieveGame(this.nickname);
-                    currentGame.deregister(this.commandHandler);
-                    playerCommandHandlerMap.remove(this.nickname);
-                    // in case of less than 3 players quit the game and announce the winner etc
-                    if (currentGame.getActivePlayerList().size() == 3) {
-                    	terminateGame(currentGame);
-					} else if (currentGame.getActivePlayerList().size() > 3) {
-						currentGame.getPlayerByNickname(nickname).setActive(false);
-						Logger.getGlobal().info("Current player disconnected: "+nickname + "\tisActive: "+currentGame.getPlayerByNickname(nickname).getActive());
-						if (currentGame.getCurrentPlayer().getUserData().getNickname().equals(this.nickname)) {
-							ControllerState newControllerState;
-							if (currentGame.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
-								WaitingForRespawn newState = new WaitingForRespawn();
-								Logger.getGlobal().info("Someone was killed");
-								newControllerState = newState.nextState(new ArrayList<>(), currentGame, currentGame.getPlayerByNickname(nickname));
-							} else {
-								currentGame.updateTurn();
-								if (currentGame.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
-									Logger.getGlobal().info("No one was killed, first spawn");
-									newControllerState = new WaitingForRespawn();
+					timer.cancel();
+					timer.purge();
+                    // check if user is in waiting list or not
+                    if (isUserInGameList(nickname)) {
+						Game currentGame = retrieveGame(nickname);
+						currentGame.deregister(commandHandler);
+						playerCommandHandlerMap.remove(nickname);
+						// in case of less than 3 players quit the game and announce the winner etc
+						if (currentGame.getActivePlayerList().size() == 3) {
+							logger.info("User " + nickname + " disconnected, game is going to terminate");
+							terminateGame(currentGame);
+						} else if (currentGame.getActivePlayerList().size() > 3) {
+							logger.info("User " + nickname + " disconnected, game is going to continue");
+							currentGame.getPlayerByNickname(nickname).setActive(false);
+							if (currentGame.getCurrentPlayer().getUserData().getNickname().equals(nickname)) {
+								ControllerState newControllerState;
+								if (currentGame.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+									WaitingForRespawn newState = new WaitingForRespawn();
+									Logger.getGlobal().info("Someone was killed");
+									newControllerState = newState.nextState(new ArrayList<>(), currentGame, currentGame.getPlayerByNickname(nickname));
+								} else {
+									currentGame.updateTurn();
+									if (currentGame.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
+										Logger.getGlobal().info("No one was killed, first spawn");
+										newControllerState = new WaitingForRespawn();
+									} else {
+										Logger.getGlobal().info("No one was killed, not first spawn");
+										newControllerState = new WaitingForMainActions();
+									}
 								}
-								else {
-									Logger.getGlobal().info("No one was killed, not first spawn");
-									newControllerState = new WaitingForMainActions();
-								}
+								Logger.getGlobal().info("Next current player is: " + currentGame.getCurrentPlayer().getUserData().getNickname());
+								Logger.getGlobal().info("Next state is " + newControllerState.getClass().getSimpleName());
+								controller.setControllerStateForGame(currentGame, newControllerState);
+								controller.requestUpdate(currentGame);
+								Logger.getGlobal().info("Trying to send a selection message");
+								CommandHandler nextCommandHandler = playerCommandHandlerMap.get(currentGame.getCurrentPlayer().getUserData().getNickname());
+								newControllerState.sendSelectionMessage(nextCommandHandler);
 							}
-							Logger.getGlobal().info("Next current player is: " + currentGame.getCurrentPlayer().getUserData().getNickname());
-							Logger.getGlobal().info("Next state is " + newControllerState.getClass().getSimpleName());
-							controller.setControllerStateForGame(currentGame, newControllerState);
-							controller.requestUpdate(currentGame);
-							Logger.getGlobal().info("Trying to send a selection message");
-							CommandHandler commandHandler = playerCommandHandlerMap.get(currentGame.getCurrentPlayer().getUserData().getNickname());
-							newControllerState.sendSelectionMessage(commandHandler);
 						}
-                    }
-
+                    } else {
+                    	for (int i = 0; i < waitingList.size(); i++) {
+                    		if (waitingList.get(i).userData.getNickname().equals(nickname)) {
+                    			waitingList.remove(i);
+							}
+						}
+						playerCommandHandlerMap.remove(nickname);
+						logger.info("User " + nickname + " disconnected from the waiting list, current waiting list size is " + waitingList.size() + " players");
+					}
                 }
             } catch (Exception ex) {
 		        logger.info(ex.getCause().getMessage());
@@ -276,30 +352,39 @@ public class GameManager {
 		}
 	}
 
-
-	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler) throws AlreadyPlayingException, IndexOutOfBoundsException {
+	private void internalAddUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler, boolean ping) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		// add user to waiting list / game (used by view)
 		if (isUserInGameList(newUser.getNickname()) || isUserInWaitingList(newUser.getNickname())) {
 			throw new AlreadyPlayingException("User " + newUser.getNickname() + "is already playing or waiting!");
 		}
-		this.waitingList.add(new Tuple(newUser, currentCommandHandler));
-		try {
-			Timer timer = new Timer();
-			timer.schedule(new IsClientAlive(newUser.getNickname(), currentCommandHandler, timer), 0, this.pingIntervalMilliseconds);
-		} catch (IllegalArgumentException e) {
-			logger.info(e.getMessage());
+		waitingList.add(new Tuple(newUser, currentCommandHandler));
+		if (ping) {
+			try {
+				Timer timer = new Timer();
+				timer.schedule(new IsClientAlive(newUser.getNickname(), currentCommandHandler, timer), 0, pingIntervalMilliseconds);
+			} catch (IllegalArgumentException e) {
+				logger.info(e.getMessage());
+			}
 		}
-		logger.info("Added user " + newUser.getNickname() + " to the waiting list, current waiting list size is " + this.waitingList.size() + " players");
-		if (this.waitingList.size() == waitingListStartTimerSize) {
-			new Thread(() -> delayedGameCreation(this.gameList.size())).start();
+		logger.info("Added user " + newUser.getNickname() + " to the waiting list, current waiting list size is " + waitingList.size() + " players");
+		if (waitingList.size() == waitingListStartTimerSize) {
+			new Thread(() -> delayedGameCreation(gameList.size())).start();
 		}
 		if (waitingList.size() >= waitingListMaxSize) {
 			createGame();
 		}
 	}
 
+	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler) throws AlreadyPlayingException, IndexOutOfBoundsException {
+		internalAddUserToWaitingList(newUser, currentCommandHandler, true);
+	}
+
+	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler, boolean ping) throws AlreadyPlayingException, IndexOutOfBoundsException {
+		internalAddUserToWaitingList(newUser, currentCommandHandler, ping);
+	}
+
 	public List<Tuple> getWaitingList() {
-		// TODO: is that method useful? Other classes cannot use Tuple type! ANSWER: No it is not useful for anybody
+		// used just in tests
 		return waitingList;
 	}
 

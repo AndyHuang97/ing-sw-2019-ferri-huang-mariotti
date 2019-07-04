@@ -215,13 +215,6 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
         // TODO update shouldn't be called from here, but from the Model with its notify, and it should receive a Response
         //update(new Response(new Game(), true, request.getNickname()));
-
-        // TODO: refactor, some tests do not use ServerApp
-        try {
-            ServerApp.gameManager.dumpToFile();
-        } catch (NullPointerException e) {
-            logger.info("Tried to dump game to file but failed");
-        }
     }
 
     @Override

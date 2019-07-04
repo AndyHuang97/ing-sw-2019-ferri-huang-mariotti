@@ -72,10 +72,10 @@ public class ControllerTest {
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
             if (i == 0) {
-                gameManager.addUserToWaitingList(user, actualPlayerCommandHandler);
+                gameManager.addUserToWaitingList(user, actualPlayerCommandHandler, false);
             }
             else {
-                gameManager.addUserToWaitingList(user, new CommandHandler());
+                gameManager.addUserToWaitingList(user, new CommandHandler(), false);
             }
         }
 

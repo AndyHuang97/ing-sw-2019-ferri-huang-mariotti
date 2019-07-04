@@ -9,10 +9,7 @@ import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.util.DeserializerConstants;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
@@ -91,12 +88,12 @@ public class DirectDeserializers {
     }
 
     private static Object deserialize(Object object, RandomDeserializer deserializer, String path) {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(DirectDeserializers.class.getClassLoader().getResource(path).toURI())))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(DirectDeserializers.class.getClassLoader().getResource(path).openStream()))) {
 
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
             object = deserializer.deserialize(json, factory);
-        } catch (IOException | ClassNotFoundException | URISyntaxException e) {
+        } catch (IOException | ClassNotFoundException | NullPointerException e) {
             Logger.getGlobal().warning(e.toString());
         }
         return object;

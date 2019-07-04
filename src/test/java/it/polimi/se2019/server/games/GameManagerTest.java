@@ -1,5 +1,6 @@
 package it.polimi.se2019.server.games;
 
+import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.server.net.socket.SocketServer;
@@ -42,7 +43,7 @@ public class GameManagerTest {
     public void testDumpToFile() {
         gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
         List<Game> oldGames = gameManager.getGameList();
-        gameManager.dumpToFile();
+        // TODO: make test useful
         gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
         Assert.assertEquals(oldGames, gameManager.getGameList());
     }
@@ -51,9 +52,18 @@ public class GameManagerTest {
     public void testWaitingList() throws GameManager.AlreadyPlayingException {
         gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
         UserData user = new UserData("testNick");
-        gameManager.addUserToWaitingList(user, new CommandHandler());
+        gameManager.addUserToWaitingList(user, new CommandHandler(), false);
         Assert.assertTrue(gameManager.getWaitingList().stream().anyMatch(tuple -> tuple.userData == user));
-        gameManager.addUserToWaitingList(user, new CommandHandler());
+        gameManager.addUserToWaitingList(user, new CommandHandler(), false);
+    }
+
+    @Test()
+    public void testWaitingListDisconnection() throws GameManager.AlreadyPlayingException, InterruptedException {
+        gameManager.init("src/test/java/it/polimi/se2019/server/games/data/games_dump.json");
+        UserData user = new UserData("testNick");
+        gameManager.addUserToWaitingList(user, new CommandHandler(), true);
+        Thread.sleep(2000);
+        Assert.assertFalse(gameManager.getWaitingList().stream().anyMatch(tuple -> tuple.userData == user));
     }
 
     @Test
@@ -68,7 +78,7 @@ public class GameManagerTest {
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
             gameManager.getMapPreference().add("0");
-            gameManager.addUserToWaitingList(user, new CommandHandler());
+            gameManager.addUserToWaitingList(user, new CommandHandler(), false);
         }
         Logger.getGlobal().info(gameManager.getGameList().toString());
         Assert.assertEquals(1, gameManager.getGameList().size());
