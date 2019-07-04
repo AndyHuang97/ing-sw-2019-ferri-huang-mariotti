@@ -7,10 +7,7 @@ import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.*;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
-import it.polimi.se2019.server.games.Deck;
-import it.polimi.se2019.server.games.Game;
-import it.polimi.se2019.server.games.GameManager;
-import it.polimi.se2019.server.games.Targetable;
+import it.polimi.se2019.server.games.*;
 import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.server.games.board.LinkType;
 import it.polimi.se2019.server.games.board.RoomColor;
@@ -54,6 +51,8 @@ public class ControllerTest {
 
     private DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
     private WeaponDeserializer weaponDeserializer = new WeaponDeserializer();
+
+    private KillShotTrack killShotTrack;
 
     @Before
     @SuppressWarnings("Duplicates")
@@ -143,6 +142,8 @@ public class ControllerTest {
         game.setCurrentPlayer(player0);
 
         //actualPlayerCommandHandler.register(controller);
+        killShotTrack = new KillShotTrack(Arrays.asList(player0, player1));
+        killShotTrack.register(game);
     }
 
     @Test
@@ -411,6 +412,39 @@ public class ControllerTest {
         ControllerState nextState = waitingForMainAction.nextState(Arrays.asList(new NoOperation(game, player0)), game, player0);
 
         System.out.println(nextState);
+    }
+
+    @Test
+    public void testKillShotTrackScore() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
+
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        killShotTrack.addDeath(player1, true);
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        killShotTrack.addDeath(player1, true);
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        killShotTrack.addDeath(player1, true);
+        player0.getCharacterState().addDamage(player1.getColor(), 12, game);
+        killShotTrack.addDeath(player0, false);
+
+        Map<PlayerColor, Integer> score = killShotTrack.calculateScore();
+
+        Integer player0score = score.get(player0.getColor());
+        Integer player1score = score.get(player1.getColor());
+
+        Assert.assertEquals((Integer) 8, player0score);
+        Assert.assertEquals((Integer) 6, player1score);
+
+
+        // testing tie-break
+        player0.getCharacterState().addDamage(player1.getColor(), 12, game);
+        killShotTrack.addDeath(player0, false);
+        player0.getCharacterState().addDamage(player1.getColor(), 12, game);
+        killShotTrack.addDeath(player0, false);
+
+        Assert.assertEquals((Integer) 8, player0score);
+        Assert.assertEquals((Integer) 6, player1score);
     }
 
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {

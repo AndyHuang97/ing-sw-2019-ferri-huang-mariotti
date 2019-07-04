@@ -81,7 +81,7 @@ public class KillShotTrack implements Serializable {
 
         EnumMap<PlayerColor, Integer> colorIntegerEnumMap;
 
-        PlayerColor deadPlayerColor = player.getColor();
+        PlayerColor killerPlayerColor = player.getCharacterState().getDamageBar().get(11);
 
         // create the death message
         PlayerDeath playerDeath = new PlayerDeath(player, frenzyTriggered);
@@ -89,17 +89,17 @@ public class KillShotTrack implements Serializable {
         if(!deathTrack.containsKey(killCounter)) {
             colorIntegerEnumMap = new EnumMap<>(PlayerColor.class);
             deathTrack.put(killCounter, colorIntegerEnumMap);
-            updateTrackSlotValue(overkill, deadPlayerColor, colorIntegerEnumMap, 0);
+            updateTrackSlotValue(overkill, killerPlayerColor, colorIntegerEnumMap, 0);
         }
         else {
             // final frenzy mode, key already present in hash map.
             colorIntegerEnumMap = deathTrack.get(killCounter);
 
-            if(!colorIntegerEnumMap.containsKey(deadPlayerColor)) {
-                updateTrackSlotValue(overkill, deadPlayerColor, colorIntegerEnumMap, 0);
+            if(!colorIntegerEnumMap.containsKey(killerPlayerColor)) {
+                updateTrackSlotValue(overkill, killerPlayerColor, colorIntegerEnumMap, 0);
             }
             else {
-                updateTrackSlotValue(overkill, deadPlayerColor, colorIntegerEnumMap, colorIntegerEnumMap.get(deadPlayerColor));
+                updateTrackSlotValue(overkill, killerPlayerColor, colorIntegerEnumMap, colorIntegerEnumMap.get(killerPlayerColor));
             }
         }
 
@@ -123,7 +123,6 @@ public class KillShotTrack implements Serializable {
      */
     public Map<PlayerColor, Integer> calculateScore() {
 
-        System.out.println(deathTrack);
         Map<PlayerColor, Integer> totalKillsByColor = new HashMap<>();
 
         // parse the deathTrack and reduce it to a Map<PlayerColor, Integer>
@@ -201,13 +200,13 @@ public class KillShotTrack implements Serializable {
     }
 
 
-    private void updateTrackSlotValue(boolean overkill, PlayerColor deadPlayerColor, Map<PlayerColor, Integer> colorIntegerEnumMap,
+    private void updateTrackSlotValue(boolean overkill, PlayerColor killerPlayerColor, Map<PlayerColor, Integer> colorIntegerEnumMap,
                               Integer baseValue) {
         if(!overkill) {
-            colorIntegerEnumMap.put(deadPlayerColor, baseValue + 1);
+            colorIntegerEnumMap.put(killerPlayerColor, baseValue + 1);
         }
         else {
-            colorIntegerEnumMap.put(deadPlayerColor, baseValue + 2);
+            colorIntegerEnumMap.put(killerPlayerColor, baseValue + 2);
         }
     }
 
