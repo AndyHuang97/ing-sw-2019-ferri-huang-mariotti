@@ -128,6 +128,9 @@ public class ControllerStateTest {
         assertFalse(p1.getCharacterState().isFirstSpawn());
 
         System.out.println("Not First Spawn (End of turn) --------------------------------");
+        p2.getCharacterState().getPowerUpBag().clear();
+        p3.getCharacterState().getPowerUpBag().clear();
+        p4.getCharacterState().getPowerUpBag().clear();
         p1.getCharacterState().setFirstSpawn(false);
         p2.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
         p3.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
@@ -136,24 +139,27 @@ public class ControllerStateTest {
         newState = respawnState.nextState(null, game, p1);
         assertEquals(respawnState, newState);
         assertEquals(p2, game.getCurrentPlayer());
+        assertEquals(1, p2.getCharacterState().getPowerUpBag().size());
 
 
         System.out.println("2) Random not valid action");
         playerActions.clear();
         respawnAction = new MovePlayerAction(game, p2);
         playerActions.add(respawnAction);    // adding action
-        newState = respawnState.nextState(playerActions, game, p1);
+        newState = respawnState.nextState(playerActions, game, p2);
         assertEquals(respawnState, newState);
         System.out.println("2-bis) spawn first dead player, P2");
         playerActions.clear();
         targetableList = new ArrayList<>();
-        targetableList.add(yellowPowerUp);
+        targetableList.add(p2.getCharacterState().getPowerUpBag().get(0));
         respawnAction = new RespawnAction(game,p2);
         respawnAction.unpack(targetableList);
-        p2.getCharacterState().getPowerUpBag().add(yellowPowerUp);
+        assertEquals(1, p2.getCharacterState().getPowerUpBag().size());
         assertTrue(respawnAction.check());
         playerActions.add(respawnAction);
         newState = respawnState.nextState(playerActions, game, p2);
+        assertEquals(0, p2.getCharacterState().getPowerUpBag().size());
+        assertEquals(1, p3.getCharacterState().getPowerUpBag().size());
         assertEquals(p3.getId(), game.getCurrentPlayer().getId());
         assertEquals(respawnState, newState);
         assertEquals(board.getTile(3,2), p1.getCharacterState().getTile());
@@ -168,6 +174,7 @@ public class ControllerStateTest {
         assertTrue(respawnAction.check());
         playerActions.add(respawnAction);
         newState = respawnState.nextState(playerActions, game, p3);
+        p4.getCharacterState().setFirstSpawn(false);
         assertEquals(p4.getId(), game.getCurrentPlayer().getId());
         assertEquals(respawnState, newState);
         assertEquals(board.getTile(3,2), p1.getCharacterState().getTile());
