@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -51,11 +52,27 @@ public class WaitingForRespawn extends ControllerState {
                     playerStack.push(player); // store the player that is ending the turn
                     Logger.getGlobal().info("Pushed player: current Player - " + player.getUserData().getNickname());
                 } else {
-                    Player p = playerStack.pop(); // pops the dead player that is respawning and get his input
-                    Logger.getGlobal().info("Popped player:" + p.getUserData().getNickname());
                     if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.RESPAWN)) {
                         if (playerActions.get(POWERUP_POSITION).check()) {
-                                playerActions.get(POWERUP_POSITION).run(); // spawns the player
+                            Player respawningPlayer = playerStack.pop(); // pops the dead player that is respawning and get his input
+                            Logger.getGlobal().info("Popped player:" + respawningPlayer.getUserData().getNickname());
+                            playerActions.get(POWERUP_POSITION).run(); // spawns the player
+
+                            boolean isOverkill = respawningPlayer.getCharacterState().getDamageBar().size() > 11;
+
+                            Logger.getGlobal().info("Is overkill: " + isOverkill);
+
+                            // give a mark to the player that overkilled deadPlayer
+                            if (isOverkill) {
+                                // who killed dead player?
+                                PlayerColor color = respawningPlayer.getCharacterState().getDamageBar().get(11);
+                                Player killer = game.getPlayerByColor(color);
+                                Logger.getGlobal().info("killer: " + killer.getUserData().getNickname());
+
+                                killer.getCharacterState().addMarker(respawningPlayer.getColor(), 1);
+                            }
+
+                            game.addDeath(respawningPlayer, isOverkill);
                         }
                     } else {
                         Logger.getGlobal().info("Expecting a correct input from a dead player.");
@@ -69,29 +86,18 @@ public class WaitingForRespawn extends ControllerState {
                             .filter(p -> p.getCharacterState().isDead()).collect(Collectors.toList());
 
                     Player deadPlayer = deadPlayers.get(0);
-                    System.out.println("dead: " + deadPlayer.getUserData().getNickname());
 
                     playerStack.push(deadPlayer); // pushes the dead player to respawn
 
-                    boolean isOverkill = deadPlayer.getCharacterState().getDamageBar().size() > 11;
-
-                    Logger.getGlobal().info("Is overkill: " + isOverkill);
-
-                    // give a mark to the player that overkilled deadPlayer
-                    if (isOverkill) {
-                        // who killed dead player?
-                        PlayerColor color = deadPlayer.getCharacterState().getDamageBar().get(11);
-                        Player killer = game.getPlayerByColor(color);
-                        System.out.println("killer: " + killer.getUserData().getNickname());
-
-                        killer.getCharacterState().addMarker(deadPlayer.getColor(), 1);
-                    }
-
-                    game.addDeath(deadPlayer, isOverkill);
-
                     Logger.getGlobal().info("Pushed player: dead Player " + deadPlayers.get(0).getUserData().getNickname());
                     game.setCurrentPlayer(deadPlayers.get(0)); // give control to one of the dead players, until everyone has spawned
-                    Logger.getGlobal().info("Giving control to a dead player");
+                    Logger.getGlobal().info("Dead player's powerUps: " + game.getCurrentPlayer().getCharacterState().getPowerUpBag().size());
+                    if (game.getCurrentPlayer().getCharacterState().getPowerUpBag().size() < 4) {
+                        PowerUp powerUp = game.getPowerupDeck().drawCard();
+                        Logger.getGlobal().info("Drawing a powerUp: " + powerUp.getId());
+                        game.getCurrentPlayer().getCharacterState().addPowerUp(powerUp);
+                    }
+                    Logger.getGlobal().info("Giving control to a dead player, and giving him a new powerup");
                     return this; // stays in this state until everyone is spawned
                 } else { // nobody is dead
                     player = playerStack.pop();// gives back the player that was ending the turn
