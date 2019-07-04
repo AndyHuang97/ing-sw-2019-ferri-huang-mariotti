@@ -82,6 +82,16 @@ public abstract class View extends Observable implements Observer<Response> {
     }
 
     /**
+     * The sendInput method sends an input message to the server, only if the client is the current player of
+     * the match.
+     */
+    public void pong() {
+        Map<String, List<String>> payload = new HashMap<>();
+        payload.put("pong", new ArrayList<>());
+        networkClient.send(new Request(new NetMessage(payload), nickname));
+    }
+
+    /**
      * The askInput method runs a runnable function from the input requested list.
      */
     public abstract void askInput();

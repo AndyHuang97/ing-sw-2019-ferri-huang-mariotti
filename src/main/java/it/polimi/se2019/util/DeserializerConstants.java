@@ -8,6 +8,7 @@ public class DeserializerConstants {
     public static final String AVAILABLE = "available";
     public static final String EFFECTLIST = "effectList";
     public static final String CONDITIONLIST = "conditionList";
+    public static final String UNIDIRECTIONAL = "unidirectional";
     public static final String NUMPLAYERTARGETS = "numPlayerTargets";
     public static final String NUMTILETARGETS = "numTileTargets";
     public static final String PLAYERSELECTIONFIRST = "playerSelectionFirst";

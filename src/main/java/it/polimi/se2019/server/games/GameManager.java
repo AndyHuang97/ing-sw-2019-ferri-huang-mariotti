@@ -293,7 +293,7 @@ public class GameManager {
 		public void run(){
 		    try {
                 try {
-                    commandHandler.update(new Response(null, false, "ping"));
+                    commandHandler.ping();
                 } catch (Observer.CommunicationError ex) {
 					timer.cancel();
 					timer.purge();

@@ -19,6 +19,7 @@ public class ActionUnit implements Targetable {
 	private transient List<Effect> effectList;
 	private transient List<Condition> conditionList;
 	private transient Map<String, List<Targetable>> commands;
+	private boolean unidirectional;
 	private int numPlayerTargets;
 	private int numTileTargets;
 	private boolean playerSelectionFirst;
@@ -33,7 +34,7 @@ public class ActionUnit implements Targetable {
 	 * @param numTileTargets
 	 * @param playerSelectionFirst
 	 */
-	public ActionUnit(boolean available, String name, String description, List<Effect> effectList, List<Condition> conditionList, int numPlayerTargets, int numTileTargets, boolean playerSelectionFirst) {
+	public ActionUnit(boolean available, String name, String description, List<Effect> effectList, List<Condition> conditionList, boolean unidirectional, int numPlayerTargets, int numTileTargets, boolean playerSelectionFirst) {
 		/*
 		TODO: remove and available or justify them!
 		 */
@@ -42,6 +43,7 @@ public class ActionUnit implements Targetable {
 		this.description = description;
 		this.effectList = effectList;
 		this.conditionList = conditionList;
+		this.unidirectional = unidirectional;
 		this.numPlayerTargets = numPlayerTargets;
 		this.numTileTargets = numTileTargets;
 		this.playerSelectionFirst = playerSelectionFirst;
@@ -109,6 +111,14 @@ public class ActionUnit implements Targetable {
 
 	public void setConditionList(List<Condition> conditionList) {
 		this.conditionList = conditionList;
+	}
+
+	public boolean isUnidirectional() {
+		return unidirectional;
+	}
+
+	public void setUnidirectional(boolean unidirectional) {
+		this.unidirectional = unidirectional;
 	}
 
 	public int getNumPlayerTargets() {

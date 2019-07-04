@@ -26,7 +26,7 @@ public class WeaponClassTest {
 
     @Test
     public void testSetter() {
-        ActionUnit actionUnit = new ActionUnit(true, "Damage Target", "", null, null, 0, 0, false);
+        ActionUnit actionUnit = new ActionUnit(true, "Damage Target", "", null, null, false, 0, 0, false);
         List<ActionUnit> expectedAUList = Arrays.asList(actionUnit);
         List<AmmoColor> expectedAmmoColorList = Arrays.asList(AmmoColor.BLUE);
 
