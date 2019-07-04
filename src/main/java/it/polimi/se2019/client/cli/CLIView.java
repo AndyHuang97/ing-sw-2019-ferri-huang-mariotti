@@ -43,7 +43,20 @@ public class CLIView extends View {
     public void showMessage(String message) {
         try {
             Player currentPlayer = getModel().getGame().getPlayerByNickname(getNickname());
-            List<String> validTiles = getModel().getGame().getBoard().getTileList().stream().map(t -> t.getId()).collect(Collectors.toList());
+            List<String> tiles = new ArrayList<>(Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"));
+            switch (getModel().getGame().getBoard().getId()) {
+                case "0":
+                    tiles.remove("3");
+                    tiles.remove("8");
+                    break;
+                case "1":
+                    tiles.remove("8");
+                    break;
+                case "3":
+                    tiles.remove("3");
+                    break;
+            }
+            final List<String> validTiles = new ArrayList<>(tiles);
             switch (message) {
                 case Constants.RELOAD:
                     List<String> selectedReloadWeapons = new ArrayList<>();
