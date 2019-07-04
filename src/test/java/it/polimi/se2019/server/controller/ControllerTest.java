@@ -144,6 +144,8 @@ public class ControllerTest {
         //actualPlayerCommandHandler.register(controller);
         killShotTrack = new KillShotTrack(Arrays.asList(player0, player1));
         killShotTrack.register(game);
+
+        game.setKillshotTrack(killShotTrack);
     }
 
     @Test
@@ -445,6 +447,34 @@ public class ControllerTest {
 
         Assert.assertEquals((Integer) 8, player0score);
         Assert.assertEquals((Integer) 6, player1score);
+    }
+
+    @Test
+    public void testFinalFrenzy() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
+
+        game.setCurrentPlayer(player0);
+
+        killShotTrack.setKillCounter(killShotTrack.getKillsForFrenzy()-1);
+
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        game.addDeath(player1, true);
+
+        Assert.assertTrue(game.isFrenzy());
+
+        for (Player player : game.getPlayerList()) {
+            if (player.getUserData().getNickname().equals(TESTNICK0)) {
+                Assert.assertTrue(player.getCharacterState().isBeforeFrenzyActivator());
+                Assert.assertEquals(2, player.getCharacterState().getValueBar()[0]);
+            } else if (player.getUserData().getNickname().equals(TESTNICK1)) {
+                Assert.assertFalse(player.getCharacterState().isBeforeFrenzyActivator());
+                Assert.assertEquals(8, player.getCharacterState().getValueBar()[0]);
+            } else {
+                Assert.assertFalse(player.getCharacterState().isBeforeFrenzyActivator());
+                Assert.assertEquals(2, player.getCharacterState().getValueBar()[0]);
+            }
+        }
     }
 
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {
