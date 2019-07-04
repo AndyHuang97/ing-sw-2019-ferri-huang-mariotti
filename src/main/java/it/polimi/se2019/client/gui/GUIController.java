@@ -120,6 +120,8 @@ public class GUIController {
     private Button pass;
     @FXML
     private Button closeButton;
+    @FXML
+    private Label currentPlayer;
 
     /**
      * The main game board initializer which is called when the GameBoard.fxml file is loaded.
@@ -499,6 +501,12 @@ public class GUIController {
             Platform.exit();
         }
 
+    }
+
+    public void showCurrentPlayr() {
+        Player player = view.getModel().getGame().getCurrentPlayer();
+        currentPlayer.setText(player.getUserData().getNickname());
+        Util.setLabelColor(currentPlayer, player.getColor());
     }
 
     @FXML
