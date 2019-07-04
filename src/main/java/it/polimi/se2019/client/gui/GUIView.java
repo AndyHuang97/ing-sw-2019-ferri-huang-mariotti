@@ -110,6 +110,7 @@ public class GUIView extends View {
         this.getGuiController().showMap();
         this.getGuiController().showPlayerBoards();
         this.getGuiController().showMyCards();
+        this.getGuiController().showCurrentPlayr();
 
 
         this.getPrimaryStage().show();

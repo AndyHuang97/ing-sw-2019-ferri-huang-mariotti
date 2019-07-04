@@ -131,6 +131,15 @@
                                           <Insets top="5.0" />
                                        </VBox.margin>
                                     </HBox>
+                                    <VBox alignment="TOP_CENTER" style="-fx-background-color: grey; -fx-background-radius: 20;">
+                                       <children>
+                                          <Label text="Current player:" textFill="WHITE" wrapText="true" />
+                                          <Label fx:id="currentPlayer" layoutX="10.0" layoutY="10.0" text="Current player:" textFill="WHITE" wrapText="true" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </VBox>
                                  </children>
                               </VBox>
                               <VBox alignment="TOP_RIGHT">
