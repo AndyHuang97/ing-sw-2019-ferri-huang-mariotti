@@ -211,7 +211,8 @@ public class CharacterState extends Observable<Response> implements Serializable
 	}
 
 	/**
-	 * @param markerBar
+     * Setter for the markerBar attribute.
+	 * @param markerBar the new value of the field markerBard
 	 */
 	public void setMarkerBar(Map<PlayerColor, Integer> markerBar) {
 		this.markerBar = markerBar;
@@ -233,6 +234,10 @@ public class CharacterState extends Observable<Response> implements Serializable
 		notifyCharacterStateChange();
 	}
 
+    /**
+     * Resets all the markers of one color passed as argument.
+     * @param playerColor color of the marker that needs to be set to zero
+     */
 	public void resetMarkerBar(PlayerColor playerColor) {
 	    getMarkerBar().put(playerColor, 0);
 	    notifyCharacterStateChange();
@@ -244,7 +249,6 @@ public class CharacterState extends Observable<Response> implements Serializable
 
 	/**
 	 * Resets all key's values to 0.
-	 *
 	 */
 	public void resetMarkerBar() {
 		markerBar.keySet()
@@ -481,11 +485,9 @@ public class CharacterState extends Observable<Response> implements Serializable
 	    int amount = 0;
 
 	    for (PowerUp powerUp : powerUpBag) {
-            System.out.println(powerUp.getPowerUpColor());
 	        if (powerUp.getPowerUpColor() == color) amount += 1;
         }
 
-        System.out.println(amount);
         return amount;
     }
 }

@@ -49,6 +49,14 @@ public class WaitingForRespawn extends ControllerState {
             return this; // did not find a valid power up action, stay in this state; a new selection message will be sent from this state
         } else { // not first spawn
                 if (!player.getCharacterState().isDead()) { // this step does NOT require any input it's at the end of a turn
+
+                    // if the activePlayer killed two or more players during this turn it gets a bonus point
+                    if (game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isDead()).collect(Collectors.toList()).size() >= 2) {
+                        player.getCharacterState().setScore(player.getCharacterState().getScore() + 1);
+                        System.out.println("COOL, DOUBLEKILL!");
+                    }
+
+
                     playerStack.push(player); // store the player that is ending the turn
                     Logger.getGlobal().info("Pushed player: current Player - " + player.getUserData().getNickname());
                 } else {
