@@ -8,7 +8,11 @@ import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
 /**
- * 
+ * This class represent the player. It's an observer waiting for PlayerDeath objects in order to update his score.
+ * The data about the actual player (the person who is playing the game) is contained in userData and the data about
+ * the character can be found in characterState.
+ *
+ * @author Rodolfo Mariotti
  */
 public class Player extends Observable<Response> implements Targetable, Observer<PlayerDeath> {
 
@@ -18,15 +22,23 @@ public class Player extends Observable<Response> implements Targetable, Observer
 	private String id;
 
 
+    /**
+     * This constructor creates an almost empty Player object.
+     * This method is used in some tests to create placeholder players.
+     *
+     * @param name name of the player
+     */
 	public Player(String name) {
 		this.userData = new UserData(name);
 	}
 
 	/**
-	 * Default constructor
-	 * @param userData
-	 * @param characterState
-	 * @param color
+	 * This constructor is used by GameManager during the initialization of the game to create new players.
+     *
+	 * @param userData reference to the UserData that will be part of the new player instance (usually a new instance
+     *                 as of UserData as well)
+	 * @param characterState reference to the CharacterState of the new player
+	 * @param color color of the new player
 	 */
 	public Player(String id, boolean active, UserData userData, CharacterState characterState, PlayerColor color) {
 		this.userData = userData;
@@ -40,6 +52,11 @@ public class Player extends Observable<Response> implements Targetable, Observer
 		return id;
 	}
 
+    /**
+     * Setter method for the id attribute.
+     *
+     * @param id new id of this object
+     */
 	public void setId(String id) {
 		this.id = id;
 	}

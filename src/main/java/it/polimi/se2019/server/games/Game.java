@@ -680,7 +680,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
             this.ammoCrateDeck = DirectDeserializers.deserializeAmmoCrate();
             drawnAmmoCrate = ammoCrateDeck.drawCard();
         }
-        return ammoCrateDeck.drawCard();
+        return drawnAmmoCrate;
     }
 
     /**
