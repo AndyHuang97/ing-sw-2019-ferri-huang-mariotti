@@ -5,6 +5,10 @@ import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.util.Response;
 import javafx.application.Platform;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class ClientCommandHandler {
@@ -16,32 +20,34 @@ public class ClientCommandHandler {
 
     private void gameStart(Response request) {
         // game initialization
-        this.view.setGame(request.getGame());
+        view.setGame(request.getGame());
         try {
-            this.view.setPlayerColor(request.getGame().getPlayerByNickname(this.view.getNickname()).getColor());
+            view.setPlayerColor(request.getGame().getPlayerByNickname(view.getNickname()).getColor());
         } catch (PlayerNotFoundException e) {
             Logger.getGlobal().warning(e.toString());
         }
-        this.view.showGame();
+        view.showGame();
     }
 
     private void gameUpdate(Response request) {
         Logger.getGlobal().info("Update Data not null in command handler");
-        this.view.update(request);
+        view.update(request);
         request.getUpdateData().forEach(stateUpdate -> Logger.getGlobal().info("Received an update: " + stateUpdate.toString()));
-        this.view.showGame();
+        view.showGame();
     }
 
     public void handle(Response request) {
-        if (view.isCliTrueGuiFalse()) {
+        if (request.getMessage().contains("ping")) {
+            view.pong();
+        } else if (view.isCliTrueGuiFalse()) {
             if (request.getSuccess() && request.getMessage().equals(Constants.FINISHGAME)) {
-                this.view.showMessage(request.getMessage());
+                view.showMessage(request.getMessage());
             } else if (request.getSuccess() && request.getGame() != null) {
                 gameStart(request);
             } else if (request.getSuccess() && request.getUpdateData() != null) {
                 gameUpdate(request);
             } else if (!request.getSuccess()) {
-                this.view.reportError(request.getMessage());
+                view.reportError(request.getMessage());
             } else {
                 new Thread(() -> internalCliHandle(request)).start();
             }
@@ -51,7 +57,7 @@ public class ClientCommandHandler {
     }
 
     private synchronized void internalCliHandle(Response request) {
-        this.view.showMessage(request.getMessage());
+        view.showMessage(request.getMessage());
     }
 
     private synchronized void internalGuiHandle(Response request) {
@@ -63,9 +69,9 @@ public class ClientCommandHandler {
             if (request.getUpdateData() != null) {
                 gameUpdate(request);
             }
-            this.view.showMessage(request.getMessage());
+            view.showMessage(request.getMessage());
         } else {
-            this.view.reportError(request.getMessage());
+            view.reportError(request.getMessage());
         }
     }
 }

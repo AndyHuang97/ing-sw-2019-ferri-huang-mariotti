@@ -10,12 +10,19 @@ public class NamedImage extends Image {
 
         private String name;
 
-        public NamedImage(String url, String regex) {
+    /**
+     * The constructor of the NamedImage, that stores the name of an image.
+     *
+     * @param  url is the url path of the image.
+     * @param regex is the regex used to remove the path of image, and get only its name.
+     */
+    public NamedImage(String url, String regex) {
             super(url);
             name = url.split(regex)[1].split(".png")[0];
         }
 
-        public String getName() {
+
+    public String getName() {
             return name;
         }
 }

@@ -14,7 +14,6 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -43,6 +42,12 @@ import java.util.stream.IntStream;
 
 import static it.polimi.se2019.client.util.Constants.*;
 
+/**
+ * The GUIController is the main gui controller, it intializes all the graphic elements from their fxml files. Then
+ * it provides all the methods for game rendering and player input building.
+ *
+ * @author andreahuang
+ */
 public class GUIController {
 
     private static final Logger logger = Logger.getLogger(GUIController.class.getName());
@@ -50,18 +55,15 @@ public class GUIController {
 
     private View view;
     private Map<PlayerColor, PlayerBoardController> playerBoardControllerMap;
-    private List<PlayerBoardController> pbControllerList;
+    private List<PlayerBoardController> playerBoardControllerList;
     private MapController mapController;
     private Map<String, List<String>> intermediateInput = new HashMap<>();
     private String message;
-    private boolean initialized;
 
     private GridPane progressBar;
 
     @FXML
     private VBox leftVBox;
-    @FXML
-    private AnchorPane map;
     @FXML
     private AnchorPane playerBoard;
     @FXML
@@ -93,24 +95,6 @@ public class GUIController {
     @FXML
     private AnchorPane frenzyActionTile;
     @FXML
-    private Button mmm;
-    @FXML
-    private Button mg;
-    @FXML
-    private Button s;
-    @FXML
-    private Button r;
-    @FXML
-    private Button mrs;
-    @FXML
-    private Button mmmm;
-    @FXML
-    private Button mmg;
-    @FXML
-    private Button mmrs;
-    @FXML
-    private Button mmmg;
-    @FXML
     private Button ms;
     @FXML
     private Button mmgAdr;
@@ -123,25 +107,26 @@ public class GUIController {
 
     /**
      * The main game board initializer which is called when the GameBoard.fxml file is loaded.
+     *
      */
     @FXML
     private void initialize() {
         playerBoardControllerMap = new HashMap<>();
-        pbControllerList = new ArrayList<>();
-        initialized = false;
+        playerBoardControllerList = new ArrayList<>();
     }
 
     /**
-     *  Is called by the main application to set itself.
+     * The setView method is called by the main application to set itself and give access to the model for linking.
      *
-     * @param view
+     * @param view is the view that interacts with the server.
+     *
      */
     public void setView(View view) {
         this.view = view;
     }
 
     /**
-     * Initializes all parameters.
+     * The init method initializes all the graphic parameters of the game using support methods.
      *
      */
     public void init() {
@@ -149,12 +134,10 @@ public class GUIController {
         initMap();
         initPlayerBoards();
         initMyCards();
-
-        initialized = false;
     }
 
     /**
-     * Sets the style of info panes.
+     * The setInfoPaneStyle method sets the style of info panes.
      *
      */
     public void setInfoPaneStyle() {
@@ -168,33 +151,33 @@ public class GUIController {
     }
 
     /**
-     * Initializes the map by loading the fxml containing the decorated map.
+     * The initMap method the map by loading the fxml containing the decorated map.
      *
      */
     public void initMap() {
 
-        if (!initialized) {
-            try {
-                FXMLLoader mloader = new FXMLLoader();
-                mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
-                AnchorPane decoratedMap = mloader.load();
-                mapController = mloader.getController();
-                mapController.setView(view);
+        try {
+            FXMLLoader mloader = new FXMLLoader();
+            mloader.setLocation(getClass().getResource("/fxml/Map.fxml"));
+            AnchorPane decoratedMap = mloader.load();
+            mapController = mloader.getController();
+            mapController.setView(view);
 
-                // removes the old anchor and adds the new one
-                leftVBox.getChildren().remove(0);
-                leftVBox.getChildren().add(0, decoratedMap);
-                mapController.handleMapLoading();
-                progressBar = mapController.getProgressBar();
-                initialized = true;
-            } catch (IOException e) {
-                logger.warning("Error loading map.");
-            }
+            // removes the old anchor and adds the new one
+            leftVBox.getChildren().remove(0);
+            leftVBox.getChildren().add(0, decoratedMap);
+            mapController.handleMapLoading();
+            progressBar = mapController.getProgressBar();
+        } catch (IOException e) {
+            logger.warning("Error loading map.");
         }
+
     }
 
     /**
-     * Calls the showMap methos of the mapController, which renders the kill shot track, the players and the
+     * The showMap method calls methods provided by the mapController to render the kill shot track, the players, the
+     * ammo crates, and the weapon crates.
+     *
      */
     public void showMap() {
         mapController.showKillShotTrack();
@@ -204,7 +187,7 @@ public class GUIController {
     }
 
     /**
-     * Initializes the players' boards with all their info.
+     * The initPlayerBoards method initializes the players' boards by loading them from the fxml file.
      *
      */
     public void initPlayerBoards() {
@@ -247,6 +230,10 @@ public class GUIController {
         }
     }
 
+    /**
+     * The showPlayerBoards method shows the player board on the board. It is called on every update to refresh the
+     * interface.
+     */
     public void showPlayerBoards() {
         Game game = view.getModel().getGame();
         int i = 0;
@@ -284,7 +271,7 @@ public class GUIController {
     }
 
     /**
-     * Initialize the client's cards to respond to mouse click events.
+     * The initMyCards method initializes the player's power up and weapon cards to respond to mouse click events.
      *
      */
     public void initMyCards() {
@@ -315,7 +302,8 @@ public class GUIController {
     }
 
     /**
-     * Plainly shows the client player's weapon and powerup cards.
+     * The showMyCards method shows the client player's weapon and power up cards. It is called on every update to refresh the
+     * interface.
      *
      */
     public void showMyCards() {
@@ -363,7 +351,7 @@ public class GUIController {
     }
 
     /**
-     * Shows the player's score.
+     * The showScore method shows a player's score.
      *
      * @param player can be either the client or an opponent.
      * @param score is the label containing the player's score.
@@ -373,7 +361,7 @@ public class GUIController {
     }
 
     /**
-     * Shows the player's name.
+     * The showName method shows the player's name.
      *
      * @param player can be either the client or an opponent.
      * @param name is the label containing the name of the player.
@@ -385,7 +373,7 @@ public class GUIController {
     }
 
     /**
-     * Shows the player's ammo.
+     * The showAmmo method shows the player's ammo.
      *
      * @param player can be either the client or an opponent.
      * @param gridPane  is the grid pane containing the ammo images and text.
@@ -400,7 +388,7 @@ public class GUIController {
     }
 
     /**
-     * Shows opponents' unloaded weapons.
+     * The showOpponentUnloadedWeapons shows the opponents' unloaded weapons.
      *
      * @param player is an opponent player.
      * @param i the i-th player in the right half of the window.
@@ -423,7 +411,7 @@ public class GUIController {
     }
 
     /**
-     * Adds the buttons to the action tile according to player's color and
+     * The showActionButtons show the buttons to the action tile according to player's color and
      * game's current mode.
      *
      */
@@ -462,7 +450,7 @@ public class GUIController {
 
 
     /**
-     * Show the player's ranking with their scores.
+     * The showRanking method shows the player's ranking with their scores. It only allows exit from the game.
      *
      */
     public void showRanking() {
@@ -495,28 +483,37 @@ public class GUIController {
             // alert is exited, no button has been pressed.
         } else if(result.get() == ButtonType.OK) {
             //okay button is pressed
-            Platform.exit();
+            System.exit(0);
         }
 
     }
 
-    public void showCurrentPlayr() {
+    /**
+     * The showCurrentPlayer method shows the current player's name.
+     *
+     */
+    public void showCurrentPlayer() {
         Player player = view.getModel().getGame().getCurrentPlayer();
         currentPlayer.setText(player.getUserData().getNickname());
         Util.setLabelColor(currentPlayer, player.getColor());
     }
 
+
+    /**
+     * The handleClose method handle the close event when the close button is clicked.
+     *
+     */
     @FXML
     public void handleClose() {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
-        Platform.exit();
+        System.exit(0);
     }
 
 
     /**
-     * Handles the confirm button, it prepares the interface to receive the next input.
-     * Finally, it refreshes the interface as the cancel button.
+     * The handleConfirm method handles the mouse click event on the confirm button, it prepares the interface to receive
+     * the next input. Finally, it sends the input and refreshes the interface calling the cancel button.
      *
      */
     @FXML
@@ -535,8 +532,8 @@ public class GUIController {
     }
 
     /**
-     * Handles the cancel button, it refreshes the interface to a state prior to the input
-     * selection.
+     * The handleCancel method handles the mouse click event on the cancel button, it refreshes the interface to a
+     * state prior to the input selection.
      *
      */
     @FXML
@@ -549,6 +546,10 @@ public class GUIController {
         view.showMessage(message);
     }
 
+    /**
+     * The handleReset method handles the refreshing of the interface.
+     *
+     */
     public void handleReset() {
         progressBar.getChildren().stream()
                 .map(n -> (Circle) n)
@@ -568,88 +569,58 @@ public class GUIController {
         resetAmmoStyle();
     }
 
+    /**
+     * The storeMessage method is used store the message received from the server. It is necessary to implement the
+     * action cancelling functionality.
+     *
+     * @param message is the message received from the server
+     */
     public void storeMessage(String message) {
         this.message = message;
     }
 
     /**
-     * Getter for the player's board.
-     *
-     * @return player board the player.
-     */
-    public AnchorPane getPlayerBoard() {
-        return playerBoard;
-    }
-
-    /**
-     * Setter for the player's board.
-     *
-     * @param playerBoard is the new player's board.
-     */
-    public void setPlayerBoard(AnchorPane playerBoard) {
-        this.playerBoard = playerBoard;
-    }
-
-    /**
-     * Getter for the map of the game.
-     *
-     * @return the map of the game.
-     */
-    public AnchorPane getMap() {
-        return map;
-    }
-
-    /**
-     * Setter for the map of the game.
-     *
-     * @param map is the new map of the game.
-     */
-    public void setMap(AnchorPane map) {
-        this.map = map;
-    }
-
-    /**
-     * Getter for the left Vbox of the game board.
-     *
-     * @return left Vbox of the game board.
-     */
-    public VBox getLeftVBox() {
-        return leftVBox;
-    }
-
-    /**
-     * Gets the list of the player boards' controller.
+     * Getter for  the list of the player boards' controller.
      *
      * @return list of player boards' controller
      */
-    public List<PlayerBoardController> getPbControllerList() {
-        return pbControllerList;
+    public List<PlayerBoardController> getPlayerBoardControllerList() {
+        return playerBoardControllerList;
     }
 
     /**
-     * Gets the player board corresponding to the player's color
+     * Getter for the player board corresponding to the player's color.
      *
      * @param playerColor the player's color associated to the board
      * @return the player board with the correct player color
      */
     public PlayerBoardController getPlayerBoardController(PlayerColor playerColor) {
-        Optional<PlayerBoardController> optional = getPbControllerList().stream()
+        Optional<PlayerBoardController> optional = getPlayerBoardControllerList().stream()
                 .filter(pc -> pc.getPlayerColor() == playerColor)
                 .findFirst();
 
         return optional.orElse(null);
     }
 
-
+    /**
+     * The getIntermediate input is the getter for a cache for the player input. It is forwarded to the view only once
+     * the whole action has been performed.
+     *
+     * @return the map built as input to send to the server
+     */
     public Map<String, List<String>> getIntermediateInput() {
         return intermediateInput;
     }
 
-    public void setIntermediateInput(Map<String, List<String>> intermediateInput) {
-        this.intermediateInput = intermediateInput;
-    }
-
-
+    /**
+     * The setCardSelectionBehavior method gives a basic behaviour to an image view, and then adds additional behaviour
+     * only when necessary.
+     *
+     * @param iv is the image view on which to set a behaviour.
+     * @param myCards is the container of the image view, and is disabled when the image view is clicked.
+     * @param action is the string action that is used as key for input building
+     * @param additionalBehaviour is a Runnable used to add some additional behaviour to the mouse click event
+     */
     public void setCardSelectionBehavior(ImageView iv, Node myCards, String action, Runnable additionalBehaviour) {
 
         iv.setOnMouseClicked(event -> {
@@ -671,6 +642,12 @@ public class GUIController {
         });
     }
 
+    /**
+     * The addInput method receives a key string and an id string to build the input.
+     *
+     * @param key is the string used as key for input building.
+     * @param id is the string used as value for input building.
+     */
     public void addInput(String key, String id) {
         intermediateInput.putIfAbsent(key, new ArrayList<>());
         if (!intermediateInput.get(key).contains(id)) {
@@ -679,6 +656,10 @@ public class GUIController {
         System.out.println("Added: " + key + " " + id);
     }
 
+    /**
+     * The handleM method asks a tile input from the player when the 'm' is clicked.
+     *
+     */
     @FXML
     public void handleM() {
         ((GUIView)view).getGuiController().handleCancel();
@@ -687,6 +668,10 @@ public class GUIController {
         view.askInput();
     }
 
+    /**
+     * The handleMG method asks a tile input and a card input from the player when the 'ms' button is clicked.
+     *
+     */
     @FXML
     public void handleMG() {
         ((GUIView)view).getGuiController().handleCancel();
@@ -696,27 +681,40 @@ public class GUIController {
         view.askInput();
     }
 
+    /**
+     * The handleMG method asks a tile input and a card input from the player when the 's' button is clicked.
+     *
+     */
     @FXML
     public void handleS() {
         ((GUIView)view).getGuiController().handleCancel();
         actionButtons.setDisable(true);
-        ((GUIView)view).getGuiController().getIntermediateInput().clear();
+        getIntermediateInput().clear();
         view.getInputRequested().add(this::getShootWeapon);
         view.askInput();
     }
 
+    /**
+     * The handleR method asks a reload input from the player when the 'r' button is clicked.
+     *
+     */
     @FXML
     public void handleR() {
         ((GUIView)view).getGuiController().handleCancel();
         actionButtons.setDisable(true);
-        ((GUIView)view).getGuiController().getIntermediateInput().clear();
+        getIntermediateInput().clear();
         view.getInputRequested().add(this::getReload);
         view.askInput();
     }
 
+    /**
+     * The handleMRS method asks a tile input, a relaod input, and a shoot weapon input when the 'mrs' button
+     * is clicked.
+     *
+     */
     @FXML
     public void handleMRS() {
-        ((GUIView)view).getGuiController().handleCancel();
+        handleCancel();
         actionButtons.setDisable(true);
         view.getInputRequested().add(this::getTile);
         view.getInputRequested().add(this::getReload);
@@ -724,6 +722,9 @@ public class GUIController {
         view.askInput();
     }
 
+    /**
+     * The handleMS method asks a tile input and a shoot weapon input when the 'ms' button is clicked.
+     */
     @FXML
     public void handleMS() {
         ((GUIView)view).getGuiController().handleCancel();
@@ -733,6 +734,10 @@ public class GUIController {
         view.askInput();
     }
 
+    /**
+     * The handlePass method directly sends a NOP(no operation) to the server to skip an action.
+     *
+     */
     @FXML
     public void handlePass() {
 
@@ -748,6 +753,12 @@ public class GUIController {
         handleCancel();
     }
 
+    /**
+     * The addKeyOrderAction method adds a 'keyOrder' key to the intemediateInput map if not present. Otherwise, if the
+     * the key string is not contained in the value list of the 'keyOrder' key, it adds it to the list.
+     *
+     * @param key
+     */
     private void addKeyOrderAction(String key) {
         if (!intermediateInput.containsKey(Constants.KEY_ORDER)) {
             List<String> lst = new ArrayList<>();
@@ -760,6 +771,10 @@ public class GUIController {
         }
     }
 
+    /**
+     * The getTile method is used to ask a tile input for a move action to the player.
+     *
+     */
     public void getTile(){
 
         addKeyOrderAction(MOVE);
@@ -774,6 +789,12 @@ public class GUIController {
         setUpProgressBar(1);
     }
 
+    /**
+     * The getShootTile method is used to ask a tile for a weapon shoot or powerUp action to the player.
+     *
+     * @param playerAction is either a shoot or a powerUp action.
+     * @param amount is the amount of tile asked from by the action.
+     */
     public void getShootTile(String playerAction, int amount) {
 
         mapController.getShootTileGrid().toFront();
@@ -799,6 +820,12 @@ public class GUIController {
         setUpProgressBar(amount);
     }
 
+    /**
+     * The getTarget method is used to ask a player target for a weapon shoot or powerUp action to the player.
+     *
+     * @param playerAction is either a shoot or a powerUp action.
+     * @param amount is the amount of tile asked from by the action.
+     */
     public void getTarget(String playerAction, int amount) {
 
         mapController.getPlayerGrid().toFront();
@@ -845,6 +872,10 @@ public class GUIController {
         setUpProgressBar(amount);
     }
 
+    /**
+     * The getCard method is used to ask a card input for a grab action to the player.
+     *
+     */
     public void getCard() {
 
         addKeyOrderAction(GRAB);
@@ -854,6 +885,10 @@ public class GUIController {
         showGrabbableCards();
     }
 
+    /**
+     * The getPowerUpForRespawn method is used to ask a power up for a respawn action to the player.
+     *
+     */
     public void getPowerUpForRespawn() {
 
         cancelButton.setDisable(true);
@@ -867,6 +902,10 @@ public class GUIController {
         setUpProgressBar(1);
     }
 
+    /**
+     * The getReload method is used to ask a weapon card input for a reload action to the player.
+     *
+     */
     public void getReload() {
 
         infoText.setText("Select one or more weapons to reload");
@@ -881,6 +920,9 @@ public class GUIController {
 
     }
 
+    /**
+     * The getShootWeapon method is used to ask a weapon card input for a shoot weapon action to the player.
+     */
     public void getShootWeapon() {
 
         addKeyOrderAction(SHOOT_WEAPON);
@@ -897,6 +939,11 @@ public class GUIController {
         setUpProgressBar(1);
     }
 
+    /**
+     * The getActionUnit method is used to ask an action unit input for a shoot action to the player.
+     * It can ask either tiles or targets, even both, to activate the action unit of the weapon.
+     *
+     */
     public void getActionUnit() {
 
         cancelButton.setDisable(false);
@@ -923,6 +970,15 @@ public class GUIController {
         }
     }
 
+    /**
+     * The setActionUnitButton method is used to give behaviour to an action button based on the list of action units
+     * of a weapon.
+     *
+     * @param b is the button on which to set the behaviour.
+     * @param actionUnitList is the list of action units that asks tile or player target inputs.
+     * @param i is index of the action in the action unit list.
+     * @param weaponID is the id of the weapon that is performing the action unit.
+     */
     public void setActionUnitButton(Button b, List<ActionUnit> actionUnitList, int i, String weaponID) {
         b.setOnAction(event -> {
             // adds the action unit in the input list
@@ -935,23 +991,27 @@ public class GUIController {
             if (actionUnitList.get(i).getNumTileTargets() > 0) {
                 view.getInputRequested().add(() -> getShootTile(SHOOT, actionUnitList.get(i).getNumTileTargets()));
             }
-
             view.askInput();
         });
     }
 
-
-
+    /**
+     * The handlePlayerSelected method is used to add a player target input to a player action.
+     *
+     * @param playerActon is the playerAction for which to add the input.
+     * @param color is the input to add for the player action.
+     */
     public void handlePlayerSelected(String playerActon, String color) {
         String id = view.getModel().getGame().getPlayerList().stream()
                 .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
                 .collect(Collectors.toList()).get(0).getId();
-        ((GUIView) view).getGuiController().addInput(playerActon, id);
+        addInput(playerActon, id);
     }
 
     /**
-     * Prepares the number of circles indicating the max number of selections needed.
-     * @param numOfTargets is the number of selections.
+     * The setUpProgressBar method sets up the number of circles indicating the max number of selections allowed.
+     *
+     * @param numOfTargets is maximum number of selections.
      */
     public void setUpProgressBar(int numOfTargets) {
 
@@ -960,7 +1020,9 @@ public class GUIController {
     }
 
     /**
-     * Shows the objects that are grabbable from the player's position in the map.
+     * The showGrabbableCards method shows the objects that are grabbable from the player's position in the map.
+     * The grabbable cards can be either ammo crate or weapon crates. In case the player already has three cards
+     * in his or her hand.
      *
      */
     public void showGrabbableCards() {
@@ -1039,7 +1101,7 @@ public class GUIController {
     }
 
     /**
-     * Shows the unloaded weapons for selection, and hides the loaded ones.
+     * The showMyUnloadedWeapons shows the player's unloaded weapons for selection, and hides the loaded ones.
      *
      */
     public void showMyUnloadedWeapons() {
@@ -1075,7 +1137,7 @@ public class GUIController {
     }
 
     /**
-     * Shows the loaded weapons for selection, and hides the unloaded ones.
+     * The showMyLoadedWeapons method shows the player's loaded weapons for selection, and hides the unloaded ones.
      *
      */
     public void showMyLoadedWeapons() {
@@ -1102,7 +1164,7 @@ public class GUIController {
     }
 
     /**
-     * Shows the powerups for selection.
+     * The showMyPowerups method shows all the player's powerUps for selection.
      *
      */
     public void showMyPowerups(String playerAction) {
@@ -1122,6 +1184,12 @@ public class GUIController {
                 });
     }
 
+    /**
+     * The showPowerUps method shows only the requested powerUps for selection. It shows the requested powerUps and
+     * hides the others ones.
+     *
+     * @param powerUpList is the list of powerUps that are asked for input.
+     */
     public void showPowerUps(List<String> powerUpList) {
         CharacterState myCharacterState =  view.getModel().getGame().getPlayerByColor(view.getPlayerColor()).getCharacterState();
         List<PowerUp> myPowerUpsModel = myCharacterState.getPowerUpBag();
@@ -1160,6 +1228,11 @@ public class GUIController {
                 });
     }
 
+    /**
+     * The getAmmo method shows the player's ammo for selection. It is needed when a targeting scope powerUp is
+     * used.
+     *
+     */
     public void getAmmo() {
         infoText.setText("Select 1 ammo");
         myAmmo.getStyleClass().add(SELECTION_NODE);
@@ -1207,6 +1280,10 @@ public class GUIController {
         setUpProgressBar(1);
     }
 
+    /**
+     * The resetAmmoStyle method resets the style of the player's ammo.
+     *
+     */
     public void resetAmmoStyle() {
         myAmmo.setDisable(false);
         if (!myAmmo.getStyleClass().isEmpty()) {
@@ -1222,6 +1299,10 @@ public class GUIController {
     }
 
 
+    /**
+     * The showPass method enables the pass button selection to skip an action.
+     *
+     */
     public void showPass() {
         pass.setDisable(false);
     }

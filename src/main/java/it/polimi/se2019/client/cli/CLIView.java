@@ -43,20 +43,7 @@ public class CLIView extends View {
     public void showMessage(String message) {
         try {
             Player currentPlayer = getModel().getGame().getPlayerByNickname(getNickname());
-            List<String> tiles = new ArrayList<>(Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"));
-            switch (getModel().getGame().getBoard().getId()) {
-                case "0":
-                    tiles.remove("3");
-                    tiles.remove("8");
-                    break;
-                case "1":
-                    tiles.remove("8");
-                    break;
-                case "3":
-                    tiles.remove("3");
-                    break;
-            }
-            final List<String> validTiles = new ArrayList<>(tiles);
+            final List<String> validTiles = getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).map(tile -> tile.getId()).collect(Collectors.toList());
             switch (message) {
                 case Constants.RELOAD:
                     List<String> selectedReloadWeapons = new ArrayList<>();
@@ -98,9 +85,15 @@ public class CLIView extends View {
                     getModel().getGame().getPlayerList().forEach(p -> {
                         if (!p.getId().equals(currentPlayer.getId())) shootPlayers.put(p.getUserData().getNickname(), p.getId());
                     });
+                    List<String> validShootTiles = new ArrayList<>(validTiles);
+                    if (actionUnit.isUnidirectional()) {
+                        int x = currentPlayer.getCharacterState().getTile().getxPosition();
+                        int y = currentPlayer.getCharacterState().getTile().getyPosition();
+                        validShootTiles = new ArrayList<>(getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).filter(t -> (t.getxPosition() == x || t.getyPosition() == y) && !t.getId().equals(getModel().getGame().getBoard().getTile(x, y).getId())).map(t -> t.getId()).collect(Collectors.toList()));
+                    }
                     int[] targetsSize = new int[] {actionUnit.getNumPlayerTargets(), actionUnit.getNumTileTargets()};
                     String[] messages = new String[] {"Select a player #%d to target", "Select tile #%d to target"};
-                    List<String>[] answers = new List[] {new ArrayList<>(shootPlayers.keySet()), new ArrayList<>(validTiles)};
+                    List<String>[] answers = new List[] {new ArrayList<>(shootPlayers.keySet()), validShootTiles};
                     boolean[] type = new boolean[] {true, false};
                     shootPlayers.put("n", "n");
                     int start;
@@ -110,6 +103,10 @@ public class CLIView extends View {
                         for (int i = 0; i < targetsSize[Math.abs(j)]; i++) {
                             if ((j != start || i != 0) && !answers[Math.abs(j)].contains("n")) {
                                 answers[Math.abs(j)].add("n");
+                            }
+                            if (answers[Math.abs(j)].isEmpty()) {
+                                sendNOP();
+                                return;
                             }
                             String selectedTarget = utils.askUserInput(String.format(messages[Math.abs(j)], i), answers[Math.abs(j)], type[Math.abs(j)]);
                             if (selectedTarget.equals(Constants.NOP)) {
@@ -233,7 +230,16 @@ public class CLIView extends View {
                                 }
                                 break;
                             case Constants.POWERUP:
-                                List<String> validPowerUps = currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> up.getName().contains("Newton") || up.getName().contains("Teleporter")).map(up -> up.getName()).collect(Collectors.toList());
+                                Map<String, Player> newtonPlayers = new HashMap<>();
+                                getModel().getGame().getPlayerList().forEach(p -> {
+                                    if (p.getCharacterState().getTile() != null) {
+                                        int x = p.getCharacterState().getTile().getxPosition();
+                                        int y = p.getCharacterState().getTile().getyPosition();
+                                        List<String> tmpValidNewtonTiles = new ArrayList<>(getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).filter(t -> (t.getxPosition() == x || t.getyPosition() == y) && !t.getId().equals(getModel().getGame().getBoard().getTile(x, y).getId())).map(t -> t.getId()).collect(Collectors.toList()));
+                                        if (!p.getId().equals(currentPlayer.getId()) && !tmpValidNewtonTiles.isEmpty()) newtonPlayers.put(p.getUserData().getNickname(), p);
+                                    }
+                                });
+                                List<String> validPowerUps = currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> (up.getName().contains("Newton") && !newtonPlayers.isEmpty()) || up.getName().contains("Teleporter")).map(up -> up.getName()).collect(Collectors.toList());
                                 String selectedPowerUp = utils.askUserInput("Choose the powerUp to use", validPowerUps, true);
                                 if (selectedPowerUp.equals(Constants.NOP)) {
                                     sendNOP();
@@ -241,21 +247,20 @@ public class CLIView extends View {
                                 }
                                 doneActions.add(Constants.POWERUP);
                                 if (selectedPowerUp.contains("Newton")) {
-                                    Map<String, String> newtonPlayers = new HashMap<>();
-                                    getModel().getGame().getPlayerList().forEach(p -> {
-                                        if (!p.getId().equals(currentPlayer.getId())) newtonPlayers.put(p.getUserData().getNickname(), p.getId());
-                                    });
                                     String selectedNewtonPlayer = utils.askUserInput("Select a player to newton", new ArrayList<>(newtonPlayers.keySet()), true);
                                     if (selectedNewtonPlayer.equals(Constants.NOP)) {
                                         sendNOP();
                                         return;
                                     }
-                                    String selectedNewtonTile = utils.askUserInput("Pick a tile where to newton it", new ArrayList<>(validTiles), false);
+                                    int x = newtonPlayers.get(selectedNewtonPlayer).getCharacterState().getTile().getxPosition();
+                                    int y = newtonPlayers.get(selectedNewtonPlayer).getCharacterState().getTile().getyPosition();
+                                    List<String> validNewtonTiles = new ArrayList<>(getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).filter(t -> (t.getxPosition() == x || t.getyPosition() == y) && !t.getId().equals(getModel().getGame().getBoard().getTile(x, y).getId())).map(t -> t.getId()).collect(Collectors.toList()));
+                                    String selectedNewtonTile = utils.askUserInput("Pick a tile where to newton it", validNewtonTiles, false);
                                     if (selectedNewtonTile.equals(Constants.NOP)) {
                                         sendNOP();
                                         return;
                                     }
-                                    getPlayerInput().put(Constants.POWERUP, Arrays.asList(selectedPowerUp, newtonPlayers.get(selectedNewtonPlayer), selectedNewtonTile));
+                                    getPlayerInput().put(Constants.POWERUP, Arrays.asList(selectedPowerUp, newtonPlayers.get(selectedNewtonPlayer).getId(), selectedNewtonTile));
                                 } else if (selectedPowerUp.contains("Teleporter")) {
                                     String selectedTeleportTile = utils.askUserInput("Pick a tile where to teleport", new ArrayList<>(validTiles), false);
                                     if (selectedTeleportTile.equals(Constants.NOP)) {

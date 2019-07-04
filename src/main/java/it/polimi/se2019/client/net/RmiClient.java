@@ -9,7 +9,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class RmiClient implements NetworkClient {
@@ -58,7 +58,7 @@ public class RmiClient implements NetworkClient {
         @Override
         public void send(String rawRequest) throws RemoteException {
             Response request = (Response) new Response(null, false, "").deserialize(rawRequest);
-            if (!request.getMessage().equals("ping")) commandHandler.handle(request);
+            commandHandler.handle(request);
         }
 
 

@@ -23,9 +23,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * The MapController class contains all the elements of the map(ammo crates, weapon crates, players, and kill shot track).
+ * It provides methods to initialize the map's graphic elements' behaviour, methods to show the graphic elements, and
+ * methods to reset the graphic elements' style.
+ *
+ * @author andreahuang
+ */
 public class MapController {
 
     private static final Logger logger = Logger.getLogger(MapController.class.getName());
+    private static double ANCHOR = 0.0;
 
     private View view;
     private List<GridPane> weaponCrateList;
@@ -55,6 +63,7 @@ public class MapController {
 
     /**
      * The map initializer that is called wen the Map.fxml file is loaded.
+     * It adds the container of weaponcrates in one list for better easier processing.
      *
      */
     @FXML
@@ -64,17 +73,18 @@ public class MapController {
     }
 
     /**
-     *  Is called by the main application to set itself.
+     * The setView method is called by the main application to set itself and give access to the model for linking.
      *
-     * @param view
+     * @param view is the view that interacts with the server.
+     *
      */
     public void setView(View view) {
         this.view = view;
     }
 
     /**
-     * Handles the loading of a map. It shows the clickable tiles based on
-     * the map's id and the present ammo tiles.
+     * The handleMapLoading method is used for the loading of a map. It initializes the clickable tiles based on
+     * the map's id, the ammocrate cards, and the players.
      *
      */
     public void handleMapLoading() {
@@ -115,6 +125,7 @@ public class MapController {
      * @param tileMap is the tile map.
      * @param x is the x coordinate of the tile.
      * @param y is the y coordintate of the tile.
+     *
      */
     public void initTileGrid(Tile[][] tileMap, int x, int y) {
 
@@ -133,7 +144,14 @@ public class MapController {
         }
     }
 
-    private static double ANCHOR = 0.0;
+    /**
+     * The setButtonTile method sets the behaviour of the mouse click event of each button from a tile.
+     * It provides a Runnable handleAction to support different kinds of input handling.
+     *
+     * @param gridPane is the grid pane that contains button.
+     * @param button is the button which the mouse click event is set on.
+     * @param handleAction is a runnable that builds the input for the mouse click event.
+     */
     public void setButtonTile(GridPane gridPane, Button button, Runnable handleAction) {
         button.setOpacity(0.4);
         AnchorPane.setTopAnchor(button, ANCHOR);
@@ -166,7 +184,7 @@ public class MapController {
     }
 
     /**
-     * This is the first initialization of the ammo grid, which defines the effect of mouse click.
+     * The initAmmoGrid is the first initialization of the ammo grid, which defines the effect of mouse click.
      * for every single ammo card.
      *
      * @param tileMap is the tile map.
@@ -186,6 +204,10 @@ public class MapController {
         }
     }
 
+    /**
+     * The showAmmoGrid method show the ammocrate on the map. It links the model's ammocrates with its graphic counterpart.
+     *
+     */
     public void showAmmoGrid() {
         view.getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).filter(tile -> !tile.isSpawnTile())
                 .forEach(tile -> {
@@ -203,11 +225,11 @@ public class MapController {
     }
 
     /**
+     * The initPlayerGrid method is called to set the behaviours of each circle that represents a player.
      *
-     *
-     * @param tileMap
-     * @param x
-     * @param y
+     * @param tileMap is the tile map of the model.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
      */
     public void initPlayerGrid(Tile[][] tileMap, int x, int y) {
 
@@ -241,7 +263,7 @@ public class MapController {
     }
 
     /**
-     * Shows the weapon crates.
+     * The showWeaponCrates method shows the weapon crates on the map. It links the model's weapons with its graphic counterpart.
      *
      */
     public void showWeaponCrates() {
@@ -275,7 +297,7 @@ public class MapController {
     }
 
     /**
-     * Shows the kill shot track.
+     * The showKillShotTrack method shows the killShotTrack on the map. It links the model's killShotTrack with its graphic counterpart.
      *
      */
     public void showKillShotTrack() {
@@ -324,7 +346,8 @@ public class MapController {
     }
 
     /**
-     * Shows the players on map.
+     * The showPlayers method shows the players on the map. It links the model's players' position with its
+     * graphic counterpart.
      *
      */
     public void showPlayers() {
@@ -356,10 +379,10 @@ public class MapController {
     }
 
     /**
-     * Adds player in a row of the player grid.
+     * The addPlayerCircle method adds a player in a row of the player grid.
      *
      * @param row is the horizontal box containing the circles that represent players.
-     * @param player is the player to be added to the row
+     * @param player is the player to be added to the row.
      */
     private void addPlayerCircle(HBox row, Player player) {
         Optional<Node> optNode = row.getChildren().stream()
@@ -376,7 +399,7 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a button from normal tile grid.
+     * The handleTileSelected method handles the selection of a button from the normal tile grid.
      *
      * @param id is the id/position in the list of tiles.
      */
@@ -388,7 +411,7 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a button from shoot tile grid.
+     * The handleShootTileSelected method handles the selection of a button from the shoot tile grid.
      *
      * @param id is the id/position in the list of tiles.
      */
@@ -400,39 +423,21 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a weapon card from a weapon crate.
+     * The handlePlayerSelected method handles the selection of a button from player grid.
      *
-     */
-    public void handleWeaponInCrateSelected(String id) {
-        System.out.println("Weapon selected: " + id);
-        ((GUIView) view).getGuiController().addInput(Constants.GRAB, id);
-    }
-
-    /**
-     * Handles the selection of an ammo card from ammo tile grid.
-     *
-     */
-    public void handleAmmoCrateSelected(String id) {
-        System.out.println("Ammocrate selected: "+ id);
-        ((GUIView) view).getGuiController().addInput(Constants.GRAB, id);
-    }
-
-    /**
-     * Handles the selection of a button from player grid.
-     *
-     * @param color
+     * @param color is the color of the selected player to be sent as input.
      */
     public void handlePlayerSelected(String color) {
-//        System.out.println("Selected player: " + color);
         String id = view.getModel().getGame().getPlayerList().stream()
                 .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
                 .collect(Collectors.toList()).get(0).getId();
-//        System.out.println(color + " " + id);
         ((GUIView) view).getGuiController().addInput(Constants.SHOOT, id);
     }
 
     /**
-     * Disables and resets all grids.
+     * The resetGrids method disables and resets all grids. It calls some helpers to disable different kinds
+     * of grid panes.
+     *
      */
     public void resetGrids() {
         resetTileGridStyle(tileGrid);
@@ -449,7 +454,7 @@ public class MapController {
     }
 
     /**
-     * Resets the tile grid's buttons to the player's color.
+     * The resetTileGridStyle method resets the tile grid's buttons to the player's color.
      *
      */
     public void resetTileGridStyle(GridPane gridPane) {
@@ -465,7 +470,7 @@ public class MapController {
     }
 
     /**
-     * Resets the ammo grid's style.
+     * The resetAmmoGridStyle method resets the ammo grid's style.
      *
      */
     public void resetAmmoGridStyle() {
@@ -482,7 +487,7 @@ public class MapController {
     }
 
     /**
-     * Resets the player grid's style.
+     * The resetPlayerGridStyle method resets the player grid's style.
      *
      */
     public void resetPlayerGridStyle() {
@@ -506,7 +511,7 @@ public class MapController {
     }
 
     /**
-     * Resets the weapons grids' style.
+     * The resetWeaponCratesStyle resets the weapons grids' style.
      *
      */
     public void resetWeaponCratesStyle() {
@@ -537,7 +542,7 @@ public class MapController {
     }
 
     /**
-     * Getter fot the progress bar that contains the circles representing the number
+     * Getter for the progress bar that contains the circles representing the number
      * of players to be selected.
      *
      * @return the progress bar.
@@ -546,18 +551,39 @@ public class MapController {
         return progressBar;
     }
 
+    /**
+     * Getter for the weaponCrateList.
+     *
+     * @return the list of grid panes that contain the ammo crates.
+     */
+
     public List<GridPane> getWeaponCrateList() {
         return weaponCrateList;
     }
 
+    /**
+     * Getter for the shooTileGrid.
+     *
+     * @return the grid pane for shooting selections.
+     */
     public GridPane getShootTileGrid() {
         return shootTileGrid;
     }
 
+    /**
+     * Getter for the ammoGrid.
+     *
+     * @return the grid pane containing the ammo crate images.
+     */
     public GridPane getAmmoGrid() {
         return ammoGrid;
     }
 
+    /**
+     * Getter for the playerGrid.
+     *
+     * @return the grid pane containing the player's circles.
+     */
     public GridPane getPlayerGrid() {
         return playerGrid;
     }
