@@ -25,7 +25,7 @@
                      <children>
                         <AnchorPane fx:id="map" prefHeight="454.0" prefWidth="600.0">
                            <children>
-                              <ImageView fitHeight="454.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ImageView fitHeight="454.0" fitWidth="600.0" layoutX="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="35.7906494140625" AnchorPane.topAnchor="0.0">
                                  <image>
                                     <Image url="@../images/maps/map0.png" />
                                  </image>
@@ -664,6 +664,7 @@
                         </AnchorPane>
                      </children>
                   </VBox>
+                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleClose" style="-fx-background-color: red; -fx-background-radius: 100;" text="X" wrapText="true" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>

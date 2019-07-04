@@ -14,18 +14,26 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.*;
@@ -110,6 +118,8 @@ public class GUIController {
     private Button mmgAdr;
     @FXML
     private Button pass;
+    @FXML
+    private Button closeButton;
 
     /**
      * The main game board initializer which is called when the GameBoard.fxml file is loaded.
@@ -141,7 +151,6 @@ public class GUIController {
         initMyCards();
 
         initialized = false;
-        //showRanking();
     }
 
     /**
@@ -454,11 +463,15 @@ public class GUIController {
 
 
     /**
-     * Show the player's raking with their scores.
+     * Show the player's ranking with their scores.
      *
      */
     public void showRanking() {
+        Alert scoreWindow = new Alert(Alert.AlertType.INFORMATION);
+        scoreWindow.initStyle(StageStyle.UTILITY);
+
         List<Player> ranking = view.getModel().getGame().getRanking();
+        GridPane rankingGrid = new GridPane();
         rankingGrid.getChildren().removeAll(rankingGrid.getChildren());
         ranking.stream()
                 .forEach(p -> {
@@ -466,9 +479,33 @@ public class GUIController {
                     Label score = new Label(p.getCharacterState().getScore().toString());
                     Util.setLabelColor(name, p.getColor());
                     Util.setLabelColor(score, p.getColor());
-                    rankingGrid.add(name, 0,ranking.indexOf(p));
+                    rankingGrid.add(name, 0, ranking.indexOf(p));
                     rankingGrid.add(score, 1, ranking.indexOf(p));
                 });
+        BackgroundFill background_fill = new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(background_fill);
+        rankingGrid.setBackground(background);
+
+        scoreWindow.setTitle("Ranking");
+        scoreWindow.setHeaderText("This is the ranking");
+        scoreWindow.setGraphic(rankingGrid);
+        scoreWindow.initOwner(((GUIView)view).getPrimaryStage());
+        scoreWindow.initModality(Modality.WINDOW_MODAL);
+        Optional<ButtonType> result = scoreWindow.showAndWait();
+        if(!result.isPresent()) {
+            // alert is exited, no button has been pressed.
+        } else if(result.get() == ButtonType.OK) {
+            //okay button is pressed
+            Platform.exit();
+        }
+
+    }
+
+    @FXML
+    public void handleClose() {
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        stage.close();
+        Platform.exit();
     }
 
 
