@@ -14,7 +14,6 @@ import it.polimi.se2019.util.Response;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * This class contains the information about a character, it's meant to be serialized.
@@ -164,6 +163,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 	}
 
 	/**
+     * Sets the damage
 	 * @param damageBar
 	 */
 	public void setDamageBar(List<PlayerColor> damageBar) {

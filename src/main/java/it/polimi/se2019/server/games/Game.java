@@ -229,6 +229,9 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public List<Player> getRanking() {
 		List<Player> ranking = new ArrayList<>();
 		ranking.addAll(playerList);
+
+		// it's the end of the game 
+
 		Comparator<Player> scoreComparator = (p1, p2) ->  p1.getCharacterState().getScore().compareTo(p2.getCharacterState().getScore());
 		ranking.sort(scoreComparator.reversed());
 		return ranking;
@@ -322,13 +325,6 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 	public void setCurrentActionUnitsList(List<ActionUnit> currentActionUnitsList) {
 		this.currentActionUnitsList = currentActionUnitsList;
-	}
-
-	@Deprecated
-	public void performMove(String action) {
-		Response response = new Response(new Game(), true, "");
-		notify(response);
-
 	}
 
 	public boolean isFrenzy() {
