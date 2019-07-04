@@ -17,3 +17,6 @@ target/
 
 # Game save
 games_dump.json
+
+# Game jars ;)
+classes/artifacts/
