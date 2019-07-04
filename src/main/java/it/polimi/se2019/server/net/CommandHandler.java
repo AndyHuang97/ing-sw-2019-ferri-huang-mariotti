@@ -184,11 +184,15 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                             logger.info(e.getMessage());
                         }
                         //TODO turn handling on reconnection
-                        if (!currentGame.getCurrentPlayer().getActive()) {
-                            currentGame.setCurrentPlayer(currentGame.getPlayerByNickname(nickname));
-                            ControllerState newControllerState = new WaitingForMainActions();
-                            ServerApp.controller.setControllerStateForGame(currentGame, newControllerState);
-                            newControllerState.sendSelectionMessage(this);
+                        if (currentGame.getActivePlayerList().size()<=3) { // if the game is still in set up state
+                            if (!currentGame.getCurrentPlayer().getActive()) { // if not active give control to a new player
+                                currentGame.setCurrentPlayer(currentGame.getPlayerByNickname(nickname));
+                            }
+                            if (currentGame.getActivePlayerList().size()==3) {
+                                ControllerState newControllerState = new WaitingForMainActions();
+                                ServerApp.controller.setControllerStateForGame(currentGame, newControllerState);
+                                newControllerState.sendSelectionMessage(this);
+                            }
                         }
                     } else {
                         logger.info("User " + nickname + " already connected");
