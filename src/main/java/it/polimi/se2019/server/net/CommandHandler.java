@@ -191,7 +191,9 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                             if (currentGame.getActivePlayerList().size()==3) {
                                 ControllerState newControllerState = new WaitingForMainActions();
                                 ServerApp.controller.setControllerStateForGame(currentGame, newControllerState);
-                                newControllerState.sendSelectionMessage(this);
+                                Logger.getGlobal().info("Sending "+newControllerState.getClass().getSimpleName()+" to "+currentGame.getCurrentPlayer().getUserData().getNickname());
+                                ServerApp.controller.requestUpdate(currentGame);
+                                newControllerState.sendSelectionMessage(ServerApp.gameManager.getPlayerCommandHandlerMap().get(currentGame.getCurrentPlayer().getUserData().getNickname()));
                             }
                         }
                     } else {

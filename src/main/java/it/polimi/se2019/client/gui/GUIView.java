@@ -15,22 +15,33 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.logging.Logger;
 
+
+/**
+ * The GUIView class is an extension of the abstract View class. It implements the methods of the View for input buidling
+ * and view selection for the gui application.
+ *
+ * @author andreahuang
+ */
 public class GUIView extends View {
 
     private GUIController guiController;
     private BorderPane rootLayout = null;
     private Stage primaryStage;
 
-    public GUIView() {
-        this.setCliTrueGuiFalse(false);
-    }
-
-
+    /**
+     * This is the main constructor used to instatiate a GUIView, it store the primaryStage for the gui controller.
+     *
+     * @param primaryStage is the main stage of the javafx application.
+     */
     public GUIView(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.setCliTrueGuiFalse(false);
     }
 
+    /**
+     * The askInput method removes a runnable object from the list of request input. It runs it and asks
+     * for input to the player.
+     */
     @Override
     public void askInput() {
         if (!getInputRequested().isEmpty()) {
@@ -38,6 +49,12 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * The showMessage method interprets the message received from the server. It shows a different view based
+     * on the message, and different allowed actions.
+     *
+     * @param message a response message containing info on the performed action.
+     */
     @Override
     public void showMessage(String message) {
         switch (message) {
@@ -84,6 +101,11 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * The reportError method shows an alert box to display the error message.
+     *
+     * @param error an error message containing info about an action's violations.
+     */
     @Override
     public void reportError(String error) {
         if (!error.equals("")) {
@@ -98,6 +120,11 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * The showGame method renders the whole interface by reading the updated model.
+     * It does a preemptive initialization only once to give some static behaviour to various graphic objects.
+     *
+     */
     @Override
     public void showGame() {
 
@@ -110,12 +137,16 @@ public class GUIView extends View {
         this.getGuiController().showMap();
         this.getGuiController().showPlayerBoards();
         this.getGuiController().showMyCards();
-        this.getGuiController().showCurrentPlayr();
+        this.getGuiController().showCurrentPlayer();
 
 
         this.getPrimaryStage().show();
     }
 
+    /**
+     * The initGameBoard method is used to load all the fxml files and adds some static behaviours.
+     *
+     */
     private void initGameBoard() {
 
         try{
@@ -144,6 +175,12 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * The getBackgroundColor method gives back a better coloring for graphic visualization associated to one
+     * client player.
+     *
+     * @return a color string.
+     */
     public String getBackgroundColor() {
         switch (super.getPlayerColor()) {
             case BLUE:
@@ -161,26 +198,38 @@ public class GUIView extends View {
         }
     }
 
-
-
-
+    /**
+     * Getter for guiController.
+     *
+     * @return the guiController
+     */
     public GUIController getGuiController() {
         return guiController;
     }
 
+    /**
+     * Setter for guiController.
+     *
+     * @param guiController the new guiController.
+     */
     public void setGuiController(GUIController guiController) {
         this.guiController = guiController;
     }
 
-    public BorderPane getRootLayout() {
-        return rootLayout;
-    }
-
+    /**
+     * Getter for primaryStage.
+     *
+     * @return the primaryStage.
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    /**
+     * The closeStage method lets the view close any stage.
+     *
+     */
+    public void closeStage(Stage stage) {
+        stage.close();
     }
 }

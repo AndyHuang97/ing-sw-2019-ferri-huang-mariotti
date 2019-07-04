@@ -21,6 +21,12 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+/**
+ * The PlayerBoardControler is the controller of the the player board. It provides methods to link a player's data to
+ * its graphic counterpart.
+ *
+ * @author andreahuang
+ */
 public class PlayerBoardController {
 
     private static final Logger logger = Logger.getLogger(PlayerBoardController.class.getName());
@@ -40,14 +46,6 @@ public class PlayerBoardController {
     private AnchorPane skullBar;
     @FXML
     private AnchorPane actionTile;
-    @FXML
-    private Label blueAmmo;
-    @FXML
-    private Label redAmmo;
-    @FXML
-    private Label yellowAmmo;
-    @FXML
-    private Label nameLabel;
 
     /**
      * The player board initializer.
@@ -58,9 +56,10 @@ public class PlayerBoardController {
     }
 
     /**
-     *  Is called by the main application to set itself.
+     * The setView method is called by the main application to set itself and give access to the model for linking.
      *
-     * @param view
+     * @param view is the view that interacts with the server.
+     *
      */
     public void setView(View view) {
         this.view = view;
@@ -171,6 +170,7 @@ public class PlayerBoardController {
      * This is the actual method that sets the image in the image view.
      * @param player is the owner of the board
      * @param gridPane is the grid pane on which to add skulls.
+     *
      */
     public void showSkulls(Player player, GridPane gridPane) {
         IntStream.range(0, player.getCharacterState().getDeaths())
@@ -186,49 +186,6 @@ public class PlayerBoardController {
     }
 
     /**
-     * Resets the damage bar.
-     */
-    @FXML
-    public void handleResetDamage() {
-
-        for (Node n : damageBar.getChildren()) {
-            ((ImageView) n).setImage(null);
-        }
-    }
-
-    /**
-     * Resets the marker bar.
-     */
-    @FXML
-    public void handleResetMarker() {
-        markerLabel.getChildren().stream()
-                .forEach(n -> ((Label) n).setText("x0"));
-    }
-
-    /**
-     * Swaps the main image and sets up the new skull bar for frenzy mode
-     * @param playerColor is the player's color
-     */
-    public void handleFrenzyKill(PlayerColor playerColor) {
-        ImageView iv = (ImageView) main.getChildren().get(0);
-        iv.setImage(getPlayerBoardImage(playerColor, Constants.FRENZY));
-
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/SkullBarFrenzy.fxml"));
-            AnchorPane pane = loader.load();
-
-            skullBar.getChildren().remove(0);
-            skullBar.getChildren().add(pane.getChildren().get(0));
-
-        } catch (IOException e) {
-            logger.warning("Could not find resource.");
-        }
-
-    }
-
-
-    /**
      * Returns the player board of a certain color.
      *
      */
@@ -237,10 +194,18 @@ public class PlayerBoardController {
         return new Image(path);
     }
 
+    /**
+     * Setter for playerColor.
+     * @param playerColor the playerColor of this client.
+     */
     public void setPlayerColor(PlayerColor playerColor) {
         this.playerColor = playerColor;
     }
 
+    /**
+     * Getter for playerColor.
+     * @return the playerColor of this client.
+     */
     public PlayerColor getPlayerColor() {
         return playerColor;
     }
