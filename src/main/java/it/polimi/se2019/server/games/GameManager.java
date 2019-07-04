@@ -303,10 +303,10 @@ public class GameManager {
 						currentGame.deregister(commandHandler);
 						playerCommandHandlerMap.remove(nickname);
 						// in case of less than 3 players quit the game and announce the winner etc
-						if (currentGame.getActivePlayerList().size() == 3) {
+						if (currentGame.getActivePlayerList().size() <= 3) {
 							logger.info("User " + nickname + " disconnected, game is going to terminate");
 							terminateGame(currentGame);
-						} else if (currentGame.getActivePlayerList().size() > 3) {
+						} else {
 							logger.info("User " + nickname + " disconnected, game is going to continue");
 							currentGame.getPlayerByNickname(nickname).setActive(false);
 							if (currentGame.getCurrentPlayer().getUserData().getNickname().equals(nickname)) {
@@ -357,12 +357,7 @@ public class GameManager {
 		}
 		waitingList.add(new Tuple(newUser, currentCommandHandler));
 		if (ping) {
-			try {
-				Timer timer = new Timer();
-				timer.schedule(new IsClientAlive(newUser.getNickname(), currentCommandHandler, timer), 0, pingIntervalMilliseconds);
-			} catch (IllegalArgumentException e) {
-				logger.info(e.getMessage());
-			}
+			startPingDaemon(newUser.getNickname(), currentCommandHandler);
 		}
 		logger.info("Added user " + newUser.getNickname() + " to the waiting list, current waiting list size is " + waitingList.size() + " players");
 		if (waitingList.size() == waitingListStartTimerSize) {
@@ -370,6 +365,15 @@ public class GameManager {
 		}
 		if (waitingList.size() >= waitingListMaxSize) {
 			createGame();
+		}
+	}
+
+	public void startPingDaemon(String nickname, CommandHandler commandHandler) {
+		try {
+			Timer timer = new Timer();
+			timer.schedule(new IsClientAlive(nickname, commandHandler, timer), 0, pingIntervalMilliseconds);
+		} catch (IllegalArgumentException e) {
+			logger.info(e.getMessage());
 		}
 	}
 

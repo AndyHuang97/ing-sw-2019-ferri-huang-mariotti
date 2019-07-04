@@ -180,6 +180,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     Game currentGame = ServerApp.gameManager.retrieveGame(nickname);
                     if (!currentGame.getPlayerByNickname(nickname).getCharacterState().isConnected()) {
                         logger.info("User " + nickname + " reconnected");
+                        ServerApp.gameManager.startPingDaemon(nickname, this);
                         currentGame.register(this);
                         ServerApp.gameManager.getPlayerCommandHandlerMap().put(nickname, this);
                         this.register(ServerApp.controller);
