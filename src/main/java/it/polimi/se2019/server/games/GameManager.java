@@ -136,7 +136,6 @@ public class GameManager {
 			}
 			if (tmpGameList.stream().anyMatch(tGame -> tGame.getStartDate().toString().equals(game.getStartDate().toString()))) {
 				for (int i = 0; i < tmpGameList.size(); i++) {
-					logger.info("" + tmpGameList.get(i).getStartDate() + "  " + game.getStartDate());
 					if (tmpGameList.get(i).getStartDate().toString().equals(game.getStartDate().toString())) {
 						if (deleteGame) {
 							logger.info("Removing a game from file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
@@ -270,13 +269,11 @@ public class GameManager {
 		game.getPlayerList().forEach(p -> {
 			try {
 				playerCommandHandlerMap.get(p.getUserData().getNickname()).update(new Response(null, true, Constants.FINISHGAME));
-			} catch (Observer.CommunicationError ex) {
-				logger.info(ex.getMessage());
-				logger.info("Cannot notify " + p.getUserData().getNickname() + " of game end");
+			} catch (Exception ex) {
+				logger.info("Cannot notify user " + p.getUserData().getNickname() + " of game end");
 			}
 			playerCommandHandlerMap.remove(p.getUserData().getNickname());
 		});
-		logger.info("Notified");
 		gameList.remove(game);
 		dumpToFile(game, true);
 	}
@@ -344,11 +341,11 @@ public class GameManager {
 							}
 						}
 						playerCommandHandlerMap.remove(nickname);
-						logger.info("User " + nickname + " disconnected from the waiting list, current waiting list size is " + waitingList.size() + " players");
+						logger.info("User " + nickname + " disconnected from the waiting list or from a terminated game, current waiting list size is " + waitingList.size() + " players");
 					}
                 }
             } catch (Exception ex) {
-		        logger.info(ex.getCause().getMessage());
+		        logger.info("A ping daemon died, probably a game ended.");
             }
 		}
 	}
