@@ -19,6 +19,8 @@ public class KillShotTrack implements Serializable {
 
     private transient List<it.polimi.se2019.util.Observer> observerList = new ArrayList<>();
 
+    public static final int[] NORMAL_VALUE_BAR = {8,6,4,2,1,1};
+
     private Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack;
     private Integer killCounter;
     private Integer killsForFrenzy;
@@ -83,6 +85,7 @@ public class KillShotTrack implements Serializable {
 
         // create the death message
         PlayerDeath playerDeath = new PlayerDeath(player, frenzyTriggered);
+
         if(!deathTrack.containsKey(killCounter)) {
             colorIntegerEnumMap = new EnumMap<>(PlayerColor.class);
             deathTrack.put(killCounter, colorIntegerEnumMap);
@@ -91,6 +94,7 @@ public class KillShotTrack implements Serializable {
         else {
             // final frenzy mode, key already present in hash map.
             colorIntegerEnumMap = deathTrack.get(killCounter);
+
             if(!colorIntegerEnumMap.containsKey(deadPlayerColor)) {
                 updateTrackSlotValue(overkill, deadPlayerColor, colorIntegerEnumMap, 0);
             }
@@ -111,6 +115,89 @@ public class KillShotTrack implements Serializable {
         player.getCharacterState().resetDamageBar();
 
         return triggerFrenzy;
+    }
+
+    /**
+     * Calculate the score of each player for the kill shot track
+     * @return map that associate the color of a player with the points it gets for the kills done
+     */
+    public Map<PlayerColor, Integer> calculateScore() {
+
+        System.out.println(deathTrack);
+        Map<PlayerColor, Integer> totalKillsByColor = new HashMap<>();
+
+        // parse the deathTrack and reduce it to a Map<PlayerColor, Integer>
+        for (Integer index : deathTrack.keySet()) {
+            Map<PlayerColor, Integer> killEntry = deathTrack.get(index);
+
+            for (PlayerColor playerColor : killEntry.keySet()) {
+                Integer valueToUpdate;
+
+                if (totalKillsByColor.containsKey(playerColor)) {
+                    valueToUpdate = totalKillsByColor.get(playerColor);
+                } else {
+                    valueToUpdate = 0;
+                }
+
+                totalKillsByColor.put(playerColor, valueToUpdate + killEntry.get(playerColor));
+            }
+        }
+
+        List<PlayerColor> killerList = new ArrayList<>();
+
+        for (int i = 0; i < deathTrack.size(); i++) {
+            PlayerColor colorOfActualMax = null;
+            Integer actualMax = null;
+
+            for (Map.Entry<PlayerColor, Integer> entry : totalKillsByColor.entrySet()) {
+
+                if (colorOfActualMax == null || actualMax < entry.getValue()) {
+                    actualMax = entry.getValue();
+                    colorOfActualMax = entry.getKey();
+                }
+
+                else if (actualMax == entry.getValue()) {
+                    PlayerColor tieBreakWinner =  tieBreaker(Arrays.asList(colorOfActualMax, entry.getKey()));
+
+                    if (tieBreakWinner != colorOfActualMax && tieBreakWinner != null) {
+                        actualMax = entry.getValue();
+                        colorOfActualMax = entry.getKey();
+                    }
+                }
+            }
+
+            totalKillsByColor.remove(colorOfActualMax);
+
+            if (colorOfActualMax != null) {
+                killerList.add(colorOfActualMax);
+            }
+        }
+
+        Map<PlayerColor, Integer> scoreMap = new HashMap<>();
+        int counter = 0;
+        // now we should have a sorted list where the first element si the color of the player with more kills
+        // just one more for loop
+        for (PlayerColor playerColor : killerList) {
+            scoreMap.put(playerColor, NORMAL_VALUE_BAR[counter]);
+            counter++;
+        }
+
+        return scoreMap;
+
+    }
+
+    private PlayerColor tieBreaker(List<PlayerColor> playerColors) {
+        for (Integer index : deathTrack.keySet()) {
+            Map<PlayerColor, Integer> killEntry = deathTrack.get(index);
+
+            for (PlayerColor playerColor : killEntry.keySet()) {
+                if (playerColors.contains(playerColor)) {
+                    return playerColor;
+                }
+            }
+        }
+
+        return null;
     }
 
 
