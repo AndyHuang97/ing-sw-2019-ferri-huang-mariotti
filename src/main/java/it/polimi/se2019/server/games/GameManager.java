@@ -134,9 +134,10 @@ public class GameManager {
 					br.close();
 				}
 			}
-			if (tmpGameList.stream().anyMatch(tGame -> tGame.getStartDate().equals(game.getStartDate()))) {
+			if (tmpGameList.stream().anyMatch(tGame -> tGame.getStartDate().toString().equals(game.getStartDate().toString()))) {
 				for (int i = 0; i < tmpGameList.size(); i++) {
-					if (tmpGameList.get(i).getStartDate().equals(game.getStartDate())) {
+					logger.info("" + tmpGameList.get(i).getStartDate() + "  " + game.getStartDate());
+					if (tmpGameList.get(i).getStartDate().toString().equals(game.getStartDate().toString())) {
 						if (deleteGame) {
 							logger.info("Removing a game from file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
 							tmpGameList.set(i, null);

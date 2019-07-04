@@ -67,7 +67,7 @@ public class Controller implements Observer<Request> {
             // nextState handles the input and returns a new State, then a message is sent from the new state;
             // if any model changes happened, the update will be sent before the selection message.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
-            this.saveGames(controllerState, newControllerState);
+            this.saveGames(game, controllerState, newControllerState);
 
             CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
             controllerState.sendErrorMessages(commandHandler);
@@ -128,11 +128,11 @@ public class Controller implements Observer<Request> {
         }
     }
 
-    public void saveGames(ControllerState oldControllerState, ControllerState newControllerState) {
+    public void saveGames(Game game, ControllerState oldControllerState, ControllerState newControllerState) {
         if ((oldControllerState.getClass().equals(WaitingForMainActions.class) && oldControllerState.getClass().equals(newControllerState.getClass()) && !oldControllerState.equals(newControllerState))||
                 (oldControllerState.getClass().equals(WaitingForReload.class) && newControllerState.getClass().equals(WaitingForMainActions.class)) ||
                 (oldControllerState.getClass().equals(WaitingForRespawn.class) && newControllerState.getClass().equals(WaitingForMainActions.class))) {
-            gameManager.dumpToFile();
+            gameManager.dumpToFile(game);
         }
     }
 

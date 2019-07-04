@@ -15,7 +15,6 @@ import it.polimi.se2019.server.games.player.Player;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class CLIView extends View {
     private static final Logger logger = Logger.getLogger(CLIView.class.getName());
@@ -44,6 +43,7 @@ public class CLIView extends View {
     public void showMessage(String message) {
         try {
             Player currentPlayer = getModel().getGame().getPlayerByNickname(getNickname());
+            List<String> validTiles = getModel().getGame().getBoard().getTileList().stream().map(t -> t.getId()).collect(Collectors.toList());
             switch (message) {
                 case Constants.RELOAD:
                     List<String> selectedReloadWeapons = new ArrayList<>();
@@ -87,7 +87,7 @@ public class CLIView extends View {
                     });
                     int[] targetsSize = new int[] {actionUnit.getNumPlayerTargets(), actionUnit.getNumTileTargets()};
                     String[] messages = new String[] {"Select a player #%d to target", "Select tile #%d to target"};
-                    List<String>[] answers = new List[] {new ArrayList<>(shootPlayers.keySet()), new ArrayList<>(Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"))};
+                    List<String>[] answers = new List[] {new ArrayList<>(shootPlayers.keySet()), new ArrayList<>(validTiles)};
                     boolean[] type = new boolean[] {true, false};
                     shootPlayers.put("n", "n");
                     int start;
@@ -145,7 +145,9 @@ public class CLIView extends View {
                     possibleActions.get(actionInput).forEach(action -> {
                         switch (action) {
                             case Constants.MOVE:
-                                String selectedMoveTile = utils.askUserInput("Pick a tile or n not to move", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "n"), false);
+                                List<String> validMoveTiles = new ArrayList<>(validTiles);
+                                validMoveTiles.add("n");
+                                String selectedMoveTile = utils.askUserInput("Pick a tile or n not to move", validMoveTiles, false);
                                 if (selectedMoveTile.equals(Constants.NOP)) {
                                     sendNOP();
                                     return;
@@ -235,14 +237,14 @@ public class CLIView extends View {
                                         sendNOP();
                                         return;
                                     }
-                                    String selectedNewtonTile = utils.askUserInput("Pick a tile where to newton it", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), false);
+                                    String selectedNewtonTile = utils.askUserInput("Pick a tile where to newton it", new ArrayList<>(validTiles), false);
                                     if (selectedNewtonTile.equals(Constants.NOP)) {
                                         sendNOP();
                                         return;
                                     }
                                     getPlayerInput().put(Constants.POWERUP, Arrays.asList(selectedPowerUp, newtonPlayers.get(selectedNewtonPlayer), selectedNewtonTile));
                                 } else if (selectedPowerUp.contains("Teleporter")) {
-                                    String selectedTeleportTile = utils.askUserInput("Pick a tile where to teleport", Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"), false);
+                                    String selectedTeleportTile = utils.askUserInput("Pick a tile where to teleport", new ArrayList<>(validTiles), false);
                                     if (selectedTeleportTile.equals(Constants.NOP)) {
                                         sendNOP();
                                         return;
@@ -294,8 +296,10 @@ public class CLIView extends View {
                     getModel().getGame().getPlayerList().forEach(p -> {
                         if (!p.getId().equals(currentPlayer.getId())) targetingScopePlayers.put(p.getUserData().getNickname(), p.getId());
                     });
+                    List<String> targetingScopePlayersKeys = new ArrayList<>(targetingScopePlayers.keySet());
+                    targetingScopePlayersKeys.add("n");
                     currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> up.getName().contains("TargetingScope")).forEach(up -> {
-                        String selectedTargetingScopePlayer = utils.askUserInput("Select a user to target with the " + up.getName() + " powerup or n not to use it", new ArrayList<>(targetingScopePlayers.keySet()), true);
+                        String selectedTargetingScopePlayer = utils.askUserInput("Select a user to target with the " + up.getName() + " powerup or n not to use it", targetingScopePlayersKeys, true);
                         if (selectedTargetingScopePlayer.equals(Constants.NOP)) {
                             sendNOP();
                             return;
