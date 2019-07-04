@@ -64,17 +64,11 @@ public class WaitingForPowerUps extends ControllerState {
 
         if (expectedPowerUp.equals(Constants.TAGBACK_GRENADE)) {
             Logger.getGlobal().info("inside Tagback");
-            // could receive a pass(NOP) message to skip the selection of powerUp
-            if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.NOP)) {
-                Logger.getGlobal().info("Detected a NOP for Targeting Scope");
-                return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);
-            }
-
-            if (playerActions.stream().allMatch(playerAction ->
-                    playerAction.getId().equals(Constants.POWERUP)
-                                                    &&
+            if (playerActions.stream().anyMatch(playerAction -> playerAction.getId().equals(Constants.NOP))
+                    ||
+                    playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP) &&
                             ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TAGBACK_GRENADE)))) {
-                Logger.getGlobal().info("Found a Tagback Grenade");
+                Logger.getGlobal().info("Found a Tagback Grenade or NOP");
                 // this block of code will be executed either with a powerUp or with a NOP, in the latter case nothing
                 // is performed on the model, but it is still needed to ask the next player for input
                 Logger.getGlobal().info("PlayerActionCheck: " + playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError));
@@ -85,8 +79,10 @@ public class WaitingForPowerUps extends ControllerState {
                     Logger.getGlobal().info("Popped: "+poppedPlayer.getId());
                     playerStack.forEach(p -> Logger.getGlobal().info("Player at the top of the stack: "+playerStack.peek().getId()));
                     // giving markers to the attacker
-                    playerActions.forEach(playerAction ->((PowerUpAction) playerAction).getPowerUpsToDiscard().forEach(powerUp -> playerStack.peek().getCharacterState().addMarker(poppedPlayer.getColor(), 1)));
-
+                    if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP))){
+                        // tagback grenade effect
+                        playerActions.forEach(playerAction -> ((PowerUpAction) playerAction).getPowerUpsToDiscard().forEach(powerUp -> playerStack.peek().getCharacterState().addMarker(poppedPlayer.getColor(), 1)));
+                    }
                     List<Player> powerUpPlayers = game.getCumulativeDamageTargetSet().stream() // checks whether one of the attacked players has a Tagback Grenade
                             .map(t -> (Player) t).filter(Player::getActive)
                                     .filter(notCurrentPlayer -> !alreadyAskedPlayers.contains(notCurrentPlayer))

@@ -43,22 +43,22 @@ public class ClientGui extends Application {
 
         view = new GUIView(primaryStage);
 
-        showLogin();
+//        showLogin();
 
         //testing
-//        view.setPlayerColor(PlayerColor.GREEN);
-//        ((Model)view.getModel()).initGame();
+        view.setPlayerColor(PlayerColor.GREEN);
+        ((Model)view.getModel()).initGame();
+        view.showGame();
+        view.showMessage(Constants.TARGETING_SCOPE);
+//        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
+//        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
+//        view.getModel().getGame().setCurrentWeapon(weapon);
+//        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
+//        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
+//        view.showMessage(Constants.SHOOT);
+        view.setNickname("Giorno");
 //        view.showGame();
-//        view.showMessage(Constants.TARGETING_SCOPE);
-////        Player player = view.getModel().getGame().getPlayerByColor(PlayerColor.GREEN);
-////        Weapon weapon = player.getCharacterState().getWeaponBag().get(0);
-////        view.getModel().getGame().setCurrentWeapon(weapon);
-////        weapon.getActionUnitList().forEach(au -> Logger.getGlobal().info(au.getId()));
-////        weapon.getOptionalEffectList().forEach(au -> Logger.getGlobal().info(au.getId()));
-////        view.showMessage(Constants.SHOOT);
-//        view.setNickname("Giorno");
-////        view.showGame();
-//        ((Model) view.getModel()).boardDeserialize();
+
 
     }
 
@@ -79,6 +79,7 @@ public class ClientGui extends Application {
             Scene scene = new Scene(login);
             loginStage.setScene(scene);
             loginStage.initOwner(primaryStage);
+            loginStage.setResizable(false);
             loginStage.showAndWait();
 
         } catch (IOException e) {
