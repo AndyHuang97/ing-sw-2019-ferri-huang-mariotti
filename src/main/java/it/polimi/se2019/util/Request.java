@@ -7,10 +7,9 @@ import java.io.*;
 import java.util.logging.Logger;
 
 /**
- * Request objects are used by the View to send data to the Controller
+ * Request objects are used by the View to send data to the Controller.
  *
- * @author AH
- *
+ * @author andreahuang
  */
 public class Request implements Serializable, NetMsg {
 
@@ -29,10 +28,20 @@ public class Request implements Serializable, NetMsg {
         }
     }
 
+    /**
+     *
+     *
+     * @param nickname
+     */
     public Request(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     *
+     * @param netMessage
+     * @param nickname
+     */
     public Request(NetMessage netMessage, String nickname) {
         this.netMessage = netMessage;
         this.nickname = nickname;
@@ -62,7 +71,6 @@ public class Request implements Serializable, NetMsg {
     public String getNickname() {
         return this.nickname;
     }
-
 
     public CommandHandler getCommandHandler() {
         return commandHandler;

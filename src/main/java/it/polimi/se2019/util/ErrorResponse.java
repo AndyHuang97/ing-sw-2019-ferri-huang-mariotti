@@ -1,29 +1,27 @@
 package it.polimi.se2019.util;
 
 /**
- * Error response class
+ * This class is basically a wrapper of the String class, this class was designed to have more functionality
+ * but due to lack of time they were never implemented.
  *
- * @author AH
- *
+ * @author Rodolfo Mariotti
  */
 public class ErrorResponse {
     private String errorMessage;
 
     /**
-     * The constructor for the class.
+     * Create a new ErrorMessage object that contains the description of the error.
      *
-     * @param errorMessage the string message
-     *
+     * @param errorMessage description of the error
      */
     public ErrorResponse(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
     /**
-     * To string method
+     * Get the text representation of the object.
      *
-     * @return the error message
-     *
+     * @return description of the error
      */
     public String toString() {
         return errorMessage;

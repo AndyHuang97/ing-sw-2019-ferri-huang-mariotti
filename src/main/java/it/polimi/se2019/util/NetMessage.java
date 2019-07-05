@@ -12,6 +12,10 @@ import java.util.Map;
  *
  */
 public class NetMessage implements Message {
+    /**
+     *
+     * String messageType, List<Targetable>
+     */
     private Map<String, List<String>> commands;
 
     /**

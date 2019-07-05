@@ -4,7 +4,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * The interface for the RMI Server methods
+ * The RmiServerInterface is the server interface that extends the Remote interface and exposes two methods.
+ * The send method is the method used by the client to send messages with its uuid identification and
+ * the register method to register a client.
  *
  * @author AH
  *
@@ -12,7 +14,7 @@ import java.rmi.RemoteException;
 public interface RmiServerInterface extends Remote {
 
     /**
-     * Planned a send
+     * Send
      *
      * @param message the actual message
      * @param uuid the uuid of the client
@@ -22,7 +24,7 @@ public interface RmiServerInterface extends Remote {
     void send(String message, String uuid) throws RemoteException;
 
     /**
-     * Planned a register method
+     * Register method
      *
      * @param client the client stub
      * @return the uuid

@@ -6,40 +6,37 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The internal message class, very important for the network
+ * This class represents a set of commands. It's used by the CommandHandler to store the data parsed from the network
+ * about the action requested by the player.
  *
- * @author AH
- *
+ * @author Andrea Huang
  */
 public class InternalMessage implements Message {
     private Map<String, List<Targetable>> commands;
 
     /**
-     * The constructor makes the commands
+     * Builds an InternalMessage object from a map that associate a command with his params.
      *
-     * @param commands what to send
-     *
+     * @param commands stored commands
      */
     public InternalMessage(Map<String, List<Targetable>> commands) {
         this.commands = commands;
     }
 
     /**
-     * Getter of the command (single)
+     * Gets the params of the selected command.
      *
-     * @param commandName the name of the command
-     * @return the command
-     *
+     * @param commandName selected command
+     * @return the params of the selected command, or null if the command is not in map
      */
     public List<Targetable> getCommandParams(String commandName) {
         return commands.get(commandName);
     }
 
     /**
-     * Getter of the commands (all)
+     * Getter method for the commands attribute.
      *
-     * @return the commands
-     *
+     * @return
      */
     public Map<String, List<Targetable>> getCommands() {
         return commands;

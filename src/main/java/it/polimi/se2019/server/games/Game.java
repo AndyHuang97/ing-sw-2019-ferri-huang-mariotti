@@ -487,7 +487,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setCurrentWeapon(Weapon currentWeapon) {
 		this.currentWeapon = currentWeapon;
 
-		StateUpdate currentWeaponUpdate = new CurrentWeaponUnpdate(currentWeapon);
+		StateUpdate currentWeaponUpdate = new CurrentWeaponUpdate(currentWeapon);
         Response response = new Response(Arrays.asList(currentWeaponUpdate));
 
         notify(response);
@@ -531,11 +531,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 
 		boolean beforeFrenzyActivator = true;
 
+		Player frenzyActivator = getPlayerByColor(currentPlayer.getCharacterState().getDamageBar().get(currentPlayer.getCharacterState().getDamageBar().size()-1));
+
 		for (Player player : playerList) {
             CharacterState characterState = player.getCharacterState();
 		    characterState.setBeforeFrenzyActivator(beforeFrenzyActivator);
 
-            if (player == currentPlayer) {
+            if (player == frenzyActivator) {
                 beforeFrenzyActivator = false;
             }
 

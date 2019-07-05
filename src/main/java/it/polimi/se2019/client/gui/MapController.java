@@ -304,6 +304,7 @@ public class MapController {
         KillShotTrack kt = view.getModel().getGame().getKillShotTrack();
 
         int offset = killShotTrackPane.getChildren().size() - kt.getKillsForFrenzy();
+        Logger.getGlobal().info("\nKillshot track offset: " + offset + "\nKillshot track pane children size: " + killShotTrackPane.getChildren().size());
 
         IntStream.range(offset, killShotTrackPane.getChildren().size())
                 .forEach(i -> {
@@ -322,7 +323,9 @@ public class MapController {
                         }
                     }
                     else { //shows skulls and frenzy pane
-                        if (kt.getKillCounter() + offset == killShotTrackPane.getChildren().size()-1) {
+                        Logger.getGlobal().info("\nkills+offset: " +kt.getKillCounter() + offset+
+                                "\nsize-1: "+ (killShotTrackPane.getChildren().size()-1));
+                        if (offset + kt.getKillCounter()  == killShotTrackPane.getChildren().size()) {
 
                             int j = 0;
                             for (PlayerColor pc : PlayerColor.values()) {

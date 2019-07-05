@@ -1,9 +1,9 @@
 package it.polimi.se2019.util;
 
 /**
- * Various command constants
+ * Those constants are used to set some conventional values for the params of the Conditions.
  *
- * @author AH
+ * @author Rodolfo Mariotti
  *
  */
 public class CommandConstants {
