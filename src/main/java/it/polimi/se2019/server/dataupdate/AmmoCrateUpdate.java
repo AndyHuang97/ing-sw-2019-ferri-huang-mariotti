@@ -5,7 +5,7 @@ import it.polimi.se2019.server.games.board.Board;
 import it.polimi.se2019.util.LocalModel;
 
 /**
- * This update message is sent by the model to the views when one the weapon crates is re-spawned. Like all the
+ * This update message is sent by the model to the views when one the ammo crates is re-spawned. Like all the
  * other update messages the method updateData() must be run to update the local copy of the model in the view.
  *
  * @author Rodolfo Mariotti

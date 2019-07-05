@@ -10,17 +10,17 @@ import it.polimi.se2019.util.LocalModel;
  *
  * @author Rodolfo Mariotti
  */
-public class WeaponStateUpdate implements StateUpdate {
-    Weapon weaponToUpdate;
+public class CurrentWeaponUpdate implements StateUpdate {
+    Weapon currentWeapon;
 
     /**
-     * Builds a new WeaponStateUpdate message. This message contains all the data that the view needs to update his
+     * Builds a new CurrentWeaponUpdate message. This message contains all the data that the view needs to update his
      * local model.
      *
-     * @param weaponToUpdate reference to the updated weapon object
+     * @param currentWeapon reference to the new value of current weapon
      */
-    public WeaponStateUpdate(Weapon weaponToUpdate) {
-        this.weaponToUpdate = weaponToUpdate;
+    public CurrentWeaponUpdate(Weapon currentWeapon) {
+        this.currentWeapon = currentWeapon;
     }
 
     /**
@@ -30,6 +30,6 @@ public class WeaponStateUpdate implements StateUpdate {
      */
     @Override
     public void updateData(LocalModel model) {
-        model.updatePlayerWeapon(weaponToUpdate);
+        model.getGame().setCurrentWeapon(currentWeapon);
     }
 }

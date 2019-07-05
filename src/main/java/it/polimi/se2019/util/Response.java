@@ -52,7 +52,7 @@ public class Response implements Serializable, NetMsg {
                 .registerSubtype(WeaponCrateUpdate.class, "WeaponCrateUpdate")
                 .registerSubtype(CharacterStateUpdate.class, "CharacterStateUpdate")
                 .registerSubtype(CurrentPlayerStateUpdate.class, "CurrentPlayerStateUpdate")
-                .registerSubtype(CurrentWeaponUnpdate.class, "CurrentWeaponUnpdate")
+                .registerSubtype(CurrentWeaponUpdate.class, "CurrentWeaponUpdate")
                 .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate")
                 .registerSubtype(WeaponStateUpdate.class, "WeaponStateUpdate");
 
@@ -67,7 +67,7 @@ public class Response implements Serializable, NetMsg {
                 .registerSubtype(WeaponCrateUpdate.class, "WeaponCrateUpdate")
                 .registerSubtype(CharacterStateUpdate.class, "CharacterStateUpdate")
                 .registerSubtype(CurrentPlayerStateUpdate.class, "CurrentPlayerStateUpdate")
-                .registerSubtype(CurrentWeaponUnpdate.class, "CurrentWeaponUnpdate")
+                .registerSubtype(CurrentWeaponUpdate.class, "CurrentWeaponUpdate")
                 .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate")
                 .registerSubtype(WeaponStateUpdate.class, "WeaponStateUpdate");
 

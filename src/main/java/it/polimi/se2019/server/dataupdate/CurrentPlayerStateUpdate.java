@@ -13,7 +13,7 @@ public class CurrentPlayerStateUpdate implements StateUpdate {
     private Player newCurrentPlayer;
 
     /**
-     * Builds a new AmmoCrateUpdate message. This message contains all the data that the view needs to update his
+     * Builds a new CurrentPlayerStateUpdate message. This message contains all the data that the view needs to update his
      * local model.
      *
      * @param newCurrentPlayer reference to the new value of current player

@@ -14,7 +14,7 @@ public class CharacterStateUpdate implements StateUpdate {
     CharacterState characterState;
 
     /**
-     * Builds a new AmmoCrateUpdate message. This message contains all the data that the view needs to update his
+     * Builds a new CharacterStateUpdate message. This message contains all the data that the view needs to update his
      * local model.
      *
      * @param characterState reference to the update CharacterState object

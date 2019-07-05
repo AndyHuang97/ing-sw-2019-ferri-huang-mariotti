@@ -487,7 +487,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setCurrentWeapon(Weapon currentWeapon) {
 		this.currentWeapon = currentWeapon;
 
-		StateUpdate currentWeaponUpdate = new CurrentWeaponUnpdate(currentWeapon);
+		StateUpdate currentWeaponUpdate = new CurrentWeaponUpdate(currentWeapon);
         Response response = new Response(Arrays.asList(currentWeaponUpdate));
 
         notify(response);
