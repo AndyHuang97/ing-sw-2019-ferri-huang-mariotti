@@ -550,6 +550,11 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
             characterState.setDeaths(0);
             characterState.swapValueBar(frenzy);
         }
+
+        StateUpdate frenzyUpdate = new FrenzyDataUpdate(frenzy);
+		Response response = new Response(Arrays.asList(frenzyUpdate));
+
+		notify(response);
 	}
 
 	/**
@@ -799,5 +804,9 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
      */
     public void resetMoveActionFailure() {
 	    moveActionFailure = new ArrayList<>();
+    }
+
+    public void frenzySetter(boolean frenzy) {
+        this.frenzy = frenzy;
     }
 }
