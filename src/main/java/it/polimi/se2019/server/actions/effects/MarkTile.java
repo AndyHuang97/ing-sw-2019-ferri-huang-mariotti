@@ -9,6 +9,12 @@ import it.polimi.se2019.util.CommandConstants;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This effect marks all the players in the indicated  tile.
+ *
+ * @author andreahuang
+ *
+ */
 public class MarkTile implements Effect {
 
     private static final int POSITION = 0;
@@ -17,12 +23,26 @@ public class MarkTile implements Effect {
     private boolean self;
     private boolean isTile;
 
+    /**
+     * Default constructor. It sets up the amount of damage to inflict, and it also has an additional
+     * name of action unit for correct targeting.
+     *
+     * @param amount is the amount of damage to inflict.
+     * @param self is a boolean that indicates whether the tile to shoot is the attacker's or another target's tile.
+     * @param isTile indicates whether the tile to evaluate is an actual tile or one from a player target.
+     */
     public MarkTile(Integer amount, boolean self, boolean isTile) {
         this.amount = amount;
         this.self = self;
         this.isTile = isTile;
     }
 
+    /**
+     * This effect adds markers to the players in the chosen tile.
+     *
+     * @param  game the game on which to perform the effect.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     */
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
         Tile tile;

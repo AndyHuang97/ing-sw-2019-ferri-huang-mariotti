@@ -12,8 +12,10 @@ import it.polimi.se2019.util.Response;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class WaitingForRespawn extends ControllerState {
 
@@ -30,8 +32,6 @@ public class WaitingForRespawn extends ControllerState {
         }
     }
 
-
-    //TODO call addDeath, swapValueBar, reset damageBar. double kill(da implementare, e aggiornare l'update dello score)
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 
@@ -112,6 +112,11 @@ public class WaitingForRespawn extends ControllerState {
                     player = playerStack.pop();// gives back the player that was ending the turn
                     Logger.getGlobal().info("Popped player:" + player.getId());
                     player.getCharacterState().setFirstSpawn(false);
+                    Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
+                    if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int)beforeFrenzyActivatorPlayers.get().count()-1))) {
+                        Logger.getGlobal().info("Terminating the game");
+                        return new EndGameState();
+                    }
                     game.setCurrentPlayer(player);// resumes the turn cycle
                     game.updateTurn(); // resumes the turn cycle
                     Logger.getGlobal().info("Next Player: "+game.getCurrentPlayer().getId());

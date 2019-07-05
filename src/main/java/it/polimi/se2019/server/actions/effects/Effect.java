@@ -8,6 +8,8 @@ import java.util.Map;
 
 /**
  * The Effect interface gives a common method for all different effects to be used by a card.
+ *
+ * @author andreahuang
  */
 public interface Effect {
 	/**
