@@ -310,12 +310,20 @@ public class Board extends Observable<Response> {
     /**
      * Getter method for the id attribute.
      *
-     * @return
+     * @return unique identifier of the object
      */
     public String getId() {
         return id;
     }
 
+    /**
+     * Given a position (x, y) and an ammo crate sets the ammo crate of the tile in position (x, y)
+     * to te value passed as param.
+     *
+     * @param xPosition x coordinate of the tile
+     * @param yPosition y coordinate of the tile
+     * @param ammoCrate ammo crate to set in (x, y)
+     */
     public void setAmmoCrate(int xPosition, int yPosition, AmmoCrate ammoCrate) {
         Tile tile = getTile(xPosition, yPosition);
         tile.setAmmoCrate(ammoCrate);
@@ -326,6 +334,14 @@ public class Board extends Observable<Response> {
         notify(response);
     }
 
+    /**
+     * Given a position (x, y) and a weapon crate sets the weapon crate of the tile in position (x, y)
+     * to te value passed as param.
+     *
+     * @param xPosition x coordinate of the tile
+     * @param yPosition y coordinate of the tile
+     * @param weaponCrate weapon crate to set in (x, y)
+     */
     public void setWeaponCrate(int xPosition, int yPosition, List<Weapon> weaponCrate) {
         Tile tile = getTile(xPosition, yPosition);
         tile.setWeaponCrate(weaponCrate);
