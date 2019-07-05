@@ -7,13 +7,11 @@ import java.util.Map;
 
 public class NetMessage implements Message {
     /**
-     * TODO: implement composition of PlayerActions
+     *
      * String messageType, List<Targetable>
      */
 
     private Map<String, List<String>> commands;
-    //private String messageType;
-    //private List<Targetable> params;
 
     public NetMessage(Map<String, List<String>> commands) {
         this.commands = commands;
