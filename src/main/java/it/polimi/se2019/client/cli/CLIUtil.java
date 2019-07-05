@@ -229,9 +229,9 @@ public class CLIUtil {
      *
      */
     public String loadMapString(String mapNumber) {
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(CLIUtil.class.getClassLoader().getResource("text/maps/map" + mapNumber + ".txt").toURI())))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(CLIUtil.class.getClassLoader().getResource("text/maps/map" + mapNumber + ".txt").openStream()))) {
             return br.lines().collect(Collectors.joining("\n"));
-        } catch (IOException | URISyntaxException ex) {
+        } catch (IOException ex) {
             //logger.info(ex.toString());
             return "";
         }

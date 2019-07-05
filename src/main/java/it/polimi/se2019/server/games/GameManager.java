@@ -99,9 +99,9 @@ public class GameManager {
 		}
 		this.dumpName = dumpName;
 		try {
-			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {
-				logger.info("Loading saved games from: " + GameManager.class.getClassLoader().getResource(dumpName).toString());
-				BufferedReader br = new BufferedReader(new InputStreamReader(GameManager.class.getClassLoader().getResource(dumpName).openStream()));
+			if (new File(dumpName).exists()) {
+				logger.info("Loading saved games from: " + new File(dumpName).getAbsolutePath());
+				BufferedReader br = new BufferedReader(new FileReader(new File(dumpName)));
 				//Read JSON file
 				List<Game> tmpGameList = new ArrayList<>();
 				try {
@@ -160,7 +160,7 @@ public class GameManager {
 				});
 				logger.info("Done with restoration!");
 			} else {
-				logger.info("No gamefile, skip loading saved games!");
+				logger.info("No gamefile in " + new File(dumpName).getAbsolutePath() + " skip loading saved games!");
 			}
 		} catch (IOException | NullPointerException ex) {
 			ex.printStackTrace();
@@ -214,8 +214,8 @@ public class GameManager {
 
 		try {
 			List<Game> tmpGameList = new ArrayList<>();
-			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {
-				BufferedReader br = new BufferedReader(new InputStreamReader(GameManager.class.getClassLoader().getResource(dumpName).openStream()));
+			if (new File(dumpName).exists()) {
+				BufferedReader br = new BufferedReader(new FileReader(new File(dumpName)));
 				//Read JSON file
 				try {
 					tmpGameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
@@ -227,20 +227,20 @@ public class GameManager {
 				for (int i = 0; i < tmpGameList.size(); i++) {
 					if (tmpGameList.get(i).getStartDate().toString().equals(game.getStartDate().toString())) {
 						if (deleteGame) {
-							logger.info("Removing a game from file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
+							logger.info("Removing a game from file, location: " + new File(dumpName).getAbsolutePath());
 							tmpGameList.set(i, null);
 						} else {
-							logger.info("Updating a game to file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
+							logger.info("Updating a game to file, location: " + new File(dumpName).getAbsolutePath());
 							tmpGameList.set(i, game);
 						}
 					}
 				}
 				while (tmpGameList.remove(null)) {}
 			} else {
-				logger.info("Saving a new game to file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
+				logger.info("Saving a new game to file, location: " + new File(dumpName).getAbsolutePath());
 				tmpGameList.add(game);
 			}
-			FileWriter writer = new FileWriter(new File(GameManager.class.getClassLoader().getResource(dumpName).getPath()));
+			FileWriter writer = new FileWriter(new File(dumpName));
 			// Write file
 			try {
 				writer.write(gson.toJson(tmpGameList.toArray()));
