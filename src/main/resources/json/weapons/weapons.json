@@ -8,6 +8,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 2 damage and 1 mark to 1 target you can see.",
           "available": true,
           "effectList": [
             {
@@ -41,6 +42,7 @@
       "optionalEffectList": [
         {
           "name": "Second Lock Effect",
+          "description": "Deal 1 mark to a different target you can see.",
           "available": false,
           "effectList": [
             {
@@ -111,6 +113,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose 1 or 2 targets you can see and deal 1 damage to each.",
           "available": true,
           "effectList": [
             {
@@ -137,6 +140,7 @@
       "optionalEffectList": [
         {
           "name": "Focus Shot Effect",
+          "description": "Deal 1 additional damage to one of those targets.",
           "available": false,
           "effectList": [
             {
@@ -191,6 +195,7 @@
         },
         {
           "name": "Turret Tripod Effect",
+          "description": "Deal 1 additional damage to the other of those targets and/or deal 1 damage to a different target you can see.",
           "available": false,
           "effectList": [
             {
@@ -261,6 +266,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 2 damage to 1 target you can see.",
           "available": true,
           "effectList": [
             {
@@ -287,6 +293,7 @@
       "optionalEffectList": [
         {
           "name": "Chain Reaction Effect",
+          "description": "Deal 1 damage to a second target that your first target can see.",
           "available": false,
           "effectList": [
             {
@@ -346,6 +353,7 @@
         },
         {
           "name": "High Voltage Effect",
+          "description": "Deal 2 damage to a third target that your second target can see. You cannot use this effect unless you first use the chain reaction",
           "available": false,
           "effectList": [
             {
@@ -421,6 +429,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 2 damage to 1 target you can see.",
           "available": true,
           "effectList": [
             {
@@ -447,6 +456,7 @@
       "optionalEffectList": [
         {
           "name": "Phase Glide Effect",
+          "description": "Move 1 or 2 squares. This effect can be used either before or after the basic effect.",
           "available": true,
           "effectList": [
             {
@@ -482,6 +492,7 @@
         },
         {
           "name": "Charged Shot Effect",
+          "description": "Deal 1 additional damage to your target.",
           "available": false,
           "effectList": [
             {
@@ -537,6 +548,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 3 damage and 1 mark to 1 target you can see. Your target must be at least 2 moves away from you",
           "available": true,
           "effectList": [
             {
@@ -589,6 +601,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 1 damage to every other player on your square.",
           "available": true,
           "effectList": [
             {
@@ -615,6 +628,7 @@
         },
         {
           "name": "Reaper Mode",
+          "description": "Deal 2 damage to every other player on your square.",
           "available": true,
           "effectList": [
             {
@@ -672,6 +686,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Move a target 0, 1, or 2 squares to a square you can see, and give it 1 damage.",
           "available": true,
           "effectList": [
             {
@@ -713,6 +728,7 @@
         },
         {
           "name": "Punisher Mode",
+          "description": "Choose a target 0, 1, or 2 moves away from you. Move the target to your square and deal 3 damage to it.",
           "available": true,
           "effectList": [
             {
@@ -779,6 +795,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose a square you can see, but not your square. Call it \"the vortex\". Choose a target on the vortex or 1 move away from it. Move it onto the vortex and give it 2 damage.",
           "available": true,
           "effectList": [
             {
@@ -828,6 +845,7 @@
       "optionalEffectList": [
         {
           "name": "Black Hole Effect",
+          "description": "Choose up to 2 other targets on the vortex or 1 move away from it. Move them onto the vortex and give them each 1 damage.",
           "available": false,
           "effectList": [
             {
@@ -913,6 +931,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose a room you can see, but not the room you are in. Deal 1 damage to everyone in that room.",
           "available": true,
           "effectList": [
             {
@@ -943,6 +962,7 @@
         },
         {
           "name": "Cozy Fire Mode",
+          "description": "Choose a square exactly one move away. Deal 1 damage and 1 mark to everyone on that square.",
           "available": true,
           "effectList": [
             {
@@ -999,6 +1019,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose 1 target you cannot see and deal 3 damage to it.",
           "available": true,
           "effectList": [
             {
@@ -1034,6 +1055,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 1 damage to 1 target you can see at least 1 move away. Then give 1 mark to that target and everyone else on that square.",
           "available": true,
           "effectList": [
             {
@@ -1077,6 +1099,7 @@
         },
         {
           "name": "Nano-Tracer Mode",
+          "description": "Deal 1 damage to 1 target you can see at least 1 move away. Then give 2 marks to that target and everyone else on that square.",
           "available": true,
           "effectList": [
             {
@@ -1149,6 +1172,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose a square 1 move away and possibly a second square 1 more move away in the same direction. On each square, you may choose 1 target and give it 1 damage.",
           "available": true,
           "effectList": [
             {
@@ -1175,6 +1199,7 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self":true
               }
             },
             {
@@ -1184,12 +1209,14 @@
               }
             }
           ],
+          "unidirectional": true,
           "numPlayerTargets" : 2,
           "numTileTargets": 2,
           "playerSelectionFirst": false
         },
         {
           "name": "Barbecue Mode",
+          "description": "Choose 2 squares as above. Deal 2 damage to everyone on the first square and 1 damage to everyone on the second square.",
           "available": true,
           "effectList": [
             {
@@ -1251,10 +1278,12 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": true
               }
             }
           ],
-          "numPlayerTargets" : 2,
+          "unidirectional": true,
+          "numPlayerTargets" : 0,
           "numTileTargets": 2,
           "playerSelectionFirst": true
         }
@@ -1271,6 +1300,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 1 damage to 1 target you can see. Then you may move the target 1 square.",
           "available": true,
           "effectList": [
             {
@@ -1313,6 +1343,7 @@
       "optionalEffectList": [
         {
           "name": "Extra Grenade Effect",
+          "description": "Deal 1 damage to every player on a square you can see. You can use this before or after the basic effect's move.",
           "available": true,
           "effectList": [
             {
@@ -1367,6 +1398,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square.",
           "available": true,
           "effectList": [
             {
@@ -1417,6 +1449,7 @@
       "optionalEffectList": [
         {
           "name": "Rocket Jump Effect",
+          "description": "Move 1 or 2 squares. This effect can be used either before or after the basic effect.",
           "available": true,
           "effectList": [
             {
@@ -1472,6 +1505,7 @@
         },
         {
           "name": "Fragmenting Warhead Effect",
+          "description": "During the basic effect, deal 1 damage to every player on your target's original square – including the target, even if you move it.",
           "available": false,
           "effectList": [
             {
@@ -1535,6 +1569,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose a cardinal direction and 1 target in that direction. Deal 3 damage to it.",
           "available": true,
           "effectList": [
             {
@@ -1559,6 +1594,7 @@
         },
         {
           "name": "Piercing Mode",
+          "description": "Choose a cardinal direction and 1 or 2 targets in that direction. Deal 2 damage to each.",
           "available": true,
           "effectList": [
             {
@@ -1594,6 +1630,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 2 damage to 1 target on your square.",
           "available": true,
           "effectList": [
             {
@@ -1621,6 +1658,7 @@
       "optionalEffectList": [
         {
           "name": "Shadowstep Effect",
+          "description": "Move 1 square before or after the basic effect.",
           "available": true,
           "effectList": [
             {
@@ -1656,6 +1694,7 @@
         },
         {
           "name": "Slice and Dice Effect",
+          "description": "Deal 2 damage to a different target on your square. The shadowstep may be used before or after this effect.",
           "available": true,
           "effectList": [
             {
@@ -1724,6 +1763,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 1 damage and 2 marks to 1 target you can see.",
           "available": true,
           "effectList": [
             {
@@ -1755,6 +1795,7 @@
         },
         {
           "name": "Scanner Mode",
+          "description": "Choose up to 3 targets you can see and deal 1 mark to each.",
           "available": true,
           "effectList": [
             {
@@ -1796,6 +1837,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 3 damage to 1 target on your square. If you want, you may then move the target 1 square.",
           "available": true,
           "effectList": [
             {
@@ -1838,6 +1880,7 @@
         },
         {
           "name": "Long Barrel Mode",
+          "description": "Deal 2 damage to 1 target on any square exactly one move away.",
           "available": true,
           "effectList": [
             {
@@ -1878,6 +1921,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose 1 target on any square exactly 1 move away. Move onto that square and give the target 1 damage and 2 marks.",
           "available": true,
           "effectList": [
             {
@@ -1922,6 +1966,7 @@
         },
         {
           "name": "Rocket Fist Mode",
+          "description": "Choose a square exactly 1 move away. Move onto that square. You may deal 2 damage to 1 target there. If you want, you may move 1 more square in that same direction (but only if it is a legal move). You may deal 2 damage to 1 target there, as well.",
           "available": true,
           "effectList": [
             {
@@ -1965,6 +2010,7 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": true
               }
             },
             {
@@ -1974,6 +2020,7 @@
               }
             }
           ],
+          "unidirectional": true,
           "numPlayerTargets" : 2,
           "numTileTargets": 2,
           "playerSelectionFirst": false
@@ -1991,6 +2038,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Choose up to 3 targets on different squares, each exactly 1 move away. Deal 1 damage to each target.",
           "available": true,
           "effectList": [
             {
@@ -2026,6 +2074,7 @@
         },
         {
           "name": "Tsunami Mode",
+          "description": "Deal 1 damage to all targets that are exactly 1 move away.",
           "available": true,
           "effectList": [
             {
@@ -2085,6 +2134,7 @@
       "actions": [
         {
           "name": "Basic Mode",
+          "description": "Deal 2 damage to 1 target on your square.",
           "available": true,
           "effectList": [
             {
@@ -2110,6 +2160,7 @@
         },
         {
           "name": "Pulverize Mode",
+          "description": "Deal 3 damage to 1 target on your square, then move that target 0, 1, or 2 squares in one direction.",
           "available": true,
           "effectList": [
             {
@@ -2171,9 +2222,11 @@
               "name": "Unidirectional",
               "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": true
               }
             }
           ],
+          "unidirectional": true,
           "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": true

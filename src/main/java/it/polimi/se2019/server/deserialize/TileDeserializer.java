@@ -22,9 +22,7 @@ public class TileDeserializer implements RandomDeserializer {
         if (!name.equals(DeserializerConstants.NOTILE)) {
             JsonElement jsonParams = json.get(DeserializerConstants.PARAMS);
             String params = jsonParams.toString();
-            //JsonArray coords = json.get(DeserializerConstants.POS).getAsJsonArray();
-            //int x = coords.get(0).getAsInt();
-            //int y = coords.get(1).getAsInt();
+
             int x = jsonParams.getAsJsonObject().get(DeserializerConstants.XPOSITION).getAsInt();
             int y = jsonParams.getAsJsonObject().get(DeserializerConstants.YPOSITION).getAsInt();
 

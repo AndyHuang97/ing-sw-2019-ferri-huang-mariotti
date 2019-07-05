@@ -4,8 +4,8 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.server.playerActions.PowerUpAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PowerUpAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
@@ -16,7 +16,14 @@ import java.util.Stack;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class WaitingForPowerUps implements ControllerState {
+
+/**
+ * This ControllerState represent the time when we are waiting for the player to choose a power up
+ *
+ *  @author AH
+ *
+ */
+public class WaitingForPowerUps extends ControllerState {
 
     private static final int POWERUP_POSITION = 0;
 
@@ -25,11 +32,24 @@ public class WaitingForPowerUps implements ControllerState {
     private Stack<Player> playerStack = new Stack<>();
     private Set<Player> alreadyAskedPlayers = new HashSet<>();
 
+    /**
+     * Default constructor.
+     *
+     * @param expectedPowerUp the powerup we expect
+     * @param storedWaitingForEffects the state we were before and we want to go back to
+     *
+     */
     public WaitingForPowerUps(String expectedPowerUp, ControllerState storedWaitingForEffects) {
         this.expectedPowerUp = expectedPowerUp;
         this.storedWaitingForEffects = storedWaitingForEffects;
     }
 
+    /**
+     * Send the message to the client
+     *
+     * @param commandHandler the client command handler
+     *
+     */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try {
@@ -39,6 +59,15 @@ public class WaitingForPowerUps implements ControllerState {
         }
     }
 
+    /**
+     * After a powerup is used we can go back to the main action or stay here in case of errors
+     *
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controller
+     *
+     */
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 
@@ -52,7 +81,7 @@ public class WaitingForPowerUps implements ControllerState {
                     playerAction.getId().equals(Constants.POWERUP)
                                                     &&
                             ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE)))) {
-                if (playerActions.stream().allMatch(PlayerAction::check)) {
+                if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                     playerActions.forEach(PlayerAction::run);
                     Logger.getGlobal().info("Targeting Scope going back to WaitingForEffects");
                     return ((WaitingForEffects)storedWaitingForEffects).nextEffectOrAction(game);
@@ -64,25 +93,27 @@ public class WaitingForPowerUps implements ControllerState {
 
         if (expectedPowerUp.equals(Constants.TAGBACK_GRENADE)) {
             Logger.getGlobal().info("inside Tagback");
-            if (playerActions.stream().allMatch(playerAction ->
-                    playerAction.getId().equals(Constants.POWERUP)
-                                                    &&
+            if (playerActions.stream().anyMatch(playerAction -> playerAction.getId().equals(Constants.NOP))
+                    ||
+                    playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP) &&
                             ((PowerUpAction) playerAction).getPowerUpsToDiscard().stream().allMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TAGBACK_GRENADE)))) {
-                Logger.getGlobal().info("Found a Tagback Grenade");
+                Logger.getGlobal().info("Found a Tagback Grenade or NOP");
                 // this block of code will be executed either with a powerUp or with a NOP, in the latter case nothing
                 // is performed on the model, but it is still needed to ask the next player for input
-                Logger.getGlobal().info("PlayerActionCheck: " + playerActions.stream().allMatch(PlayerAction::check));
-                if (playerActions.stream().allMatch(PlayerAction::check)) {
+                Logger.getGlobal().info("PlayerActionCheck: " + playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError));
+                if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                     playerActions.forEach(PlayerAction::run); // needed to discard the powerup
 
                     Player poppedPlayer = playerStack.pop(); // pops the player that sent the correct powerUp to be consumed
                     Logger.getGlobal().info("Popped: "+poppedPlayer.getId());
                     playerStack.forEach(p -> Logger.getGlobal().info("Player at the top of the stack: "+playerStack.peek().getId()));
                     // giving markers to the attacker
-                    playerActions.forEach(playerAction ->((PowerUpAction) playerAction).getPowerUpsToDiscard().forEach(powerUp -> playerStack.peek().getCharacterState().addMarker(poppedPlayer.getColor(), 1)));
-
+                    if (playerActions.stream().allMatch(playerAction -> playerAction.getId().equals(Constants.POWERUP))){
+                        // tagback grenade effect
+                        playerActions.forEach(playerAction -> ((PowerUpAction) playerAction).getPowerUpsToDiscard().forEach(powerUp -> playerStack.peek().getCharacterState().addMarker(poppedPlayer.getColor(), 1)));
+                    }
                     List<Player> powerUpPlayers = game.getCumulativeDamageTargetSet().stream() // checks whether one of the attacked players has a Tagback Grenade
-                            .map(t -> (Player) t)
+                            .map(t -> (Player) t).filter(Player::getActive)
                                     .filter(notCurrentPlayer -> !alreadyAskedPlayers.contains(notCurrentPlayer))
                                     .filter(notCurrentPlayer -> !notCurrentPlayer.equals(playerStack.peek())) // gets the targets who can see the attacker
                                     .filter(p -> p.getCharacterState().getTile().getVisibleTargets(game).contains(playerStack.peek()))
@@ -118,10 +149,22 @@ public class WaitingForPowerUps implements ControllerState {
         return this; // invalid input
     }
 
+    /**
+     * Getter of the player stack
+     *
+     * @return  the player stack
+     *
+     */
     public Stack<Player> getPlayerStack() {
         return playerStack;
     }
 
+    /**
+     * Getter of the already asked players
+     *
+     * @return  the player already asked
+     *
+     */
     public Set<Player> getAlreadyAskedPlayers() {
         return alreadyAskedPlayers;
     }

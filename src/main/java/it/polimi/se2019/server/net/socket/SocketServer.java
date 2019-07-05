@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.net.socket;
 
-import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.net.CommandHandler;
 import it.polimi.se2019.util.NetMessage;
 import it.polimi.se2019.util.Request;
@@ -12,19 +11,28 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * This class contains is used from the server to talk to the clients.
- * Client's sockets are stored in clientSocketMap.
- * To send a message to a client the server needs to know the client's color.
- * This class should be used from the VirtualView (server-side) to contact the View (client-side).
+ * The socket server handles a connection made using sockets. It handles the send and receive parts. The server task is to accept a connection
+ * and start a new thread with a clienthandler inside to manage it. This way we have a single network entry/exit through the client handler and the command handler.
+ *
+ * @author FF
+ *
  */
-
 public class SocketServer {
     private static final Logger logger = Logger.getLogger(SocketServer.class.getName());
     private ServerSocket serverSocket;
 
+    /**
+     * Standard start method, it starts the accept connections loop. For each new connections it receive it spawns a new thread
+     * to manage it.
+     *
+     * @param port the socket port to be used
+     * @throws IOException in case of bad net errors
+     *
+     */
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         while (!serverSocket.isClosed()) {
@@ -32,17 +40,31 @@ public class SocketServer {
         }
     }
 
+    /**
+     * This subclass is where a connection from the client gets handled, It provides as a unique point of contact with the client.
+     * This is a very standard approach to socket management, nothing fancy.
+     *
+     */
     public static class ClientHandler extends Thread {
         private Socket clientSocket;
         private PrintWriter out;
         private BufferedReader in;
         private CommandHandler commandHandler;
-        private Boolean echo;
 
+        /**
+         * Default constructor.
+         *
+         */
         private ClientHandler(Socket socket) {
             this.clientSocket = socket;
         }
 
+        /**
+         * When a new connection is managed we create the in and out channels from the socket assigned to the client, we than
+         * spawn a new command handler to link to this and ew start the while cycle to grab any incoming messages.
+         * messages are processed by the command handler.
+         *
+         */
         @Override
         public void run() {
             try {
@@ -53,9 +75,6 @@ public class SocketServer {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     Request request = (Request) new Request(new NetMessage(null), null).deserialize(inputLine);
-                    if (request.getNetMessage().getCommands().containsKey("pong")) {
-                        this.echo = true;
-                    }
                     this.commandHandler.handle(request);
                 }
 
@@ -67,23 +86,15 @@ public class SocketServer {
             }
         }
 
+        /**
+         * To send something to a specific client, message must be already serialized.
+         *
+         * @param message the message to send
+         * @throws IOException in case of bad network
+         *
+         */
         public void send(String message) throws IOException {
             out.println(message);
-            Response response = (Response) new Response(null, false, "").deserialize(message);
-            if (response.getMessage().equals("ping")) {
-                long startTime = System.currentTimeMillis();
-                this.echo = false;
-                while (!this.echo && (System.currentTimeMillis() - startTime) < 1000 ) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        // useless
-                    }
-                }
-                if (!this.echo) {
-                    throw new IOException("dwe");
-                }
-            }
         }
     }
 }

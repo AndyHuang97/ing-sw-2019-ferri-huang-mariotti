@@ -6,18 +6,17 @@ import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.deserialize.*;
-import it.polimi.se2019.server.exceptions.IllegalPlayerActionException;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
-import it.polimi.se2019.server.games.Deck;
-import it.polimi.se2019.server.games.Game;
-import it.polimi.se2019.server.games.GameManager;
-import it.polimi.se2019.server.games.Targetable;
-import it.polimi.se2019.server.games.board.*;
+import it.polimi.se2019.server.games.*;
+import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.LinkType;
+import it.polimi.se2019.server.games.board.RoomColor;
+import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.*;
+import it.polimi.se2019.server.playeractions.*;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.DeserializerConstants;
 import it.polimi.se2019.util.InternalMessage;
@@ -53,6 +52,8 @@ public class ControllerTest {
     private DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
     private WeaponDeserializer weaponDeserializer = new WeaponDeserializer();
 
+    private KillShotTrack killShotTrack;
+
     @Before
     @SuppressWarnings("Duplicates")
     public void setUp() throws GameManager.AlreadyPlayingException, GameManager.GameNotFoundException, PlayerNotFoundException, IOException {
@@ -70,10 +71,10 @@ public class ControllerTest {
         for (int i = 0; i <= waitingListMaxSize; i++) {
             UserData user = new UserData("testNick" + i);
             if (i == 0) {
-                gameManager.addUserToWaitingList(user, actualPlayerCommandHandler);
+                gameManager.addUserToWaitingList(user, actualPlayerCommandHandler, false);
             }
             else {
-                gameManager.addUserToWaitingList(user, new CommandHandler());
+                gameManager.addUserToWaitingList(user, new CommandHandler(), false);
             }
         }
 
@@ -82,17 +83,17 @@ public class ControllerTest {
         // Board init
         tileMap = new Tile[2][3];
         LinkType[] links00 = {LinkType.WALL, LinkType.DOOR, LinkType.DOOR, LinkType.WALL};
-        tileMap[0][0] = new SpawnTile(RoomColor.RED, links00, null);
+        tileMap[0][0] = new Tile(RoomColor.RED, links00, null);
         LinkType[] links01 = {LinkType.DOOR, LinkType.DOOR, LinkType.OPEN, LinkType.WALL};
-        tileMap[0][1] = new NormalTile(RoomColor.YELLOW, links01, null);
+        tileMap[0][1] = new Tile(RoomColor.YELLOW, links01, null);
         LinkType[] links10 = {LinkType.WALL, LinkType.WALL, LinkType.OPEN, LinkType.DOOR};
-        tileMap[1][0] = new NormalTile(RoomColor.BLUE, links10, null);
+        tileMap[1][0] = new Tile(RoomColor.BLUE, links10, null);
         LinkType[] links11 = {LinkType.OPEN, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][1] = new NormalTile(RoomColor.BLUE, links11, null);
+        tileMap[1][1] = new Tile(RoomColor.BLUE, links11, null);
         LinkType[] links02 = {LinkType.OPEN, LinkType.DOOR, LinkType.WALL, LinkType.WALL};
-        tileMap[0][2] = new NormalTile(RoomColor.YELLOW, links02, null);
+        tileMap[0][2] = new Tile(RoomColor.YELLOW, links02, null);
         LinkType[] links12 = {LinkType.WALL, LinkType.WALL, LinkType.WALL, LinkType.DOOR};
-        tileMap[1][2] = new NormalTile(RoomColor.WHITE, links12, null);
+        tileMap[1][2] = new Tile(RoomColor.WHITE, links12, null);
         board = new Board("lol", tileMap);
 
         game.setBoard(board);
@@ -141,6 +142,10 @@ public class ControllerTest {
         game.setCurrentPlayer(player0);
 
         //actualPlayerCommandHandler.register(controller);
+        killShotTrack = new KillShotTrack(Arrays.asList(player0, player1));
+        killShotTrack.register(game);
+
+        game.setKillShotTrack(killShotTrack);
     }
 
     @Test
@@ -216,7 +221,7 @@ public class ControllerTest {
         ControllerState waitingForMainActions = new WaitingForMainActions();
         controller.setControllerStateForGame(game, waitingForMainActions);
 
-        Deck<Weapon> weaponDeck =  DirectDeserializers.deserialzerWeaponDeck();
+        Deck<Weapon> weaponDeck =  DirectDeserializers.deserialzeWeaponDeck();
 
         // add weapon to tileMap[0][0] SpawnTile
 
@@ -360,7 +365,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testActionAvailability() throws GameManager.GameNotFoundException, PlayerNotFoundException, IllegalPlayerActionException {
+    public void testActionAvailability() throws GameManager.GameNotFoundException, PlayerNotFoundException {
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
         player0.getCharacterState().getDamageBar().clear();
 
@@ -381,6 +386,67 @@ public class ControllerTest {
         // not available action, so no move performed
         Assert.assertSame(player0.getCharacterState().getTile(), tileMap[0][0]);
 
+    }
+
+    @Test
+    public void testRespawnAction() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        ControllerState waitingForMainAction = new WaitingForMainActions();
+        controller.setControllerStateForGame(game, waitingForMainAction);
+
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
+
+        player0.getCharacterState().setFirstSpawn(false);
+        player0.getCharacterState().setFirstSpawn(false);
+
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+
+        Map<String, List<Targetable>> command = new HashMap<>();
+        command.put(Constants.KEY_ORDER, Arrays.asList(new NoOperation(0)));
+        command.put(Constants.NOP, new ArrayList<>());
+
+        InternalMessage message = new InternalMessage(command);
+        Request request = new Request(message, TESTNICK0);
+
+        ((WaitingForMainActions) waitingForMainAction).updateCounter();
+        actualPlayerCommandHandler.handleLocalRequest(request);
+
+        ControllerState nextState = waitingForMainAction.nextState(Arrays.asList(new NoOperation(game, player0)), game, player0);
+
+        System.out.println(nextState);
+    }
+
+    @Test
+    public void testKillShotTrackScore() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
+
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        killShotTrack.addDeath(player1, true);
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        killShotTrack.addDeath(player1, true);
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        killShotTrack.addDeath(player1, true);
+        player0.getCharacterState().addDamage(player1.getColor(), 12, game);
+        killShotTrack.addDeath(player0, false);
+
+        Map<PlayerColor, Integer> score = killShotTrack.calculateScore();
+
+        Integer player0score = score.get(player0.getColor());
+        Integer player1score = score.get(player1.getColor());
+
+        Assert.assertEquals((Integer) 8, player0score);
+        Assert.assertEquals((Integer) 6, player1score);
+
+
+        // testing tie-break
+        player0.getCharacterState().addDamage(player1.getColor(), 12, game);
+        killShotTrack.addDeath(player0, false);
+        player0.getCharacterState().addDamage(player1.getColor(), 12, game);
+        killShotTrack.addDeath(player0, false);
+
+        Assert.assertEquals((Integer) 8, player0score);
+        Assert.assertEquals((Integer) 6, player1score);
     }
 
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {

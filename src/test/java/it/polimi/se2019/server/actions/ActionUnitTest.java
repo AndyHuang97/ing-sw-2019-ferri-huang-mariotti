@@ -15,7 +15,7 @@ public class ActionUnitTest {
 
     @Before
     public void setUp() {
-        actionUnit = new ActionUnit(false, "action", null, null, 0, 0, false);
+        actionUnit = new ActionUnit(false, "action", "", null, null, false, 0, 0, false);
     }
 
     @After

@@ -7,17 +7,28 @@ import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Deck;
 import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.util.DeserializerConstants;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
+/**
+ * This is the core deserializer, based on the request is able to call the correct deserializer and create the required object
+ *
+ * @author andreahuang
+ *
+ */
 public class DirectDeserializers {
 
     private static final String MAP = "maps/map";
-    private static final String JSON_PATH = "src/main/resources/json/";
+    private static final String JSON_PATH = "json/";
     private static final String WEAPON = "weapons/weapons.json";
     private static final String POWERUP = "powerups/powerups.json";
     private static final String AMMOCRATE = "ammocrates/ammocrates.json";
@@ -25,7 +36,10 @@ public class DirectDeserializers {
 
     static DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
 
-
+    /**
+     * The constructor is used to load the possible deserializers into the available ones
+     *
+     */
     public DirectDeserializers() {
         factory.registerDeserializer(DeserializerConstants.TILE, new TileDeserializerSupplier());
         factory.registerDeserializer(DeserializerConstants.AMMOCRATEDECK, new AmmoCrateDeserializerSupplier());
@@ -50,8 +64,7 @@ public class DirectDeserializers {
         return board;
     }
 
-    //TODO need renaming
-    public static Deck<Weapon> deserialzerWeaponDeck() {
+    public static Deck<Weapon> deserialzeWeaponDeck() {
         WeaponDeckDeserializer weaponDeckDeserializer = (WeaponDeckDeserializer) factory.getDeserializer(DeserializerConstants.WEAPONDECK);
 
         String path = JSON_PATH+WEAPON;
@@ -63,8 +76,7 @@ public class DirectDeserializers {
         return weaponDeck;
     }
 
-    //TODO need renaming
-    public static Deck<PowerUp> deserialzerPowerUpDeck() {
+    public static Deck<PowerUp> deserialzePowerUpDeck() {
         PowerUpDeserializer powerUpDeserializer = (PowerUpDeserializer) factory.getDeserializer(DeserializerConstants.POWERUPDECK);
 
         String path = JSON_PATH+POWERUP;
@@ -88,16 +100,107 @@ public class DirectDeserializers {
         return ammoCrateDeck;
     }
 
+    public static Deck<PowerUp> deserializePowerUpDeck(Deck<PowerUp> deck) {
+        List<PowerUp> powerUpList = new ArrayList<>();
+
+        if (deck != null) {
+            PowerUp powerUp = deck.drawCard();
+            while (powerUp != null) {
+                powerUp = getPowerUp(powerUp.getName());
+                powerUpList.add(powerUp);
+                powerUp = deck.drawCard();
+            }
+        }
+        return new Deck<>(powerUpList);
+    }
+
+    public static Deck<Weapon> deserializeWeaponDeck(Deck<Weapon> deck) {
+        List<Weapon> weaponList = new ArrayList<>();
+
+        Weapon weapon = deck.drawCard();
+        while (weapon != null) {
+            weapon = getWeapon(weapon.getName());
+            weaponList.add(weapon);
+            weapon = deck.drawCard();
+        }
+        return new Deck<>(weaponList);
+    }
+
+    public static Deck<AmmoCrate> deserializeAmmoCrateDeck(Deck<AmmoCrate> deck) {
+        List<AmmoCrate> ammoCrateList = new ArrayList<>();
+
+        AmmoCrate ammoCrate = deck.drawCard();
+        while (ammoCrate != null) {
+            ammoCrate = getAmmoCrate(ammoCrate.getName());
+            ammoCrateList.add(ammoCrate);
+            ammoCrate = deck.drawCard();
+        }
+        return new Deck<>(ammoCrateList);
+    }
+
+    public static Board deserializeBoardCrates(Board board) {
+        board.getTileList().stream().filter(Objects::nonNull).filter(Tile::isSpawnTile).forEach(tile -> tile.setWeaponCrate(tile.getWeaponCrate().stream().map(weapon -> getWeapon(weapon.getName())).collect(Collectors.toList())));
+        board.getTileList().stream().filter(Objects::nonNull).filter(tile -> !tile.isSpawnTile()).forEach(tile -> tile.setAmmoCrate(getAmmoCrate(tile.getAmmoCrate().getName())));
+        return board;
+    }
+
+    public static CharacterState deserializeCharacterState(CharacterState characterState, Board board) {
+        if (characterState.getTile() != null && characterState.getTile().getId() != null) {
+            characterState.setTile(board.getTileFromID(characterState.getTile().getId()));
+        }
+        characterState.setPowerUpBag(characterState.getPowerUpBag().stream().map(powerUp -> getPowerUp(powerUp.getName())).collect(Collectors.toList()));
+        characterState.setWeaponBag(characterState.getWeaponBag().stream().map(weapon -> getWeapon(weapon.getName())).collect(Collectors.toList()));
+        return characterState;
+    }
+
+    public static List<PowerUp> deserializePowerUpList(List<PowerUp> powerUpList) {
+        return powerUpList.stream().map(powerUp -> getPowerUp(powerUp.getName())).collect(Collectors.toList());
+    }
+
+
     private static Object deserialize(Object object, RandomDeserializer deserializer, String path) {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(DirectDeserializers.class.getClassLoader().getResource(path).openStream()))) {
 
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
             object = deserializer.deserialize(json, factory);
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | NullPointerException e) {
             Logger.getGlobal().warning(e.toString());
         }
         return object;
+    }
+
+    private static PowerUp getPowerUp(String cardName) {
+        Deck<PowerUp> deck = DirectDeserializers.deserialzePowerUpDeck();
+        PowerUp card = deck.drawCard();
+
+        while(!card.getName().equals(cardName)) {
+            card = deck.drawCard();
+        }
+        //System.out.println(card.getName());
+        return card;
+    }
+
+    private static Weapon getWeapon(String cardName) {
+        Deck<Weapon> deck = DirectDeserializers.deserialzeWeaponDeck();
+        Weapon card = deck.drawCard();
+
+        while(!card.getName().equals(cardName)) {
+            card = deck.drawCard();
+        }
+
+        return card;
+    }
+
+    private static AmmoCrate getAmmoCrate(String cardName) {
+        Deck<AmmoCrate> deck = DirectDeserializers.deserializeAmmoCrate();
+        AmmoCrate card = deck.drawCard();
+
+        while(!card.getName().equals(cardName)) {
+            card = deck.drawCard();
+        }
+
+        return card;
     }
 }
 

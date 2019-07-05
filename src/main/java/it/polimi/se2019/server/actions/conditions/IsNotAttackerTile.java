@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 
 /**
  * This condition checks whether the selected tile is not the same as the attacker's tile.
+ *
+ * @author andreahuang
  */
 public class IsNotAttackerTile implements Condition {
 
@@ -19,10 +21,22 @@ public class IsNotAttackerTile implements Condition {
 
     private boolean isTile;
 
+    /**
+     * Default constructor.
+     *
+     * @param isTile boolean indicating whether the input to check is a tile of a player target .
+     */
     public IsNotAttackerTile(boolean isTile) {
         this.isTile = isTile;
     }
 
+    /**
+     * Checks whether the input is not on the attacker tile.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if it is not on attacker tile, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile targetTile;

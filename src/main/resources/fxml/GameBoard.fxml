@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="740.0" prefWidth="1280.0" style="-fx-background-color: #595959" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.GUIController">
+<AnchorPane prefHeight="740.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2019.client.gui.GUIController">
    <children>
       <HBox prefHeight="900.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -25,7 +25,7 @@
                      <children>
                         <AnchorPane fx:id="map" prefHeight="454.0" prefWidth="600.0">
                            <children>
-                              <ImageView fitHeight="454.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ImageView fitHeight="454.0" fitWidth="600.0" layoutX="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="35.7906494140625" AnchorPane.topAnchor="0.0">
                                  <image>
                                     <Image url="@../images/maps/map0.png" />
                                  </image>
@@ -76,7 +76,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <Button disable="true" mnemonicParsing="false" text="Send" />
+                                          <Button fx:id="pass" disable="true" mnemonicParsing="false" onAction="#handlePass" text="Pass" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -85,7 +85,7 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <VBox fx:id="playerInfoBox" alignment="CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="163.0">
+                              <VBox fx:id="playerInfoBox" alignment="TOP_CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="163.0">
                                  <children>
                                     <AnchorPane prefHeight="35.0">
                                        <children>
@@ -123,15 +123,23 @@
                                           </HBox>
                                        </children>
                                     </GridPane>
-                                    <AnchorPane prefHeight="160.0" prefWidth="163.0">
+                                    <HBox alignment="CENTER" prefHeight="33.0" prefWidth="163.0" style="-fx-background-color: grey; -fx-background-radius: 20;">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="33.0" prefWidth="163.0" style="-fx-background-color: grey; -fx-background-radius: 20;" AnchorPane.bottomAnchor="0.0">
-                                             <children>
-                                                <Label fx:id="myScore" text="Score" textFill="WHITE" />
-                                             </children>
-                                          </HBox>
+                                          <Label fx:id="myScore" text="Score" textFill="WHITE" />
                                        </children>
-                                    </AnchorPane>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <VBox alignment="TOP_CENTER" style="-fx-background-color: grey; -fx-background-radius: 20;">
+                                       <children>
+                                          <Label text="Current player:" textFill="WHITE" wrapText="true" />
+                                          <Label fx:id="currentPlayer" layoutX="10.0" layoutY="10.0" text="Current player:" textFill="WHITE" wrapText="true" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </VBox>
                                  </children>
                               </VBox>
                               <VBox alignment="TOP_RIGHT">
@@ -152,14 +160,115 @@
                                                       </ImageView>
                                                    </children>
                                                 </AnchorPane>
-                                                <AnchorPane fx:id="actionButtons" />
+                                                <AnchorPane fx:id="actionButtons">
+                                                   <children>
+                                                      <AnchorPane fx:id="normalActionTile" layoutY="20.0" visible="false">
+                                                         <children>
+                                                            <GridPane prefHeight="58.0" prefWidth="30.0">
+                                                               <columnConstraints>
+                                                                  <ColumnConstraints />
+                                                                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                               </columnConstraints>
+                                                               <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                               </rowConstraints>
+                                                               <children>
+                                                                  <Button fx:id="mmm" mnemonicParsing="false" onAction="#handleM" opacity="0.45" prefHeight="16.0" prefWidth="26.0" GridPane.columnIndex="1">
+                                                                     <font>
+                                                                        <Font size="4.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                                  <Button fx:id="mg" mnemonicParsing="false" onAction="#handleMG" opacity="0.45" prefHeight="16.0" prefWidth="26.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                                     <font>
+                                                                        <Font size="4.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                                  <Button fx:id="s" mnemonicParsing="false" onAction="#handleS" opacity="0.45" prefHeight="16.0" prefWidth="26.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                                     <font>
+                                                                        <Font size="4.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                               </children>
+                                                            </GridPane>
+                                                            <Button fx:id="r" layoutX="7.0" layoutY="62.0" mnemonicParsing="false" onAction="#handleR" opacity="0.45" prefHeight="24.0" prefWidth="21.0">
+                                                               <font>
+                                                                  <Font size="4.0" />
+                                                               </font>
+                                                            </Button>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <AnchorPane fx:id="frenzyActionTile" visible="false">
+                                                         <children>
+                                                            <GridPane layoutY="14.0" prefHeight="46.0" prefWidth="31.0">
+                                                               <columnConstraints>
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                               </columnConstraints>
+                                                               <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                               </rowConstraints>
+                                                               <children>
+                                                                  <Button fx:id="mrs" maxHeight="15.0" maxWidth="31.0" minHeight="15.0" mnemonicParsing="false" onAction="#handleMRS" opacity="0.45" prefHeight="15.0" prefWidth="31.0">
+                                                                     <font>
+                                                                        <Font size="10.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                                  <Button fx:id="mmmm" maxHeight="15.0" minHeight="15.0" mnemonicParsing="false" onAction="#handleM" opacity="0.45" prefHeight="15.0" prefWidth="31.0" GridPane.rowIndex="1">
+                                                                     <font>
+                                                                        <Font size="4.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                                  <Button fx:id="mmg" mnemonicParsing="false" onAction="#handleMG" opacity="0.45" prefHeight="15.0" prefWidth="31.0" GridPane.rowIndex="2">
+                                                                     <font>
+                                                                        <Font size="4.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                               </children>
+                                                            </GridPane>
+                                                            <GridPane layoutY="78.0" prefHeight="31.0" prefWidth="31.0">
+                                                               <columnConstraints>
+                                                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                               </columnConstraints>
+                                                               <rowConstraints>
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                               </rowConstraints>
+                                                               <children>
+                                                                  <Button fx:id="mmrs" maxHeight="15.0" minHeight="15.0" mnemonicParsing="false" onAction="#handleMRS" opacity="0.45" prefHeight="15.0" prefWidth="31.0">
+                                                                     <font>
+                                                                        <Font size="4.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                                  <Button fx:id="mmmg" maxHeight="15.0" minHeight="15.0" mnemonicParsing="false" onAction="#handleMG" opacity="0.45" prefHeight="15.0" prefWidth="31.0" GridPane.rowIndex="1">
+                                                                     <font>
+                                                                        <Font size="4.0" />
+                                                                     </font>
+                                                                  </Button>
+                                                               </children>
+                                                            </GridPane>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <Button fx:id="mmgAdr" layoutX="98.0" layoutY="22.0" mnemonicParsing="false" onAction="#handleMG" opacity="0.45" prefHeight="16.0" prefWidth="26.0" visible="false">
+                                                         <font>
+                                                            <Font size="4.0" />
+                                                         </font>
+                                                      </Button>
+                                                      <Button fx:id="ms" layoutX="180.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleMS" opacity="0.45" prefHeight="16.0" prefWidth="26.0" visible="false">
+                                                         <font>
+                                                            <Font size="4.0" />
+                                                         </font>
+                                                      </Button>
+                                                   </children></AnchorPane>
                                              </children>
                                           </StackPane>
                                        </children>
                                     </HBox>
                                     <HBox alignment="TOP_RIGHT" prefHeight="138.0">
                                        <children>
-                                          <GridPane fx:id="myWeapons" hgap="10.0" prefWidth="225.0">
+                                          <GridPane fx:id="myWeapons" hgap="5.0" prefWidth="225.0">
                                             <columnConstraints>
                                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -185,34 +294,52 @@
                                                    </image>
                                                 </ImageView>
                                              </children>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
                                           </GridPane>
                                           <GridPane fx:id="myPowerUps" alignment="CENTER" hgap="10.0" prefWidth="250.0">
                                             <columnConstraints>
                                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <ImageView fitHeight="110.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
                                                    <GridPane.margin>
-                                                      <Insets left="11.0" />
+                                                      <Insets />
                                                    </GridPane.margin>
                                                 </ImageView>
-                                                <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" layoutX="110.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                                    <image>
                                                       <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
+                                                   <GridPane.margin>
+                                                      <Insets />
+                                                   </GridPane.margin>
                                                 </ImageView>
-                                                <ImageView fitHeight="110.0" fitWidth="65.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                                    <image>
                                                       <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
                                                    </image>
+                                                   <GridPane.margin>
+                                                      <Insets />
+                                                   </GridPane.margin>
+                                                </ImageView>
+                                                <ImageView fitHeight="110.0" fitWidth="55.0" layoutX="135.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                                                   <image>
+                                                      <Image url="@../images/powerups/Blue_TagbackGrenade.png" />
+                                                   </image>
+                                                   <GridPane.margin>
+                                                      <Insets />
+                                                   </GridPane.margin>
                                                 </ImageView>
                                              </children>
                                              <HBox.margin>
@@ -245,17 +372,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
@@ -325,17 +452,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
@@ -402,17 +529,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
@@ -479,17 +606,17 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="150.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                    <ImageView fitHeight="150.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2">
                                        <image>
                                           <Image url="@../images/weapons/Whisper.png" />
                                        </image>
@@ -546,6 +673,7 @@
                         </AnchorPane>
                      </children>
                   </VBox>
+                  <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleClose" style="-fx-background-color: red; -fx-background-radius: 100;" text="X" wrapText="true" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>

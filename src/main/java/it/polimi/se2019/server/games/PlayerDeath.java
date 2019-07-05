@@ -8,6 +8,13 @@ import static java.util.Map.Entry.*;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * This class is sent to all players by the kill shot track when one player is killed, it contains enough
+ * data so that every player that receives  this update can change his score getting points for the damage
+ * did to the dead player.
+ *
+ * @author Rodolfo Mariotti
+ */
 public class PlayerDeath {
 
     private PlayerColor deadPlayer;
@@ -29,6 +36,7 @@ public class PlayerDeath {
 
     /**
      * Sorts in descending order the players who attacked the dead player.
+     *
      * @return rankedAttackers, a descending sorted list of the attackers.
      */
     public List<PlayerColor> rankedAttackers() {
@@ -59,38 +67,83 @@ public class PlayerDeath {
         return rankedAttackers;
     }
 
+    /**
+     * Getter method for the damageBar attribute.
+     *
+     * @return reference to the damageBar object of the player death
+     */
     public List<PlayerColor> getDamageBar() {
         return damageBar;
     }
 
+    /**
+     * Setter method fot the damageBar attribute.
+     *
+     * @param damageBar reference to the object that will be set as damageBar in the player death
+     */
     public void setDamageBar(List<PlayerColor> damageBar) {
         this.damageBar = damageBar;
     }
 
+    /**
+     * Getter method for the deadPlayer attribute.
+     *
+     * @return reference to the died player that triggered this player death update
+     */
     public PlayerColor getDeadPlayer() {
         return deadPlayer;
     }
 
+    /**
+     * Setter method for the deadPlayer attribute.
+     *
+     * @param deadPlayer reference to the object that will be set as deadPlayer in the player death
+     */
     public void setDeadPlayer(PlayerColor deadPlayer) {
         this.deadPlayer = deadPlayer;
     }
 
+    /**
+     * Getter method for the valueBar attribute.
+     *
+     * @return reference to the array that contains the value bar of the dead player
+     */
     public int[] getValueBar() {
         return valueBar;
     }
 
+    /**
+     * Setter method for the valueBar attribute.
+     *
+     * @param valueBar reference to the array that will be set as value bar of the dead player
+     */
     public void setValueBar(int[] valueBar) {
         this.valueBar = valueBar;
     }
 
+    /**
+     * Getter method for the deaths attribute.
+     *
+     * @return number of deaths of the dead player
+     */
     public int getDeaths() {
         return deaths;
     }
 
+    /**
+     * Setter method for the deaths attribute.
+     *
+     * @param deaths set the number of deaths of the dead player
+     */
     public void setDeaths(int deaths) {
         this.deaths = deaths;
     }
 
+    /**
+     * Getter method for the deathDuringFrenzy attribute.
+     *
+     * @return true if the player is dead during frenzy mode, false otherwise
+     */
     public boolean isDeathDuringFrenzy() {
         return deathDuringFrenzy;
     }

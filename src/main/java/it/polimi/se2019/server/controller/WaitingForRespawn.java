@@ -1,34 +1,58 @@
 package it.polimi.se2019.server.controller;
 
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
+import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class WaitingForRespawn implements ControllerState {
+/**
+ * This ControllerState represent when we are asking a user where to respawn
+ *
+ *  @author AH
+ *
+ */
+public class WaitingForRespawn extends ControllerState {
 
     private static final int POWERUP_POSITION = 0;
     private Stack<Player> playerStack = new Stack<>();
 
+    /**
+     * Send the message to the client
+     *
+     * @param commandHandler the client command handler
+     *
+     */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try { // asks the current player for a power up
+            Logger.getGlobal().info("Sending respawn selection message...");
             commandHandler.update(new Response(null, true, Constants.RESPAWN));
         } catch (Observer.CommunicationError e) {
             Logger.getGlobal().warning(e.getMessage());
         }
     }
 
-
-    //TODO call addDeath, swapValueBar, reset damageBar. double kill(da implementare, e aggiornare l'update dello score)
+    /**
+     * After a respawn its time to give command back to who really owns it usially the next player :)
+     *
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controller
+     *
+     */
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 
@@ -46,35 +70,96 @@ public class WaitingForRespawn implements ControllerState {
             return this; // did not find a valid power up action, stay in this state; a new selection message will be sent from this state
         } else { // not first spawn
                 if (!player.getCharacterState().isDead()) { // this step does NOT require any input it's at the end of a turn
+
+                    // if the activePlayer killed two or more players during this turn it gets a bonus point
+                    if (game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isDead()).collect(Collectors.toList()).size() >= 2) {
+                        player.getCharacterState().setScore(player.getCharacterState().getScore() + 1);
+                        Logger.getGlobal().info("COOL, DOUBLEKILL!");
+                    }
+
+
                     playerStack.push(player); // store the player that is ending the turn
-                    Logger.getGlobal().info("Pushed player:" + player.getId());
+                    Logger.getGlobal().info("Pushed player: current Player - " + player.getUserData().getNickname());
                 } else {
-                    Player p = playerStack.pop(); // pops the dead player that is respawning and get his input
-                    Logger.getGlobal().info("Popped player:" + p.getId());
                     if (playerActions.get(POWERUP_POSITION).getId().equals(Constants.RESPAWN)) {
                         if (playerActions.get(POWERUP_POSITION).check()) {
-                                playerActions.get(POWERUP_POSITION).run(); // spawns the player
+                            Player respawningPlayer = playerStack.pop(); // pops the dead player that is respawning and get his input
+                            Logger.getGlobal().info("Popped player:" + respawningPlayer.getUserData().getNickname());
+
+
+                            boolean isOverkill = respawningPlayer.getCharacterState().getDamageBar().size() > 11;
+
+                            Logger.getGlobal().info("Is overkill: " + isOverkill);
+
+                            // give a mark to the player that overkilled deadPlayer
+                            if (isOverkill) {
+                                // who killed dead player?
+                                PlayerColor color = respawningPlayer.getCharacterState().getDamageBar().get(11);
+                                Player killer = game.getPlayerByColor(color);
+                                Logger.getGlobal().info("killer: " + killer.getUserData().getNickname());
+
+                                killer.getCharacterState().addMarker(respawningPlayer.getColor(), 1);
+                            }
+
+                            game.addDeath(respawningPlayer, isOverkill);
+                            playerActions.get(POWERUP_POSITION).run(); // spawns the player and resets the damage bar
                         }
                     } else {
                         Logger.getGlobal().info("Expecting a correct input from a dead player.");
                         return this; // tries to get input again for the dead player
                     }
                 }
-                if (game.getPlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) { // if someone is dead
-                    List<Player> deadPlayers = game.getPlayerList().stream()
+
+                Logger.getGlobal().info("Any dead player: " + game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead()));
+                if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) { // if someone is dead
+                    List<Player> deadPlayers = game.getActivePlayerList().stream()
                             .filter(p -> p.getCharacterState().isDead()).collect(Collectors.toList());
-                    playerStack.push(deadPlayers.get(0)); // pushes the dead player to respawn
-                    Logger.getGlobal().info("Pushed player:" + deadPlayers.get(0).getId());
+
+                    Player deadPlayer = deadPlayers.get(0);
+
+                    playerStack.push(deadPlayer); // pushes the dead player to respawn
+
+                    Logger.getGlobal().info("Pushed player: dead Player " + deadPlayers.get(0).getUserData().getNickname());
                     game.setCurrentPlayer(deadPlayers.get(0)); // give control to one of the dead players, until everyone has spawned
-                    Logger.getGlobal().info("Giving control to a dead player");
+                    Logger.getGlobal().info("Dead player's powerUps: " + game.getCurrentPlayer().getCharacterState().getPowerUpBag().size());
+                    if (game.getCurrentPlayer().getCharacterState().getPowerUpBag().size() < 4) {
+                        PowerUp powerUp = game.getPowerUpDeck().drawCard();
+                        Logger.getGlobal().info("Drawing a powerUp: " + powerUp.getId());
+                        game.getCurrentPlayer().getCharacterState().addPowerUp(powerUp);
+                    }
+                    Logger.getGlobal().info("Giving control to a dead player, and giving him a new powerup");
                     return this; // stays in this state until everyone is spawned
                 } else { // nobody is dead
                     player = playerStack.pop();// gives back the player that was ending the turn
-                    Logger.getGlobal().info("Popped player:" + player.getId());
+                    game.setCurrentPlayer(player);// resumes the turn cycle
+                    Logger.getGlobal().info("Popped player:" + player.getUserData().getNickname());
                     player.getCharacterState().setFirstSpawn(false);
-                    game.setCurrentPlayer(player);
-                    game.nextCurrentPlayer(); // resumes the turn cycle
-                    Logger.getGlobal().info("Next Player: "+game.getCurrentPlayer().getId());
+
+                    Logger.getGlobal().info("Frenzy " + game.isFrenzy());
+                    if (game.isFrenzy()) {
+                        Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
+                        beforeFrenzyActivatorPlayers.get().forEach(player1 -> Logger.getGlobal().info("Before frenzy activator player: " +player1.getUserData().getNickname()));
+                        Logger.getGlobal().info("Frenzy activator: " + beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count() - 1).getUserData().getNickname());
+                        Logger.getGlobal().info("Current player: " + game.getCurrentPlayer().getUserData().getNickname());
+                        if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count() - 1))) {
+                            if (!game.isFrenzyActivatorEntered()) {
+                                Logger.getGlobal().info("Setting frenzyActivatorEntered to true in respawn");
+                                game.setFrenzyActivatorEntered(true);
+                            } else {
+                                Logger.getGlobal().info("Terminating the game");
+
+                                Response response = new Response(null, true, Constants.FINISHGAME);
+
+                                // walk-around to send a broadcast message to all the Views
+                                game.update(response);
+
+                                return new EndGameState();
+                            }
+                        }
+                    }
+
+                    game.updateTurn(); // resumes the turn cycle
+                    Logger.getGlobal().info("Next Player: "+game.getCurrentPlayer().getUserData().getNickname());
                     if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
                         return new WaitingForRespawn(); // if next player has not spawned yet
                     } else {

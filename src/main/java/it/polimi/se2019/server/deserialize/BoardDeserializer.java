@@ -37,16 +37,12 @@ public class BoardDeserializer implements RandomDeserializer {
             }
 
             // read position and add the tile to the array
-            // TODO: read config
             JsonObject jsonParams = jsonTile.get(DeserializerConstants.PARAMS).getAsJsonObject();
             int xCoord = jsonParams.get(DeserializerConstants.XPOSITION).getAsInt();
             int yCoord = jsonParams.get(DeserializerConstants.YPOSITION).getAsInt();
 
-            //System.out.println(tile);
             tileMap[xCoord][yCoord] = tile;
         }
-
-        // TODO: pad empty map spaces with void unlinked tiles, maybe flyweight pattern (?)
 
         return new Board(id, tileMap);
     }

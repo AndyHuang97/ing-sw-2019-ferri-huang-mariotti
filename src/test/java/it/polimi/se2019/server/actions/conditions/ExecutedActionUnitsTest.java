@@ -28,7 +28,7 @@ public class ExecutedActionUnitsTest {
     @Test
     public void testExecutedActionUnits() {
         Condition condition;
-        ActionUnit basicMode = new ActionUnit(true,"Basic Mode", null, null, 0,0,true);
+        ActionUnit basicMode = new ActionUnit(true,"Basic Mode", "", null, null, false, 0,0,true);
         game.setCurrentActionUnitsList(Arrays.asList(basicMode));
 
         condition = new ExecutedActionUnits(Arrays.asList("Basic Mode"));

@@ -4,7 +4,6 @@ import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.NamedImage;
 import it.polimi.se2019.client.util.Util;
-import it.polimi.se2019.server.exceptions.TileNotFoundException;
 import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.board.Tile;
 import it.polimi.se2019.server.games.player.Player;
@@ -24,9 +23,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * The MapController class contains all the elements of the map(ammo crates, weapon crates, players, and kill shot track).
+ * It provides methods to initialize the map's graphic elements' behaviour, methods to show the graphic elements, and
+ * methods to reset the graphic elements' style.
+ *
+ * @author andreahuang
+ */
 public class MapController {
 
     private static final Logger logger = Logger.getLogger(MapController.class.getName());
+    private static double ANCHOR = 0.0;
 
     private View view;
     private List<GridPane> weaponCrateList;
@@ -52,14 +59,11 @@ public class MapController {
     @FXML
     private GridPane redWeapons;
     @FXML
-    private AnchorPane powerupDeck;
-    @FXML
-    private AnchorPane weaponDeck;
-    @FXML
     private GridPane progressBar;
 
     /**
      * The map initializer that is called wen the Map.fxml file is loaded.
+     * It adds the container of weaponcrates in one list for better easier processing.
      *
      */
     @FXML
@@ -69,26 +73,25 @@ public class MapController {
     }
 
     /**
-     *  Is called by the main application to set itself.
+     * The setView method is called by the main application to set itself and give access to the model for linking.
      *
-     * @param view
+     * @param view is the view that interacts with the server.
+     *
      */
     public void setView(View view) {
         this.view = view;
     }
 
-
     /**
-     * Handles the loading of a map. It shows the clickable tiles based on
-     * the map's json file and the present ammo tiles.
+     * The handleMapLoading method is used for the loading of a map. It initializes the clickable tiles based on
+     * the map's id, the ammocrate cards, and the players.
      *
      */
-    @FXML
     public void handleMapLoading() {
 
         // recognizes the board from its id.
-        System.out.println(view.getModel().getGame().getBoard());
-        System.out.println(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png");
+        Logger.getGlobal().info(view.getModel().getGame().getBoard().toString());
+        Logger.getGlobal().info(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png");
         mapImage.setImage(new Image(Constants.MAP_IMAGE + view.getModel().getGame().getBoard().getId() + ".png"));
 
         try {
@@ -107,10 +110,6 @@ public class MapController {
             resetTileGridStyle(shootTileGrid);
             tileGrid.setVisible(false);
             ammoGrid.setDisable(true);
-            showKillShotTrack();
-            showPlayers();
-            initWeaponCrates();
-            showWeaponCrates();
 
         } catch (IllegalArgumentException e) {
             logger.warning(e.toString());
@@ -126,6 +125,7 @@ public class MapController {
      * @param tileMap is the tile map.
      * @param x is the x coordinate of the tile.
      * @param y is the y coordintate of the tile.
+     *
      */
     public void initTileGrid(Tile[][] tileMap, int x, int y) {
 
@@ -144,7 +144,14 @@ public class MapController {
         }
     }
 
-    private static double ANCHOR = 0.0;
+    /**
+     * The setButtonTile method sets the behaviour of the mouse click event of each button from a tile.
+     * It provides a Runnable handleAction to support different kinds of input handling.
+     *
+     * @param gridPane is the grid pane that contains button.
+     * @param button is the button which the mouse click event is set on.
+     * @param handleAction is a runnable that builds the input for the mouse click event.
+     */
     public void setButtonTile(GridPane gridPane, Button button, Runnable handleAction) {
         button.setOpacity(0.4);
         AnchorPane.setTopAnchor(button, ANCHOR);
@@ -177,7 +184,7 @@ public class MapController {
     }
 
     /**
-     * This is the first initialization of the ammo grid, which defines the effect of mouse click.
+     * The initAmmoGrid is the first initialization of the ammo grid, which defines the effect of mouse click.
      * for every single ammo card.
      *
      * @param tileMap is the tile map.
@@ -191,34 +198,38 @@ public class MapController {
                 // gets the i-th anchorpane containing the imageview
                 AnchorPane anchorPane = (AnchorPane) ((HBox) ammoGrid.getChildren().get(Util.convertToIndex(x, y))).getChildren().get(0);
                 ImageView iv = (ImageView) anchorPane.getChildren().get(0);
-                String id = view.getModel().getGame().getBoard().getTileMap()[x][y].getAmmoCrate().getName();
-                //TODO separate the image loading from the setup, no need to iterate the mouse click behavior
-                iv.setImage(new NamedImage(Constants.AMMO_PATH + id + ".png", Constants.AMMO_PATH));
-                iv.setVisible(true);
-                iv.setDisable(true);
 
-                iv.setOnMouseClicked(event -> {
-                    anchorPane.setDisable(true);
-                    anchorPane.setOpacity(Constants.onClickedOpacity);
-
-                    BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
-                    Button confirmButton = (Button) root.lookup("#confirmButton");
-                    Util.ifFirstSelection(confirmButton, progressBar);
-                    Util.updateCircle(progressBar);
-
-                    NamedImage image = (NamedImage) iv.getImage();
-                    handleAmmoCrateSelected(image.getName());
-                });
+//                ((GUIView)view).getGuiController().setCardSelectionBehavior(iv, anchorPane, Constants.GRAB);
             }
         }
     }
 
     /**
+     * The showAmmoGrid method show the ammocrate on the map. It links the model's ammocrates with its graphic counterpart.
      *
+     */
+    public void showAmmoGrid() {
+        view.getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).filter(tile -> !tile.isSpawnTile())
+                .forEach(tile -> {
+                    AnchorPane anchorPane = (AnchorPane) ((HBox) ammoGrid.getChildren().get(Integer.parseInt(tile.getId()))).getChildren().get(0);
+                    ImageView iv = (ImageView) anchorPane.getChildren().get(0);
+                    if (tile.getAmmoCrate() != null) {
+                        String id = tile.getAmmoCrate().getName();
+                        iv.setImage(new NamedImage(Constants.AMMO_PATH + id + ".png", Constants.AMMO_PATH));
+                        iv.setVisible(true);
+                        iv.setDisable(true);
+                    } else {
+                        iv.setVisible(false);
+                    }
+                });
+    }
+
+    /**
+     * The initPlayerGrid method is called to set the behaviours of each circle that represents a player.
      *
-     * @param tileMap
-     * @param x
-     * @param y
+     * @param tileMap is the tile map of the model.
+     * @param x is the x coordinate.
+     * @param y is the y coordinate.
      */
     public void initPlayerGrid(Tile[][] tileMap, int x, int y) {
 
@@ -234,7 +245,7 @@ public class MapController {
                             .forEach(c ->
                                 c.setOnMouseClicked(event -> {
                                     c.setDisable(true);
-                                    c.setOpacity(Constants.onClickedOpacity);
+                                    c.setOpacity(Constants.CLICKED_OPACITY);
 
                                     BorderPane root = (BorderPane) ((GUIView) view).getPrimaryStage().getScene().getRoot();
                                     Button confirmButton = (Button) root.lookup("#confirmButton");
@@ -252,25 +263,7 @@ public class MapController {
     }
 
     /**
-     * Sets the mouse click behavior on weapon crates' cards.
-     *
-     */
-    public void initWeaponCrates() {
-
-
-        weaponCrateList.stream()
-                .forEach(wc -> {
-                    wc.setDisable(true);
-                    wc.getChildren().stream()
-                            .map(n -> (ImageView) n)
-                            .forEach(w ->
-                                    ((GUIView) view).getGuiController().setCardSelectionBehavior(w, wc, Constants.GRAB)
-                            );
-                });
-    }
-
-    /**
-     * Shows the weapon crates.
+     * The showWeaponCrates method shows the weapon crates on the map. It links the model's weapons with its graphic counterpart.
      *
      */
     public void showWeaponCrates() {
@@ -286,11 +279,17 @@ public class MapController {
                                     .findFirst();
                             if (optGrid.isPresent()){
                                 GridPane actualGrid = optGrid.get();
-                                IntStream.range(0, 3)
+                                actualGrid.getChildren().forEach(node -> node.setVisible(false));
+                                IntStream.range(0, tileMap[x][y].getWeaponCrate().size())
                                         .forEach(i -> {
                                             ImageView iv = (ImageView) actualGrid.getChildren().get(i);
-                                            String weaponID = tileMap[x][y].getWeaponCrate().get(i).getName();
-                                            iv.setImage(new NamedImage(Constants.WEAPON_PATH+weaponID+".png", Constants.WEAPON_PATH));
+                                            if (tileMap[x][y].getWeaponCrate().get(i) != null) {
+                                                String weaponID = tileMap[x][y].getWeaponCrate().get(i).getName();
+                                                iv.setImage(new NamedImage(Constants.WEAPON_PATH + weaponID + ".png", Constants.WEAPON_PATH));
+                                                iv.setVisible(true);
+                                            } else {
+                                                iv.setVisible(false);
+                                            }
                                         });
                             }
                         })
@@ -298,13 +297,14 @@ public class MapController {
     }
 
     /**
-     * Shows the kill shot track.
+     * The showKillShotTrack method shows the killShotTrack on the map. It links the model's killShotTrack with its graphic counterpart.
      *
      */
     public void showKillShotTrack() {
-        KillShotTrack kt = view.getModel().getGame().getKillshotTrack();
+        KillShotTrack kt = view.getModel().getGame().getKillShotTrack();
 
         int offset = killShotTrackPane.getChildren().size() - kt.getKillsForFrenzy();
+        Logger.getGlobal().info("\nKillshot track offset: " + offset + "\nKillshot track pane children size: " + killShotTrackPane.getChildren().size());
 
         IntStream.range(offset, killShotTrackPane.getChildren().size())
                 .forEach(i -> {
@@ -312,18 +312,20 @@ public class MapController {
                     ImageView iv = (ImageView) sp.getChildren().get(0);
                     Label points = (Label) sp.getChildren().get(1);
 
-                    EnumMap<PlayerColor, Integer> colorIntegerEnumMap = kt.getDeathTrack().get(i-offset);
+                    Map<PlayerColor, Integer> colorIntegerMap = kt.getDeathTrack().get(i-offset);
                     if (i < kt.getKillCounter() + offset) { //shows player tokens
                         Optional<PlayerColor> optPc= Arrays.stream(PlayerColor.values())
-                                .filter(colorIntegerEnumMap::containsKey)
+                                .filter(colorIntegerMap::containsKey)
                                 .findFirst();
                         if (optPc.isPresent()) {
                             iv.setImage(Util.getPlayerToken(optPc.get()));
-                            points.setText(colorIntegerEnumMap.get(optPc.get()).toString());
+                            points.setText(colorIntegerMap.get(optPc.get()).toString());
                         }
                     }
                     else { //shows skulls and frenzy pane
-                        if (kt.getKillCounter() + offset == killShotTrackPane.getChildren().size()-1) {
+                        Logger.getGlobal().info("\nkills+offset: " +kt.getKillCounter() + offset+
+                                "\nsize-1: "+ (killShotTrackPane.getChildren().size()-1));
+                        if (offset + kt.getKillCounter()  == killShotTrackPane.getChildren().size()) {
 
                             int j = 0;
                             for (PlayerColor pc : PlayerColor.values()) {
@@ -331,8 +333,8 @@ public class MapController {
                                 iv = (ImageView) sp.getChildren().get(0);
                                 points = (Label) sp.getChildren().get(1);
                                 iv.setImage(Util.getPlayerToken(pc));
-                                if (colorIntegerEnumMap.get(pc) != null) {
-                                    points.setText(colorIntegerEnumMap.get(pc).toString());
+                                if (colorIntegerMap.get(pc) != null) {
+                                    points.setText(colorIntegerMap.get(pc).toString());
                                 }
                                 else {
                                     points.setText("0");
@@ -347,45 +349,45 @@ public class MapController {
     }
 
     /**
-     * Shows the players on map.
+     * The showPlayers method shows the players on the map. It links the model's players' position with its
+     * graphic counterpart.
      *
      */
     public void showPlayers() {
 
+        resetPlayerGridStyle();
         view.getModel().getGame().getPlayerList().stream()
+                .filter(player -> player.getCharacterState().getTile() != null)
                 .forEach(p -> {
-                    try {
-                        int[] coords = view.getModel().getGame().getBoard().getTilePosition(p.getCharacterState().getTile());
-                        VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
-                        vbox.setDisable(false);
+                    int[] coords = {p.getCharacterState().getTile().getxPosition(), p.getCharacterState().getTile().getyPosition()};
+                    VBox vbox = (VBox) playerGrid.getChildren().get(Util.convertToIndex(coords[0], coords[1]));
+                    Logger.getGlobal().info(p.getUserData().getNickname()+"-> x: "+coords[0]+"; y: "+coords[1]);
+                    vbox.setDisable(false);
 
-                        HBox firstRow = (HBox) vbox.getChildren().get(1);
-                        HBox secondRow = (HBox) vbox.getChildren().get(2);
+                    HBox firstRow = (HBox) vbox.getChildren().get(1);
+                    HBox secondRow = (HBox) vbox.getChildren().get(2);
 
-                        firstRow.setDisable(false);
-                        secondRow.setDisable(false);
+                    firstRow.setDisable(false);
+                    secondRow.setDisable(false);
 
-                        boolean isSecondRow = firstRow.getChildren().stream()
-                                .allMatch(Node::isVisible);
-                        if (!isSecondRow) {
-                            addPlayerCircle(firstRow, p);
-                        }
-                        else {
-                            addPlayerCircle(secondRow, p);
-                        }
-                    } catch (TileNotFoundException e) {
-                        logger.warning(e.toString());
+                    boolean isSecondRow = firstRow.getChildren().stream()
+                            .allMatch(Node::isVisible);
+                    if (!isSecondRow) {
+                        addPlayerCircle(firstRow, p);
+                    }
+                    else {
+                        addPlayerCircle(secondRow, p);
                     }
                 });
     }
 
     /**
-     * Adds player in a row of the player grid.
+     * The addPlayerCircle method adds a player in a row of the player grid.
      *
      * @param row is the horizontal box containing the circles that represent players.
-     * @param player is the player to be added to the row
+     * @param player is the player to be added to the row.
      */
-    public void addPlayerCircle(HBox row, Player player) {
+    private void addPlayerCircle(HBox row, Player player) {
         Optional<Node> optNode = row.getChildren().stream()
                 .filter(n -> !n.isVisible())
                 .findFirst();
@@ -400,7 +402,7 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a button from normal tile grid.
+     * The handleTileSelected method handles the selection of a button from the normal tile grid.
      *
      * @param id is the id/position in the list of tiles.
      */
@@ -412,7 +414,7 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a button from shoot tile grid.
+     * The handleShootTileSelected method handles the selection of a button from the shoot tile grid.
      *
      * @param id is the id/position in the list of tiles.
      */
@@ -424,39 +426,21 @@ public class MapController {
     }
 
     /**
-     * Handles the selection of a weapon card from a weapon crate.
+     * The handlePlayerSelected method handles the selection of a button from player grid.
      *
-     */
-    public void handleWeaponInCrateSelected(String id) {
-        System.out.println("Weapon selected: " + id);
-        ((GUIView) view).getGuiController().addInput(Constants.GRAB, id);
-    }
-
-    /**
-     * Handles the selection of an ammo card from ammo tile grid.
-     *
-     */
-    public void handleAmmoCrateSelected(String id) {
-        System.out.println("Ammocrate selected: "+ id);
-        ((GUIView) view).getGuiController().addInput(Constants.GRAB, id);
-    }
-
-    /**
-     * Handles the selection of a button from player grid.
-     *
-     * @param color
+     * @param color is the color of the selected player to be sent as input.
      */
     public void handlePlayerSelected(String color) {
-        System.out.println("Selected player: " + color);
         String id = view.getModel().getGame().getPlayerList().stream()
                 .filter(p -> Paint.valueOf(color).equals(Paint.valueOf(p.getColor().getColor())))
                 .collect(Collectors.toList()).get(0).getId();
-        System.out.println(color + " " + id);
         ((GUIView) view).getGuiController().addInput(Constants.SHOOT, id);
     }
 
     /**
-     * Disables and resets all grids.
+     * The resetGrids method disables and resets all grids. It calls some helpers to disable different kinds
+     * of grid panes.
+     *
      */
     public void resetGrids() {
         resetTileGridStyle(tileGrid);
@@ -473,7 +457,7 @@ public class MapController {
     }
 
     /**
-     * Resets the tile grid's buttons to the player's color.
+     * The resetTileGridStyle method resets the tile grid's buttons to the player's color.
      *
      */
     public void resetTileGridStyle(GridPane gridPane) {
@@ -489,7 +473,7 @@ public class MapController {
     }
 
     /**
-     * Resets the ammo grid's style.
+     * The resetAmmoGridStyle method resets the ammo grid's style.
      *
      */
     public void resetAmmoGridStyle() {
@@ -501,12 +485,12 @@ public class MapController {
                         ap.getStyleClass().remove(0);
                     }
                     ap.setDisable(false);
-                    ap.setOpacity(1.0);
+                    ap.getChildren().get(0).setOpacity(1.0);
                 });
     }
 
     /**
-     * Resets the player grid's style.
+     * The resetPlayerGridStyle method resets the player grid's style.
      *
      */
     public void resetPlayerGridStyle() {
@@ -530,7 +514,7 @@ public class MapController {
     }
 
     /**
-     * Resets the weapons grids' style.
+     * The resetWeaponCratesStyle resets the weapons grids' style.
      *
      */
     public void resetWeaponCratesStyle() {
@@ -542,8 +526,11 @@ public class MapController {
                     }
                     wc.getChildren().stream()
                             .forEach(n -> {
-                                n.setDisable(false);
+                                n.setDisable(true);
                                 n.setOpacity(1.0);
+                                if(!n.getStyleClass().isEmpty()) {
+                                    n.getStyleClass().remove(0);
+                                }
                             });
                 });
     }
@@ -558,12 +545,49 @@ public class MapController {
     }
 
     /**
-     * Getter fot the progress bar that contains the circles representing the number
+     * Getter for the progress bar that contains the circles representing the number
      * of players to be selected.
      *
      * @return the progress bar.
      */
     public GridPane getProgressBar() {
         return progressBar;
+    }
+
+    /**
+     * Getter for the weaponCrateList.
+     *
+     * @return the list of grid panes that contain the ammo crates.
+     */
+
+    public List<GridPane> getWeaponCrateList() {
+        return weaponCrateList;
+    }
+
+    /**
+     * Getter for the shooTileGrid.
+     *
+     * @return the grid pane for shooting selections.
+     */
+    public GridPane getShootTileGrid() {
+        return shootTileGrid;
+    }
+
+    /**
+     * Getter for the ammoGrid.
+     *
+     * @return the grid pane containing the ammo crate images.
+     */
+    public GridPane getAmmoGrid() {
+        return ammoGrid;
+    }
+
+    /**
+     * Getter for the playerGrid.
+     *
+     * @return the grid pane containing the player's circles.
+     */
+    public GridPane getPlayerGrid() {
+        return playerGrid;
     }
 }

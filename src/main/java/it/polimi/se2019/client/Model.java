@@ -21,16 +21,29 @@ import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.LocalModel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+/**
+ * The Model class contains a copy of the server's model, a game object. It provides the methods to update the local
+ * model.
+ *
+ * @author andreahuang
+ */
 public class Model implements LocalModel {
 
     private Game game;
 
+    /**
+     * The setCharacterState method sets the new character state to a specific player.
+     *
+     * @param characterState the new character state to be assigned.
+     */
     @Override
     public void setCharacterState(CharacterState characterState) {
         PlayerColor color = characterState.getColor();
@@ -39,26 +52,80 @@ public class Model implements LocalModel {
         localPlayer = game.getPlayerByColor(color);
 
         localPlayer.setCharacterState(characterState);
+        Logger.getGlobal().info("Character update: " + localPlayer.getCharacterState().getColor() + "\ttile "+localPlayer.getCharacterState().getTile());
     }
 
+    /**
+     * Setter for game
+     * @param game is the game.
+     */
     @Override
     public void setGame(Game game) {
         this.game = game;
     }
 
+
+    /**
+     * Setter for killShotTrack.
+     * @param killShotTrack the new killShotTrack.
+     */
     @Override
     public void setKillShotTrack(KillShotTrack killShotTrack) {
-        this.game.setKillshotTrack(killShotTrack);
+        this.game.setKillShotTrack(killShotTrack);
     }
 
+    /**
+     * Getter for the board. It may be usedo to update components of the board.
+     *
+     * @return the board of the local model
+     */
     @Override
     public Board getBoard() {
+        Logger.getGlobal().info("Updating the board ...");
         return getGame().getBoard();
     }
 
+    /**
+     * Getter for game.
+     *
+     * @return the current copy of the game.
+     */
     @Override
     public Game getGame() {
         return game;
+    }
+
+    @Override
+    public void updatePlayerWeapon(Weapon weaponToUpdate) {
+
+        Player weaponPlayer = game.getPlayerList().stream().filter(player -> player.getCharacterState().getWeaponBag().stream().anyMatch(weapon -> weapon.equals(weaponToUpdate))).findFirst().orElse(null);
+
+        if (weaponPlayer != null) {
+            Weapon oldWeapon = weaponPlayer.getCharacterState().getWeaponBag().stream().filter(weapon -> weapon.getId().equals(weaponToUpdate)).findFirst().orElse(null);
+            if (oldWeapon != null) {
+                weaponPlayer.getCharacterState().removeWeapon(oldWeapon);
+                weaponPlayer.getCharacterState().addWeapon(weaponToUpdate);
+            }
+        }
+
+        /*for (Player player : game.getPlayerList()) {
+            List<Weapon> weaponBag = player.getCharacterState().getWeaponBag();
+
+            Iterator<Weapon> weaponIterator = weaponBag.iterator();
+
+            while (weaponIterator.hasNext()) {
+                Weapon weapon = weaponIterator.next();
+                // if the weapon checked has the same name of the weapon to update
+                // remove the old and set the new at the end of the loop
+                if (weapon.getName().equals(weaponToUpdate.getName())) {
+                    weaponIterator.remove();
+                }
+            }
+
+            weaponBag.add(weaponToUpdate);
+        }
+
+         */
     }
 
 
@@ -66,12 +133,12 @@ public class Model implements LocalModel {
     // testing methods ---------------------------------------------------------------------------------------------
     public void initGame() {
         game = new Game();
-        game.setFrenzy(true);
+
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
         p1.getCharacterState().setTile(game.getBoard().getTile(0,0));
-        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("Mista"), new CharacterState(), PlayerColor.BLUE);
+        Player p2 = new Player(UUID.randomUUID().toString(), true, new UserData("P2"), new CharacterState(), PlayerColor.BLUE);
         p2.getCharacterState().setTile(game.getBoard().getTile(0,0));
         Player p3 = new Player(UUID.randomUUID().toString(), true, new UserData("Narancia"), new CharacterState(), PlayerColor.YELLOW);
         p3.getCharacterState().setTile(game.getBoard().getTile(1,1));
@@ -100,20 +167,27 @@ public class Model implements LocalModel {
         p5.getCharacterState().setWeaponBag(Arrays.asList(w1,w2,w4));
 
         List<ActionUnit> actionUnitList = new ArrayList<>();
-        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null, 2,2,true));
-        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null, 2,1,false));
+        actionUnitList.add(new ActionUnit(true,"Basic mode", null, null,null, false, 2,2,true));
+        actionUnitList.add(new ActionUnit(true,"Alternate mode", null, null,null, false, 2,1,false));
         List<ActionUnit> optionalEffectList = new ArrayList<>();
-        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null, 2,2,true));
+        optionalEffectList.add(new ActionUnit(true,"Optional effect", null, null,null, false, 2,2,true));
         p1.getCharacterState().getWeaponBag().stream()
                 .forEach(w -> {
                     w.setActionUnitList(actionUnitList);
                     w.setOptionalEffectList(optionalEffectList);
                 });
 
-        p1.getCharacterState().setPowerUpBag(Arrays.asList(
-                new PowerUp(null, "Blue_Newton", AmmoColor.BLUE),
-                new PowerUp(null, "Red_Newton", AmmoColor.RED),
-                new PowerUp(null, "Yellow_Teleporter", AmmoColor.YELLOW)));
+
+        List<ActionUnit> powerUpActionList = new ArrayList<>();
+        powerUpActionList.add(new ActionUnit(true,"Basic mode", null, null,null, false, 1,2,true));
+        PowerUp newton = new PowerUp(powerUpActionList, "Blue_Newton", AmmoColor.BLUE);
+        List<ActionUnit> targetingScopeList = new ArrayList<>();
+        targetingScopeList.add(new ActionUnit(true,"Basic mode", null, null,null, false, 1,0,true));
+        PowerUp targetingScope =  new PowerUp(targetingScopeList, "Red_TargetingScope", AmmoColor.RED);
+        List<ActionUnit> powerUpActionList1 = new ArrayList<>();
+        powerUpActionList1.add(new ActionUnit(true,"Basic mode", null, null,null, false, 0,1,true));
+        PowerUp teleporter = new PowerUp(powerUpActionList1, "Yellow_TagbackGrenade", AmmoColor.YELLOW);
+        p1.getCharacterState().setPowerUpBag(Arrays.asList(newton, targetingScope,teleporter,targetingScope));
 
         p1.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.BLUE,PlayerColor.BLUE,PlayerColor.BLUE));
         p2.getCharacterState().getDamageBar().addAll(Arrays.asList(PlayerColor.YELLOW,PlayerColor.BLUE,PlayerColor.BLUE));
@@ -163,18 +237,29 @@ public class Model implements LocalModel {
         p4.getCharacterState().setScore(4);
         p5.getCharacterState().setScore(5);
 
-        KillShotTrack kt = new KillShotTrack(game.getPlayerList());
-        kt.addDeath(p1, false);
-        kt.addDeath(p2, true);
-        kt.addDeath(p3, true);
-        kt.addDeath(p4, true);
-        kt.addDeath(p5, true);
-        kt.addDeath(p1, false);
-        kt.addDeath(p2, true);
-        kt.addDeath(p3, true);
-        kt.addDeath(p4, true);
-        kt.addDeath(p5, true);
-        game.setKillshotTrack(kt);
+        game.setFrenzy(true);
+//        KillShotTrack kt = new KillShotTrack(game.getPlayerList());
+//        p1.getCharacterState().resetDamageBar();
+//        p1.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
+//        kt.addDeath(p1, false);
+//        p2.getCharacterState().resetDamageBar();
+//        p2.getCharacterState().addDamage(PlayerColor.GREEN, 11, game);
+//        kt.addDeath(p2, true);
+//        p3.getCharacterState().resetDamageBar();
+//        p3.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
+//        kt.addDeath(p3, true);
+//        p4.getCharacterState().resetDamageBar();
+//        p4.getCharacterState().addDamage(PlayerColor.GREEN, 11, game);
+//        kt.addDeath(p4, true);
+//        p5.getCharacterState().resetDamageBar();
+//        p5.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
+//        kt.addDeath(p5, true);
+//        kt.addDeath(p1, false);
+//        kt.addDeath(p2, true);
+//        kt.addDeath(p3, true);
+//        kt.addDeath(p4, true);
+//        kt.addDeath(p5, true);
+//        game.setKillShotTrack(kt);
 
     }
 
@@ -183,11 +268,11 @@ public class Model implements LocalModel {
         BoardDeserializer boardDeserializer = new BoardDeserializer();
         factory.registerDeserializer("tile", new TileDeserializerSupplier());
 
-        String path = "src/main/resources/json/maps/map0.json";
+        String path = "json/maps/map0.json";
 
         Board board = null;
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(Model.class.getClassLoader().getResource(path).toURI())))) {
 
             JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(bufferedReader).getAsJsonObject();
@@ -207,13 +292,13 @@ public class Model implements LocalModel {
                                                         new Weapon(null, "ZX-2", null
                                                                 , null, null),
                                                         new Weapon(null, "Plasma_Gun", null
-                                                                , null, null),
-                                                        new Weapon(null, "Heatseeker", null
-                                                                , null, null)));
+                                                                , null, null)
+//                                                        ,new Weapon(null, "Heatseeker", null, null, null)
+                                                        ));
                                     }
                                 }
                             }));
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | URISyntaxException e) {
             Logger.getGlobal().warning(e.toString());
         }
     }

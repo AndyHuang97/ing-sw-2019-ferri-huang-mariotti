@@ -16,6 +16,13 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * The LoginController class sets up the stage for a player's login input.
+ * It asks a nickname, an ip, a connection type, and a map to connect to the server.
+ *
+ * @author andreahuang
+ *
+ */
 public class LoginController {
 
     private static final Logger logger = Logger.getLogger(LoginController.class.getName());
@@ -30,12 +37,15 @@ public class LoginController {
     private TextField ip;
 
     private Stage loginStage;
-    private Stage waitingStage;
     private View view;
 
+    /**
+     * The initialize method is used to initialize the choice box objects.
+     *
+     */
     @FXML
     public void initialize() {
-        try (InputStream input = new FileInputStream("src/main/resources/config.properties")) {
+        try (InputStream input = LoginController.class.getClassLoader().getResource("config.properties").openStream()) {
             Properties prop = new Properties();
             prop.load(input);
             ip.setText(prop.getProperty("server.host"));
@@ -50,32 +60,58 @@ public class LoginController {
         }
     }
 
+    /**
+     * Setter for the login stage.
+     *
+     * @param stage the stage of the login
+     */
     public void setLoginStage(Stage stage) {
         this.loginStage = stage;
     }
 
+    /**
+     * Setter for the view. The view provides the connect method
+     * @param view the view of the client
+     */
     public void setView(View view) {
         this.view = view;
     }
 
+    /**
+     * Exception for nickname not found in the login form.
+     *
+     */
     public class NicknameNotFound extends Exception {
         public NicknameNotFound(String errorMessage) {
             super(errorMessage);
         }
     }
 
+    /**
+     * Exception for ip no found in the login form.
+     *
+     */
     public class IpNotFound extends Exception{
         public IpNotFound(String errorMessage) {
             super(errorMessage);
         }
     }
 
+    /**
+     * Exception for choice not found in the login form.
+     *
+     */
     public class ChoiceNotSelected extends Exception {
         public ChoiceNotSelected(String errorMessage) {
             super(errorMessage);
         }
     }
 
+    /**
+     * The handleConnect method handle the mouse click event on the connect button.
+     * If successful, it starts a connection with a server.
+     *
+     */
     @FXML
     public void handleConnect() {
         try {
@@ -87,6 +123,7 @@ public class LoginController {
             view.setNickname(nickname.getText());
             view.connect(nickname.getText(), ip.getText(), (String) connectType.getValue(), (String) map.getValue());
             loginStage.close();
+
         } catch (NicknameNotFound e) {
             showNoSelectionAlert("nickname");
         } catch (IpNotFound e) {
@@ -98,41 +135,28 @@ public class LoginController {
         }
     }
 
+    /**
+     * The showNoSelectionAlert method shows an alert box displaying a no selection warning.
+     *
+     * @param textField
+     */
     public void showNoSelectionAlert(String textField) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        //alert.initOwner(((GUIView) view).getPrimaryStage());
         alert.setTitle("No Selection");
         alert.setHeaderText("No " + textField + " selected.");
         alert.setContentText("Please input a " + textField + ".");
         alert.showAndWait();
     }
 
+    /**
+     * The showWrongFormatAlert method shows an alert box displaying a wrong format warning.
+     */
+
     public void showWrongFormatAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        //alert.initOwner(((GUIView) view).getPrimaryStage());
         alert.setTitle("Format error");
         alert.setHeaderText("Port must be an integer.");
         alert.setContentText("Please input an integer.");
         alert.showAndWait();
-    }
-    public void showWaiting() {
-
-        Label waitingLabel = new Label("Waiting for other players to connect ...");
-        Button enterButton = new Button("Enter");
-        enterButton.setOnAction(event -> waitingStage.close());
-        enterButton.setVisible(false);
-
-        HBox hbox = new HBox(waitingLabel, enterButton);
-        hbox.setAlignment(Pos.CENTER);
-        Scene waitingScene = new Scene(new BorderPane(hbox),600.0,400.0);
-
-        waitingStage = new Stage();
-        waitingStage.setScene(waitingScene);
-        waitingStage.showAndWait();
-    }
-
-    public void stopWating() {
-
-        waitingStage.close();
     }
 }

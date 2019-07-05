@@ -9,10 +9,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+/**
+ * This condition checks whether a player target is in the target list.
+ *
+ * @author andreahuang
+ *
+ */
 public class IsTargetInTargetList implements Condition {
 
     private static final int PLAYERPOSITION = 0;
 
+    /**
+     * Checks whether a player target is in the target list.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if present, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Targetable targetPlayer = targets.get(CommandConstants.TARGETLIST).get(PLAYERPOSITION);

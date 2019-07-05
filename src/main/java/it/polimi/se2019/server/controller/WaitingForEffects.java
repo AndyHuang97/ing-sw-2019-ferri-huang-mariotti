@@ -5,8 +5,8 @@ import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.net.CommandHandler;
-import it.polimi.se2019.server.playerActions.PlayerAction;
-import it.polimi.se2019.server.playerActions.ShootPlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
+import it.polimi.se2019.server.playeractions.ShootPlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
 
@@ -14,7 +14,13 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class WaitingForEffects implements ControllerState {
+/**
+ * This is the state when you have to shoot a weapon
+ *
+ * @author FF
+ *
+ */
+public class WaitingForEffects extends ControllerState {
 
     private static final int SHOOT_POSITION = 0;
 
@@ -22,11 +28,24 @@ public class WaitingForEffects implements ControllerState {
     private ShootPlayerAction shootPlayerAction;
     private ControllerState storedWaitingForMainActions;
 
+    /**
+     * Default constructor.
+     *
+     * @param chosenWeapon the weapon currently in use
+     * @param storedWaitingForMainActions the state we were before and we want to go back to
+     *
+     */
     public WaitingForEffects(Weapon chosenWeapon, ControllerState storedWaitingForMainActions) {
         this.chosenWeapon = chosenWeapon;
         this.storedWaitingForMainActions = storedWaitingForMainActions;
     }
 
+    /**
+     * We send the client the message to remind him to shoot
+     *
+     * @param commandHandler the player commandhandler
+     *
+     */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try {
@@ -36,15 +55,26 @@ public class WaitingForEffects implements ControllerState {
         }
     }
 
+    /**
+     * After a shoot is performed it can go back to the main action or ask for a powerup to be used or stay here in case of errors.
+     * Some powerups require to change the current user
+     *
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controller
+     *
+     */
     //TODO check the availability of more optionalEffects as first thing
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
         // in this state the controller is expecting to receive a ShootPlayerAction
         if (playerActions.get(SHOOT_POSITION).getId().equals(Constants.SHOOT)) {
-            if (playerActions.stream().allMatch(PlayerAction::check)) {
+            if (playerActions.stream().allMatch(ControllerState::checkPlayerActionAndSaveError)) {
                 playerActions.forEach(PlayerAction::run); // there is actually only one action in the list
 
                 shootPlayerAction = (ShootPlayerAction) playerActions.get(SHOOT_POSITION);
+
                 if (game.getCumulativeDamageTargetSet().isEmpty()){ // means no damage was dealt with the run of the action
 
                     if(!shootPlayerAction.getChosenWeapon().getOptionalEffectList().isEmpty()) {
@@ -64,14 +94,15 @@ public class WaitingForEffects implements ControllerState {
                 } else { // damage was dealt to someone
                     // Targeting Scope
                     if (player.getCharacterState().getPowerUpBag().stream()
-                            .anyMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE))) {
-                        Logger.getGlobal().info("Attacker has a targetingScope");
+                            .anyMatch(powerUp -> powerUp.getName().split("_")[1].equals(Constants.TARGETING_SCOPE))
+                            && player.getCharacterState().getAmmoBag().keySet().stream().anyMatch(color ->player.getCharacterState().getAmmoBag().get(color)>0)) {
+                        Logger.getGlobal().info("Attacker has a TargetingScope and at least one ammo");
                         return new WaitingForPowerUps(Constants.TARGETING_SCOPE, this); // power up on current player
                     }
                     // Tagback Grenade
                     game.getCumulativeDamageTargetSet().forEach(t -> Logger.getGlobal().info("DamagedTarget: "+t.getId()));
                     List<Player> powerUpPlayers = game.getCumulativeDamageTargetSet().stream() // checks whether one of the attacked players has a Tagback Grenade
-                            .map(t -> (Player) t)
+                            .map(t -> (Player) t).filter(Player::getActive)
                             .filter(notCurrentPlayer -> !notCurrentPlayer.equals(player)) // gets the targets who can see the attacker
                             .filter(p -> p.getCharacterState().getTile().getVisibleTargets(game).contains(player))
                             .filter(p -> p.getCharacterState().getPowerUpBag().stream()
@@ -116,7 +147,10 @@ public class WaitingForEffects implements ControllerState {
     /**
      * The nextEffectOrAction method is used to detect the cases in which no more optionalEffects are expected
      * when returning from the WaitingForPowerUp state.
+     *
+     * @param game the game currently in use
      * @return this state if more effects are left, storedWaitingForMainActions otherwise.
+     *
      */
     public ControllerState nextEffectOrAction(Game game) {
         if(!shootPlayerAction.getChosenWeapon().getOptionalEffectList().isEmpty()) {
@@ -136,11 +170,22 @@ public class WaitingForEffects implements ControllerState {
         return swapBackToMainAction(game);
     }
 
+    /**
+     * Swap back to the main action we stored before
+     *
+     * @param game the game
+     * @return the old state
+     *
+     */
     private ControllerState swapBackToMainAction(Game game) {
+        Logger.getGlobal().info("Current action unit list size: " + game.getCurrentActionUnitsList().size());
         if (!game.getCurrentActionUnitsList().isEmpty()) {
             // at least one shot was performed
-            chosenWeapon.setLoaded(false);
+            Logger.getGlobal().info("Unloading the weapon: " + chosenWeapon);
+            game.setLoaded(chosenWeapon, false);
         }
+        // added this to reset the current weapon in use by the current player
+        game.setCurrentWeapon(null);
         game.getCumulativeDamageTargetSet().clear();
         return ((WaitingForMainActions) storedWaitingForMainActions).nextPlayerOrReloadRespawn(game, game.getCurrentPlayer()); // should go back to the WaitingForMainActions it came from
     }

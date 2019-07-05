@@ -12,7 +12,14 @@ import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
 
 import java.util.*;
+import java.util.logging.Logger;
 
+/**
+ * The View abstract class provides reception of response message from the server and also send request messages
+ * to the server
+ *
+ * @author andreahuang
+ */
 public abstract class View extends Observable implements Observer<Response> {
 
     private LocalModel model;
@@ -29,6 +36,11 @@ public abstract class View extends Observable implements Observer<Response> {
         model = new Model();
     }
 
+    /**
+     * The update method is called for the local model updates contained in the response message.
+     *
+     * @param response the response containing the updates of the model.
+     */
     @Override
     public void update(Response response) {
         List<StateUpdate> updateList = response.getUpdateData();
@@ -39,7 +51,8 @@ public abstract class View extends Observable implements Observer<Response> {
     }
 
     /**
-     * The connect method initializes a connection to the server sending its nickname.
+     * The connect method initializes a connection to the server sending its nickname and a map preference.
+     *
      * @param nickname is the client's nickname.
      * @param ip is the server's ip address.
      * @param connectionType is the connection type, either RMI or socket.
@@ -68,15 +81,27 @@ public abstract class View extends Observable implements Observer<Response> {
     /**
      * The sendInput method sends an input message to the server, only if the client is the current player of
      * the match.
+     *
      */
     public void sendInput() {
         System.out.println(">>> Sending: " + getPlayerInput());
         if (model.getGame().getCurrentPlayer().getUserData().getNickname().equals(nickname)) {
+//            System.out.println("WARNING: Commented send for gui local testing, go to View.sendInput and comment it");
             networkClient.send(new Request(new NetMessage(playerInput), nickname));
         } else {
             System.out.println("Wait for your turn!");
         }
         getPlayerInput().clear();
+    }
+
+    /**
+     * The pong answers to a ping message
+     *
+     */
+    public void pong() {
+        Map<String, List<String>> payload = new HashMap<>();
+        payload.put("pong", new ArrayList<>());
+        networkClient.send(new Request(new NetMessage(payload), nickname));
     }
 
     /**
@@ -110,35 +135,79 @@ public abstract class View extends Observable implements Observer<Response> {
         model.setGame(game);
     }
 
+    /**
+     * Getter for model.
+     *
+     * @return the current model.
+     */
     public LocalModel getModel() {
         return model;
     }
 
+    /**
+     * Getter for the client's nickname.
+     *
+     * @return the nickname of the player
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * Setter for the client's nickname.
+     *
+     * @param nickname the new nickname
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     * Getter for the client's playerColor.
+     *
+     * @return the client's playerColor.
+     */
     public PlayerColor getPlayerColor() {
         return playerColor;
     }
 
+    /**
+     * Setter for the client's playerColor.
+     * @param playerColor the client's playerColor.
+     */
     public void setPlayerColor(PlayerColor playerColor) {
         this.playerColor = playerColor;
     }
 
+    /**
+     * Getter for playerInput.
+     *
+     * @return the playerInput.
+     */
     public Map<String, List<String>> getPlayerInput() {
         return playerInput;
     }
 
+    /**
+     * Getter for inputRequested.
+     *
+     * @return the requested input.
+     */
     public List<Runnable> getInputRequested() {
         return inputRequested;
     }
 
+    /**
+     * Checks whether the view is connected via cli or gui.
+     *
+     * @return true if cli, false if gui.
+     */
     public boolean isCliTrueGuiFalse() { return cliTrueGuiFalse; }
 
+    /**
+     * Setter for the boolean that indicates the connection type.
+     *
+     * @param cliTrueGuiFalse the type of the connection.
+     */
     public void setCliTrueGuiFalse(boolean cliTrueGuiFalse) { this.cliTrueGuiFalse = cliTrueGuiFalse; }
 }

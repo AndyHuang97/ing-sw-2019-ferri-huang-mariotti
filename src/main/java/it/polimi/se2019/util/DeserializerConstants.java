@@ -1,12 +1,20 @@
 package it.polimi.se2019.util;
 
+/**
+ * Those constants are used to set some conventional values for the deserializer, all the fields of the json files
+ * have an entry here.
+ *
+ * @author Rodolfo Mariotti
+ */
 public class DeserializerConstants {
     public static final String ACTIONS = "actions";
     public static final String ACTIONUNIT = "actionunit";
     public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
     public static final String AVAILABLE = "available";
     public static final String EFFECTLIST = "effectList";
     public static final String CONDITIONLIST = "conditionList";
+    public static final String UNIDIRECTIONAL = "unidirectional";
     public static final String NUMPLAYERTARGETS = "numPlayerTargets";
     public static final String NUMTILETARGETS = "numTileTargets";
     public static final String PLAYERSELECTIONFIRST = "playerSelectionFirst";

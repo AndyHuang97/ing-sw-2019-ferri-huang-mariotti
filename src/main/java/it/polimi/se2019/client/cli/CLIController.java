@@ -1,8 +1,6 @@
 package it.polimi.se2019.client.cli;
 
-import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
-import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
@@ -16,11 +14,24 @@ import java.util.stream.Collectors;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+/**
+ * The CLI controller is used to print the complex elements of the interface, in particular the map, the boards,
+ * the powerups and the weapons etc
+ *
+ * @author FF
+ *
+ */
 public class CLIController {
     private static final Logger logger = Logger.getLogger(CLIController.class.getName());
     CLIView view;
     CLIUtil utils;
 
+    /**
+     * This method prints the map and the killshot bar, the map is printed using a trick, the maps a saved as text files
+     * and the sections where crates and players can spawn are marked to be replaced by the actual content. This allow
+     * the code to be very streamlined.
+     *
+     */
     public void handleMapLoading() {
         final String[] map = {utils.loadMapString(view.getModel().getGame().getBoard().getId())};
         Tile[][] tileMap = view.getModel().getGame().getBoard().getTileMap();
@@ -32,26 +43,28 @@ public class CLIController {
                             if (tileMap[x][y] != null) {
                                 final int[] lineSize = new int[2];
                                 if (!tileMap[x][y].isSpawnTile()) {
-                                    String ammoName = tileMap[x][y].getAmmoCrate().getName();
-                                    replacement.get(0).append(utils.getUpperLowerCrate(ammoName).get(0));
-                                    lineSize[0] = 3;
-                                    replacement.get(1).append(utils.getUpperLowerCrate(ammoName).get(1));
-                                    lineSize[1] = 3;
+                                    if (tileMap[x][y].getAmmoCrate() != null) {
+                                        String ammoName = tileMap[x][y].getAmmoCrate().getName();
+                                        replacement.get(0).append(utils.getUpperLowerCrate(ammoName).get(0));
+                                        lineSize[0] = 3;
+                                        replacement.get(1).append(utils.getUpperLowerCrate(ammoName).get(1));
+                                        lineSize[1] = 3;
+                                    }
                                 } else {
                                     String color = tileMap[x][y].getRoomColor().getColor();
                                     weaponCreates.append(utils.getPrintableRoomColor(color) + color.toLowerCase().substring(0, 1).toUpperCase() + color.toLowerCase().substring(1) + " Weapons Create" + Colors.RESET + "\n");
                                     weaponCreates.append(handleWeapons(tileMap[x][y].getWeaponCrate()));
                                 }
-                                tileMap[x][y].getPlayers(view.getModel().getGame()).forEach(p -> {
-                                    if (lineSize[0] < 6) {
-                                        replacement.get(0).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "⬤" + Colors.RESET);
-                                        lineSize[0]++;
+                                view.getModel().getGame().getPlayerList().forEach(p -> {
+                                    if (p.getCharacterState().getTile() != null && tileMap[x][y].getId().equals(p.getCharacterState().getTile().getId())) {
+                                        if (lineSize[0] < 6) {
+                                            replacement.get(0).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "●" + Colors.RESET);
+                                            lineSize[0]++;
+                                        } else {
+                                            replacement.get(1).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "●" + Colors.RESET);
+                                            lineSize[1]++;
+                                        }
                                     }
-                                    else {
-                                        replacement.get(1).append(utils.getPrintablePlayerColor(p.getColor().getColor()) + "⬤" + Colors.RESET);
-                                        lineSize[1]++;
-                                    }
-
                                 });
                                 while (lineSize[0] < 6) {
                                     replacement.get(0).append(" ");
@@ -73,16 +86,20 @@ public class CLIController {
                         }));
         utils.println("+-+-+-+-+-+-+-+-+");
         for (int i = 0; i < 7; i++) {
-            if (i < view.getModel().getGame().getKillshotTrack().getKillCounter()) utils.print("|" + Colors.RED_BACKGROUND + "☠" + Colors.RESET);
+            if (i < view.getModel().getGame().getKillShotTrack().getKillCounter()) utils.print("|" + Colors.RED_BACKGROUND + "☠" + Colors.RESET);
             else utils.print("|☠");
         }
-        if (view.getModel().getGame().getKillshotTrack().getKillCounter() >= 8) utils.println("|" + Colors.RED_BACKGROUND +  "☼"  + Colors.RESET + "|");
+        if (view.getModel().getGame().getKillShotTrack().getKillCounter() >= 8) utils.println("|" + Colors.RED_BACKGROUND +  "☼"  + Colors.RESET + "|");
         else utils.println("|" + Colors.RED + "☼" + Colors.RESET + "|");
         utils.println(map[0]);
         utils.print("\n");
         utils.println(weaponCreates.toString());
     }
 
+    /**
+     * This loads all the players and myself. It loads the board and their unloaded weapons. For my self it also prints my powerups.
+     *
+     */
     public void handleCharactersLoading() {
         view.getModel().getGame().getPlayerList().forEach(p -> {
             if (!p.getUserData().getNickname().equals(view.getNickname())) {
@@ -100,10 +117,16 @@ public class CLIController {
             utils.println("My powerUps:");
             utils.println(handlePowerUps(currentPlayer.getCharacterState().getPowerUpBag()));
         } catch (PlayerNotFoundException ex) {
-            logger.info(ex.getMessage());
+            //logger.info(ex.getMessage());
         }
     }
 
+    /**
+     * This prints a player board, its a complex part and uses a lot of utf8 special chars
+     *
+     * @param p the player to print the board
+     *
+     */
     public void handlePlayerBoard(Player p) {
         // printing the nickname
         utils.print(utils.getPrintablePlayerColor(p.getColor().getColor()) + p.getUserData().getNickname() + " ⬤" + Colors.RESET);
@@ -128,7 +151,7 @@ public class CLIController {
             }
         }
         utils.print("\n");
-        List<String> symbols = Arrays.asList("◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "☠", "☼");
+        List<String> symbols = new LinkedList<>(Arrays.asList("◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "◊", "☠", "☼"));
         utils.println("+---+---+---+---+---+---+---+---+---+---+---+---+");
         utils.println("|   |   |   |   |   |   |   |   |   |   |   |   |");
         p.getCharacterState().getDamageBar().forEach(c -> {
@@ -153,6 +176,13 @@ public class CLIController {
         else utils.println("              ");
     }
 
+    /**
+     * This uses a mechanism to print the weapons in a 3 columns pattern. It uses scanners to work.
+     *
+     * @param weapons the weapons list
+     * @return the string to be printed
+     *
+     */
     public String handleWeapons(List<Weapon> weapons) {
         Scanner[] scanners = new Scanner[weapons.size()];
         for (int i = 0; i < weapons.size(); i++) {
@@ -161,6 +191,13 @@ public class CLIController {
         return utils.nColumnsFormatter(3, scanners);
     }
 
+    /**
+     * This uses a mechanism to print the powerups in a 2 columns pattern. It uses scanners to work.
+     *
+     * @param powerUps the powerups list
+     * @return the string to be printed
+     *
+     */
     public String handlePowerUps(List<PowerUp> powerUps) {
         Scanner[] scanners = new Scanner[powerUps.size()];
         for (int i = 0; i < powerUps.size(); i++) {
@@ -169,6 +206,13 @@ public class CLIController {
         return utils.nColumnsFormatter(2, scanners);
     }
 
+    /**
+     * This just prints a single powerup
+     *
+     * @param c the powerup
+     * @return the string to be printed
+     *
+     */
     public String handlePowerUp(PowerUp c) {
         StringBuilder result = new StringBuilder();
         result.append("+------------------------+\n");
@@ -178,12 +222,24 @@ public class CLIController {
         }
         result.append("|\n");
         result.append("+------------------------+\n");
-        result.append("|                        |\n");
-        result.append("|                        |\n");
+        for (int i = 0; i < 3; i++) {
+            if (i < c.getActionUnitList().size()) {
+                if (c.getActionUnitList().get(i).getName().length() > 22) result.append("| " + c.getActionUnitList().get(i).getName().substring(0, 19) + "... |\n");
+                else result.append("| " + String.format("%-22s", c.getActionUnitList().get(i).getName()) + " |\n");
+            } else result.append("|                        |\n");
+        }
+        result.append("|          " + utils.getPrintableRoomColor(c.getPowerUpColor().getColor()) + "■" + Colors.RESET + " x1          |\n");
         result.append("+------------------------+\n");
         return result.toString();
     }
 
+    /**
+     * This just prints a single weapon
+     *
+     * @param c the weapon
+     * @return the string to be printed
+     *
+     */
     public String handleWeapon(Weapon c) {
         StringBuilder result = new StringBuilder();
         result.append("+------------------+\n");
@@ -193,12 +249,42 @@ public class CLIController {
         }
         result.append("|\n");
         result.append("+------------------+\n");
-        result.append("|                  |\n");
-        result.append("|                  |\n");
+        result.append("| Pickup: ");
+        for (int i = 0; i < 4; i++) {
+            if (i < c.getPickUpCost().size()) result.append(utils.getPrintableRoomColor(c.getPickUpCost().get(i).getColor()) + "■ " + Colors.RESET);
+            else result.append("  ");
+        }
+        result.append(" |\n| Reload: ");
+        for (int i = 0; i < 4; i++) {
+            if (i < c.getReloadCost().size()) result.append(utils.getPrintableRoomColor(c.getReloadCost().get(i).getColor()) + "■ " + Colors.RESET);
+            else result.append("  ");
+        }
+        if (c.isLoaded()) result.append(" |\n| Is Loaded: " + Colors.GREEN + "●" + Colors.RESET + "     |\n");
+        else result.append("|\n| Is Loaded: " + Colors.RED + "●" + Colors.RESET + "     |\n");
+        result.append("+------------------+\n");
+        for (int i = 0; i < 3; i++) {
+            if (i < c.getActionUnitList().size()) {
+                if (c.getActionUnitList().get(i).getName().length() > 16) result.append("| " + c.getActionUnitList().get(i).getName().substring(0, 13) + "... |\n");
+                else result.append("| " + String.format("%-16s", c.getActionUnitList().get(i).getName()) + " |\n");
+            } else result.append("|                  |\n");
+        }
+        result.append("+------------------+\n");
+        for (int i = 0; i < 3; i++) {
+            if (i < c.getOptionalEffectList().size()) {
+                if (c.getOptionalEffectList().get(i).getName().length() > 16) result.append("| " + c.getOptionalEffectList().get(i).getName().substring(0, 13) + "... |\n");
+                else result.append("| " + String.format("%-16s", c.getOptionalEffectList().get(i).getName()) + " |\n");
+            } else result.append("|                  |\n");
+        }
         result.append("+------------------+\n");
         return result.toString();
     }
 
+    /**
+     * This is a view setter
+     *
+     * @param view the view
+     *
+     */
     public void setView(CLIView view) {
         this.view = view;
         this.utils = view.getUtils();

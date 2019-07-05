@@ -1,5 +1,10 @@
 package it.polimi.se2019.client.util;
 
+/**
+ * This Constants class contains path constants and other constants used for client-server communication.
+ *
+ * @author andreahuang
+ */
 public class Constants {
 
     private Constants() {
@@ -7,6 +12,7 @@ public class Constants {
     }
 
     public static final String WEAPON_PATH = "/images/weapons/";
+    public static final String DEFAULT_CARD_PATH = "/images/weapons/Lock_Rifle.png";
     public static final String POWERUP_PATH = "/images/powerups/";
     public static final String ACTION_TILE = "/images/playerBoards/ActionTile_";
     public static final String AMMO_PATH = "/images/ammo/";
@@ -16,6 +22,9 @@ public class Constants {
     public static final String BOARD_PATH = "/images/playerBoards/PlayerBoard_";
     public static final String ACTION_BUTTONS = "/fxml/ActionButtons";
     public static final String SOFACHROMERG_FONT = "/css/sofachromerg.ttf";
+    public static final String SELECTION_NODE = "selection-node";
+    public static final String CSS_HOVERING = "object";
+    public static final String CIRCLE = "my-circle";
     public static final String NORMAL = "_Normal";
     public static final String FRENZY = "_Frenzy";
     public static final String RMI = "RMI";
@@ -38,8 +47,9 @@ public class Constants {
     public static final String TELEPORTER = "Teleporter";
     public static final String NEWTON = "Newton";
     public static final String TARGETING_SCOPE = "TargetingScope";
+    public static final String FINISHGAME = "FinishGame";
     public static final double buttonOpacity = 0.45;
-    public static final double onClickedOpacity = 0.6;
+    public static final double CLICKED_OPACITY = 0.6;
     public static final String map0 = "0";
     public static final String map1 = "1";
     public static final String map2 = "2";

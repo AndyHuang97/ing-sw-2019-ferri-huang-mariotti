@@ -42,22 +42,6 @@
           "numPlayerTargets" : 1,
           "numTileTargets": 0,
           "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -102,22 +86,6 @@
             }
           ],
           "numPlayerTargets" : 1,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
         }
@@ -166,22 +134,6 @@
           "numPlayerTargets" : 1,
           "numTileTargets": 0,
           "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -196,52 +148,36 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target ",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
               }
             }
           ],
           "conditionList": [
             {
-              "name": "One direction movement",
-              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": false
               }
             },
             {
-              "name": "Max distance x2",
+              "name": "MaxDistance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "maxDistance": 2
-              }
-            },
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
+                "amount": 2,
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "lazy": true
               }
             }
           ],
-          "numPlayerTargets" : 0,
+          "unidirectional": true,
+          "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -256,52 +192,36 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target (",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
               }
             }
           ],
           "conditionList": [
             {
-              "name": "One direction movement",
-              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": false
               }
             },
             {
-              "name": "Max distance x2",
+              "name": "MaxDistance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "maxDistance": 2
-              }
-            },
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
+                "amount": 2,
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "lazy": true
               }
             }
           ],
-          "numPlayerTargets" : 0,
+          "unidirectional": true,
+          "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -316,52 +236,36 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target (",
-              "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
+              "name": "Move target List",
+              "class_name": "it.polimi.se2019.server.actions.effects.MoveTargetList",
               "params": {
               }
             }
           ],
           "conditionList": [
             {
-              "name": "One direction movement",
-              "class_name": "it.polimi.se2019.server.actions.conditions.OneDirectionMovement",
+              "name": "Unidirectional",
+              "class_name": "it.polimi.se2019.server.actions.conditions.IsUnidirectional",
               "params": {
+                "self": false
               }
             },
             {
-              "name": "Max distance x2",
+              "name": "MaxDistance x2",
               "class_name": "it.polimi.se2019.server.actions.conditions.MaxDistance",
               "params": {
-                "maxDistance": 2
-              }
-            },
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
+                "amount": 2,
+                "self": false,
+                "initialIsTile": false,
+                "finalIsTile": true,
+                "lazy": true
               }
             }
           ],
-          "numPlayerTargets" : 0,
+          "unidirectional": true,
+          "numPlayerTargets" : 1,
           "numTileTargets": 1,
           "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -375,22 +279,6 @@
           "name": "Main Effect",
           "available": true,
           "effectList": [],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
           "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
@@ -412,22 +300,6 @@
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
           "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
         }
       ],
       "image": ""
@@ -441,22 +313,6 @@
           "name": "Main Effect",
           "available": true,
           "effectList": [],
-          "conditionList": [],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
-              }
-            }
-          ],
           "conditionList": [],
           "numPlayerTargets" : 0,
           "numTileTargets": 0,
@@ -475,39 +331,18 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target",
+              "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
-              }
-            }
-          ],
-          "conditionList": [
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
-              }
-            }
-          ],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 1,
-          "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
+                "self": true,
+                "isTile": true
               }
             }
           ],
           "conditionList": [],
           "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -522,39 +357,18 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target",
+              "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
-              }
-            }
-          ],
-          "conditionList": [
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
-              }
-            }
-          ],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 1,
-          "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
+                "self": true,
+                "isTile": true
               }
             }
           ],
           "conditionList": [],
           "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""
@@ -569,39 +383,18 @@
           "available": true,
           "effectList": [
             {
-              "name": "Move target",
+              "name": "Move Target",
               "class_name": "it.polimi.se2019.server.actions.effects.MoveTarget",
               "params": {
-              }
-            }
-          ],
-          "conditionList": [
-            {
-              "name": "Not respawn phase",
-              "class_name": "it.polimi.se2019.server.actions.conditions.IsNotRespawnPhase",
-              "params": {
-              }
-            }
-          ],
-          "numPlayerTargets" : 0,
-          "numTileTargets": 1,
-          "playerSelectionFirst": false
-        },
-        {
-          "name": "Secondary Effect",
-          "available": true,
-          "effectList": [
-            {
-              "name": "Replace Ammo",
-              "class_name": "it.polimi.se2019.server.actions.effects.ReplaceAmmo",
-              "params": {
+                "self": true,
+                "isTile": true
               }
             }
           ],
           "conditionList": [],
           "numPlayerTargets" : 0,
-          "numTileTargets": 0,
-          "playerSelectionFirst": true
+          "numTileTargets": 1,
+          "playerSelectionFirst": false
         }
       ],
       "image": ""

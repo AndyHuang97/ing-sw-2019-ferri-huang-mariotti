@@ -2,17 +2,37 @@ package it.polimi.se2019.server.graphs;
 
 import java.util.*;
 
+/**
+ * Basic implementation of a Graph, it's used for distance calculation in the Board.
+ *
+ * @param <T> type of vertex of the graph
+ * @author Andrea Huang
+ */
 public class Graph<T> {
     private Map<Vertex<T>, List<Vertex<T>>> adjacentVertices;
 
+    /**
+     * Constructor used to initialize a blank graph.
+     */
     public Graph() {
         this.adjacentVertices = new HashMap<>();
     }
 
+    /**
+     * Method to add a vertex in the graph.
+     *
+     * @param content content of the vertex
+     */
     public void addVertex(T content) {
         adjacentVertices.putIfAbsent(new Vertex(content), new ArrayList<>());
     }
 
+    /**
+     * Ad an edge between two vertex.
+     *
+     * @param content1 starting vertex
+     * @param content2 final vertex
+     */
     public void addEdge(T content1, T content2) {
         Vertex firstVertex = new Vertex(content1);
         Vertex secondVertex = new Vertex(content2);
@@ -21,12 +41,19 @@ public class Graph<T> {
         adjacentVertices.get(secondVertex).add(firstVertex);
     }
 
+    /**
+     * Get all adjacent vertex of a vertex.
+     *
+     * @param content target vertex
+     * @return vertexes adjacent to the target vertex
+     */
     public List<Vertex<T>> getAdjacentVertices(T content) {
         return adjacentVertices.get(new Vertex(content));
     }
 
     /**
      * This method determines if two nodes are reachable in a given amount of steps (maxDistance).
+     *
      * @param start start is the root node.
      * @param end end is the final node we are looking for.
      * @param maxDistance maxDistance is the maximum amount of steps the method will look for the end node.

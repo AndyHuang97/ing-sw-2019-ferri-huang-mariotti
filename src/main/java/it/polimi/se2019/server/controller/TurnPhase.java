@@ -1,5 +1,11 @@
 package it.polimi.se2019.server.controller;
 
+/**
+ * The messages it needs to send to client
+ *
+ * @author FF
+ *
+ */
 public enum TurnPhase {
     WAITING_FOR_MOVE,
     WAITING_FOR_SHOOT,

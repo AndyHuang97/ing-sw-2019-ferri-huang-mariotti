@@ -6,7 +6,7 @@ import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
 import it.polimi.se2019.server.games.Targetable;
 import it.polimi.se2019.server.games.player.Player;
-import it.polimi.se2019.server.playerActions.PlayerAction;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -16,16 +16,26 @@ import java.util.logging.Logger;
 /**
  * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/setUp them.
  * The order of the key parsing is determined by the keyOrder key of the message's commands.
+ *
+ * @author AH
+ *
  */
 public class MessageParser {
 
+    /**
+     * The actual parser
+     *
+     * @param message the internal message
+     * @param game the game
+     * @param player the player
+     * @throws MessageParseException if problem arises
+     * @throws UnpackingException if problems arises during unpacking
+     *
+     */
     public List<PlayerAction> parse(InternalMessage message, Game game, Player player) throws MessageParseException, UnpackingException {
         List<PlayerAction> playerActions = new ArrayList<>();
-        //for (String k : message.getCommands().keySet()) {
         for (Targetable t : message.getCommands().get(Constants.KEY_ORDER)){
             PlayerAction pa = (PlayerAction) t;
-            System.out.println(pa.getId());
-            //TODO use keyOrder
             Logger.getGlobal().info(pa.getClass().getSimpleName());
             List<Targetable> params = message.getCommandParams(pa.getClass().getSimpleName());
             try {
