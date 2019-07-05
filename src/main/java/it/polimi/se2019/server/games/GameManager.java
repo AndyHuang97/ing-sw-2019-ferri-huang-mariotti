@@ -159,7 +159,7 @@ public class GameManager {
 	 * This is the real file dumper, it first loads the saved games from file, it the analyzes the command by searching
 	 * for an existing save of the game by matching the date of when the game started that can be considered unique.
 	 * In case it becomes a problem the requirement of uniqueness we can switch to uuid. After having located the previous
-	 * game sae it gets replaced by the new one or deleted if specified. After all of this it saves back to file.
+	 * game save it gets replaced by the new one or deleted if specified. After all of this it saves back to file.
 	 *
 	 * @param game is the game object
 	 * @param deleteGame the action I want to perform
