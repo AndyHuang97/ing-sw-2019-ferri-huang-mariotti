@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * This class represent a shoot action. Like all the PlayerAction can be run and checked, his methods
+ * should be run by the Controller.
+ *
+ * @author Andrea Huang
+ */
 public class ShootPlayerAction extends PlayerAction {
 
     private static final String DEFAULT_ERROR_MESSAGE = "Shoot action failed:";
@@ -29,6 +35,13 @@ public class ShootPlayerAction extends PlayerAction {
     public ShootPlayerAction(Game game, Player player) { super(game, player); }
     public ShootPlayerAction(int amount) { super(amount);}
 
+    /**
+     * Unpack the params argument into the object.
+     *
+     * @requires (* at least one Targetable object in params must have a dynamic type of Weapon *)
+     * @param params weapon to use for the shoot action
+     * @throws UnpackingException no object with a dynamic type of Weapon in params
+     */
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
 

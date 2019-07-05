@@ -14,6 +14,8 @@ import java.util.List;
 /**
  * This action is used to choose a weapon to shoot with, and then make the Controller switch to WaitingForEffects State.
  * All action units are selected and dealt with in that state, and it expects the actual ShootPlayerAction.
+ *
+ * @author Andrea Huang
  */
 public class ShootWeaponSelection extends PlayerAction {
 

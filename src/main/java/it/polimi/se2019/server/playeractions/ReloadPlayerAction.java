@@ -11,6 +11,12 @@ import it.polimi.se2019.server.games.player.Player;
 
 import java.util.*;
 
+/**
+ * This class represent a reload action. Like all the PlayerAction can be run and checked, his methods
+ * should be run by the Controller.
+ *
+ * @author Andrea Huang
+ */
 public class ReloadPlayerAction extends PlayerAction {
     private static final String ERROR_MESSAGE = "Reload action failed:";
     private static final String NOT_ENOUGH = "not enough";
@@ -21,6 +27,13 @@ public class ReloadPlayerAction extends PlayerAction {
     public ReloadPlayerAction(Game game, Player player) { super(game, player); }
     public ReloadPlayerAction(int amount) { super(amount);}
 
+    /**
+     * Unpack the params argument into the object.
+     *
+     * @requires (* dynamic type of each element of params must be Weapon *);
+     * @param params contains the weapons to reload
+     * @throws UnpackingException dynamic type of one or more elements of params is not Weapon
+     */
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
         try {
