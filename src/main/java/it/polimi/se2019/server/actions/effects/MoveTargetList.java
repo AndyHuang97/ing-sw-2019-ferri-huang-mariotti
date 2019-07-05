@@ -10,6 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * This effect moves all the targets to a tile
+ *
+ * @author FF
+ *
+ */
 public class MoveTargetList implements Effect {
 
     private static final int TILE_POSITION = 0;
@@ -17,11 +23,23 @@ public class MoveTargetList implements Effect {
     private boolean self;
     private String actionUnitName;
 
+    /**
+     * Default construtctor. It sets up the self and isTile boolean parameters to interpret the input correctly.
+     *
+     * @param self is the boolean indicating whether the moving player is the attacker
+     * @param actionUnitName
+     */
     public MoveTargetList(boolean self, String actionUnitName) {
         this.self = self;
         this.actionUnitName = actionUnitName;
     }
 
+    /**
+     * Moves the targest to the correct tile
+     *
+     * @param game the game
+     * @param targets the targets to move
+     */
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
         Tile tile;

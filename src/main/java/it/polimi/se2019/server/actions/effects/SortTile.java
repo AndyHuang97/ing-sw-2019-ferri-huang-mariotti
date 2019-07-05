@@ -11,7 +11,20 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * This effect sorts the tiles based on the current player tile
+ *
+ * @author FF
+ *
+ */
 public class SortTile implements Effect {
+
+    /**
+     * Sorts the tiles based on the current player tile
+     *
+     * @param game the game
+     * @param targets the target is the tile list
+     */
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
         List<Tile> tileList = targets.get(CommandConstants.TILELIST).stream()

@@ -6,8 +6,21 @@ import javafx.application.Application;
 
 import java.util.Scanner;
 
+/**
+ * This was the generalized client before we decided to split the jars for the gui and the cli
+ *
+ * @author FF
+ *
+ */
 public class Client {
 
+    /**
+     * The switcher component
+     *
+     * @param input the string
+     * @return the boolean status
+     *
+     */
     public static boolean chooseView(String input) {
         if (input.equalsIgnoreCase("cli")) {
             new CLIView();
@@ -19,6 +32,12 @@ public class Client {
         return true;
     }
 
+    /**
+     * The main
+     *
+     * @param args optional args
+     *
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Adrenaline, the modern frame to play a FPS!");

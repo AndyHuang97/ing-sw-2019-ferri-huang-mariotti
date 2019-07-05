@@ -112,10 +112,17 @@ public class WaitingForRespawn extends ControllerState {
                     player = playerStack.pop();// gives back the player that was ending the turn
                     Logger.getGlobal().info("Popped player:" + player.getId());
                     player.getCharacterState().setFirstSpawn(false);
-                    Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
-                    if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count()-1))) {
-                        Logger.getGlobal().info("Terminating the game");
-                        return new EndGameState();
+
+                    if (game.isFrenzy()) {
+                        Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
+                        if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count() - 1))) {
+                            if (!game.isFrenzyActivatorEntered()) {
+                                game.setFrenzyActivatorEntered(true);
+                            } else {
+                                Logger.getGlobal().info("Terminating the game");
+                                return new EndGameState();
+                            }
+                        }
                     }
                     game.setCurrentPlayer(player);// resumes the turn cycle
                     game.updateTurn(); // resumes the turn cycle
