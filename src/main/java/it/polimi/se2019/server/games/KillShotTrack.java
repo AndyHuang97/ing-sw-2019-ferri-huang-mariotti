@@ -155,20 +155,28 @@ public class KillShotTrack implements Serializable {
         Map<PlayerColor, Integer> totalKillsByColor = new HashMap<>();
 
         // parse the deathTrack and reduce it to a Map<PlayerColor, Integer>
-        for (Integer index : deathTrack.keySet()) {
-            Map<PlayerColor, Integer> killEntry = deathTrack.get(index);
+        // in case of disconnection of a player the KillShotTrack could be empty
+        try {
+            for (Integer index : deathTrack.keySet()) {
+                Map<PlayerColor, Integer> killEntry = deathTrack.get(index);
 
-            for (PlayerColor playerColor : killEntry.keySet()) {
-                Integer valueToUpdate;
+                for (PlayerColor playerColor : killEntry.keySet()) {
+                    Integer valueToUpdate;
 
-                if (totalKillsByColor.containsKey(playerColor)) {
-                    valueToUpdate = totalKillsByColor.get(playerColor);
-                } else {
-                    valueToUpdate = 0;
+                    if (totalKillsByColor.containsKey(playerColor)) {
+                        valueToUpdate = totalKillsByColor.get(playerColor);
+                    } else {
+                        valueToUpdate = 0;
+                    }
+
+                    totalKillsByColor.put(playerColor, valueToUpdate + killEntry.get(playerColor));
                 }
-
-                totalKillsByColor.put(playerColor, valueToUpdate + killEntry.get(playerColor));
             }
+        } catch (NullPointerException e) {
+            // the KillShotTrack is empty and the game is ending
+            Map<PlayerColor, Integer> emergencyScore = new HashMap<>();
+
+            return emergencyScore;
         }
 
         List<PlayerColor> killerList = new ArrayList<>();

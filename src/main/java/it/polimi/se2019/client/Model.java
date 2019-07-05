@@ -100,14 +100,18 @@ public class Model implements LocalModel {
         for (Player player : game.getPlayerList()) {
             List<Weapon> weaponBag = player.getCharacterState().getWeaponBag();
 
-            for (Weapon weapon : weaponBag) {
+            Iterator<Weapon> weaponIterator = weaponBag.iterator();
+
+            while (weaponIterator.hasNext()) {
+                Weapon weapon = weaponIterator.next();
                 // if the weapon checked has the same name of the weapon to update
-                // remove the old and set the new
+                // remove the old and set the new at the end of the loop
                 if (weapon.getName().equals(weaponToUpdate.getName())) {
-                    weaponBag.remove(weapon);
-                    weaponBag.add(weaponToUpdate);
+                    weaponIterator.remove();
                 }
             }
+
+            weaponBag.add(weaponToUpdate);
         }
     }
 
