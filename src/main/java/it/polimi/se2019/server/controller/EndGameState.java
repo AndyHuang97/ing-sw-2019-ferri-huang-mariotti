@@ -16,6 +16,8 @@ public class EndGameState extends ControllerState {
 
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
+
         return null;
     }
+
 }
