@@ -11,6 +11,12 @@ import it.polimi.se2019.server.games.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represent a move action. Like all the PlayerAction can be run and checked, his methods
+ * should be run by the Controller.
+ *
+ * @author Andrea Huang
+ */
 public class MovePlayerAction extends PlayerAction {
     private static final String ERRORMESSAGE = "Move action failed";
     private static final int TILEPOSITION = 0;
@@ -23,7 +29,11 @@ public class MovePlayerAction extends PlayerAction {
     public MovePlayerAction(int amount) { super(amount);}
 
     /**
-     * @param params: list param containing Targetable object that can be cast to Tile
+     * Unpack the params argument into the object.
+     *
+     * @requires (* dynamic type of each element of param is Tile *);
+     * @param params: list of Targetable objects of dynamic type Tile
+     * @throws UnpackingException if one of the Targetable in the params is not a Tile
      */
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
@@ -61,6 +71,11 @@ public class MovePlayerAction extends PlayerAction {
         return null;
     }
 
+    /**
+     * Getter method for the moveList attribute.
+     *
+     * @return the moveList containing all the Tile selected by the player
+     */
     public List<Tile> getMoveList() {
         return moveList;
     }

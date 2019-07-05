@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 /**
  * This ControllerState represent the turn phase after the movement phase, the player should be able to shoot or grab
  * or reload so this ControllerState will allow those actions.
+ *
+ *  @author FF
+ *
  */
 public class WaitingForMainActions extends ControllerState {
     private static final String MOVE_ACTION_ERROR_MESSAGE = "Move action failed!";
@@ -33,8 +36,10 @@ public class WaitingForMainActions extends ControllerState {
     private static final int POWERUP_POSITION = 0;
 
     /**
+     * Send the message to the client
      *
-     * @param commandHandler @return
+     * @param commandHandler the client command handler
+     *
      */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
@@ -46,7 +51,7 @@ public class WaitingForMainActions extends ControllerState {
     }
 
     private int actionCounter = 0;
-
+    
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) throws ClassCastException {
         //TODO need to add all the error reports: commandHandler.reportError(playerAction.getErrorMessage());

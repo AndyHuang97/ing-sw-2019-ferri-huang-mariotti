@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * This class represent a ammo grab or weapon grab action. Like all the PlayerAction can be run and checked, his methods
+ * should be run by the Controller.
+ *
+ * @author Andrea Huang
+ */
 public class GrabPlayerAction extends PlayerAction {
 
     private static final String DEFAULT_ERROR_MESSAGE = "Grab action failed";
@@ -40,6 +46,15 @@ public class GrabPlayerAction extends PlayerAction {
     public GrabPlayerAction(Game game, Player player) { super(game, player); }
     public GrabPlayerAction(int amount) { super(amount);}
 
+    /**
+     * Unpack the params argument into the object.
+     *
+     * @requires (* params[0] must have a dynamic type of Weapon or AmmoCrate *) && (* params[1] must have a dynamic
+     *           type of Weapon or be omitted *);
+     * @param params: list of Targetable objects of dynamic type Tile
+     * @throws UnpackingException if the dynamic type of params[0] is not Weapon or AmmoCrate, params[1] exists and is
+     *                            not a Weapon (dynamic)
+     */
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
         boolean weaponCastError = false;
@@ -69,9 +84,6 @@ public class GrabPlayerAction extends PlayerAction {
         }
     }
 
-    /**
-     * Checks if the Weapon the player is trying to grab is in the weapon crate of the Tile the player is in.
-     */
     @Override
     public boolean check() {
         // access the player position that will be set during run phase
@@ -190,7 +202,7 @@ public class GrabPlayerAction extends PlayerAction {
             // pay pickup cost
             player.getCharacterState().consumeAmmo(weaponToGrab.getPickupCostAsMap(), getGame());
 
-            // consume the ammoCrate card
+            // consume the weapon crate card
             List<Weapon> weaponCrate = playerTile.getWeaponCrate();
             weaponCrate.remove(weaponToGrab);
 

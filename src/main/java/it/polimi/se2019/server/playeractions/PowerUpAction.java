@@ -12,6 +12,12 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * This class represent a power up use action. Like all the PlayerAction can be run and checked, his methods
+ * should be run by the Controller.
+ *
+ * @author Andrea Huang
+ */
 public class PowerUpAction extends PlayerAction {
 
     private static final int MAIN_EFFECT = 0;
@@ -27,12 +33,21 @@ public class PowerUpAction extends PlayerAction {
     }
     public PowerUpAction(int amount) {super (amount);}
 
+    /**
+     * Unpack the params argument into the object.
+     *
+     * @requires (* at least one of the elements of params must ave a dynamic type of PowerUp *);
+     * @param params power up that will be used for this action
+     * @throws UnpackingException there are no power ups in params
+     */
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
         try {
             powerUpsToDiscard = params.stream().filter(t -> getPlayer().getCharacterState().getPowerUpBag().contains(t))
                     .map(t -> (PowerUp) t).collect(Collectors.toList());
+
             Logger.getGlobal().info(powerUpsToDiscard.toString());
+
             powerUpsToDiscard.forEach(powerUp -> System.out.println(powerUp.getId()));
             inputCommands = buildCommandDict(params);
             powerUpsToDiscard.forEach(p-> Logger.getGlobal().info(p.getId()));

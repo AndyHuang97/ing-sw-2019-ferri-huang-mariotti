@@ -15,6 +15,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+/**
+ * This class represent a ammo grab or weapon grab action. Like all the PlayerAction can be run and checked, his methods
+ * should be run by the Controller.
+ *
+ * @author Andrea Huang
+ *
+ */
 public class RespawnAction extends PlayerAction {
 
     private static final int POWER_UP_POSITION = 0;
@@ -30,6 +37,13 @@ public class RespawnAction extends PlayerAction {
         super(amount);
     }
 
+    /**
+     * Unpack the params argument into the object.
+     *
+     * @requires (* params[0] must have a dynamic type of PowerUp *);
+     * @param params contains the power up used to respawn
+     * @throws UnpackingException params[0] has not a dynamic type of PowerUp
+     */
     @Override
     public void unpack(List<Targetable> params) throws UnpackingException {
         try {
@@ -64,6 +78,7 @@ public class RespawnAction extends PlayerAction {
 
     /**
      * This method checks whether the sender of the message has the power up card that was selected as input.
+     *
      * @return true if the sender has the card, false otherwise.
      */
     @Override
