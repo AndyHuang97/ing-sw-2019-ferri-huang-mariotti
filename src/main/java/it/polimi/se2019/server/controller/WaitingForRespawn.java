@@ -113,7 +113,7 @@ public class WaitingForRespawn extends ControllerState {
                     Logger.getGlobal().info("Popped player:" + player.getId());
                     player.getCharacterState().setFirstSpawn(false);
                     Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
-                    if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int)beforeFrenzyActivatorPlayers.get().count()-1))) {
+                    if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count()-1))) {
                         Logger.getGlobal().info("Terminating the game");
                         return new EndGameState();
                     }

@@ -117,13 +117,13 @@ public class WaitingForMainActions extends ControllerState {
                     Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
                     return newState.nextState(null, game, player); // no playerActions will be evaluated
                 } else {// no kills in final frenzy action
-                    game.updateTurn(); // consumed all actions in frenzy mode, give control to another player
-                    Logger.getGlobal().info("No one was killed in frenzy. No more actions, next player");
                     Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
-                    if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int)beforeFrenzyActivatorPlayers.get().count()-1))) {
+                    if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count()-1))) {
                         Logger.getGlobal().info("Terminating the game");
                         return new EndGameState();
                     }
+                    game.updateTurn(); // consumed all actions in frenzy mode, give control to another player
+                    Logger.getGlobal().info("No one was killed in frenzy. No more actions, next player");
                     return new WaitingForMainActions(); // new player, reset all
                 }
             } else {
