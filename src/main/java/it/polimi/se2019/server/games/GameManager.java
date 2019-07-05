@@ -4,7 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.actions.Direction;
 import it.polimi.se2019.server.cards.Card;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.controller.ControllerState;
 import it.polimi.se2019.server.controller.WaitingForMainActions;
@@ -106,6 +110,10 @@ public class GameManager {
 							.registerSubtype(AmmoColor.class, "AmmoColor")
 							.registerSubtype(Card.class, "Card")
 							.registerSubtype(Tile.class, "Tile")
+                            .registerSubtype(Weapon.class, "Weapon")
+                            .registerSubtype(PowerUp.class, "PowerUp")
+                            .registerSubtype(AmmoCrate.class, "AmmoCrate")
+                            .registerSubtype(Direction.class, "Direction")
 							.registerSubtype(ActionUnit.class, "ActionUnit")
 							.registerSubtype(PlayerAction.class, "PlayerAction");
 					Gson gson = new GsonBuilder().registerTypeAdapterFactory(targetableAdapterFactory).create();
@@ -190,13 +198,26 @@ public class GameManager {
 	 *
 	 */
 	private void internalDumpToFile(Game game, boolean deleteGame) {
+        RuntimeTypeAdapterFactory<Targetable> targetableAdapterFactory = RuntimeTypeAdapterFactory.of(Targetable.class, "type")
+                .registerSubtype(Player.class, "Player")
+                .registerSubtype(AmmoColor.class, "AmmoColor")
+                .registerSubtype(Card.class, "Card")
+                .registerSubtype(Tile.class, "Tile")
+                .registerSubtype(Weapon.class, "Weapon")
+                .registerSubtype(PowerUp.class, "PowerUp")
+                .registerSubtype(AmmoCrate.class, "AmmoCrate")
+                .registerSubtype(Direction.class, "Direction")
+                .registerSubtype(ActionUnit.class, "ActionUnit")
+                .registerSubtype(PlayerAction.class, "PlayerAction");
+
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(targetableAdapterFactory).create();
+
 		try {
 			List<Game> tmpGameList = new ArrayList<>();
 			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {
 				BufferedReader br = new BufferedReader(new InputStreamReader(GameManager.class.getClassLoader().getResource(dumpName).openStream()));
 				//Read JSON file
 				try {
-					Gson gson = new Gson();
 					tmpGameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
 				} finally {
 					br.close();
@@ -222,14 +243,6 @@ public class GameManager {
 			FileWriter writer = new FileWriter(new File(GameManager.class.getClassLoader().getResource(dumpName).getPath()));
 			// Write file
 			try {
-				RuntimeTypeAdapterFactory<Targetable> targetableAdapterFactory = RuntimeTypeAdapterFactory.of(Targetable.class, "type")
-						.registerSubtype(Player.class, "Player")
-						.registerSubtype(AmmoColor.class, "AmmoColor")
-						.registerSubtype(Card.class, "Card")
-						.registerSubtype(Tile.class, "Tile")
-						.registerSubtype(ActionUnit.class, "ActionUnit")
-						.registerSubtype(PlayerAction.class, "PlayerAction");
-				Gson gson = new GsonBuilder().registerTypeAdapterFactory(targetableAdapterFactory).create();
 				writer.write(gson.toJson(tmpGameList.toArray()));
 			} finally {
 				writer.close();
