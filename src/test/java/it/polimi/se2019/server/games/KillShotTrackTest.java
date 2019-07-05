@@ -35,7 +35,7 @@ public class KillShotTrackTest {
         p5.getCharacterState().setDamageBar(damageBar);
         kt = new KillShotTrack(new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5)));
 
-        game = new Game(null, Arrays.asList(p1,p2,p3,p4,p5), p1, null, kt, null, null, null, null);
+        game = new Game(null, Arrays.asList(p1,p2,p3,p4,p5), p1, null, kt, null, null, null, null, false, false);
     }
 
     @After

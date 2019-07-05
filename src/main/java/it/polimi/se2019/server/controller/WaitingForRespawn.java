@@ -120,6 +120,12 @@ public class WaitingForRespawn extends ControllerState {
                                 game.setFrenzyActivatorEntered(true);
                             } else {
                                 Logger.getGlobal().info("Terminating the game");
+
+                                Response response = new Response(null, true, Constants.FINISHGAME);
+
+                                // walk-around to send a broadcast message to all the Views
+                                game.update(response);
+
                                 return new EndGameState();
                             }
                         }
