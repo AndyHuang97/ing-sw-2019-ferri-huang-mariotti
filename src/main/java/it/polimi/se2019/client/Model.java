@@ -51,7 +51,7 @@ public class Model implements LocalModel {
 
     @Override
     public void setKillShotTrack(KillShotTrack killShotTrack) {
-        this.game.setKillshotTrack(killShotTrack);
+        this.game.setKillShotTrack(killShotTrack);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class Model implements LocalModel {
 //        kt.addDeath(p3, true);
 //        kt.addDeath(p4, true);
 //        kt.addDeath(p5, true);
-//        game.setKillshotTrack(kt);
+//        game.setKillShotTrack(kt);
 
     }
 

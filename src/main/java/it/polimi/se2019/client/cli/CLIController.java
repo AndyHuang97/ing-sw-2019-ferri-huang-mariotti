@@ -1,8 +1,6 @@
 package it.polimi.se2019.client.cli;
 
-import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.client.util.Util;
-import it.polimi.se2019.server.cards.Card;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
@@ -75,10 +73,10 @@ public class CLIController {
                         }));
         utils.println("+-+-+-+-+-+-+-+-+");
         for (int i = 0; i < 7; i++) {
-            if (i < view.getModel().getGame().getKillshotTrack().getKillCounter()) utils.print("|" + Colors.RED_BACKGROUND + "☠" + Colors.RESET);
+            if (i < view.getModel().getGame().getKillShotTrack().getKillCounter()) utils.print("|" + Colors.RED_BACKGROUND + "☠" + Colors.RESET);
             else utils.print("|☠");
         }
-        if (view.getModel().getGame().getKillshotTrack().getKillCounter() >= 8) utils.println("|" + Colors.RED_BACKGROUND +  "☼"  + Colors.RESET + "|");
+        if (view.getModel().getGame().getKillShotTrack().getKillCounter() >= 8) utils.println("|" + Colors.RED_BACKGROUND +  "☼"  + Colors.RESET + "|");
         else utils.println("|" + Colors.RED + "☼" + Colors.RESET + "|");
         utils.println(map[0]);
         utils.print("\n");

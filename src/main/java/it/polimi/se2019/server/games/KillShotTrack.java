@@ -20,6 +20,8 @@ import java.util.logging.Logger;
  * KillShotTrack it's also a big part of the model because manages the death of the players and triggers the frenzy mode.
  * This class should be observed by Game and by all Player in the game because it sends updates on changes to himself and
  * triggers score update on the players.
+ *
+ * @author Rodolfo Mariotti
  */
 public class KillShotTrack implements Serializable {
     // needed to send log dta to the server
@@ -287,19 +289,41 @@ public class KillShotTrack implements Serializable {
         }
     }
 
+    /**
+     * Getter method for the deathTrack attribute.
+     *
+     * @return value of deathTrack
+     */
     public Map<Integer, EnumMap<PlayerColor, Integer>> getDeathTrack() {
         return deathTrack;
     }
 
+    /**
+     * Setter method for the deathTrack attribute. Notifies registered observers.
+     *
+     * @param deathTrack every entry of the deathTrack map represents one kill on the KillShotTrack.
+     *        The key (Integer) represents the kill number and is associated to a map that contains the color
+     *        of the player that did the kill and the number of skulls he put on the KillShotTrack for that.
+     */
     public void setDeathTrack(Map<Integer, EnumMap<PlayerColor, Integer>> deathTrack) {
         this.deathTrack = deathTrack;
         notifyKillShotTrackChange();
     }
 
+    /**
+     * Getter method for the killCounter attribute.
+     *
+     * @return number of kills done from the beginning of the game to te start od the frenzy mode.
+     */
     public Integer getKillCounter() {
         return killCounter;
     }
 
+    /**
+     * Setter method for the killCounter attribute. Notifies registered observers.
+     *
+     * @param killCounter value to be set as killCounter
+     */
     public void setKillCounter(Integer killCounter) {
         this.killCounter = killCounter;
         notifyKillShotTrackChange();

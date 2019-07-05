@@ -112,10 +112,10 @@ public class GameManager {
 						newPlayerList.add(newPlayer);
 					});
 					// then the kill shot tracker
-					KillShotTrack newKillShotTrack = new KillShotTrack(tmpGame.getKillshotTrack().getDeathTrack(), newPlayerList, tmpGame.getKillshotTrack().getKillCounter());
+					KillShotTrack newKillShotTrack = new KillShotTrack(tmpGame.getKillShotTrack().getDeathTrack(), newPlayerList, tmpGame.getKillShotTrack().getKillCounter());
 					// then the game
 					Game newGame = new Game(tmpGame.getStartDate(), newPlayerList, newPlayerList.stream().filter(player -> player.getId().equals(tmpGame.getCurrentPlayer().getId())).findAny().orElseThrow(() -> new NullPointerException("player not found")),
-							tmpGame.getBoard(), newKillShotTrack, tmpGame.getWeaponDeck(), tmpGame.getPowerupDeck(), tmpGame.getAmmoCrateDeck());
+							tmpGame.getBoard(), newKillShotTrack, tmpGame.getWeaponDeck(), tmpGame.getPowerUpDeck(), tmpGame.getAmmoCrateDeck());
 					// at the end we register all we need to register
 					newGame.getPlayerList().forEach(newPlayer -> {
 						// register game in the player
@@ -312,7 +312,7 @@ public class GameManager {
         Logger.getGlobal().info("Game objects were loaded");
 
 		newGame.getBoard().register(newGame);
-        newGame.getKillshotTrack().register(newGame);
+        newGame.getKillShotTrack().register(newGame);
 
 		mapPreference = new ArrayList<>();
 

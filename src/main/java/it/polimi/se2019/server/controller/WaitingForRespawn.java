@@ -102,7 +102,7 @@ public class WaitingForRespawn extends ControllerState {
                     game.setCurrentPlayer(deadPlayers.get(0)); // give control to one of the dead players, until everyone has spawned
                     Logger.getGlobal().info("Dead player's powerUps: " + game.getCurrentPlayer().getCharacterState().getPowerUpBag().size());
                     if (game.getCurrentPlayer().getCharacterState().getPowerUpBag().size() < 4) {
-                        PowerUp powerUp = game.getPowerupDeck().drawCard();
+                        PowerUp powerUp = game.getPowerUpDeck().drawCard();
                         Logger.getGlobal().info("Drawing a powerUp: " + powerUp.getId());
                         game.getCurrentPlayer().getCharacterState().addPowerUp(powerUp);
                     }
