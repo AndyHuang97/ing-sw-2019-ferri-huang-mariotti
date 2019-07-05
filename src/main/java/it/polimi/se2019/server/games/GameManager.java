@@ -204,6 +204,7 @@ public class GameManager {
 				writer.close();
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			logger.info("Error while saving games to file");
 		}
 	}

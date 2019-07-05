@@ -11,13 +11,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * The client CommandHandler is what bridges the view to the network, like the server command handler it wraps the network.
+ * The difference here is that here are only handled the commands arriving form the server.
+ *
+ * @author FF
+ *
+ */
 public class ClientCommandHandler {
     private View view;
-    
+
+    /**
+     * Just a constructor
+     *
+     */
     public ClientCommandHandler(View view) {
         this.view = view;
     }
 
+    /**
+     * This is called internally to show the game at the start when it receives the game copy
+     *
+     * @param request the request containing the game
+     *
+     */
     private void gameStart(Response request) {
         // game initialization
         view.setGame(request.getGame());
@@ -29,6 +46,12 @@ public class ClientCommandHandler {
         view.showGame();
     }
 
+    /**
+     * This is called internally to update the game copy and to show it
+     *
+     * @param request the request containing the game update
+     *
+     */
     private void gameUpdate(Response request) {
         Logger.getGlobal().info("Update Data not null in command handler");
         view.update(request);
@@ -36,6 +59,13 @@ public class ClientCommandHandler {
         view.showGame();
     }
 
+    /**
+     * This handles the request from the server, the cli and gui treat the requests in a different way, ping requests are treated separately.
+     * The order is very important to the stability of the app
+     *
+     * @param request the request containing the message
+     *
+     */
     public void handle(Response request) {
         if (request.getMessage().contains("ping")) {
             view.pong();
@@ -56,10 +86,22 @@ public class ClientCommandHandler {
         }
     }
 
+    /**
+     * The threaded request handler for the cli
+     *
+     * @param request the request containing the message
+     *
+     */
     private synchronized void internalCliHandle(Response request) {
         view.showMessage(request.getMessage());
     }
 
+    /**
+     * The threaded request handler for the gui
+     *
+     * @param request the request containing the message
+     *
+     */
     private synchronized void internalGuiHandle(Response request) {
         if (request.getSuccess()) {
             // game initialization

@@ -1,5 +1,11 @@
 package it.polimi.se2019.client.cli;
 
+/**
+ * Just an handy collections of colors
+ *
+ * @author FF
+ *
+ */
 public final class Colors {
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset

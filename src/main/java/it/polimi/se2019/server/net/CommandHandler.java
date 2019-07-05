@@ -45,7 +45,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     private Boolean firstEcho = true;
 
     /**
-     * Just a test constructor
+     * Just a constructor
      *
      */
     public CommandHandler() {

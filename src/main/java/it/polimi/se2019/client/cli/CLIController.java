@@ -14,11 +14,24 @@ import java.util.stream.Collectors;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+/**
+ * The CLI controller is used to print the complex elements of the interface, in particular the map, the boards,
+ * the powerups and the weapons etc
+ *
+ * @author FF
+ *
+ */
 public class CLIController {
     private static final Logger logger = Logger.getLogger(CLIController.class.getName());
     CLIView view;
     CLIUtil utils;
 
+    /**
+     * This method prints the map and the killshot bar, the map is printed using a trick, the maps a saved as text files
+     * and the sections where crates and players can spawn are marked to be replaced by the actual content. This allow
+     * the code to be very streamlined.
+     *
+     */
     public void handleMapLoading() {
         final String[] map = {utils.loadMapString(view.getModel().getGame().getBoard().getId())};
         Tile[][] tileMap = view.getModel().getGame().getBoard().getTileMap();
@@ -83,6 +96,10 @@ public class CLIController {
         utils.println(weaponCreates.toString());
     }
 
+    /**
+     * This loads all the players and myself. It loads the board and their unloaded weapons. For my self it also prints my powerups.
+     *
+     */
     public void handleCharactersLoading() {
         view.getModel().getGame().getPlayerList().forEach(p -> {
             if (!p.getUserData().getNickname().equals(view.getNickname())) {
@@ -104,6 +121,12 @@ public class CLIController {
         }
     }
 
+    /**
+     * This prints a player board, its a complex part and uses a lot of utf8 special chars
+     *
+     * @param p the player to print the board
+     *
+     */
     public void handlePlayerBoard(Player p) {
         // printing the nickname
         utils.print(utils.getPrintablePlayerColor(p.getColor().getColor()) + p.getUserData().getNickname() + " ⬤" + Colors.RESET);
@@ -153,6 +176,13 @@ public class CLIController {
         else utils.println("              ");
     }
 
+    /**
+     * This uses a mechanism to print the weapons in a 3 columns pattern. It uses scanners to work.
+     *
+     * @param weapons the weapons list
+     * @return the string to be printed
+     *
+     */
     public String handleWeapons(List<Weapon> weapons) {
         Scanner[] scanners = new Scanner[weapons.size()];
         for (int i = 0; i < weapons.size(); i++) {
@@ -161,6 +191,13 @@ public class CLIController {
         return utils.nColumnsFormatter(3, scanners);
     }
 
+    /**
+     * This uses a mechanism to print the powerups in a 2 columns pattern. It uses scanners to work.
+     *
+     * @param powerUps the powerups list
+     * @return the string to be printed
+     *
+     */
     public String handlePowerUps(List<PowerUp> powerUps) {
         Scanner[] scanners = new Scanner[powerUps.size()];
         for (int i = 0; i < powerUps.size(); i++) {
@@ -169,6 +206,13 @@ public class CLIController {
         return utils.nColumnsFormatter(2, scanners);
     }
 
+    /**
+     * This just prints a single powerup
+     *
+     * @param c the powerup
+     * @return the string to be printed
+     *
+     */
     public String handlePowerUp(PowerUp c) {
         StringBuilder result = new StringBuilder();
         result.append("+------------------------+\n");
@@ -189,6 +233,13 @@ public class CLIController {
         return result.toString();
     }
 
+    /**
+     * This just prints a single weapon
+     *
+     * @param c the weapon
+     * @return the string to be printed
+     *
+     */
     public String handleWeapon(Weapon c) {
         StringBuilder result = new StringBuilder();
         result.append("+------------------+\n");
@@ -228,6 +279,12 @@ public class CLIController {
         return result.toString();
     }
 
+    /**
+     * This is a view setter
+     *
+     * @param view the view
+     *
+     */
     public void setView(CLIView view) {
         this.view = view;
         this.utils = view.getUtils();
