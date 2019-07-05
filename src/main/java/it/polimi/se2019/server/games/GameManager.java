@@ -147,7 +147,7 @@ public class GameManager {
 					tmpGame.setWeaponDeck(DirectDeserializers.deserializeWeaponDeck(tmpGame.getWeaponDeck()));
 					tmpGame.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrateDeck(tmpGame.getAmmoCrateDeck()));
 					Game newGame = new Game(tmpGame.getStartDate(), newPlayerList, newPlayerList.stream().filter(player -> player.getId().equals(tmpGame.getCurrentPlayer().getId())).findAny().orElseThrow(() -> new NullPointerException("player not found")),
-							board, newKillShotTrack, tmpGame.getWeaponDeck(), tmpGame.getPowerUpDeck(), tmpGame.getAmmoCrateDeck(), DirectDeserializers.deserializePowerUpList(tmpGame.getUsedPowerUps()));
+							board, newKillShotTrack, tmpGame.getWeaponDeck(), tmpGame.getPowerUpDeck(), tmpGame.getAmmoCrateDeck(), DirectDeserializers.deserializePowerUpList(tmpGame.getUsedPowerUps()), tmpGame.isFrenzy(), tmpGame.isFrenzyActivatorEntered());
 					// at the end we register all we need to register
 					newGame.getPlayerList().forEach(newPlayer -> {
 						// register game in the player

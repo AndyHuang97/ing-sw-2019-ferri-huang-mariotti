@@ -116,8 +116,12 @@ public class WaitingForRespawn extends ControllerState {
                     if (game.isFrenzy()) {
                         Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
                         if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count() - 1))) {
-                            Logger.getGlobal().info("Terminating the game");
-                            return new EndGameState();
+                            if (!game.isFrenzyActivatorEntered()) {
+                                game.setFrenzyActivatorEntered(true);
+                            } else {
+                                Logger.getGlobal().info("Terminating the game");
+                                return new EndGameState();
+                            }
                         }
                     }
                     game.setCurrentPlayer(player);// resumes the turn cycle

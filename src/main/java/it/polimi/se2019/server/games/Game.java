@@ -44,6 +44,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private Set<Targetable> cumulativeDamageTargetSet;
 	private Set<Targetable> cumulativeTargetSet;
 	private boolean frenzy;
+	private boolean frenzyActivatorEntered;
 
 	// needed to access the player position before an action is run
 	private Tile virtualPlayerPosition;
@@ -92,6 +93,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.cumulativeDamageTargetSet = new HashSet<>();
 		this.cumulativeTargetSet = new HashSet<>();
 		this.frenzy = false;
+		this.frenzyActivatorEntered = false;
 	}
 
     /**
@@ -106,7 +108,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
      * @param powerUpDeck deck containing power up cards used by players to respawn and apply varius effects
      * @param ammoCrateDeck deck containing ammo cards that will spawn in ammo crates
      */
-	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killShotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerUpDeck, Deck<AmmoCrate> ammoCrateDeck, List<PowerUp> usedPowerUps) {
+	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killShotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerUpDeck, Deck<AmmoCrate> ammoCrateDeck, List<PowerUp> usedPowerUps, boolean frenzy, boolean frenzyActivatorEntered) {
 		this.startDate = startDate;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
@@ -116,6 +118,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.powerUpDeck = powerUpDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
 		this.usedPowerUps = usedPowerUps;
+		this.frenzy = frenzy;
+		this.frenzyActivatorEntered = frenzyActivatorEntered;
 		this.currentActionUnitsList = new ArrayList<>();
 		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
@@ -738,5 +742,24 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	 */
 	public List<PowerUp> getUsedPowerUps() {
 		return usedPowerUps;
+	}
+
+	/**
+	 * Getter for frenzyActivatorEntered.
+	 *
+	 * @return frenzyActivatorEntered.
+	 */
+	public boolean isFrenzyActivatorEntered() {
+		return frenzyActivatorEntered;
+	}
+
+	/**
+	 * Setter for frenzyActivatorEntered.
+	 *
+	 * @param frenzyActivatorEntered is a boolean parameter indicating if the frenzy activator player has
+	 *                               ended his turn once, waiting for his last turn.
+	 */
+	public void setFrenzyActivatorEntered(boolean frenzyActivatorEntered) {
+		this.frenzyActivatorEntered = frenzyActivatorEntered;
 	}
 }
