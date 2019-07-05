@@ -63,10 +63,10 @@ public class GUIView extends View {
 
 
     public void timer(boolean quitApp) {
-        Platform.runLater(() -> {
+        new Thread(() -> {
             long startTime = System.currentTimeMillis();
             userInput = false;
-            while (!userInput && (System.currentTimeMillis() - startTime) < inputTimeout * 1000 ) {
+            while (!userInput && (System.currentTimeMillis() - startTime) < inputTimeout * 1000) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
@@ -75,13 +75,20 @@ public class GUIView extends View {
             }
             if (!userInput) {
                 if (quitApp) {
+                    Logger.getGlobal().info("Timer expired, quitting...");
                     Platform.exit();
                     System.exit(0);
                 } else {
-                    guiController.handlePass();
+                    Logger.getGlobal().info("Timer expired, passing");
+                    Platform.runLater(() -> guiController.handlePass());
                 }
             }
-        });
+        }).start();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        showInternalMessage(message, true);
     }
 
     /**
@@ -90,8 +97,7 @@ public class GUIView extends View {
      *
      * @param message a response message containing info on the performed action.
      */
-    @Override
-    public void showMessage(String message) {
+    public void showInternalMessage(String message, boolean startTimer) {
         switch (message) {
             case Constants.MAIN_ACTION:
                 guiController.setInfoText("Select one action or powerup");
@@ -99,41 +105,41 @@ public class GUIView extends View {
                 guiController.showActionButtons();
                 guiController.showPowerUps(Arrays.asList(Constants.TELEPORTER, Constants.NEWTON));
                 guiController.showPass();
-                timer(false);
+                if (startTimer) timer(false);
                 return;
             case Constants.RESPAWN:
                 guiController.setInfoText("Select one powerup for respawn");
                 guiController.storeMessage(message);
                 guiController.getPowerUpForRespawn();
-                timer(true);
+                if (startTimer) timer(true);
                 return;
             case Constants.RELOAD:
                 guiController.setInfoText("Select one or more weapons to reload");
                 guiController.storeMessage(message);
                 guiController.showPass();
                 guiController.getReload();
-                timer(false);
+                if (startTimer) timer(false);
                 return;
             case Constants.SHOOT:
                 guiController.setInfoText("Select one effect");
                 guiController.storeMessage(message);
                 guiController.getActionUnit();
                 guiController.showPass();
-                timer(false);
+                if (startTimer) timer(false);
                 return;
             case Constants.TARGETING_SCOPE:
                 guiController.setInfoText("Select one or more Targeting Scopes");
                 guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TARGETING_SCOPE));
                 guiController.showPass();
-                timer(false);
+                if (startTimer) timer(false);
                 return;
             case Constants.TAGBACK_GRENADE:
                 guiController.setInfoText("Select one or more Tagback Grenades");
                 guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TAGBACK_GRENADE));
                 guiController.showPass();
-                timer(false);
+                if (startTimer) timer(false);
                 return;
             case Constants.FINISHGAME:
                 guiController.showRanking();

@@ -546,7 +546,7 @@ public class GUIController {
         view.getInputRequested().clear();
         intermediateInput.clear();
         Logger.getGlobal().info("Cancelling, show message: "+message);
-        view.showMessage(message);
+        view.showInternalMessage(message, false);
     }
 
     /**

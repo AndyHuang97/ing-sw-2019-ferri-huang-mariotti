@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * The GameManager provides all the methods to manage a game, to start it, to end it, etc
- * Not only that, the gameManager also stores the games in a list to allow multiple games in parallel and provides
- * the correct methods to access a specific game.
- * Last the gameManger also saves the games to file, this is to allow the games to be restored in case of server crash
+ * This class is used by te server tu manager multiple games. It's capable of creating new games for the players waiting
+ * in queue for the start of a new match; saving the state the ames on the disck and much more. Check out the
+ * documentation of each method for a full overview of what this class does.
  *
+ * @author Rodolfo Mariotti
  */
 public class GameManager {
 	private static final Logger logger = Logger.getLogger(GameManager.class.getName());
@@ -40,11 +40,12 @@ public class GameManager {
 	private int pingIntervalMilliseconds;
 	private Controller controller;
 
-	/**
-	 * A tuple data structure used to store the related data together
-	 *
-	 */
-	public class Tuple<X, Y> {
+    /**
+     * This class create an association between an commandHandler object and a userData object.
+     * Tulpe objects are used by the GameManager before the players are associated with a game (and before their
+     * commanHandler is added to the  playerCommandHandlerMap.
+     */
+	public class Tuple {
 		public final UserData userData;
 		public final CommandHandler commandHandler;
 		public Tuple(UserData userData, CommandHandler commandHander) {
@@ -53,10 +54,9 @@ public class GameManager {
 		}
 	}
 
-	/**
-	 * The default constructor, nothing special happens here
-	 *
-	 */
+    /**
+     * This constructor builds an empty GameManager object.
+     */
 	public GameManager() {
 		this.gameList = new ArrayList<>();
 		this.waitingList = new ArrayList<>();
@@ -136,23 +136,21 @@ public class GameManager {
 		}
 	}
 
-	/**
-	 * One of the methods to dump to file, it can put a new game to file or update an existing game to file
-	 *
-	 * @param game is the game object
-	 *
-	 */
+    /**
+     * Serialize and dump the selected game to file.
+     *
+     * @param game the game that needs to be dumped
+     */
 	public void dumpToFile(Game game) {
 		internalDumpToFile(game, false);
 	}
 
-	/**
-	 * The other methods to dump to file, it can put a new game to file or update an existing game to file and delete it
-	 *
-	 * @param game is the game object
-	 * @param deleteGame the action I want to perform
-	 *
-	 */
+    /**
+     * Serialize and dump the selected game to file.
+     *
+     * @param game the game that needs to be dumped
+     * @param deleteGame if true the selected game will be dumped and removed from the GameManager
+     */
 	public void dumpToFile(Game game, boolean deleteGame) {
 		internalDumpToFile(game, deleteGame);
 	}
@@ -193,7 +191,7 @@ public class GameManager {
 					}
 				}
 				while (tmpGameList.remove(null)) {}
-			} else if (!deleteGame) {
+			} else {
 				logger.info("Saving a new game to file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
 				tmpGameList.add(game);
 			}
@@ -210,25 +208,23 @@ public class GameManager {
 		}
 	}
 
-	/**
-	 * A check to control if a user is in the waiting list already
-	 *
-	 * @param nickname the nickname to check
-	 * @return if a user is in the waiting list
-	 *
-	 */
+    /**
+     * Check if the selected player is in the waiting list.
+     *
+     * @param nickname the nickname of the player that needs to be found in the waiting list
+     * @return true if a player with the selected nickname is in waiting list, false otherwise
+     */
 	public boolean isUserInWaitingList(String nickname) {
 		// used  to check if user is in waiting list (used by view)
 		return waitingList.stream().anyMatch(tuple -> tuple.userData.getNickname().equals(nickname));
 	}
 
-	/**
-	 * A check to control if a user is in a game
-	 *
-	 * @param nickname the nickname to check
-	 * @return if a user is in a game
-	 *
-	 */
+    /**
+     * Check if the selected player is playing in some game.
+     *
+     * @param nickname the nickname of the player that needs to be found
+     * @return true if a player with the selected nickname is playing in some game, false otherwise
+     */
 	public boolean isUserInGameList(String nickname) {
 		// used  to check if user is in waiting list (used by view)
 		return gameList.stream().anyMatch(
@@ -238,23 +234,22 @@ public class GameManager {
 		);
 	}
 
-	/**
-	 * The exception for a game not found
-	 *
-	 */
+    /**
+     * This exception is thrown when the GmaeManager is unable to retrive a game.
+     */
 	public class GameNotFoundException extends Exception {
 		public GameNotFoundException(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 
-	/**
-	 * This is a very important, retrieves the game by nickname
-	 *
-	 * @param nickname the nickname of one of the players
-	 * @return the corresponding game
-	 *
-	 */
+    /**
+     * Get the game where the player with the selected nickname is playing.
+     *
+     * @param nickname the nickname of the player
+     * @return the game where the player with the selected nickname is playing
+     * @throws GameNotFoundException the is no player with the selected nickname in any game
+     */
 	public Game retrieveGame(String nickname) throws GameNotFoundException {
 		// used to check if user is in a game (used by view)
 		return gameList.stream().filter(
@@ -264,23 +259,22 @@ public class GameManager {
 		).findAny().orElseThrow(() -> new GameNotFoundException("Nickname " + nickname + " has no games available!"));
 	}
 
-	/**
-	 * This exception is thrown when you perform some illegal actions on a player already in a game
-	 *
-	 */
+    /**
+     * This exception should be thrown when a player that is already playing or is already in a waiting list
+     * tries to join a game or a waiting list.
+     */
 	public class AlreadyPlayingException extends Exception {
 		public AlreadyPlayingException(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 
-	/**
-	 * This starts a new game, first it checks that there are not too many players, then it starts creating the players,
-	 * it links the observable/observers to then receive the updates. It stores che command handlers of the players, it initializes the deck,
-	 * cards, board etc.
-	 * Last it delivers the game to all clients and picks the starting client. Then it resets the waiting list and the map preference board.
-	 *
-	 */
+    /**
+     * Create a new game for the players in the waiting list. Starting with just a small set of Player objects this
+     * method is able to add a new game and also register correctly the observers needed to run a game.
+     *
+     * @throws IndexOutOfBoundsException thrown if the waiting list contains more than five players
+     */
 	public void createGame() throws IndexOutOfBoundsException {
 		logger.info("Starting a new game");
 		//create the new game and reset waiting list, do not use it
@@ -333,13 +327,13 @@ public class GameManager {
 		dumpToFile(newGame);
 	}
 
-	/**
-	 * This is used to start the countdown when you want to create a game, it sleeps and after that it checks
-	 * if conditions are still valid and creates the game
-	 *
-	 * @param previousGameListSize the old size list as a reference
-	 *
-	 */
+    /**
+     * This method is used to call createGame() vith a certain delay, so that other players can connect during
+     * the delay time and join the game before it starts.
+     *
+     * @param previousGameListSize the size of the waiting list before the countdown
+     * @throws IndexOutOfBoundsException thrown if the waiting list contains more than five players
+     */
 	private void delayedGameCreation(int previousGameListSize) throws IndexOutOfBoundsException {
 		logger.info("Starting game creation countdown (" + startTimerSeconds + "s)...");
 		try {
@@ -352,12 +346,11 @@ public class GameManager {
 		}
 	}
 
-	/**
-	 * This removes an ended game. At the end of everything
-	 *
-	 * @param game the game to terminate
-	 *
-	 */
+    /**
+     * This method notifies players that the game is terminating and removes the game from the list of games.
+     *
+     * @param game the game that will be terminated
+     */
 	public void terminateGame(Game game) {
 		logger.info("Terminating a game, users will be notified");
 		game.getPlayerList().forEach(p -> {
@@ -372,18 +365,38 @@ public class GameManager {
 		dumpToFile(game, true);
 	}
 
-
+	/**
+	 * The pinger daemon is a very classical ping pong mechanism to check if a client is alive. Its protocol independent
+	 * so it works with both rmi and socket. There also is the implementation of what to do when a client fails to respond
+	 * usually it can quit the game or just disconnect it. It is implemented as a timer that runs at an interval.
+	 *
+	 */
 	public class IsClientAlive extends TimerTask {
 		private String nickname;
 		private CommandHandler commandHandler;
 		private Timer timer;
 
+		/**
+		 * The constructor of the class
+		 *
+		 * @param nickname the user nickname (to identify the game)
+		 * @param commandHandler the command handler to check if connection is alive
+		 * @param timer the timer object
+		 *
+		 */
 		public IsClientAlive(String nickname, CommandHandler commandHandler, Timer timer) {
 			this.nickname = nickname;
 			this.commandHandler = commandHandler;
 			this.timer = timer;
 		}
 
+		/**
+		 * The run block of the timer, if first sends a ping if the response is pong it just comes back to sleep. If no
+		 * response it checks if the user is in a game. If so it checks if the game is a 3 or less players game. If it is it
+		 * shuts the game down. If not it just disconnects the player form the game. If user is not connected to any game, it just frees
+		 * the waiting list
+		 *
+		 */
 		public void run(){
 		    try {
                 try {
@@ -445,6 +458,15 @@ public class GameManager {
 		}
 	}
 
+    /**
+     * This method is called ny addUserToWaitingList() to implement it's functionality.
+     *
+     * @param newUser contains information about the new user
+     * @param currentCommandHandler the command handler of the new user
+     * @param ping true if the the GameManager needs to start a ping daemon for the new user
+     * @throws AlreadyPlayingException thrown if the user is already laying in some game
+     * @throws IndexOutOfBoundsException thrown if the waiting list contains more than five players
+     */
 	private void internalAddUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler, boolean ping) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		// add user to waiting list / game (used by view)
 		if (isUserInGameList(newUser.getNickname()) || isUserInWaitingList(newUser.getNickname())) {
@@ -463,6 +485,12 @@ public class GameManager {
 		}
 	}
 
+    /**
+     * Start a ping daemon for the new user.
+     *
+     * @param nickname name of the player that needs the ping daemon
+     * @param commandHandler command handler of the player
+     */
 	public void startPingDaemon(String nickname, CommandHandler commandHandler) {
 		try {
 			Timer timer = new Timer();
@@ -472,32 +500,74 @@ public class GameManager {
 		}
 	}
 
+    /**
+     * This method adds a new user to the waiting list and starts a ping daemon fr that player.
+     *
+     * @param newUser contains information about the new user
+     * @param currentCommandHandler the command handler of the new user
+     * @throws AlreadyPlayingException thrown if the user is already laying in some game
+     * @throws IndexOutOfBoundsException thrown if the waiting list contains more than five players
+     */
 	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		internalAddUserToWaitingList(newUser, currentCommandHandler, true);
 	}
 
+    /**
+     * This method adds a new user to the waiting list.
+     *
+     * @param newUser contains information about the new user
+     * @param currentCommandHandler the command handler of the new user
+     * @param ping true if the the GameManager needs to start a ping daemon for the new user
+     * @throws AlreadyPlayingException thrown if the user is already laying in some game
+     * @throws IndexOutOfBoundsException thrown if the waiting list contains more than five players
+     */
 	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler, boolean ping) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		internalAddUserToWaitingList(newUser, currentCommandHandler, ping);
 	}
 
+    /**
+     * Getter method for the waitingList attribute. Only for testing, should be avoided in production code.
+     *
+     * @return the list of player waiting for a game to be created
+     */
 	public List<Tuple> getWaitingList() {
 		// used just in tests
 		return waitingList;
 	}
 
 
+    /**
+     * Getter method for the playerCommandHandlerMap attribute.
+     *
+     * @return a map that associates the nickname of a player with his commandHandler
+     */
 	public Map<String, CommandHandler> getPlayerCommandHandlerMap() {
 		return playerCommandHandlerMap;
 	}
 
+    /**
+     * Getter method for the mapPreference attribute.
+     *
+     * @return an index that represent the type of map chosen for the next game
+     */
 	public List<String> getMapPreference() {
 		return mapPreference;
 	}
 
+    /**
+     * Getter method for the gameList attribute.
+     *
+     * @return list of games managed by the GameManager
+     */
 	public List<Game> getGameList() {
 		return gameList;
 	}
 
+    /**
+     * Setter method for the controller attribute. Sets the controller for every game.
+     *
+     * @param controller the controller instance that will be used to handle every game managed by the GameManager
+     */
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}

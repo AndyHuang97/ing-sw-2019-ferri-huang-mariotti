@@ -143,7 +143,16 @@ public class CLIView extends View {
                         if (currentPlayer.getCharacterState().getDeaths() > 5)
                             possibleActions.put(">\uD83D\uDF8B", Arrays.asList(Constants.MOVE, Constants.SHOOT_WEAPON));
                     }
-                    if (currentPlayer.getCharacterState().getPowerUpBag().stream().anyMatch(up -> up.getName().contains("Newton") || up.getName().contains("Teleporter"))) possibleActions.put("PowerUp", Arrays.asList(Constants.POWERUP));
+                    Map<String, Player> newtonPlayers = new HashMap<>();
+                    getModel().getGame().getPlayerList().forEach(p -> {
+                        if (p.getCharacterState().getTile() != null) {
+                            int x = p.getCharacterState().getTile().getxPosition();
+                            int y = p.getCharacterState().getTile().getyPosition();
+                            List<String> tmpValidNewtonTiles = new ArrayList<>(getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).filter(t -> (t.getxPosition() == x || t.getyPosition() == y) && !t.getId().equals(getModel().getGame().getBoard().getTile(x, y).getId())).map(t -> t.getId()).collect(Collectors.toList()));
+                            if (!p.getId().equals(currentPlayer.getId()) && !tmpValidNewtonTiles.isEmpty()) newtonPlayers.put(p.getUserData().getNickname(), p);
+                        }
+                    });
+                    if (currentPlayer.getCharacterState().getPowerUpBag().stream().anyMatch(up -> (up.getName().contains("Newton") && !newtonPlayers.isEmpty())  || up.getName().contains("Teleporter"))) possibleActions.put("PowerUp", Arrays.asList(Constants.POWERUP));
                     possibleActions.put("Skip", Arrays.asList(Constants.NOP));
                     String actionInput = utils.askUserInput("Pick an action", new ArrayList<>(possibleActions.keySet()), true);
                     if (actionInput.equals(Constants.NOP)) {
@@ -230,15 +239,6 @@ public class CLIView extends View {
                                 }
                                 break;
                             case Constants.POWERUP:
-                                Map<String, Player> newtonPlayers = new HashMap<>();
-                                getModel().getGame().getPlayerList().forEach(p -> {
-                                    if (p.getCharacterState().getTile() != null) {
-                                        int x = p.getCharacterState().getTile().getxPosition();
-                                        int y = p.getCharacterState().getTile().getyPosition();
-                                        List<String> tmpValidNewtonTiles = new ArrayList<>(getModel().getGame().getBoard().getTileList().stream().filter(Objects::nonNull).filter(t -> (t.getxPosition() == x || t.getyPosition() == y) && !t.getId().equals(getModel().getGame().getBoard().getTile(x, y).getId())).map(t -> t.getId()).collect(Collectors.toList()));
-                                        if (!p.getId().equals(currentPlayer.getId()) && !tmpValidNewtonTiles.isEmpty()) newtonPlayers.put(p.getUserData().getNickname(), p);
-                                    }
-                                });
                                 List<String> validPowerUps = currentPlayer.getCharacterState().getPowerUpBag().stream().filter(up -> (up.getName().contains("Newton") && !newtonPlayers.isEmpty()) || up.getName().contains("Teleporter")).map(up -> up.getName()).collect(Collectors.toList());
                                 String selectedPowerUp = utils.askUserInput("Choose the powerUp to use", validPowerUps, true);
                                 if (selectedPowerUp.equals(Constants.NOP)) {

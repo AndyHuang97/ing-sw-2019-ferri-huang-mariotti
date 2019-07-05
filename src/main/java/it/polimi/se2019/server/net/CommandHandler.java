@@ -29,6 +29,7 @@ import java.util.logging.Logger;
  * The CommandHandler act as a virtual view.
  * The virtual view receives messages from the client via network, then it parses the message
  * and notifies the Controller.
+ *
  */
 public class CommandHandler extends Observable<Request> implements Observer<Response> {
 
@@ -42,27 +43,54 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     private Boolean echo;
     private Boolean firstEcho = true;
 
-
-    // just for tests
+    /**
+     * Just a test constructor
+     *
+     */
     public CommandHandler() {
     }
 
+    /**
+     * The constructor used by the socket
+     *
+     * @param clientHandler the send to client via socket
+     *
+     */
     public CommandHandler(SocketServer.ClientHandler clientHandler) {
         this.socketTrueRmiFalse = true;
         this.socketClientHandler = clientHandler;
     }
 
+    /**
+     * The constructor used by the rmi
+     *
+     * @param clientWorker the rmi client stub
+     *
+     */
     public CommandHandler(RmiClientInterface clientWorker) {
         this.socketTrueRmiFalse = false;
         this.rmiClientWorker = clientWorker;
     }
 
+    /**
+     * Not found exception
+     *
+     */
     public class TargetableNotFoundException extends RuntimeException {
         public TargetableNotFoundException(String errorMessage) {
             super(errorMessage);
         }
     }
 
+    /**
+     * This method is used to convert an id to the object reference it refers. It needs to cycle through all the possible
+     * objects of the game to find it. Il looks for players, tiles, ammocrates, powerup or weapons.
+     *
+     * @param netMessage the unconverted message
+     * @param game the game
+     * @return the converted message
+     *
+     */
     public InternalMessage convertNetMessage(NetMessage netMessage, Game game) throws TargetableNotFoundException {
         Map<String, List<Targetable>> newCommands = new HashMap<>();
         netMessage.getCommands().forEach((key, values) -> {
@@ -167,6 +195,14 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         return new InternalMessage(newCommands);
     }
 
+    /**
+     * This handles the call from the client, in particular if a client is trying to connect (or reconnect) it puts him into the
+     * waitinglist or reconnects him to the game. If a client is not connecting it could be a pong (that is managed here) or
+     * a normale request that is processed by the controller
+     *
+     * @param request the request
+     *
+     */
     public synchronized void handle(Request request) {
         // log request
         NetMessage message = request.getNetMessage();
@@ -230,6 +266,12 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         }
     }
 
+    /**
+     * A method used to notify the controller, similar to the normal handle, but more stripped
+     *
+     * @param request the request
+     *
+     */
     public synchronized void handleLocalRequest(Request request) {
         request.setCommandHandler(this);
 
@@ -240,6 +282,13 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         //update(new Response(new Game(), true, request.getNickname()));
     }
 
+    /**
+     * This is where you send a model update to a client, the model notify and this sends to the clients. It is buffered
+     * in here to allow a better network management.
+     *
+     * @param response the response
+     *
+     */
     @Override
     public synchronized void update(Response response) throws CommunicationError {
         //System.out.println("update works");
@@ -268,18 +317,30 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     }
 
+    /**
+     * The buffer adder
+     *
+     * @param stateUpdate the update
+     *
+     */
     public void addUpdateToBuffer(StateUpdate stateUpdate) {
         updateBuffer.add(stateUpdate);
     }
 
+    /**
+     * The buffer rest
+     **
+     */
     public void resetBuffer() {
         updateBuffer = new ArrayList<>();
     }
 
+    /**
+     * The buffer sender
+     **
+     */
     public void sendBuffer() throws CommunicationError {
-        //System.out.println("SENDIG THE UPDATEBUFFER!!!!!!!!!!!!!!!!!!!!");
-
-        if (updateBuffer.size() != 0) {
+        if (!updateBuffer.isEmpty()) {
             Response response = new Response(updateBuffer);
             resetBuffer();
 
@@ -287,6 +348,13 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
         }
     }
 
+    /**
+     * This is where we communicate to the client, we send a message to it. The rmi implementation uses threads to make
+     * it non blocking. Disconnections are handled using the pinger daemon.
+     *
+     * @param response the response
+     *
+     */
     public void sendResponse(Response response) throws CommunicationError {
         try {
             if (this.socketTrueRmiFalse) {
@@ -300,11 +368,16 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     }
                 }).start();
             }
+            Thread.sleep(50);
         } catch (Exception e) {
             throw new CommunicationError(e.getMessage());
         }
     }
 
+    /**
+     * Just the ping sender and processing, sends and waits for response
+     **
+     */
     public void ping() throws CommunicationError {
         sendResponse(new Response(null, false, "ping"));
         long startTime = System.currentTimeMillis();
