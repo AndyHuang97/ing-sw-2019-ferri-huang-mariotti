@@ -147,6 +147,7 @@ public class WaitingForRespawn extends ControllerState {
                                 game.setFrenzyActivatorEntered(true);
                             } else {
                                 Logger.getGlobal().info("Terminating the game");
+                                game.finalScoreUpdate();
 
                                 Response response = new Response(null, true, Constants.FINISHGAME);
 

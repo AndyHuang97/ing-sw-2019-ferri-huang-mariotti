@@ -28,8 +28,6 @@ import java.util.stream.Stream;
  *
  */
 public class WaitingForMainActions extends ControllerState {
-    private static final String MOVE_ACTION_ERROR_MESSAGE = "Move action failed!";
-
     private static final int NORMAL_ACTION_NUMBER = 2;
     private static final int BEFORE_FRENZY_NUMBER = 2;
     private static final int AFTER_FRENZY_NUMBER = 1;
@@ -156,6 +154,7 @@ public class WaitingForMainActions extends ControllerState {
                             game.setFrenzyActivatorEntered(true);
                         } else {
                             Logger.getGlobal().info("Terminating the game");
+                            game.finalScoreUpdate();
 
                             Response response = new Response(null, true, Constants.FINISHGAME);
 
@@ -231,7 +230,7 @@ public class WaitingForMainActions extends ControllerState {
                                     });
                             Logger.getGlobal().info(String.valueOf(res));
 
-                            if (!res) addErrorMessage(MOVE_ACTION_ERROR_MESSAGE);
+                            game.addMoveActionFailure(res);
 
                             return res; // the result of the the internal anyMatch, it is returned as value of the external anyMatch
                         }
