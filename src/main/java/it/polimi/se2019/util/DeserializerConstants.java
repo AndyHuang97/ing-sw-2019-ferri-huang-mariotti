@@ -1,5 +1,11 @@
 package it.polimi.se2019.util;
 
+/**
+ * Those constants are used to set some conventional values for the deserializer, all the fields of the json files
+ * have an entry here.
+ *
+ * @author Rodolfo Mariotti
+ */
 public class DeserializerConstants {
     public static final String ACTIONS = "actions";
     public static final String ACTIONUNIT = "actionunit";
