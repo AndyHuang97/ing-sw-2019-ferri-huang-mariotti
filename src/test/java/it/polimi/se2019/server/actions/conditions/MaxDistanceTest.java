@@ -75,7 +75,7 @@ public class MaxDistanceTest {
 
     @Test
     public void testMaxDistance() {
-        Condition condition = new MaxDistance(1, false,true,true, null);
+        Condition condition = new MaxDistance(1, false,true,true, false, null);
         List<Targetable> tileList = new ArrayList<>();
         targets.put("tileList", tileList);
 

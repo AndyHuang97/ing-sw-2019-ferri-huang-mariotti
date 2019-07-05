@@ -10,16 +10,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * This condition checks whether the target list is visible.
+ *
+ * @author andreahuang
+ *
+ */
 public class IsTargetListVisible implements Condition {
 
     private static final int TARGETPOSITION = 0;
 
     private String actionUnitName;
 
+    /**
+     * Default constructor. It can set up the name of an action unit from which to retrieve the initial fron
+     * which to calculate the visibility.
+     *
+     * @param actionUnitName
+     */
     public IsTargetListVisible(String actionUnitName) {
         this.actionUnitName = actionUnitName;
     }
 
+    /**
+     * Checks whether the target list is visible.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if target list is visible, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile initialTile;

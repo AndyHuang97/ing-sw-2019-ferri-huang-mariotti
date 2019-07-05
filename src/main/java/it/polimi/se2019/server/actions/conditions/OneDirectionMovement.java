@@ -10,6 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * This condition checks whether the movement was unidirectional.
+ *
+ * @author andreahuang
+ *
+ */
 public class OneDirectionMovement implements Condition {
 
     private static final Logger logger = Logger.getLogger(OneDirectionMovement.class.getName());
@@ -17,10 +23,22 @@ public class OneDirectionMovement implements Condition {
 
     private Integer amount;
 
+    /**
+     * Default construtor. It sets up the amount which represents the distance.
+     *
+     * @param amount
+     */
     public OneDirectionMovement(Integer amount) {
         this.amount = amount;
     }
 
+    /**
+     * Checks whether the movement was unidirectional.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if the movement was unidrectional, false otherwise
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile targetTile = (Tile) targets.get(CommandConstants.TILELIST).get(TARGETTILEPOSITION);

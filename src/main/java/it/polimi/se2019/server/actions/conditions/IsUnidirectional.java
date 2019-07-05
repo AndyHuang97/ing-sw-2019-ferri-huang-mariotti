@@ -13,10 +13,24 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * This condition checks whether the tiles or targets that were selected are in one direction.
+ *
+ * @author andreahuang
+ *
+ */
 public class IsUnidirectional implements Condition {
 
     private static final int POSITION = 0;
     private boolean self;
+
+    /**
+     * Checks whether the tiles or targets that were selected are in one direction.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if all of the targets are in same direction, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         

@@ -86,7 +86,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 	 */
 	public CharacterState(int deaths, int[] valueBar, List<PlayerColor> damageBar, Map<PlayerColor, Integer> markerBar,
 						  Map<AmmoColor, Integer> ammoBag, List<Weapon> weaponBag,
-						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected, PlayerColor color) {
+						  List<PowerUp> powerUpBag, Tile tile, Integer score, Boolean connected, Boolean firstSpawn, PlayerColor color) {
         this.deaths = deaths;
         this.valueBar = valueBar;
 	    this.damageBar = damageBar;
@@ -97,6 +97,7 @@ public class CharacterState extends Observable<Response> implements Serializable
 		this.tile = tile;
 		this.score = score;
 		this.connected = connected;
+		this.firstSpawn = firstSpawn;
 		this.color = color;
 	}
 

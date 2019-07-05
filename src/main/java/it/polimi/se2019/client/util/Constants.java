@@ -1,5 +1,10 @@
 package it.polimi.se2019.client.util;
 
+/**
+ * This Constants class contains path constants and other constants used for client-server communication.
+ *
+ * @author andreahuang
+ */
 public class Constants {
 
     private Constants() {

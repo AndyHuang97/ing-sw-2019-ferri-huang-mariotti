@@ -8,12 +8,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * This condition checks whether the distance between the attacker and the target tile is greater than the amount
+ * member variable.
+ *
+ */
 public class MinDistance extends Distance {
 
-    public MinDistance(Integer amount, boolean self, boolean finalIsTile, boolean initialIsTile, String actionUnitName) {
-        super(amount, self, finalIsTile, initialIsTile, actionUnitName);
+    /**
+     * Default constructor. Sets up all parameters for check evaluation.
+     *
+     *  @param amount is an intenger indicating the distance
+     * @param self boolean indicating whether the first tile to consider is the attacker or not
+     * @param finalIsTile boolean indicating whether the last tile is calculated from a tile input or player target input.
+     * @param initialIsTile boolean indicating whether the last tile is calculated from a tile input or player target input.
+     * @param lazy when evaluating a list of destination tile list, if true only one tile needs to meet the check,
+     *             otherwise all tiles need to meet the check
+     * @param actionUnitName the name of the action unit from which
+     */
+    public MinDistance(Integer amount, boolean self, boolean finalIsTile, boolean initialIsTile, boolean lazy, String actionUnitName) {
+        super(amount, self, finalIsTile, initialIsTile, lazy, actionUnitName);
     }
 
+    /**
+     * Checks whether the distance between a first tile and a final tile is greater than the specified amount.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if distance is less, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile initialTile = super.getInitialTile(game, targets);

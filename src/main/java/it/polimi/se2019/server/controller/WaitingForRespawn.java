@@ -53,7 +53,7 @@ public class WaitingForRespawn extends ControllerState {
                     // if the activePlayer killed two or more players during this turn it gets a bonus point
                     if (game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isDead()).collect(Collectors.toList()).size() >= 2) {
                         player.getCharacterState().setScore(player.getCharacterState().getScore() + 1);
-                        System.out.println("COOL, DOUBLEKILL!");
+                        Logger.getGlobal().info("COOL, DOUBLEKILL!");
                     }
 
 

@@ -8,14 +8,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * This condition checks whether a target was selected in a previous action unit.
+ *
+ * @author andreahuang
+ */
 public class IsTargetNotInActionUnitTargetList implements Condition {
 
     private String actionUnitName;
 
+    /**
+     * Default constructor. It sets up the action unit from which to look for a target.
+     *
+     * @param actionUnitName
+     */
     public IsTargetNotInActionUnitTargetList(String actionUnitName) {
         this.actionUnitName = actionUnitName;
     }
 
+    /**
+     * Checks whether a target was not selected in a previous action unit.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if the target was not selected in that action unit, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         try {

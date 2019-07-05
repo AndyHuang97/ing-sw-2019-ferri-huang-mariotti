@@ -273,13 +273,10 @@ public class GUIView extends View {
     }
 
     /**
-     * The closeStage method lets the view close any stage.
+     * Setter for userInput.
      *
+     * @param userInput is a boolean indicating if a user input is to be expected.
      */
-    public void closeStage(Stage stage) {
-        stage.close();
-    }
-
     public void setUserInput(boolean userInput) {
         this.userInput = userInput;
     }
