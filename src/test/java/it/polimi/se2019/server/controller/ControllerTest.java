@@ -477,6 +477,41 @@ public class ControllerTest {
         }
     }
 
+    @Test
+    public void testEndGame() throws GameManager.GameNotFoundException, PlayerNotFoundException {
+        for (Player player : game.getPlayerList()) {
+            player.getCharacterState().setFirstSpawn(false);
+        }
+
+        Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
+        Player player1 = gameManager.retrieveGame(TESTNICK1).getPlayerByNickname(TESTNICK1);
+
+        // fast forward to the start of the frenzy mode
+        game.setCurrentPlayer(player0);
+
+        killShotTrack.setKillCounter(killShotTrack.getKillsForFrenzy()-1);
+
+        player1.getCharacterState().addDamage(player0.getColor(), 12, game);
+        game.addDeath(player1, true);
+
+        Assert.assertTrue(game.isFrenzy());
+
+        // fast forward to the final turn, the turn of the frenzy activator!
+        game.setCurrentPlayer(player0);
+
+        player1.getCharacterState().resetDamageBar();
+
+        ControllerState waitForMainActions = new WaitingForMainActions();
+        controller.setControllerStateForGame(game, waitForMainActions);
+
+        ((WaitingForMainActions) waitForMainActions).updateCounter();
+        ((WaitingForMainActions) waitForMainActions).updateCounter();
+
+        ControllerState nextState = ((WaitingForMainActions) waitForMainActions).nextPlayerOrReloadRespawn(game, player0);
+
+        Assert.assertTrue(nextState instanceof EndGameState);
+    }
+
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {
         Map<AmmoColor, Integer> ammo = new HashMap<>();
         ammo.put(AmmoColor.BLUE, amountOfAmmoPerColor);
