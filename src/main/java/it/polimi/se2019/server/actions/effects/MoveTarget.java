@@ -24,7 +24,7 @@ public class MoveTarget implements Effect {
     private boolean isTile;
 
     /**
-     * Default construtctor. It sets up the self and isTile boolean parameters to interpret the input correctly.
+     * Default constructor. It sets up the self and isTile boolean parameters to interpret the input correctly.
      *
      * @param self is the boolean indicating whether the moving player is the attacker
      * @param isTile
@@ -35,10 +35,12 @@ public class MoveTarget implements Effect {
     }
 
     /**
-     * Moves the target to the correct tile
+     * This method moves a single target, interpreting the self and isTile boolean parameter.
+     * If self is true, then it moves the attacker. The isTile parameter is true then it gets the final
+     * tile from the tile input, otherwise it gets it from the target input tile.
      *
-     * @param game the game
-     * @param targets the target to move
+     * @param  game the game on which to perform the effect.
+     * @param targets the targets is the input of the current player. Either tiles or players.
      */
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {

@@ -30,13 +30,14 @@ public class ActionUnit implements Targetable {
 
 	/**
 	 * Default constructor
-	 * @param available
-	 * @param name
-	 * @param effectList
-	 * @param conditionList
-	 * @param numPlayerTargets
-	 * @param numTileTargets
-	 * @param playerSelectionFirst
+	 * @param available indicates whether the action is readily available.
+	 * @param name is the name of the action unit.
+	 * @param effectList is the list of the effects.
+	 * @param conditionList is the list of conditions.
+	 * @param unidirectional is a boolean parameter that indicates whether a direction is asked as tile.
+	 * @param numPlayerTargets is the maximum number of players to be selected.
+	 * @param numTileTargets is the maximum number of tiles to be selected.
+	 * @param playerSelectionFirst is a boolean parameter that indicates
 	 */
 	public ActionUnit(boolean available, String name, String description, List<Effect> effectList, List<Condition> conditionList, boolean unidirectional, int numPlayerTargets, int numTileTargets, boolean playerSelectionFirst) {
 		this.available = available;
@@ -51,12 +52,11 @@ public class ActionUnit implements Targetable {
 	}
 
 	/**
-	 * Each action unit has a check that checks all the conditions in the action unit and makes sure all are respected
+	 * This is the main control on the user input, it checks through all the conditions of the action unit
 	 *
-	 * @param game the game
-	 * @param targets the targetables
-	 * @return a boolean response
-	 *
+	 * @param game is the game on which to perform the action unit.
+	 * @param targets is the input from the player.
+	 * @return true only if all conditions are met, false if
 	 */
 	public boolean check(Game game, Map<String, List<Targetable>> targets) {
 		for (Condition c : conditionList) {

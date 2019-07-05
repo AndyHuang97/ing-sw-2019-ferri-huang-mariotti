@@ -4,8 +4,10 @@ import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.cli.CLIView;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.weapons.Weapon;
+import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.Game;
+import it.polimi.se2019.server.games.KillShotTrack;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
@@ -49,6 +51,8 @@ public class DataUpdateTest {
     private Forwarder forwarder;
     private CharacterState characterState1;
     private Game game;
+    private KillShotTrack killShotTrack;
+    private Controller controller;
 
     @Before
     public void setUp() {
@@ -85,6 +89,10 @@ public class DataUpdateTest {
 
         game.initGameObjects("0");
 
+        killShotTrack = new KillShotTrack(game.getPlayerList());
+
+        game.setKillShotTrack(killShotTrack);
+        killShotTrack.register(game);
 
     }
 

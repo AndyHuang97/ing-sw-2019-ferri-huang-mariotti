@@ -14,7 +14,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * 
+ * This class is used to represent a single square of the map. There are methods to manage weapon crates and ammo
+ * crates on each tile.
+ *
+ * @author Rodolfo Mariotti
  */
 public class Tile implements Targetable {
 
@@ -66,6 +69,15 @@ public class Tile implements Targetable {
 		yPosition = 0;
 	}
 
+    /**
+     * Tile constructor. Initializes a new tile.
+     *
+     * @param id unique identifier
+     * @param links link type for every cardinal position
+     * @param roomColor color of the tile
+     * @param xPosition x coordinate of the tile in the map
+     * @param yPosition y coordinate of the tile in the mao
+     */
 	public Tile(String id, LinkType[] links, RoomColor roomColor, int xPosition, int yPosition) {
 		this.id = id;
 		this.roomColor = roomColor;
@@ -74,65 +86,78 @@ public class Tile implements Targetable {
 		this.yPosition = yPosition;
 	}
 
+    /**
+     * Tile is a Targetable object so it has an id. This method is the getter for the id attribute.
+     *
+     * @return unique identifier of the tile
+     */
 	@Override
 	public String getId() {
 		return id;
 	}
 
+    /**
+     * Setter for the id attribute
+     *
+     * @param id unique identifier of the tile
+     */
 	public void setId(String id) {
 		this.id = id;
 	}
 
+    /**
+     * Getter method for the roomColor attribute. Each tile has a roomColor, a group of tiles with the same
+     * roomColor form a room.
+     *
+     * @return the color of the tile
+     */
 	public RoomColor getRoomColor() {
 		return roomColor;
 	}
 
-	/*
-	public void setRoomColor(RoomColor roomColor) {
-		this.roomColor = roomColor;
-	}
-	*/
-
+    /**
+     * Getter method, returns the type of the north link.
+     *
+     * @return type of the north link
+     */
 	public LinkType getNorthLink() {
 		return links[0];
 	}
 
-	/*
-	public void setNorthLink(LinkType northLink) {
-		links[0] = northLink;
-	}
-	*/
-
+    /**
+     * Getter method, returns the type of the east link.
+     *
+     * @return type of the east link
+     */
 	public LinkType getEastLink() {
 		return links[1];
 	}
 
-	/*
-	public void setEastLink(LinkType eastLink) {
-		links[1] = eastLink;
-	}
-	*/
-
+    /**
+     * Getter method, returns the type of the south link.
+     *
+     * @return type of the south link
+     */
 	public LinkType getSouthLink() {
 		return links[2];
 	}
 
-	/*
-	public void setSouthLink(LinkType southLink) {
-		links[2] = southLink;
-	}
-	*/
-
+    /**
+     * Getter method, returns the type of the west link.
+     *
+     * @return type of the west link
+     */
 	public LinkType getWestLink() {
 		return links[3];
 	}
 
-	/*
-	public void setWestLink(LinkType westLink) {
-		links[3] = westLink;
-	}
-	*/
-
+    /**
+     * Gets the list of tiles visible from this tile, so each tile of the room and the tiles of each room connected to
+     * this tile by an open link or a door link.
+     *
+     * @param board board where this tile is
+     * @return list of visible tiles
+     */
 	public List<Tile> getVisibleTiles(Board board) {
 		List<Tile> visibleTiles = new ArrayList<>();
 		int[] pos;
@@ -173,6 +198,12 @@ public class Tile implements Targetable {
 		return visibleTiles;
 	}
 
+    /**
+     * Get the list of players that stands on a tile tht is visible from this tile.
+     *
+     * @param game this tile is part of a board that is part of the game
+     * @return list of visible targets
+     */
 	public List<Player> getVisibleTargets(Game game) {
 		List<Player> visibleTargets;
 		List<Tile> visibleTiles = getVisibleTiles(game.getBoard());
@@ -184,6 +215,12 @@ public class Tile implements Targetable {
 		return visibleTargets;
 	}
 
+    /**
+     * Get the list of players on this tile.
+     *
+     * @param game this tile is part of a board that is part of the game
+     * @return list of player on this tile
+     */
 	public List<Player> getPlayers(Game game) {
 		List<Player> players;
 
@@ -194,25 +231,26 @@ public class Tile implements Targetable {
 		return players;
 	}
 
+    /**
+     * Get the tiles that have the same room color. The group of tiles with the same colors form a
+     * room.
+     *
+     * @param board board where this tile is
+     * @return tiles of the same room
+     */
 	public List<Tile> getRoom(Board board) {
-		List<Tile> tiles = new ArrayList<>();
-
-		/*
-		for(int i = 0; i < board.getTileMap()[0].length; i++) {
-			for(int j = 0; j < board.getTileMap().length; j++) {
-				if(board.getTileMap()[j][i].getRoomColor() == roomColor) {
-					tiles.add(board.getTileMap()[j][i]);
-				}
-			}
-		}*/
-		tiles = board.getTileList().stream()
+		return board.getTileList().stream()
 				.filter(Objects::nonNull)
 				.filter(tile -> tile.getRoomColor().equals(roomColor))
 				.collect(Collectors.toList());
 
-		return tiles;
 	}
 
+    /**
+     * Get a textual representation of the tile object.
+     *
+     * @return textual representation of the tile object
+     */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -227,34 +265,74 @@ public class Tile implements Targetable {
 		return builder.toString();
 	}
 
+    /**
+     * Getter method for the weaponCrate attribute.
+     *
+     * @return weapon crate of this tile
+     */
 	public List<Weapon> getWeaponCrate() {
 		return weaponCrate;
 	}
 
+    /**
+     * Setter method for the weaponCrate attribute.
+     *
+     * @param weaponCrate reference to the object that will be set as weapon crate
+     */
 	public void setWeaponCrate(List<Weapon> weaponCrate) {
 	    this.weaponCrate = weaponCrate;
 	}
 
+    /**
+     * Getter method for the ammoCrate attribute.
+     *
+     * @return ammo crate of this tile
+     */
 	public AmmoCrate getAmmoCrate() {
 		return ammoCrate;
 	}
 
+    /**
+     * Setter method for the ammoCrate attribute.
+     *
+     * @param ammoCrate reference to the object that will be set as ammo crate
+     */
 	public void setAmmoCrate(AmmoCrate ammoCrate) {
 	    this.ammoCrate = ammoCrate;
 	}
 
+    /**
+     * Getter method for the isSpawnTile attribute.
+     *
+     * @return true if this tile contains a spawn, false if contains an ammo crate
+     */
 	public boolean isSpawnTile() {
 		return isSpawnTile;
 	}
 
+    /**
+     * Setter method for the isSpawnTile attribute.
+     *
+     * @param spawnTile new value of the isSpawnTile attribute
+     */
 	public void setSpawnTile(boolean spawnTile) {
 		isSpawnTile = spawnTile;
 	}
 
+    /**
+     * Getter method for the xPosition attribute.
+     *
+     * @return position of the tile on the x axis of board
+     */
 	public int getxPosition() {
 		return xPosition;
 	}
 
+    /**
+     * Getter method for the yPosition attribute.
+     *
+     * @return position of the tile on the y axis of board
+     */
 	public int getyPosition() {
 		return yPosition;
 	}
