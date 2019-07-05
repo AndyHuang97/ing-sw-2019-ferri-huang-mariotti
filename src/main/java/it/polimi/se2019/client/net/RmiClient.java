@@ -1,6 +1,8 @@
 package it.polimi.se2019.client.net;
 
 import it.polimi.se2019.client.View;
+import it.polimi.se2019.client.cli.ClientCli;
+import it.polimi.se2019.client.gui.ClientGui;
 import it.polimi.se2019.client.util.ClientCommandHandler;
 import it.polimi.se2019.util.*;
 
@@ -47,10 +49,10 @@ public class RmiClient implements NetworkClient {
      */
     @Override
     public void start(View view) {
-        try (InputStream input = RmiClient.class.getClassLoader().getResource("config.properties").openStream()) {
-            Properties prop = new Properties();
-            prop.load(input);
-            int rmiPort = Integer.parseInt(prop.getProperty("rmi.port"));
+        try {
+            int rmiPort;
+            if (view.isCliTrueGuiFalse()) rmiPort = Integer.parseInt(ClientCli.prop.getProperty("rmi.port"));
+            else rmiPort = Integer.parseInt(ClientGui.prop.getProperty("rmi.port"));
             this.server = (RmiServerInterface) Naming.lookup("rmi://" + serverHost + ":" + rmiPort + "/adrenalina");
             ClientCommandHandler commandHandler = new ClientCommandHandler(view);
             RmiClientWorker worker = new RmiClientWorker(commandHandler);

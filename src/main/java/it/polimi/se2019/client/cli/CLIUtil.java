@@ -31,13 +31,7 @@ public class CLIUtil {
      *
      */
     public CLIUtil() {
-        try (InputStream input = CLIUtil.class.getClassLoader().getResource("config.properties").openStream()) {
-            Properties prop = new Properties();
-            prop.load(input);
-            inputTimeout = Integer.parseInt(prop.getProperty("game.input_timeout_seconds"));
-        } catch(IOException e) {
-            Logger.getGlobal().warning(e.toString());
-        }
+        inputTimeout = Integer.parseInt(ClientCli.prop.getProperty("game.input_timeout_seconds"));
     }
 
     /**

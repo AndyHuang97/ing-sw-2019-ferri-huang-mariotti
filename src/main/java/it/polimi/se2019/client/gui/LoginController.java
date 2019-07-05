@@ -45,19 +45,13 @@ public class LoginController {
      */
     @FXML
     public void initialize() {
-        try (InputStream input = LoginController.class.getClassLoader().getResource("config.properties").openStream()) {
-            Properties prop = new Properties();
-            prop.load(input);
-            ip.setText(prop.getProperty("server.host"));
-            connectType.getItems().add(Constants.RMI);
-            connectType.getItems().add(Constants.SOCKET);
-            map.getItems().add(Constants.map0);
-            map.getItems().add(Constants.map1);
-            map.getItems().add(Constants.map2);
-            map.getItems().add(Constants.map3);
-        } catch(IOException e) {
-            logger.info(e.toString());
-        }
+        ip.setText(ClientGui.prop.getProperty("server.host"));
+        connectType.getItems().add(Constants.RMI);
+        connectType.getItems().add(Constants.SOCKET);
+        map.getItems().add(Constants.map0);
+        map.getItems().add(Constants.map1);
+        map.getItems().add(Constants.map2);
+        map.getItems().add(Constants.map3);
     }
 
     /**
