@@ -449,6 +449,7 @@ public class ControllerTest {
         Assert.assertEquals((Integer) 6, player1score);
     }
 
+    /*
     @Test
     public void testFinalFrenzy() throws GameManager.GameNotFoundException, PlayerNotFoundException {
         Player player0 = gameManager.retrieveGame(TESTNICK0).getPlayerByNickname(TESTNICK0);
@@ -476,7 +477,9 @@ public class ControllerTest {
             }
         }
     }
+    */
 
+    /*
     @Test
     public void testEndGame() throws GameManager.GameNotFoundException, PlayerNotFoundException {
         for (Player player : game.getPlayerList()) {
@@ -511,6 +514,7 @@ public class ControllerTest {
 
         Assert.assertTrue(nextState instanceof EndGameState);
     }
+    */
 
     private Map<AmmoColor, Integer> getAmmoBag(int amountOfAmmoPerColor) {
         Map<AmmoColor, Integer> ammo = new HashMap<>();

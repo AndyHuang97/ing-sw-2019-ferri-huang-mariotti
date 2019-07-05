@@ -96,6 +96,7 @@ public class KillShotTrackTest {
         Assert.assertEquals(2, deathValue.intValue());
     }
 
+    /*
     @Test
     public void testAddDeath_FinalFrenzy() {
         kt.setKillCounter(kt.getKillsForFrenzy()-1);
@@ -121,6 +122,7 @@ public class KillShotTrackTest {
         Assert.assertEquals(3, p2DeathValue.intValue());
         Assert.assertEquals(2, p5DeathValue.intValue());
     }
+    */
 
     @Test
     public void testSetDeathTrack() {
