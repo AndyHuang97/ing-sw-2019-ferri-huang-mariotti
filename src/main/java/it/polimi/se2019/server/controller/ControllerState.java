@@ -67,7 +67,10 @@ public abstract class ControllerState {
         }
 
         errorMessages = new ArrayList<>();
+    }
 
+    public void resetErrorMessages() {
+        errorMessages = new ArrayList<>();
     }
 
 
