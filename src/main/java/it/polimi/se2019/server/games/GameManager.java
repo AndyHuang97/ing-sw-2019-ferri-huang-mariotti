@@ -353,7 +353,7 @@ public class GameManager {
 	}
 
 	/**
-	 * This removes an ended game. At the end of everything
+	 * This destroys a game and removes it from file.
 	 *
 	 * @param game the game to terminate
 	 *
@@ -372,7 +372,12 @@ public class GameManager {
 		dumpToFile(game, true);
 	}
 
-
+	/**
+	 * The pinger daemon is very important for the stability of the app, checks if somebody disconnected
+	 *
+	 * @param game the game to terminate
+	 *
+	 */
 	public class IsClientAlive extends TimerTask {
 		private String nickname;
 		private CommandHandler commandHandler;
