@@ -373,9 +373,9 @@ public class GameManager {
 	}
 
 	/**
-	 * The pinger daemon is very important for the stability of the app, checks if somebody disconnected
-	 *
-	 * @param game the game to terminate
+	 * The pinger daemon is a very classical ping pong mechanism to check if a client is alive. Its protocol independent
+	 * so it works with both rmi and socket. There also is the implementation of what to do when a client fails to respond
+	 * usually it can quit the game or just disconnect it. It is implemented as a timer that runs at an interval.
 	 *
 	 */
 	public class IsClientAlive extends TimerTask {
@@ -383,12 +383,27 @@ public class GameManager {
 		private CommandHandler commandHandler;
 		private Timer timer;
 
+		/**
+		 * The constructor of the class
+		 *
+		 * @param nickname the user nickname (to identify the game)
+		 * @param commandHandler the command handler to check if connection is alive
+		 * @param timer the timer object
+		 *
+		 */
 		public IsClientAlive(String nickname, CommandHandler commandHandler, Timer timer) {
 			this.nickname = nickname;
 			this.commandHandler = commandHandler;
 			this.timer = timer;
 		}
 
+		/**
+		 * The run block of the timer, if first sends a ping if the response is pong it just comes back to sleep. If no
+		 * response it checks if the user is in a game. If so it checks if the game is a 3 or less players game. If it is it
+		 * shuts the game down. If not it just disconnects the player form the game. If user is not connected to any game, it just frees
+		 * the waiting list
+		 *
+		 */
 		public void run(){
 		    try {
                 try {
@@ -450,6 +465,16 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * This parts add users to the waiting list. First a routine check to verify user is not already doing something.
+	 * If negative, it starts the pinger daemon and adds the user to the waiting list. If the waiting list is more than 3 players
+	 * it starts the countdown, if more than 5 it starts the game.
+	 *
+	 * @param newUser just the userdata
+	 * @param currentCommandHandler his command handler
+	 * @param ping if you want the pinger to be active, dont use false if you dont know what you are doing
+	 *
+	 */
 	private void internalAddUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler, boolean ping) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		// add user to waiting list / game (used by view)
 		if (isUserInGameList(newUser.getNickname()) || isUserInWaitingList(newUser.getNickname())) {
@@ -468,6 +493,13 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * This is where the pinger daemon is initialized, just a timer creation and a scheduling
+	 *
+	 * @param nickname just the userdata
+	 * @param commandHandler his command handler
+	 *
+	 */
 	public void startPingDaemon(String nickname, CommandHandler commandHandler) {
 		try {
 			Timer timer = new Timer();
@@ -477,32 +509,76 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * Just the nice entrance to the internal function
+	 *
+	 * @param newUser just the userdata
+	 * @param currentCommandHandler his command handler
+	 *
+	 */
 	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		internalAddUserToWaitingList(newUser, currentCommandHandler, true);
 	}
 
+	/**
+	 * Just the nice entrance to the internal function
+	 *
+	 * @param newUser just the userdata
+	 * @param currentCommandHandler his command handler
+	 * @param ping if you want the pinger to be active, dont use false if you dont know what you are doing
+	 *
+	 */
 	public void addUserToWaitingList(UserData newUser, CommandHandler currentCommandHandler, boolean ping) throws AlreadyPlayingException, IndexOutOfBoundsException {
 		internalAddUserToWaitingList(newUser, currentCommandHandler, ping);
 	}
 
+	/**
+	 * Get the waiting list as a list of tuple
+	 *
+	 * @return returns the waiting list
+	 *
+	 */
 	public List<Tuple> getWaitingList() {
 		// used just in tests
 		return waitingList;
 	}
 
-
+	/**
+	 * Get the command handler map
+	 *
+	 * @return the command handler map
+	 *
+	 */
 	public Map<String, CommandHandler> getPlayerCommandHandlerMap() {
 		return playerCommandHandlerMap;
 	}
 
+	/**
+	 * Get the list of map preferences
+	 *
+	 * @return the list of map preferences
+	 *
+	 */
 	public List<String> getMapPreference() {
 		return mapPreference;
 	}
 
+	/**
+	 * Get the list of games
+	 *
+	 * @return the list of games
+	 *
+	 */
 	public List<Game> getGameList() {
 		return gameList;
 	}
 
+	/**
+	 * Set the controller
+	 *
+	 * @param controller the controller
+	 *
+	 */
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
