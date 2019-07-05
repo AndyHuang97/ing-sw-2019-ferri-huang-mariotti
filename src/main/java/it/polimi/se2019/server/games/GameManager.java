@@ -3,7 +3,6 @@ package it.polimi.se2019.server.games;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.se2019.client.util.Constants;
-import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.actions.Direction;
 import it.polimi.se2019.server.cards.Card;
@@ -87,10 +86,17 @@ public class GameManager {
 	 *
 	 */
 	public void init(String dumpName) {
-		waitingListMaxSize = Integer.parseInt(ServerApp.prop.getProperty("game_manager.waiting_list_max_size"));
-		waitingListStartTimerSize = Integer.parseInt(ServerApp.prop.getProperty("game_manager.waiting_list_start_timer_size"));
-		startTimerSeconds = Integer.parseInt(ServerApp.prop.getProperty("game_manager.start_timer_seconds"));
-		pingIntervalMilliseconds = Integer.parseInt(ServerApp.prop.getProperty("game_manager.ping_interval_milliseconds"));
+		try (InputStream input = GameManager.class.getClassLoader().getResource("config.properties").openStream()) {
+			Properties prop = new Properties();
+			// load a properties file
+			prop.load(input);
+			waitingListMaxSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_max_size"));
+			waitingListStartTimerSize = Integer.parseInt(prop.getProperty("game_manager.waiting_list_start_timer_size"));
+			startTimerSeconds = Integer.parseInt(prop.getProperty("game_manager.start_timer_seconds"));
+			pingIntervalMilliseconds = Integer.parseInt(prop.getProperty("game_manager.ping_interval_milliseconds"));
+		} catch (IOException ex) {
+			logger.info(ex.toString());
+		}
 		this.dumpName = dumpName;
 		try {
 			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {

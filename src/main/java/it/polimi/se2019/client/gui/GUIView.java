@@ -39,7 +39,13 @@ public class GUIView extends View {
      * @param primaryStage is the main stage of the javafx application.
      */
     public GUIView(Stage primaryStage) {
-        inputTimeout = Integer.parseInt(ClientGui.prop.getProperty("game.input_timeout_seconds"));
+        try (InputStream input = LoginController.class.getClassLoader().getResource("config.properties").openStream()) {
+            Properties prop = new Properties();
+            prop.load(input);
+            inputTimeout = Integer.parseInt(prop.getProperty("game.input_timeout_seconds"));
+        } catch(IOException e) {
+            Logger.getGlobal().warning(e.toString());
+        }
         this.primaryStage = primaryStage;
         this.setCliTrueGuiFalse(false);
     }

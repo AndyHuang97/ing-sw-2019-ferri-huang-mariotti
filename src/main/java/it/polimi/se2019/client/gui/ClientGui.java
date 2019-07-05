@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 
 import java.io.*;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 /**
@@ -22,10 +21,11 @@ import java.util.logging.Logger;
  * @author andreahuang
  */
 public class ClientGui extends Application {
+
     private static final Logger logger = Logger.getLogger(ClientGui.class.getName());
+
     private Stage primaryStage;
     private View view;
-    public static Properties prop = new Properties();
 
     /**
      * The main method that starts the gui application.
@@ -33,20 +33,6 @@ public class ClientGui extends Application {
      * @param args is the vector of args accepted by the application
      */
     public static void main(String[] args) {
-        if(args.length > 0) {
-            File file = new File(args[0]);
-            try (InputStream input = new FileInputStream(file)) {
-                prop.load(input);
-                Logger.getGlobal().info("Finished loading settings from file: " + args[0]);
-            } catch (IOException ex) {
-                Logger.getGlobal().info("Please provide a valid config file");
-                System.exit(0);
-            }
-            // Work with your 'file' object here
-        } else {
-            Logger.getGlobal().info("Please provide a config file");
-            System.exit(0);
-        }
         launch(args);
     }
 

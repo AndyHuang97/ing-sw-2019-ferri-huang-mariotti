@@ -1,6 +1,5 @@
 package it.polimi.se2019.server.games;
 
-import it.polimi.se2019.server.ServerApp;
 import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
 import it.polimi.se2019.server.dataupdate.StateUpdate;
 import it.polimi.se2019.server.games.player.CharacterState;
@@ -71,7 +70,15 @@ public class KillShotTrack implements Serializable {
      * Loads configuration parameters.
      */
     private void loadConfig() {
-        killsForFrenzy = Integer.parseInt(ServerApp.prop.getProperty("game.kills_for_frenzy"));
+        try(InputStream input = KillShotTrack.class.getClassLoader().getResource("config.properties").openStream()){
+            Properties prop = new Properties();
+            prop.load(input);
+            killsForFrenzy = Integer.parseInt(prop.getProperty("game.kills_for_frenzy"));
+
+        } catch (IOException e) {
+            logger.warning(e.toString());
+        }
+
     }
 
     /**
