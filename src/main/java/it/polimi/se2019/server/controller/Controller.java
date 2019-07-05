@@ -24,18 +24,33 @@ import java.util.logging.Logger;
  * This class implement the Controller of the MVC pattern. The Controller parse the inputs (Requests)
  * of the view and uses the Model's methods to edit Model's data.
  * Using the character state the Controller is able to manage the turn. Since there is only one Controller for
- * every game running on the server, the Controller needs to behave differently on his state basis, so it needs
+ * all the games running on the server, the Controller needs to behave differently on his state basis, so it needs
  * to save a state for every game.
+ *
+ * @author FF
+ *
  */
 public class Controller implements Observer<Request> {
 
     private GameManager gameManager;
     private Map<Game, ControllerState> controllerStateMap = new HashMap<>();
 
+    /**
+     * Default constructor that is linked to the gamemanager
+     *
+     * @param activeGames the gamemanager
+     *
+     */
     public Controller(GameManager activeGames) {
         this.gameManager = activeGames;
     }
 
+    /**
+     * This method is used to execute an action
+     *
+     * @param action the action
+     *
+     */
     public void applyAction(PlayerAction action){
         action.run();
     }
@@ -43,6 +58,9 @@ public class Controller implements Observer<Request> {
     /**
      * Create a PlayerAction object by parsing the request. Then the PlayerAction built is checked
      * and if it's runnable is run.
+     *
+     * @param request the request from the client already prefiltered
+     *
      */
     @Override
     public void update(Request request) {
@@ -86,10 +104,22 @@ public class Controller implements Observer<Request> {
         }
     }
 
+    /**
+     * The getter for the gamemanager
+     *
+     * @return the gamemanager
+     *
+     */
     public GameManager getGameManager() {
         return gameManager;
     }
 
+    /**
+     * The setter for the gamemanager
+     *
+     * @param gameManager the new gamemanager
+     *
+     */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
     }
@@ -99,8 +129,10 @@ public class Controller implements Observer<Request> {
     /**
      * If the game is present in the controllerStateMap return the correspondent ControllerState value
      * else returns a new WaitingForRespawn (subclass of ControllerState)
+     *
      * @param game the key you need to get the associated value
      * @return ControllerState of the selected Game
+     *
      */
     public ControllerState getStateFromGame(Game game) {
         controllerStateMap.putIfAbsent(game, new WaitingForRespawn());
@@ -109,13 +141,21 @@ public class Controller implements Observer<Request> {
 
     /**
      * Set the ControllerState for the selected Game
+     *
      * @param game the kay you need to set the associated value
      * @param controllerState the ControllerState you want to correspond to the key
+     *
      */
     public synchronized void setControllerStateForGame(Game game, ControllerState controllerState) {
         controllerStateMap.put(game, controllerState);
     }
 
+    /**
+     * Send the buffer to the clients
+     *
+     * @param currentGame the game you want to update on the clients
+     *
+     */
     public void requestUpdate(Game currentGame) {
         Map<String, CommandHandler> commandHandlerMap = gameManager.getPlayerCommandHandlerMap();
         for (Player player : currentGame.getActivePlayerList()) {
@@ -130,6 +170,14 @@ public class Controller implements Observer<Request> {
         }
     }
 
+    /**
+     * Only save when a turn is finished and we infer that from the state change
+     *
+     * @param game the game you want to save
+     * @param oldControllerState to check if the turn ended
+     * @param newControllerState to check if the turn ended
+     *
+     */
     public void saveGames(Game game, ControllerState oldControllerState, ControllerState newControllerState) {
         if ((oldControllerState.getClass().equals(WaitingForMainActions.class) && oldControllerState.getClass().equals(newControllerState.getClass()) && !oldControllerState.equals(newControllerState))||
                 (oldControllerState.getClass().equals(WaitingForReload.class) && newControllerState.getClass().equals(WaitingForMainActions.class)) ||
@@ -138,6 +186,13 @@ public class Controller implements Observer<Request> {
         }
     }
 
+    /**
+     * Notify players a game is finished
+     *
+     * @param game the game you want to notify
+     * @throws it.polimi.se2019.util.Observer.CommunicationError if clients are down
+     *
+     */
     public void notifyGameEnd(Game game) throws Observer.CommunicationError {
         for (Player player : game.getActivePlayerList()) {
             gameManager.getPlayerCommandHandlerMap().get(player.getUserData().getNickname()).sendResponse(new Response(null, false, Constants.FINISHGAME));

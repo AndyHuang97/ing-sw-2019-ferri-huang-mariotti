@@ -11,28 +11,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * This is the abstract of the state of the controller, every state needs to send a message to the client and receive a response
+ * to switch to another state or to to stay on the same state. A state can generate an error if the client selection is invalid.
+ *
+ * @author FF
+ *
+ */
 public abstract class ControllerState {
     private static List<String> errorMessages = new ArrayList<>();
 
     /**
+     * This needs to be implemented but sends to the client the action they need to perform
      *
-     * @param commandHandler
-     * @return sends a message to the correct commandHandler of the current player
+     * @param commandHandler the player commandhandler
+     *
      */
-    //TODO get the correct commandHandler
     public abstract void sendSelectionMessage(CommandHandler commandHandler);
 
     /**
      * This method contains all the logic of a state. It checks whether the input is among those allowed in the state.
      * If if fails it stays in the same state and keeps waiting for the same input, otherwise it performs the check
      * and run methods of the actions, with possible modifications on the model and then goes to a new state.
+     *
      * @param playerActions the list of actions received from the player
      * @param game the game on which to execute the actions
      * @param player the player sending the input
-     * @return the new state of the controlelr
+     * @return the new state of the controller
+     *
      */
     public abstract ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player);
 
+    /**
+     * Sends an error message to the client by combining the currently stored error messages and then flush the currently stored error messages
+     *
+     * @param commandHandler the player commandhandler
+     *
+     */
     public void sendErrorMessages(CommandHandler commandHandler) {
         final String DASH_SPACE = "- ";
         final Character NEWLINE = '\n';
@@ -44,8 +59,6 @@ public abstract class ControllerState {
             stringBuilder.append(error);
             stringBuilder.append(NEWLINE);
         }
-
-        System.out.println(stringBuilder.toString());
 
         try {
             commandHandler.update(new Response(null, false, stringBuilder.toString()));
@@ -63,6 +76,7 @@ public abstract class ControllerState {
      * Views by the Controller and showed to the player, then the stored error messages will be flushed.
      *
      * @param errorMessage the message that will be stored
+     *
      */
     public static void addErrorMessage(String errorMessage) {
         if (!errorMessages.stream().anyMatch(storedMessage -> storedMessage.equals(errorMessage))) {
@@ -70,6 +84,12 @@ public abstract class ControllerState {
         }
     }
 
+    /**
+     * Check if a playerAction can be run by executing the check on it, if it cannot be run add an error
+     *
+     * @param playerAction the action to check
+     *
+     */
     public static boolean checkPlayerActionAndSaveError(PlayerAction playerAction) {
         boolean runnable = playerAction.check();
 

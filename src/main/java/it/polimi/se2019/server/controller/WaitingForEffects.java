@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * This is the state when you have to shoot a weapon
+ *
+ * @author FF
+ *
+ */
 public class WaitingForEffects extends ControllerState {
 
     private static final int SHOOT_POSITION = 0;
@@ -22,11 +28,24 @@ public class WaitingForEffects extends ControllerState {
     private ShootPlayerAction shootPlayerAction;
     private ControllerState storedWaitingForMainActions;
 
+    /**
+     * Default constructor.
+     *
+     * @param chosenWeapon the weapon currently in use
+     * @param storedWaitingForMainActions the state we were before and we want to go back to
+     *
+     */
     public WaitingForEffects(Weapon chosenWeapon, ControllerState storedWaitingForMainActions) {
         this.chosenWeapon = chosenWeapon;
         this.storedWaitingForMainActions = storedWaitingForMainActions;
     }
 
+    /**
+     * We send the client the message to remind him to shoot
+     *
+     * @param commandHandler the player commandhandler
+     *
+     */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try {
@@ -36,6 +55,16 @@ public class WaitingForEffects extends ControllerState {
         }
     }
 
+    /**
+     * After a shoot is performed it can go back to the main action or ask for a powerup to be used or stay here in case of errors.
+     * Some powerups require to change the current user
+     *
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controller
+     *
+     */
     //TODO check the availability of more optionalEffects as first thing
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
@@ -118,7 +147,10 @@ public class WaitingForEffects extends ControllerState {
     /**
      * The nextEffectOrAction method is used to detect the cases in which no more optionalEffects are expected
      * when returning from the WaitingForPowerUp state.
+     *
+     * @param game the game currently in use
      * @return this state if more effects are left, storedWaitingForMainActions otherwise.
+     *
      */
     public ControllerState nextEffectOrAction(Game game) {
         if(!shootPlayerAction.getChosenWeapon().getOptionalEffectList().isEmpty()) {
@@ -138,6 +170,13 @@ public class WaitingForEffects extends ControllerState {
         return swapBackToMainAction(game);
     }
 
+    /**
+     * Swap back to the main action we stored before
+     *
+     * @param game the game
+     * @return the old state
+     *
+     */
     private ControllerState swapBackToMainAction(Game game) {
         if (!game.getCurrentActionUnitsList().isEmpty()) {
             // at least one shot was performed
