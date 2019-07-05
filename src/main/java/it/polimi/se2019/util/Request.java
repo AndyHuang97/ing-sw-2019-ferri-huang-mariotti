@@ -7,7 +7,9 @@ import java.io.*;
 import java.util.logging.Logger;
 
 /**
- * Request objects are used by the View to send data to the Controller
+ * Request objects are used by the View to send data to the Controller.
+ *
+ * @author andreahuang
  */
 
 public class Request implements Serializable, NetMsg {
@@ -27,10 +29,20 @@ public class Request implements Serializable, NetMsg {
         }
     }
 
+    /**
+     *
+     *
+     * @param nickname
+     */
     public Request(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     *
+     * @param netMessage
+     * @param nickname
+     */
     public Request(NetMessage netMessage, String nickname) {
         this.netMessage = netMessage;
         this.nickname = nickname;
@@ -60,35 +72,6 @@ public class Request implements Serializable, NetMsg {
     public String getNickname() {
         return this.nickname;
     }
-
-//    @Override
-//    public byte[] serialize() {
-//
-//
-//        try {
-//            out.writeObject(this);
-//            return bos.toByteArray();
-//        } catch (IOException e) {
-//            Logger.getGlobal().warning("Could not serialize the request: "+e.toString());
-//        }
-//        return new byte[0];
-//    }
-
-//    @Override
-//    public NetMsg deserialize(byte[] message) {
-//
-////
-//        try {
-//            ByteArrayInputStream bis = new ByteArrayInputStream(message);
-//            ObjectInputStream in = new ObjectInputStream(bis);
-//            return (Request) in.readObject();
-//        }catch (IOException | ClassNotFoundException e) {
-//            Logger.getGlobal().warning("Could not deserialize the request: "+e.toString());
-//        }
-//        //TODO decide how to deal with this bad request
-//        return new Request(null);
-//
-//    }
 
     public CommandHandler getCommandHandler() {
         return commandHandler;

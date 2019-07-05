@@ -97,7 +97,18 @@ public class Model implements LocalModel {
 
     @Override
     public void updatePlayerWeapon(Weapon weaponToUpdate) {
-        for (Player player : game.getPlayerList()) {
+
+        Player weaponPlayer = game.getPlayerList().stream().filter(player -> player.getCharacterState().getWeaponBag().stream().anyMatch(weapon -> weapon.equals(weaponToUpdate))).findFirst().orElse(null);
+
+        if (weaponPlayer != null) {
+            Weapon oldWeapon = weaponPlayer.getCharacterState().getWeaponBag().stream().filter(weapon -> weapon.getId().equals(weaponToUpdate)).findFirst().orElse(null);
+            if (oldWeapon != null) {
+                weaponPlayer.getCharacterState().removeWeapon(oldWeapon);
+                weaponPlayer.getCharacterState().addWeapon(weaponToUpdate);
+            }
+        }
+
+        /*for (Player player : game.getPlayerList()) {
             List<Weapon> weaponBag = player.getCharacterState().getWeaponBag();
 
             Iterator<Weapon> weaponIterator = weaponBag.iterator();
@@ -113,6 +124,8 @@ public class Model implements LocalModel {
 
             weaponBag.add(weaponToUpdate);
         }
+
+         */
     }
 
 
@@ -120,7 +133,7 @@ public class Model implements LocalModel {
     // testing methods ---------------------------------------------------------------------------------------------
     public void initGame() {
         game = new Game();
-        game.setFrenzy(true);
+
         boardDeserialize();
 
         Player p1 = new Player(UUID.randomUUID().toString(), true, new UserData("Giorno"), new CharacterState(), PlayerColor.GREEN);
@@ -224,11 +237,22 @@ public class Model implements LocalModel {
         p4.getCharacterState().setScore(4);
         p5.getCharacterState().setScore(5);
 
+        game.setFrenzy(true);
 //        KillShotTrack kt = new KillShotTrack(game.getPlayerList());
+//        p1.getCharacterState().resetDamageBar();
+//        p1.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
 //        kt.addDeath(p1, false);
+//        p2.getCharacterState().resetDamageBar();
+//        p2.getCharacterState().addDamage(PlayerColor.GREEN, 11, game);
 //        kt.addDeath(p2, true);
+//        p3.getCharacterState().resetDamageBar();
+//        p3.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
 //        kt.addDeath(p3, true);
+//        p4.getCharacterState().resetDamageBar();
+//        p4.getCharacterState().addDamage(PlayerColor.GREEN, 11, game);
 //        kt.addDeath(p4, true);
+//        p5.getCharacterState().resetDamageBar();
+//        p5.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
 //        kt.addDeath(p5, true);
 //        kt.addDeath(p1, false);
 //        kt.addDeath(p2, true);
