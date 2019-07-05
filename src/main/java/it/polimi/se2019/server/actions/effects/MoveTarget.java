@@ -34,6 +34,12 @@ public class MoveTarget implements Effect {
         this.isTile = isTile;
     }
 
+    /**
+     * Moves the target to the correct tile
+     *
+     * @param game the game
+     * @param targets the target to move
+     */
     @Override
     public void run(Game game, Map<String, List<Targetable>> targets) {
         Player target;
