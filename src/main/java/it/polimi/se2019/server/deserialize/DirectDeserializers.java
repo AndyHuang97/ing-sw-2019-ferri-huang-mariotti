@@ -130,14 +130,13 @@ public class DirectDeserializers {
     }
 
     public static Board deserializeBoardCrates(Board board) {
-
         board.getTileList().stream().filter(Objects::nonNull).filter(Tile::isSpawnTile).forEach(tile -> tile.setWeaponCrate(tile.getWeaponCrate().stream().map(weapon -> getWeapon(weapon.getName())).collect(Collectors.toList())));
         board.getTileList().stream().filter(Objects::nonNull).filter(tile -> !tile.isSpawnTile()).forEach(tile -> tile.setAmmoCrate(getAmmoCrate(tile.getAmmoCrate().getName())));
         return board;
     }
 
-    public static CharacterState deserializeCharacterState(CharacterState characterState) {
-
+    public static CharacterState deserializeCharacterState(CharacterState characterState, Board board) {
+        characterState.setTile(board.getTileFromID(characterState.getTile().getId()));
         characterState.setPowerUpBag(characterState.getPowerUpBag().stream().map(powerUp -> getPowerUp(powerUp.getName())).collect(Collectors.toList()));
         characterState.setWeaponBag(characterState.getWeaponBag().stream().map(weapon -> getWeapon(weapon.getName())).collect(Collectors.toList()));
         return characterState;

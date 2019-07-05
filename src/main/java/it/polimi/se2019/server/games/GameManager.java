@@ -125,7 +125,7 @@ public class GameManager {
 								tmpCharacterState.getDamageBar(), tmpCharacterState.getMarkerBar(), tmpCharacterState.getAmmoBag(),
 								tmpCharacterState.getWeaponBag(), tmpCharacterState.getPowerUpBag(), tmpCharacterState.getTile(),
 								tmpCharacterState.getScore(), false, tmpCharacterState.isFirstSpawn(), tmpCharacterState.getColor());
-						newCharacterState = DirectDeserializers.deserializeCharacterState(newCharacterState);
+						newCharacterState = DirectDeserializers.deserializeCharacterState(newCharacterState, tmpGame.getBoard());
 						Player newPlayer = new Player(tmpPlayer.getId(), false, tmpPlayer.getUserData(), newCharacterState, tmpPlayer.getColor());
 						newPlayerList.add(newPlayer);
 					});
