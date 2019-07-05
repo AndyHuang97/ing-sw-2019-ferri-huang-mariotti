@@ -300,6 +300,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                     }
                 }).start();
             }
+            Thread.sleep(50);
         } catch (Exception e) {
             throw new CommunicationError(e.getMessage());
         }
