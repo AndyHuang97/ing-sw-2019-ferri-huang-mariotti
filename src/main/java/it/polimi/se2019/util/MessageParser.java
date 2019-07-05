@@ -16,9 +16,22 @@ import java.util.logging.Logger;
 /**
  * Transform a Message in a List of PlayerActions using reflection so that the Controller can check/setUp them.
  * The order of the key parsing is determined by the keyOrder key of the message's commands.
+ *
+ * @author AH
+ *
  */
 public class MessageParser {
 
+    /**
+     * The actual parser
+     *
+     * @param message the internal message
+     * @param game the game
+     * @param player the player
+     * @throws MessageParseException if problem arises
+     * @throws UnpackingException if problems arises during unpacking
+     *
+     */
     public List<PlayerAction> parse(InternalMessage message, Game game, Player player) throws MessageParseException, UnpackingException {
         List<PlayerAction> playerActions = new ArrayList<>();
         for (Targetable t : message.getCommands().get(Constants.KEY_ORDER)){

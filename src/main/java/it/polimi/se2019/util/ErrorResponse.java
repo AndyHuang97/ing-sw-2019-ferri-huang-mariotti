@@ -7,7 +7,6 @@ package it.polimi.se2019.util;
  * @author Rodolfo Mariotti
  */
 public class ErrorResponse {
-
     private String errorMessage;
 
     /**

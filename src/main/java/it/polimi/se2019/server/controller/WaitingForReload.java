@@ -11,10 +11,22 @@ import it.polimi.se2019.util.Response;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * This ControllerState represent when we are waiting for the player to gives us a reload command
+ *
+ *  @author AH
+ *
+ */
 public class WaitingForReload extends ControllerState {
 
     private static final int RELOAD_POSITION = 0;
 
+    /**
+     * Send the message to the client
+     *
+     * @param commandHandler the client command handler
+     *
+     */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try {
@@ -24,6 +36,15 @@ public class WaitingForReload extends ControllerState {
         }
     }
 
+    /**
+     * After a reload is issued or not we go to the next player (or we respawn the dead guys)
+     *
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controller
+     *
+     */
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 

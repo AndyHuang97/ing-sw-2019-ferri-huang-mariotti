@@ -11,7 +11,6 @@ import java.util.logging.Logger;
  *
  * @author andreahuang
  */
-
 public class Request implements Serializable, NetMsg {
 
     private InternalMessage internalMessage;
