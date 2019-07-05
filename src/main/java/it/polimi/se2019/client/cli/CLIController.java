@@ -117,7 +117,7 @@ public class CLIController {
             utils.println("My powerUps:");
             utils.println(handlePowerUps(currentPlayer.getCharacterState().getPowerUpBag()));
         } catch (PlayerNotFoundException ex) {
-            logger.info(ex.getMessage());
+            //logger.info(ex.getMessage());
         }
     }
 

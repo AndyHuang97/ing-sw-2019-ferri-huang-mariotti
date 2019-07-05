@@ -36,7 +36,7 @@ public class CLIUtil {
             prop.load(input);
             inputTimeout = Integer.parseInt(prop.getProperty("game.input_timeout_seconds"));
         } catch(IOException e) {
-            Logger.getGlobal().warning(e.toString());
+            //Logger.getGlobal().warning(e.toString());
         }
     }
 
@@ -56,7 +56,7 @@ public class CLIUtil {
             thread.start();
             return task.get(inputTimeout, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException | ExecutionException ex) {
-            logger.info(ex.getMessage());
+            //logger.info(ex.getMessage());
             out.println("Input timeout reached");
             return Constants.NOP;
         }
@@ -204,7 +204,7 @@ public class CLIUtil {
         try {
             Thread.currentThread().join();
         } catch (InterruptedException ex) {
-            logger.info(ex.getMessage());
+            //logger.info(ex.getMessage());
         }
     }
 
@@ -232,7 +232,7 @@ public class CLIUtil {
         try (BufferedReader br = new BufferedReader(new FileReader(new File(CLIUtil.class.getClassLoader().getResource("text/maps/map" + mapNumber + ".txt").toURI())))) {
             return br.lines().collect(Collectors.joining("\n"));
         } catch (IOException | URISyntaxException ex) {
-            logger.info(ex.toString());
+            //logger.info(ex.toString());
             return "";
         }
     }
