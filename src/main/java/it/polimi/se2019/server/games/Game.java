@@ -53,6 +53,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	private List<PowerUp> usedPowerUps = new ArrayList<>();
 	private List<Weapon> usedWeapons = new ArrayList<>();
 
+	private List<Boolean> moveActionFailure = new ArrayList<>();
+
 
     /**
      * Use this constructor to initialize an empty game. It's used mainly for testing purposes.
@@ -317,16 +319,10 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	}
 
     /**
-     * This method is called at the ond of the game to get a list of player sorted from the one with the higher
-     * score to the one with the lower.
-     *
-     * @return a sorted list of player (sorted for decreasing score)
+     * This method is called at the end of the game by the model to update the scores of all player.
      */
-	public List<Player> getRanking() {
-		List<Player> ranking = new ArrayList<>();
-		ranking.addAll(playerList);
-
-		// it's the end of the game, get points from the players who got damages on their boards
+	public void finalScoreUpdate() {
+        // it's the end of the game, get points from the players who got damages on their boards
         killShotTrack.killPlayersAndGetScore(playerList);
         // the score of each player has been updated, time to calculate the bonus points on the KillShotTrack
         Map<PlayerColor, Integer> killShotTrackBonusPoints = killShotTrack.calculateScore();
@@ -338,6 +334,17 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
                 characterState.setScore(characterState.getScore() + entry.getValue());
             }
         }
+    }
+
+    /**
+     * This method is called at the end of the game by the Views to get a list of player sorted from the one with the
+     * higher score to the one with the lower.
+     *
+     * @return a sorted list of player (sorted for decreasing score)
+     */
+	public List<Player> getRanking() {
+		List<Player> ranking = new ArrayList<>();
+		ranking.addAll(playerList);
 
         // the final players scores have been calculated, let's sort the array
 		Comparator<Player> scoreComparator = (p1, p2) ->  p1.getCharacterState().getScore().compareTo(p2.getCharacterState().getScore());
@@ -764,4 +771,33 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 	public void setFrenzyActivatorEntered(boolean frenzyActivatorEntered) {
 		this.frenzyActivatorEntered = frenzyActivatorEntered;
 	}
+
+    /**
+     * This method adds a boolean to the moveActionFailure.
+     *
+     * @param bool value to add to the moveActionFailure attribute
+     */
+	public void addMoveActionFailure(Boolean bool) {
+	    moveActionFailure.add(bool);
+    }
+
+    /**
+     * This method returns true if at least one value in moveActionFailures.
+     *
+     * @return true if the move action was successful, false otherwise
+     */
+    public boolean needsMoveActionErrorMessage() {
+	    if (moveActionFailure.stream().anyMatch(success -> success == true)) {
+	        return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * This method resets the moveActionFailure.
+     */
+    public void resetMoveActionFailure() {
+	    moveActionFailure = new ArrayList<>();
+    }
 }
