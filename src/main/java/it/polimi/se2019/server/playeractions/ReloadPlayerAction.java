@@ -39,7 +39,7 @@ public class ReloadPlayerAction extends PlayerAction {
 
             getPlayer().getCharacterState().consumeAmmo(reloadCost, getGame());
 
-            weapon.setLoaded(true);
+            getGame().setLoaded(weapon, true);
         }
     }
 

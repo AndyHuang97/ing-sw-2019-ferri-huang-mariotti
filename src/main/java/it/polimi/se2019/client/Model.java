@@ -65,6 +65,22 @@ public class Model implements LocalModel {
         return game;
     }
 
+    @Override
+    public void updatePlayerWeapon(Weapon weaponToUpdate) {
+        for (Player player : game.getPlayerList()) {
+            List<Weapon> weaponBag = player.getCharacterState().getWeaponBag();
+
+            for (Weapon weapon : weaponBag) {
+                // if the weapon checked has the same name of the weapon to update
+                // remove the old and set the new
+                if (weapon.getName().equals(weaponToUpdate.getName())) {
+                    weaponBag.remove(weapon);
+                    weaponBag.add(weaponToUpdate);
+                }
+            }
+        }
+    }
+
 
 
     // testing methods ---------------------------------------------------------------------------------------------

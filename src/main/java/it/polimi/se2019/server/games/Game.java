@@ -4,10 +4,7 @@ import it.polimi.se2019.server.actions.ActionUnit;
 import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
 import it.polimi.se2019.server.cards.powerup.PowerUp;
 import it.polimi.se2019.server.cards.weapons.Weapon;
-import it.polimi.se2019.server.dataupdate.CurrentPlayerStateUpdate;
-import it.polimi.se2019.server.dataupdate.CurrentWeaponUnpdate;
-import it.polimi.se2019.server.dataupdate.KillShotTrackUpdate;
-import it.polimi.se2019.server.dataupdate.StateUpdate;
+import it.polimi.se2019.server.dataupdate.*;
 import it.polimi.se2019.server.deserialize.DirectDeserializers;
 import it.polimi.se2019.server.exceptions.PlayerNotFoundException;
 import it.polimi.se2019.server.games.board.Board;
@@ -716,5 +713,20 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
      */
     public void discardWeapon(Weapon weapon) {
         usedWeapons.add(weapon);
+    }
+
+    /**
+     * Reload/unload the selected weapon. Notifies registered observers.
+     *
+     * @param weapon the weapon you want to reload/unload
+     * @param state true if you want to reload the weapon, false if you want to unload it
+     */
+    public void setLoaded(Weapon weapon, boolean state) {
+        weapon.setLoaded(state);
+
+        StateUpdate weaponStateUpdate = new WeaponStateUpdate(weapon);
+
+        Response response = new Response(Arrays.asList(weaponStateUpdate));
+        notify(response);
     }
 }
