@@ -20,6 +20,13 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The GameManager provides all the methods to manage a game, to start it, to end it, etc
+ * Not only that, the gameManager also stores the games in a list to allow multiple games in parallel and provides
+ * the correct methods to access a specific game.
+ * Last the gameManger also saves the games to file, this is to allow the games to be restored in case of server crash
+ *
+ */
 public class GameManager {
 	private static final Logger logger = Logger.getLogger(GameManager.class.getName());
 	private List<Game> gameList;
@@ -33,6 +40,10 @@ public class GameManager {
 	private int pingIntervalMilliseconds;
 	private Controller controller;
 
+	/**
+	 * A tuple data structure used to store the related data together
+	 *
+	 */
 	public class Tuple<X, Y> {
 		public final UserData userData;
 		public final CommandHandler commandHandler;
@@ -42,6 +53,10 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * The default constructor, nothing special happens here
+	 *
+	 */
 	public GameManager() {
 		this.gameList = new ArrayList<>();
 		this.waitingList = new ArrayList<>();
@@ -49,6 +64,14 @@ public class GameManager {
 		this.playerCommandHandlerMap = new HashMap<>();
 	}
 
+	/**
+	 * This is the real magic, it initializes the game manager by loading the settings from file and by loading the saved
+	 * games from disk. Loading takes a few lines due to the complex recreation of the observer/observable pattern that gets destroyed
+	 * during serialization
+	 *
+	 * @param dumpName its the name of the dump file
+	 *
+	 */
 	public void init(String dumpName) {
 		try (InputStream input = GameManager.class.getClassLoader().getResource("config.properties").openStream()) {
 			Properties prop = new Properties();
@@ -113,14 +136,37 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * One of the methods to dump to file, it can put a new game to file or update an existing game to file
+	 *
+	 * @param game is the game object
+	 *
+	 */
 	public void dumpToFile(Game game) {
 		internalDumpToFile(game, false);
 	}
 
+	/**
+	 * The other methods to dump to file, it can put a new game to file or update an existing game to file and delete it
+	 *
+	 * @param game is the game object
+	 * @param deleteGame the action I want to perform
+	 *
+	 */
 	public void dumpToFile(Game game, boolean deleteGame) {
 		internalDumpToFile(game, deleteGame);
 	}
 
+	/**
+	 * This is the real file dumper, it first loads the saved games from file, it the analyzes the command by searching
+	 * for an existing save of the game by matching the date of when the game started that can be considered unique.
+	 * In case it becomes a problem the requirement of uniqueness we can switch to uuid. After having located the previous
+	 * game sae it gets replaced by the new one or deleted if specified. After all of this it saves back to file.
+	 *
+	 * @param game is the game object
+	 * @param deleteGame the action I want to perform
+	 *
+	 */
 	private void internalDumpToFile(Game game, boolean deleteGame) {
 		try {
 			List<Game> tmpGameList = new ArrayList<>();
@@ -147,7 +193,7 @@ public class GameManager {
 					}
 				}
 				while (tmpGameList.remove(null)) {}
-			} else {
+			} else if (!deleteGame) {
 				logger.info("Saving a new game to file, location: " + GameManager.class.getClassLoader().getResource(dumpName).getPath());
 				tmpGameList.add(game);
 			}
@@ -164,11 +210,25 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * A check to control if a user is in the waiting list already
+	 *
+	 * @param nickname the nickname to check
+	 * @return if a user is in the waiting list
+	 *
+	 */
 	public boolean isUserInWaitingList(String nickname) {
 		// used  to check if user is in waiting list (used by view)
 		return waitingList.stream().anyMatch(tuple -> tuple.userData.getNickname().equals(nickname));
 	}
 
+	/**
+	 * A check to control if a user is in a game
+	 *
+	 * @param nickname the nickname to check
+	 * @return if a user is in a game
+	 *
+	 */
 	public boolean isUserInGameList(String nickname) {
 		// used  to check if user is in waiting list (used by view)
 		return gameList.stream().anyMatch(
@@ -178,12 +238,23 @@ public class GameManager {
 		);
 	}
 
+	/**
+	 * The exception for a game not found
+	 *
+	 */
 	public class GameNotFoundException extends Exception {
 		public GameNotFoundException(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 
+	/**
+	 * This is a very important, retrieves the game by nickname
+	 *
+	 * @param nickname the nickname of one of the players
+	 * @return the corresponding game
+	 *
+	 */
 	public Game retrieveGame(String nickname) throws GameNotFoundException {
 		// used to check if user is in a game (used by view)
 		return gameList.stream().filter(
@@ -193,12 +264,23 @@ public class GameManager {
 		).findAny().orElseThrow(() -> new GameNotFoundException("Nickname " + nickname + " has no games available!"));
 	}
 
+	/**
+	 * This exception is thrown when you perform some illegal actions on a player already in a game
+	 *
+	 */
 	public class AlreadyPlayingException extends Exception {
 		public AlreadyPlayingException(String errorMessage) {
 			super(errorMessage);
 		}
 	}
 
+	/**
+	 * This starts a new game, first it checks that there are not too many players, then it starts creating the players,
+	 * it links the observable/observers to then receive the updates. It stores che command handlers of the players, it initializes the deck,
+	 * cards, board etc.
+	 * Last it delivers the game to all clients and picks the starting client. Then it resets the waiting list and the map preference board.
+	 *
+	 */
 	public void createGame() throws IndexOutOfBoundsException {
 		logger.info("Starting a new game");
 		//create the new game and reset waiting list, do not use it
@@ -251,6 +333,13 @@ public class GameManager {
 		dumpToFile(newGame);
 	}
 
+	/**
+	 * This is used to start the countdown when you want to create a game, it sleeps and after that it checks
+	 * if conditions are still valid and creates the game
+	 *
+	 * @param previousGameListSize the old size list as a reference
+	 *
+	 */
 	private void delayedGameCreation(int previousGameListSize) throws IndexOutOfBoundsException {
 		logger.info("Starting game creation countdown (" + startTimerSeconds + "s)...");
 		try {
@@ -263,6 +352,12 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * This removes an ended game. At the end of everything
+	 *
+	 * @param game the game to terminate
+	 *
+	 */
 	public void terminateGame(Game game) {
 		logger.info("Terminating a game, users will be notified");
 		game.getPlayerList().forEach(p -> {

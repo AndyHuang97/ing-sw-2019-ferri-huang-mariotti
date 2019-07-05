@@ -19,6 +19,17 @@ public class CLIUtil {
     private static final Logger logger = Logger.getLogger(CLIUtil.class.getName());
     private Scanner in = new Scanner(System.in);
     private PrintStream out = System.out;
+    private int inputTimeout;
+
+    public CLIUtil() {
+        try (InputStream input = CLIUtil.class.getClassLoader().getResource("config.properties").openStream()) {
+            Properties prop = new Properties();
+            prop.load(input);
+            inputTimeout = Integer.parseInt(prop.getProperty("game.input_timeout_seconds"));
+        } catch(IOException e) {
+            Logger.getGlobal().warning(e.toString());
+        }
+    }
 
     private String basicUserInput(String printString) {
         try {
@@ -27,7 +38,7 @@ public class CLIUtil {
             Thread thread = new Thread(task);
             thread.setDaemon(true);
             thread.start();
-            return task.get(300, TimeUnit.SECONDS);
+            return task.get(inputTimeout, TimeUnit.SECONDS);
         } catch (InterruptedException | TimeoutException | ExecutionException ex) {
             logger.info(ex.getMessage());
             out.println("Input timeout reached");
