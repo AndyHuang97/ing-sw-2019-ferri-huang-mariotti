@@ -751,6 +751,7 @@ public class ControllerStateTest {
         System.out.println("5) ShootPlayerAction with damage, no more optional effects");
         weapon = getWeapon("Whisper");
         game.setCurrentPlayer(p1);
+        p1.getCharacterState().addDamage(PlayerColor.GREEN, 11, game);
         game.setFrenzy(false);
         waitingForEffects = new WaitingForEffects(weapon, waitingForMainActions);
         playerActions.clear();
@@ -898,6 +899,7 @@ public class ControllerStateTest {
         System.out.println("1) Invalid input for an invalid expected powerup");
         game.setCurrentPlayer(p1);
         p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
+        p1.getCharacterState().addDamage(PlayerColor.BLUE, 11, game);
         game.setFrenzy(true);
         waitingForPowerUps = new WaitingForPowerUps("", waitingForEffects);
         playerActions.clear();
