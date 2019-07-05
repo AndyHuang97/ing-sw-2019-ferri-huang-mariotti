@@ -547,7 +547,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
             if (player == frenzyActivator) {
                 beforeFrenzyActivator = false;
             }
-
+            characterState.setDeaths(0);
             characterState.swapValueBar(frenzy);
         }
 	}

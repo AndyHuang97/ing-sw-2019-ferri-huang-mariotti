@@ -108,6 +108,8 @@ public class PlayerBoardController {
         ImageView iv = (ImageView) actionTile.getChildren().get(0);
         String gameMode = view.getModel().getGame().isFrenzy() ? Constants.FRENZY : Constants.NORMAL;
         iv.setImage(new Image(Constants.ACTION_TILE+player.getColor().getColor()+gameMode+".png"));
+        iv.setVisible(true);
+        iv.toFront();
     }
 
     /**
@@ -178,6 +180,10 @@ public class PlayerBoardController {
      *
      */
     public void showSkulls(Player player, GridPane gridPane) {
+        Logger.getGlobal().info("showing skullbars - player deaths " + player.getCharacterState().getDeaths());
+
+        gridPane.getChildren().forEach(node -> ((ImageView)node).setImage(null));
+
         IntStream.range(0, player.getCharacterState().getDeaths())
                 .forEach(death -> {
                     Optional<ImageView> iv = gridPane.getChildren().stream()
@@ -186,6 +192,7 @@ public class PlayerBoardController {
                             .findFirst();
                     if (iv.isPresent()) {
                         iv.get().setImage(new Image(Constants.SKULL_PATH));
+                        iv.get().setVisible(true);
                     }
                 });
     }

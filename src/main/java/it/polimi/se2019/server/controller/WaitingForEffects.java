@@ -178,8 +178,10 @@ public class WaitingForEffects extends ControllerState {
      *
      */
     private ControllerState swapBackToMainAction(Game game) {
+        Logger.getGlobal().info("Current action unit list size: " + game.getCurrentActionUnitsList().size());
         if (!game.getCurrentActionUnitsList().isEmpty()) {
             // at least one shot was performed
+            Logger.getGlobal().info("Unloading the weapon: " + chosenWeapon);
             game.setLoaded(chosenWeapon, false);
         }
         // added this to reset the current weapon in use by the current player
