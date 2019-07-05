@@ -26,7 +26,7 @@ public enum PlayerColor {
 
 
     /**
-     * Getter method for the color attributes
+     * Getter method for the color attribute.
      *
      * @return the name of the color
      */
