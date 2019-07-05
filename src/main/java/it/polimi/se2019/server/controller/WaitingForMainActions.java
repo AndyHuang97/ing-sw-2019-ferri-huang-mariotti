@@ -68,11 +68,36 @@ public class WaitingForMainActions extends ControllerState {
         // could receive a pass(NOP) message to skip the turn
         if (playerActions.get(0).getId().equals(Constants.NOP)) {
             Logger.getGlobal().info("Detected a NOP");
+            Logger.getGlobal().info("Frenzy " + game.isFrenzy());
+            if (game.isFrenzy()) {
+                Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
+                game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator()).forEach(p -> System.out.println("before frenzy activator: " + p.getUserData().getNickname()));
+                if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count()-1))) {
+                    if (!game.isFrenzyActivatorEntered()) {
+                        Logger.getGlobal().info("Setting frenzyActivatorEntered to true in main actions with NOP");
+                        game.setFrenzyActivatorEntered(true);
+                    } else {
+                        Logger.getGlobal().info("Terminating the game");
+
+                        Response response = new Response(null, true, Constants.FINISHGAME);
+
+                        // walk-around to send a broadcast message to all the Views
+                        game.update(response);
+
+                        return new EndGameState();
+                    }
+                }
+            }
             if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
                 // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
-                WaitingForRespawn newState = new WaitingForRespawn();
-                Logger.getGlobal().info("Someone was killed before NOP");
-                return newState.nextState(playerActions, game, player);
+                if (game.isFrenzy()) {
+                    WaitingForRespawn newState = new WaitingForRespawn();
+                    Logger.getGlobal().info("Someone was killed before NOP in frenzy");
+                    return newState.nextState(playerActions, game, player);
+                } else {
+                    Logger.getGlobal().info("Someone was killed before NOP in normal");
+                    return new WaitingForReload();
+                }
             }
 
             game.updateTurn();
@@ -117,9 +142,12 @@ public class WaitingForMainActions extends ControllerState {
                     Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
                     return newState.nextState(null, game, player); // no playerActions will be evaluated
                 } else {// no kills in final frenzy action
+                    Logger.getGlobal().info("Frenzy " + game.isFrenzy());
                     Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
+                    game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator()).forEach(p -> System.out.println("before frenzy activator: " + p.getUserData().getNickname()));
                     if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count()-1))) {
                         if (!game.isFrenzyActivatorEntered()) {
+                            Logger.getGlobal().info("Setting frenzyActivatorEntered to true in main actions");
                             game.setFrenzyActivatorEntered(true);
                         } else {
                             Logger.getGlobal().info("Terminating the game");
@@ -149,36 +177,6 @@ public class WaitingForMainActions extends ControllerState {
                 return this; // keeps track of the action actionCounter
             }
         }
-        /*
-        if (actionCounter >= getCounterLimit(game, player)) { // no actions left
-            game.getCurrentActionUnitsList().clear();
-            if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
-                if (game.isFrenzy()) {
-                    WaitingForRespawn newState = new WaitingForRespawn();
-                    Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
-                    return newState.nextState(null, game, player); // do not need for the current player
-                } else {
-                    Logger.getGlobal().info("Someone was killed in normal. No more actions");
-                    return new WaitingForReload();
-                }
-            }
-            else {// no one died
-                game.updateTurn();
-                if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
-                    Logger.getGlobal().info("No one was killed, first spawn");
-                    return new WaitingForRespawn();
-                }
-                else {
-                    Logger.getGlobal().info("No one was killed, not first spawn");
-                    return new WaitingForMainActions();
-                }
-            }
-        } else {
-            Logger.getGlobal().info("Still have some actions left");
-            return this;
-        }
-
-         */
     }
 
     /**

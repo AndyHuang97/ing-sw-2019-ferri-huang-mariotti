@@ -136,7 +136,9 @@ public class DirectDeserializers {
     }
 
     public static CharacterState deserializeCharacterState(CharacterState characterState, Board board) {
-        characterState.setTile(board.getTileFromID(characterState.getTile().getId()));
+        if (characterState.getTile() != null && characterState.getTile().getId() != null) {
+            characterState.setTile(board.getTileFromID(characterState.getTile().getId()));
+        }
         characterState.setPowerUpBag(characterState.getPowerUpBag().stream().map(powerUp -> getPowerUp(powerUp.getName())).collect(Collectors.toList()));
         characterState.setWeaponBag(characterState.getWeaponBag().stream().map(weapon -> getWeapon(weapon.getName())).collect(Collectors.toList()));
         return characterState;

@@ -81,7 +81,7 @@ public class WaitingForRespawn extends ControllerState {
                             }
 
                             game.addDeath(respawningPlayer, isOverkill);
-                            playerActions.get(POWERUP_POSITION).run(); // spawns the player
+                            playerActions.get(POWERUP_POSITION).run(); // spawns the player and resets the damage bar
                         }
                     } else {
                         Logger.getGlobal().info("Expecting a correct input from a dead player.");
@@ -110,13 +110,19 @@ public class WaitingForRespawn extends ControllerState {
                     return this; // stays in this state until everyone is spawned
                 } else { // nobody is dead
                     player = playerStack.pop();// gives back the player that was ending the turn
-                    Logger.getGlobal().info("Popped player:" + player.getId());
+                    game.setCurrentPlayer(player);// resumes the turn cycle
+                    Logger.getGlobal().info("Popped player:" + player.getUserData().getNickname());
                     player.getCharacterState().setFirstSpawn(false);
 
+                    Logger.getGlobal().info("Frenzy " + game.isFrenzy());
                     if (game.isFrenzy()) {
                         Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
+                        beforeFrenzyActivatorPlayers.get().forEach(player1 -> Logger.getGlobal().info("Before frenzy activator player: " +player1.getUserData().getNickname()));
+                        Logger.getGlobal().info("Frenzy activator: " + beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count() - 1).getUserData().getNickname());
+                        Logger.getGlobal().info("Current player: " + game.getCurrentPlayer().getUserData().getNickname());
                         if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int) beforeFrenzyActivatorPlayers.get().count() - 1))) {
                             if (!game.isFrenzyActivatorEntered()) {
+                                Logger.getGlobal().info("Setting frenzyActivatorEntered to true in respawn");
                                 game.setFrenzyActivatorEntered(true);
                             } else {
                                 Logger.getGlobal().info("Terminating the game");
@@ -130,9 +136,9 @@ public class WaitingForRespawn extends ControllerState {
                             }
                         }
                     }
-                    game.setCurrentPlayer(player);// resumes the turn cycle
+
                     game.updateTurn(); // resumes the turn cycle
-                    Logger.getGlobal().info("Next Player: "+game.getCurrentPlayer().getId());
+                    Logger.getGlobal().info("Next Player: "+game.getCurrentPlayer().getUserData().getNickname());
                     if (game.getCurrentPlayer().getCharacterState().isFirstSpawn()) {
                         return new WaitingForRespawn(); // if next player has not spawned yet
                     } else {
