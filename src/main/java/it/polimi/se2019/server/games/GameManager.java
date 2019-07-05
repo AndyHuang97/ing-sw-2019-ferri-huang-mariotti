@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * in queue for the start of a new match; saving the state the ames on the disck and much more. Check out the
  * documentation of each method for a full overview of what this class does.
  *
- * @author Rodolfo Mariotti
+ * @author Federico Ferri
  */
 public class GameManager {
 	private static final Logger logger = Logger.getLogger(GameManager.class.getName());
@@ -42,8 +42,8 @@ public class GameManager {
 
     /**
      * This class create an association between an commandHandler object and a userData object.
-     * Tulpe objects are used by the GameManager before the players are associated with a game (and before their
-     * commanHandler is added to the  playerCommandHandlerMap.
+     * Tuple objects are used by the GameManager before the players are associated with a game (and before their
+     * commandHandler is added to the  playerCommandHandlerMap.
      */
 	public class Tuple {
 		public final UserData userData;

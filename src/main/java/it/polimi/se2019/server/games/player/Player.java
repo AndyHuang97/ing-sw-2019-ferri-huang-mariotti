@@ -62,6 +62,8 @@ public class Player extends Observable<Response> implements Targetable, Observer
 	}
 
 	/**
+     * This method checks whether the player is active or not.
+     *
 	 * @return true if the player is active, false otherwise
 	 */
 	public boolean getActive() {
@@ -69,48 +71,74 @@ public class Player extends Observable<Response> implements Targetable, Observer
 	}
 
 	/**
-	 * @param active
+     * This method sets the player active or inactive depending on the parameter passed.
+     *
+	 * @param active true to set the player active, false to set the player inactive
 	 */
 	public void setActive(boolean active) {
 		characterState.setConnected(active);
 	}
 
 	/**
-	 * @return
+     * Getter method for the userData attribute.
+     *
+	 * @return data about the player
 	 */
 	public UserData getUserData() {
 		return userData;
 	}
 
 	/**
-	 * @param userData
+     * Setter method for the userData attribute.
+     *
+	 * @param userData reference to the object that will be set as userData
 	 */
 	public void setUserData(UserData userData) {
 		this.userData = userData;
 	}
 
 	/**
-	 * @return characterState
+     * Getter method for the characterState attribute.
+     *
+	 * @return characterState data about the character
 	 */
 	public CharacterState getCharacterState() {
 		return characterState;
 	}
 
 	/**
-	 * @param characterState
+     * Setter method for the characterState attribute;
+     *
+	 * @param characterState reference to the object that will be set as characterState
 	 */
 	public void setCharacterState(CharacterState characterState) {
 		this.characterState = characterState;
 	}
 
+    /**
+     * Getter method for the color attribute.
+     *
+     * @return color of the player
+     */
 	public PlayerColor getColor() {
 		return color;
 	}
 
+    /**
+     * Setter method for the color attribute.
+     *
+     * @param color new color of the player
+     */
 	public void setColor(PlayerColor color) {
 		this.color = color;
 	}
 
+    /**
+     * This method is colled when the KillShotTrack notifies a player death.
+     * The score of the player is updated accordingly to the data of the player death.
+     *
+     * @param playerDeath data to update player score
+     */
     @Override
     public void update(PlayerDeath playerDeath) {
         characterState.updateScore(playerDeath, color);
