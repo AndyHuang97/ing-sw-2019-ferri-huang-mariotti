@@ -17,11 +17,23 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * This ControllerState represent when we are asking a user where to respawn
+ *
+ *  @author AH
+ *
+ */
 public class WaitingForRespawn extends ControllerState {
 
     private static final int POWERUP_POSITION = 0;
     private Stack<Player> playerStack = new Stack<>();
 
+    /**
+     * Send the message to the client
+     *
+     * @param commandHandler the client command handler
+     *
+     */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try { // asks the current player for a power up
@@ -32,6 +44,15 @@ public class WaitingForRespawn extends ControllerState {
         }
     }
 
+    /**
+     * After a respawn its time to give command back to who really owns it usially the next player :)
+     *
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controller
+     *
+     */
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 

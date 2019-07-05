@@ -16,6 +16,13 @@ import java.util.Stack;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+
+/**
+ * This ControllerState represent the time when we are waiting for the player to choose a power up
+ *
+ *  @author AH
+ *
+ */
 public class WaitingForPowerUps extends ControllerState {
 
     private static final int POWERUP_POSITION = 0;
@@ -25,11 +32,24 @@ public class WaitingForPowerUps extends ControllerState {
     private Stack<Player> playerStack = new Stack<>();
     private Set<Player> alreadyAskedPlayers = new HashSet<>();
 
+    /**
+     * Default constructor.
+     *
+     * @param expectedPowerUp the powerup we expect
+     * @param storedWaitingForEffects the state we were before and we want to go back to
+     *
+     */
     public WaitingForPowerUps(String expectedPowerUp, ControllerState storedWaitingForEffects) {
         this.expectedPowerUp = expectedPowerUp;
         this.storedWaitingForEffects = storedWaitingForEffects;
     }
 
+    /**
+     * Send the message to the client
+     *
+     * @param commandHandler the client command handler
+     *
+     */
     @Override
     public void sendSelectionMessage(CommandHandler commandHandler) {
         try {
@@ -39,6 +59,15 @@ public class WaitingForPowerUps extends ControllerState {
         }
     }
 
+    /**
+     * After a powerup is used we can go back to the main action or stay here in case of errors
+     *
+     * @param playerActions the list of actions received from the player
+     * @param game the game on which to execute the actions
+     * @param player the player sending the input
+     * @return the new state of the controller
+     *
+     */
     @Override
     public ControllerState nextState(List<PlayerAction> playerActions, Game game, Player player) {
 
@@ -120,10 +149,22 @@ public class WaitingForPowerUps extends ControllerState {
         return this; // invalid input
     }
 
+    /**
+     * Getter of the player stack
+     *
+     * @return  the player stack
+     *
+     */
     public Stack<Player> getPlayerStack() {
         return playerStack;
     }
 
+    /**
+     * Getter of the already asked players
+     *
+     * @return  the player already asked
+     *
+     */
     public Set<Player> getAlreadyAskedPlayers() {
         return alreadyAskedPlayers;
     }

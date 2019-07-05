@@ -19,6 +19,12 @@ import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * This is the core deserializer, based on the request is able to call the correct deserializer and create the required object
+ *
+ * @author andreahuang
+ *
+ */
 public class DirectDeserializers {
 
     private static final String MAP = "maps/map";
@@ -30,7 +36,10 @@ public class DirectDeserializers {
 
     static DynamicDeserializerFactory factory = new DynamicDeserializerFactory();
 
-
+    /**
+     * The constructor is used to load the possible deserializers into the available ones
+     *
+     */
     public DirectDeserializers() {
         factory.registerDeserializer(DeserializerConstants.TILE, new TileDeserializerSupplier());
         factory.registerDeserializer(DeserializerConstants.AMMOCRATEDECK, new AmmoCrateDeserializerSupplier());

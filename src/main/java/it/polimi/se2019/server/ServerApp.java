@@ -11,6 +11,9 @@ import java.io.InputStream;
 
 /**
  * This class is used to setUp the server.
+ *
+ * @author AH
+ *
  */
 public class ServerApp {
     private static final Logger logger = Logger.getLogger(ServerApp.class.getName());
@@ -19,7 +22,14 @@ public class ServerApp {
     public static Controller controller;
     public static GameManager gameManager = new GameManager();
 
-
+    /**
+     * This is the main of the server, it creates the game manager and the controller, it links them plus it starts all
+     * the network components
+     *
+     * @param args the eventual line args
+     * @throws IOException if we have problems communicating
+     *
+     */
     public static void main(String[] args) throws IOException {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %5$s%6$s%n");
         System.setProperty("sun.rmi.transport.tcp.handshakeTimeout", "1000");
