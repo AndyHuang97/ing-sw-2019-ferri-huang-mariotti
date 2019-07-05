@@ -12,10 +12,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * This condition checks whether the target list is in the chosen direction.
+ *
+ * @author andreahuang
+ *
+ */
 public class IsTargetListInDirection implements Condition {
 
     private static final int POSITION = 0;
 
+    /**
+     * Checks whether the target list is in the chosen direction.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if all targets are in direction, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
 

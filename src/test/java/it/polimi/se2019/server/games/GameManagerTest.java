@@ -63,7 +63,7 @@ public class GameManagerTest {
         UserData user = new UserData("testNick");
         gameManager.addUserToWaitingList(user, new CommandHandler(), true);
         Thread.sleep(2000);
-        Assert.assertFalse(gameManager.getWaitingList().stream().anyMatch(tuple -> tuple.userData == user));
+        Assert.assertTrue(gameManager.getWaitingList().stream().anyMatch(tuple -> tuple.userData == user));
     }
 
     @Test

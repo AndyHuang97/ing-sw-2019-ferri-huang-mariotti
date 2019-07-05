@@ -29,10 +29,21 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+/**
+ * The Model class contains a copy of the server's model, a game object. It provides the methods to update the local
+ * model.
+ *
+ * @author andreahuang
+ */
 public class Model implements LocalModel {
 
     private Game game;
 
+    /**
+     * The setCharacterState method sets the new character state to a specific player.
+     *
+     * @param characterState the new character state to be assigned.
+     */
     @Override
     public void setCharacterState(CharacterState characterState) {
         PlayerColor color = characterState.getColor();
@@ -44,22 +55,41 @@ public class Model implements LocalModel {
         Logger.getGlobal().info("Character update: " + localPlayer.getCharacterState().getColor() + "\ttile "+localPlayer.getCharacterState().getTile());
     }
 
+    /**
+     * Setter for game
+     * @param game is the game.
+     */
     @Override
     public void setGame(Game game) {
         this.game = game;
     }
 
+
+    /**
+     * Setter for killShotTrack.
+     * @param killShotTrack the new killShotTrack.
+     */
     @Override
     public void setKillShotTrack(KillShotTrack killShotTrack) {
         this.game.setKillShotTrack(killShotTrack);
     }
 
+    /**
+     * Getter for the board. It may be usedo to update components of the board.
+     *
+     * @return the board of the local model
+     */
     @Override
     public Board getBoard() {
         Logger.getGlobal().info("Updating the board ...");
         return getGame().getBoard();
     }
 
+    /**
+     * Getter for game.
+     *
+     * @return the current copy of the game.
+     */
     @Override
     public Game getGame() {
         return game;

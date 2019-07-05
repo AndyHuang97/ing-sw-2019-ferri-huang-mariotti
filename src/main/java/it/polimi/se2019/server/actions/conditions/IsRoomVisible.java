@@ -12,11 +12,19 @@ import java.util.logging.Logger;
 
 /**
  * This condition checks whether a room is visible from the current player's position.
+ *
+ * @author andreahuang
  */
 public class IsRoomVisible implements Condition {
 
     private static final int TILEPOSITION = 0;
 
+    /**
+     * Checks whether a room is visible from the current player's position.
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if the room is visible, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
         Tile roomTile  = (Tile) targets.get(CommandConstants.TILELIST).get(TILEPOSITION);

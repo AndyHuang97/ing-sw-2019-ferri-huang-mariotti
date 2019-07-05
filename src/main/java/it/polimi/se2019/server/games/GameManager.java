@@ -107,7 +107,7 @@ public class GameManager {
 						CharacterState newCharacterState = new CharacterState(tmpCharacterState.getDeaths(), tmpCharacterState.getValueBar(),
 								tmpCharacterState.getDamageBar(), tmpCharacterState.getMarkerBar(), tmpCharacterState.getAmmoBag(),
 								tmpCharacterState.getWeaponBag(), tmpCharacterState.getPowerUpBag(), tmpCharacterState.getTile(),
-								tmpCharacterState.getScore(), false, tmpCharacterState.getColor());
+								tmpCharacterState.getScore(), false, tmpCharacterState.isFirstSpawn(), tmpCharacterState.getColor());
 						Player newPlayer = new Player(tmpPlayer.getId(), false, tmpPlayer.getUserData(), newCharacterState, tmpPlayer.getColor());
 						newPlayerList.add(newPlayer);
 					});

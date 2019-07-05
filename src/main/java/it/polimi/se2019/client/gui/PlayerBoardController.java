@@ -66,7 +66,8 @@ public class PlayerBoardController {
     }
 
     /**
-     * Initializes the marker bar, it only loads the correct images.
+     * The initMarkerPane initializes the marker bar, it only loads the correct images.
+     *
      * @param color is the color of the client.
      */
     public void initMarkerPane(PlayerColor color) {
@@ -82,7 +83,8 @@ public class PlayerBoardController {
     }
 
     /**
-     * Initializes the main player board.
+     * The showPlayerBoard method shows the main player board.
+     *
      * @param player is the owner of this board.
      */
     public void showPlayerBoard(Player player) {
@@ -98,7 +100,8 @@ public class PlayerBoardController {
 
 
     /**
-     * Shows the action tile
+     * The showActionTile method shows the player's action tile.
+     *
      * @param player is the owner of this action tile.
      */
     public void showActionTile(Player player) {
@@ -108,7 +111,8 @@ public class PlayerBoardController {
     }
 
     /**
-     * Shows the player's damage bar.
+     * The showDamageBar shows the player's damage bar.
+     *
      */
     public void showDamageBar(Player player) {
 
@@ -125,7 +129,7 @@ public class PlayerBoardController {
     }
 
     /**
-     * Shows the player's marker bar.
+     * The showMarkerBar shows the player's marker bar.
      */
     public void showMarkerBar(Player player) {
 
@@ -142,7 +146,7 @@ public class PlayerBoardController {
     }
 
     /**
-     * Shows the player's skull bar.
+     * The showSkullBar method shows the player's skull bar.
      */
     public void showSkullBar(Player player) {
 
@@ -167,8 +171,9 @@ public class PlayerBoardController {
     }
 
     /**
-     * This is the actual method that sets the image in the image view.
-     * @param player is the owner of the board
+     * The showSkulls method sets the image in the image view for the skull bar.
+     *
+     * @param player is the owner of the board.
      * @param gridPane is the grid pane on which to add skulls.
      *
      */
@@ -186,8 +191,11 @@ public class PlayerBoardController {
     }
 
     /**
-     * Returns the player board of a certain color.
+     * The getPlayerBoardImage gets the image of the playerBoard according to the client's assigned color.
      *
+     * @param playerColor is the client's color.
+     * @param mode is the mode of the current game.
+     * @return the correct image of the player board.
      */
     public Image getPlayerBoardImage(PlayerColor playerColor, String mode) {
         String path = Constants.BOARD_PATH + playerColor.getColor() + mode + ".png";
@@ -196,6 +204,7 @@ public class PlayerBoardController {
 
     /**
      * Setter for playerColor.
+     *
      * @param playerColor the playerColor of this client.
      */
     public void setPlayerColor(PlayerColor playerColor) {
@@ -204,6 +213,7 @@ public class PlayerBoardController {
 
     /**
      * Getter for playerColor.
+     * 
      * @return the playerColor of this client.
      */
     public PlayerColor getPlayerColor() {

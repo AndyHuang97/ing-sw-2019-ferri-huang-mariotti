@@ -12,8 +12,21 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * This condition checks whether the selected player targets corresponds to each one of the different selected tiles.
+ *
+ * @author andreahuang
+ *
+ */
 public class OneTileOneTarget implements Condition {
 
+    /**
+     * Checks whether the selected player targets corresponds to each one of the different selected tiles.
+     *
+     * @param game the game on which to perform the evaluation.
+     * @param targets the targets is the input of the current player. Either tiles or players.
+     * @return true if each target was on a different square, false otherwise.
+     */
     @Override
     public boolean check(Game game, Map<String, List<Targetable>> targets) {
 
