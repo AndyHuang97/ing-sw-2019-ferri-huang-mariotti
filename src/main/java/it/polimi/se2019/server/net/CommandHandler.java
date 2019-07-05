@@ -27,8 +27,9 @@ import java.util.logging.Logger;
 
 /**
  * The CommandHandler act as a virtual view.
- * The virtual view receives messages from the client via network, then it parses the message
- * and notifies the Controller.
+ * The command handler is in charge to wrap the network, it provides methods when we receive a message and to send a message
+ *
+ * @author FF
  *
  */
 public class CommandHandler extends Observable<Request> implements Observer<Response> {
@@ -73,7 +74,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
     }
 
     /**
-     * Not found exception
+     * Not found exception, could be thrown when we convert a reference message to a real object message
      *
      */
     public class TargetableNotFoundException extends RuntimeException {
@@ -89,6 +90,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
      * @param netMessage the unconverted message
      * @param game the game
      * @return the converted message
+     * @throws TargetableNotFoundException if it does not find a target
      *
      */
     public InternalMessage convertNetMessage(NetMessage netMessage, Game game) throws TargetableNotFoundException {
@@ -258,8 +260,6 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
                 Logger.getGlobal().info("Notifying request to the controller: " + request.getNickname());
                 request.setCommandHandler(this);
                 notify(request);
-//                handleLocalRequest(request);
-
             } catch (GameManager.GameNotFoundException | TargetableNotFoundException e) {
                 logger.info(e.getMessage());
             }
@@ -274,12 +274,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
      */
     public synchronized void handleLocalRequest(Request request) {
         request.setCommandHandler(this);
-
-        // here it needs to parse the message!
         notify(request);
-
-        // TODO update shouldn't be called from here, but from the Model with its notify, and it should receive a Response
-        //update(new Response(new Game(), true, request.getNickname()));
     }
 
     /**
@@ -287,22 +282,14 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
      * in here to allow a better network management.
      *
      * @param response the response
+     * @throws it.polimi.se2019.util.Observer.CommunicationError if the network has a problem
      *
      */
     @Override
     public synchronized void update(Response response) throws CommunicationError {
-        //System.out.println("update works");
         /**
          * Response on move done
          */
-        //showMessage(response.serialize());
-
-        /*
-        String serializedResponse = response.serialize();
-        if (!serializedResponse.equals("{\"success\":false,\"message\":\"ping\"}")){
-            System.out.println(serializedResponse);
-        }
-        */
 
         // buffered update
         if (response.getUpdateData() != null) {
@@ -337,7 +324,8 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     /**
      * The buffer sender
-     **
+     * @throws it.polimi.se2019.util.Observer.CommunicationError if the network has a problem
+     *
      */
     public void sendBuffer() throws CommunicationError {
         if (!updateBuffer.isEmpty()) {
@@ -353,6 +341,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
      * it non blocking. Disconnections are handled using the pinger daemon.
      *
      * @param response the response
+     * @throws it.polimi.se2019.util.Observer.CommunicationError if the network has a problem
      *
      */
     public void sendResponse(Response response) throws CommunicationError {
@@ -376,7 +365,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
 
     /**
      * Just the ping sender and processing, sends and waits for response
-     **
+     * @throws it.polimi.se2019.util.Observer.CommunicationError if the network has a problem
      */
     public void ping() throws CommunicationError {
         sendResponse(new Response(null, false, "ping"));
