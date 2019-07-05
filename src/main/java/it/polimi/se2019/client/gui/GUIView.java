@@ -30,7 +30,7 @@ public class GUIView extends View {
     private GUIController guiController;
     private BorderPane rootLayout = null;
     private Stage primaryStage;
-q    private boolean userInput;
+    private boolean userInput;
     private int inputTimeout;
 
     /**
