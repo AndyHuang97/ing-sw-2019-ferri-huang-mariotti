@@ -11,7 +11,7 @@ import it.polimi.se2019.util.LocalModel;
  * @author Rodolfo Mariotti
  */
 public class WeaponStateUpdate implements StateUpdate {
-    Weapon weaponToUpdate;
+    private Weapon weaponToUpdate;
 
     /**
      * Builds a new WeaponStateUpdate message. This message contains all the data that the view needs to update his
