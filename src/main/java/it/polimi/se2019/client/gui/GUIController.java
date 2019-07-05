@@ -14,6 +14,7 @@ import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -53,7 +54,7 @@ public class GUIController {
     private static final Logger logger = Logger.getLogger(GUIController.class.getName());
     private static final int ACTIONUNIT_POSITION = 0;
 
-    private View view;
+    private GUIView view;
     private Map<PlayerColor, PlayerBoardController> playerBoardControllerMap;
     private List<PlayerBoardController> playerBoardControllerList;
     private MapController mapController;
@@ -121,7 +122,7 @@ public class GUIController {
      * @param view is the view that interacts with the server.
      *
      */
-    public void setView(View view) {
+    public void setView(GUIView view) {
         this.view = view;
     }
 
@@ -507,6 +508,7 @@ public class GUIController {
     public void handleClose() {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
+        Platform.exit();
         System.exit(0);
     }
 
@@ -523,6 +525,7 @@ public class GUIController {
         if (view.getInputRequested().isEmpty())
         {
             view.sendInput();
+            view.setUserInput(true);
             handleCancel();
         }
         else {
@@ -543,7 +546,7 @@ public class GUIController {
         view.getInputRequested().clear();
         intermediateInput.clear();
         Logger.getGlobal().info("Cancelling, show message: "+message);
-        view.showMessage(message);
+        view.showInternalMessage(message, false);
     }
 
     /**
@@ -747,6 +750,7 @@ public class GUIController {
         intermediateInput.keySet().stream()
                 .forEach(k -> view.getPlayerInput().put(k, intermediateInput.get(k)));
         view.sendInput();
+        view.setUserInput(true);
         intermediateInput.clear();
         pass.setDisable(true);
 

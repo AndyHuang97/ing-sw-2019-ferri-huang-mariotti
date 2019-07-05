@@ -82,8 +82,8 @@ public abstract class View extends Observable implements Observer<Response> {
     }
 
     /**
-     * The sendInput method sends an input message to the server, only if the client is the current player of
-     * the match.
+     * The pong answers to a ping message
+     *
      */
     public void pong() {
         Map<String, List<String>> payload = new HashMap<>();

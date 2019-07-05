@@ -2,6 +2,7 @@ package it.polimi.se2019.client.gui;
 
 import it.polimi.se2019.client.View;
 import it.polimi.se2019.client.util.Constants;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -11,8 +12,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 
@@ -27,6 +30,8 @@ public class GUIView extends View {
     private GUIController guiController;
     private BorderPane rootLayout = null;
     private Stage primaryStage;
+    private boolean userInput;
+    private int inputTimeout;
 
     /**
      * This is the main constructor used to instatiate a GUIView, it store the primaryStage for the gui controller.
@@ -34,6 +39,13 @@ public class GUIView extends View {
      * @param primaryStage is the main stage of the javafx application.
      */
     public GUIView(Stage primaryStage) {
+        try (InputStream input = LoginController.class.getClassLoader().getResource("config.properties").openStream()) {
+            Properties prop = new Properties();
+            prop.load(input);
+            inputTimeout = Integer.parseInt(prop.getProperty("game.input_timeout_seconds"));
+        } catch(IOException e) {
+            Logger.getGlobal().warning(e.toString());
+        }
         this.primaryStage = primaryStage;
         this.setCliTrueGuiFalse(false);
     }
@@ -49,14 +61,43 @@ public class GUIView extends View {
         }
     }
 
+
+    public void timer(boolean quitApp) {
+        new Thread(() -> {
+            long startTime = System.currentTimeMillis();
+            userInput = false;
+            while (!userInput && (System.currentTimeMillis() - startTime) < inputTimeout * 1000) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    // do nothing
+                }
+            }
+            if (!userInput) {
+                if (quitApp) {
+                    Logger.getGlobal().info("Timer expired, quitting...");
+                    Platform.exit();
+                    System.exit(0);
+                } else {
+                    Logger.getGlobal().info("Timer expired, passing");
+                    Platform.runLater(() -> guiController.handlePass());
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        showInternalMessage(message, true);
+    }
+
     /**
      * The showMessage method interprets the message received from the server. It shows a different view based
      * on the message, and different allowed actions.
      *
      * @param message a response message containing info on the performed action.
      */
-    @Override
-    public void showMessage(String message) {
+    public void showInternalMessage(String message, boolean startTimer) {
         switch (message) {
             case Constants.MAIN_ACTION:
                 guiController.setInfoText("Select one action or powerup");
@@ -64,35 +105,41 @@ public class GUIView extends View {
                 guiController.showActionButtons();
                 guiController.showPowerUps(Arrays.asList(Constants.TELEPORTER, Constants.NEWTON));
                 guiController.showPass();
+                if (startTimer) timer(false);
                 return;
             case Constants.RESPAWN:
                 guiController.setInfoText("Select one powerup for respawn");
                 guiController.storeMessage(message);
                 guiController.getPowerUpForRespawn();
+                if (startTimer) timer(true);
                 return;
             case Constants.RELOAD:
                 guiController.setInfoText("Select one or more weapons to reload");
                 guiController.storeMessage(message);
                 guiController.showPass();
                 guiController.getReload();
+                if (startTimer) timer(false);
                 return;
             case Constants.SHOOT:
                 guiController.setInfoText("Select one effect");
                 guiController.storeMessage(message);
                 guiController.getActionUnit();
                 guiController.showPass();
+                if (startTimer) timer(false);
                 return;
             case Constants.TARGETING_SCOPE:
                 guiController.setInfoText("Select one or more Targeting Scopes");
                 guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TARGETING_SCOPE));
                 guiController.showPass();
+                if (startTimer) timer(false);
                 return;
             case Constants.TAGBACK_GRENADE:
                 guiController.setInfoText("Select one or more Tagback Grenades");
                 guiController.storeMessage(message);
                 guiController.showPowerUps(Collections.singletonList(Constants.TAGBACK_GRENADE));
                 guiController.showPass();
+                if (startTimer) timer(false);
                 return;
             case Constants.FINISHGAME:
                 guiController.showRanking();
@@ -231,5 +278,9 @@ public class GUIView extends View {
      */
     public void closeStage(Stage stage) {
         stage.close();
+    }
+
+    public void setUserInput(boolean userInput) {
+        this.userInput = userInput;
     }
 }

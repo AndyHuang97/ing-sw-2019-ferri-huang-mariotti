@@ -64,7 +64,14 @@ public class GameManager {
 		this.playerCommandHandlerMap = new HashMap<>();
 	}
 
-
+	/**
+	 * This is the real magic, it initializes the game manager by loading the settings from file and by loading the saved
+	 * games from disk. Loading takes a few lines due to the complex recreation of the observer/observable pattern that gets destroyed
+	 * during serialization
+	 *
+	 * @param dumpName its the name of the dump file
+	 *
+	 */
 	public void init(String dumpName) {
 		try (InputStream input = GameManager.class.getClassLoader().getResource("config.properties").openStream()) {
 			Properties prop = new Properties();
@@ -148,14 +155,16 @@ public class GameManager {
 		internalDumpToFile(game, deleteGame);
 	}
 
-    /**
-     * This method it's used by the GameManager to implement the dumpToFile() methods.
-     * The game passed as parameter is serialized (in json) and written to a file, if the deleteGame param
-     * is true the game is removed from the games of the GameManager.
-     *
-     * @param game the game that needs to be dumped
-     * @param deleteGame if true the selected game will be dumped and removed from the GameManager
-     */
+	/**
+	 * This is the real file dumper, it first loads the saved games from file, it the analyzes the command by searching
+	 * for an existing save of the game by matching the date of when the game started that can be considered unique.
+	 * In case it becomes a problem the requirement of uniqueness we can switch to uuid. After having located the previous
+	 * game sae it gets replaced by the new one or deleted if specified. After all of this it saves back to file.
+	 *
+	 * @param game is the game object
+	 * @param deleteGame the action I want to perform
+	 *
+	 */
 	private void internalDumpToFile(Game game, boolean deleteGame) {
 		try {
 			List<Game> tmpGameList = new ArrayList<>();
@@ -356,18 +365,38 @@ public class GameManager {
 		dumpToFile(game, true);
 	}
 
-
+	/**
+	 * The pinger daemon is a very classical ping pong mechanism to check if a client is alive. Its protocol independent
+	 * so it works with both rmi and socket. There also is the implementation of what to do when a client fails to respond
+	 * usually it can quit the game or just disconnect it. It is implemented as a timer that runs at an interval.
+	 *
+	 */
 	public class IsClientAlive extends TimerTask {
 		private String nickname;
 		private CommandHandler commandHandler;
 		private Timer timer;
 
+		/**
+		 * The constructor of the class
+		 *
+		 * @param nickname the user nickname (to identify the game)
+		 * @param commandHandler the command handler to check if connection is alive
+		 * @param timer the timer object
+		 *
+		 */
 		public IsClientAlive(String nickname, CommandHandler commandHandler, Timer timer) {
 			this.nickname = nickname;
 			this.commandHandler = commandHandler;
 			this.timer = timer;
 		}
 
+		/**
+		 * The run block of the timer, if first sends a ping if the response is pong it just comes back to sleep. If no
+		 * response it checks if the user is in a game. If so it checks if the game is a 3 or less players game. If it is it
+		 * shuts the game down. If not it just disconnects the player form the game. If user is not connected to any game, it just frees
+		 * the waiting list
+		 *
+		 */
 		public void run(){
 		    try {
                 try {
