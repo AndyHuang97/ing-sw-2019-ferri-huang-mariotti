@@ -35,6 +35,6 @@ public class IsTargetListNotVisible implements Condition {
                         .allMatch(targetPlayer -> !attackerTile.getVisibleTargets(game).contains(targetPlayer)));
         return targets.get(CommandConstants.TARGETLIST).stream()
                 .map(t -> (Player) t)
-                .allMatch(targetPlayer -> !attackerTile.getVisibleTargets(game).contains(targetPlayer));
+                .allMatch(targetPlayer -> !attackerTile.getVisibleTargets(game).contains(targetPlayer) && targetPlayer.getCharacterState().getTile() != null);
     }
 }

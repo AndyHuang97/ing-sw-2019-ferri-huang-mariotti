@@ -53,7 +53,8 @@ public class Response implements Serializable, NetMsg {
                 .registerSubtype(CharacterStateUpdate.class, "CharacterStateUpdate")
                 .registerSubtype(CurrentPlayerStateUpdate.class, "CurrentPlayerStateUpdate")
                 .registerSubtype(CurrentWeaponUnpdate.class, "CurrentWeaponUnpdate")
-                .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate");
+                .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate")
+                .registerSubtype(WeaponStateUpdate.class, "WeaponStateUpdate");
 
         Gson gson = new GsonBuilder().registerTypeAdapterFactory(stateUpdateAdapterFactory).create();
         return gson.toJson(this, Response.class);
@@ -67,7 +68,8 @@ public class Response implements Serializable, NetMsg {
                 .registerSubtype(CharacterStateUpdate.class, "CharacterStateUpdate")
                 .registerSubtype(CurrentPlayerStateUpdate.class, "CurrentPlayerStateUpdate")
                 .registerSubtype(CurrentWeaponUnpdate.class, "CurrentWeaponUnpdate")
-                .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate");
+                .registerSubtype(KillShotTrackUpdate.class, "KillShotTrackUpdate")
+                .registerSubtype(WeaponStateUpdate.class, "WeaponStateUpdate");
 
         Gson gson = new GsonBuilder().registerTypeAdapterFactory(stateUpdateAdapterFactory).create();
 

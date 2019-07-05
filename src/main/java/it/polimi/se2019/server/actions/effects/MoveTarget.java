@@ -9,6 +9,12 @@ import it.polimi.se2019.util.CommandConstants;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This effect moves a single target to a new position.
+ *
+ * @author andreahuang
+ *
+ */
 public class MoveTarget implements Effect {
 
     private static final int TILEPOSITION = 0;
@@ -17,6 +23,12 @@ public class MoveTarget implements Effect {
     private boolean self;
     private boolean isTile;
 
+    /**
+     * Default construtctor. It sets up the self and isTile boolean parameters to interpret the input correctly.
+     *
+     * @param self is the boolean indicating whether the moving player is the attacker
+     * @param isTile
+     */
     public MoveTarget(boolean self, boolean isTile) {
         this.self = self;
         this.isTile = isTile;

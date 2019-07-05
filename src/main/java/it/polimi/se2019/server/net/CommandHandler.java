@@ -21,7 +21,6 @@ import it.polimi.se2019.util.*;
 import it.polimi.se2019.util.Observable;
 import it.polimi.se2019.util.Observer;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -359,6 +358,7 @@ public class CommandHandler extends Observable<Request> implements Observer<Resp
             }
             Thread.sleep(50);
         } catch (Exception e) {
+            Logger.getGlobal().info("Exception" + e.getMessage() + " " + e.getClass().getSimpleName());
             throw new CommunicationError(e.getMessage());
         }
     }

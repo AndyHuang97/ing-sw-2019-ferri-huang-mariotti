@@ -1,6 +1,7 @@
 package it.polimi.se2019.server.controller;
 
 
+import it.polimi.se2019.client.util.Constants;
 import it.polimi.se2019.server.exceptions.MessageParseException;
 import it.polimi.se2019.server.exceptions.UnpackingException;
 import it.polimi.se2019.server.games.Game;
@@ -11,6 +12,7 @@ import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Request;
 import it.polimi.se2019.util.RequestParser;
+import it.polimi.se2019.util.Response;
 
 import java.util.HashMap;
 import java.util.List;
@@ -133,6 +135,12 @@ public class Controller implements Observer<Request> {
                 (oldControllerState.getClass().equals(WaitingForReload.class) && newControllerState.getClass().equals(WaitingForMainActions.class)) ||
                 (oldControllerState.getClass().equals(WaitingForRespawn.class) && newControllerState.getClass().equals(WaitingForMainActions.class))) {
             gameManager.dumpToFile(game);
+        }
+    }
+
+    public void notifyGameEnd(Game game) throws Observer.CommunicationError {
+        for (Player player : game.getActivePlayerList()) {
+            gameManager.getPlayerCommandHandlerMap().get(player.getUserData().getNickname()).sendResponse(new Response(null, false, Constants.FINISHGAME));
         }
     }
 

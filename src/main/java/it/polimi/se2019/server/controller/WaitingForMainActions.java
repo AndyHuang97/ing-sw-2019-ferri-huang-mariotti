@@ -102,37 +102,44 @@ public class WaitingForMainActions extends ControllerState {
                 return new WaitingForEffects(chosenWeapon, this);
             }
             // no shoot weapon selection
-            if (game.isFrenzy()) {
-                if (actionCounter >= getCounterLimit(game, player)) {
-                    if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
-                        // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
-                        WaitingForRespawn newState = new WaitingForRespawn();
-                        Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
-                        return newState.nextState(playerActions, game, player);
-                    } else {// no kills in final frenzy action
-                        game.updateTurn(); // consumed all actions in frenzy mode, give control to another player
-                        Logger.getGlobal().info("No one was killed in frenzy. No more actions, next player");
-                        return new WaitingForMainActions(); // new player, reset all
-                    }
-                } else {
-                    Logger.getGlobal().info("More actions left in frenzy, get the next action");
-                    return this; // keeps track of the actionCounter for the current player
-                }
-            } else { // not frenzy
-                if (actionCounter >= getCounterLimit(game, player)) { // consumed all actions in normal mode, nextPlayer is delegated to WaitingForReload state
-                    Logger.getGlobal().info("Not frenzy. No more actions, go to reload");
-                    return new WaitingForReload(); // in normal mode, respawn is after Reload
-                } else { // still an action left
-                    Logger.getGlobal().info("Not frenzy. More actions left, get the next action");
-                    return this; // keeps track of the action actionCounter
-                }
-            }
+            return nextPlayerOrReloadRespawn(game, player);
         }
         Logger.getGlobal().info("Action was available, but check failed");
         return this; // invalid action because of input selection
     }
 
     public ControllerState nextPlayerOrReloadRespawn(Game game, Player player) {
+        if (game.isFrenzy()) {
+            if (actionCounter >= getCounterLimit(game, player)) {
+                if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
+                    // creates a new WaitingForRespawn state and gets nextState to initiate the respawn sequence
+                    WaitingForRespawn newState = new WaitingForRespawn();
+                    Logger.getGlobal().info("Someone was killed in frenzy. No more actions");
+                    return newState.nextState(null, game, player); // no playerActions will be evaluated
+                } else {// no kills in final frenzy action
+                    game.updateTurn(); // consumed all actions in frenzy mode, give control to another player
+                    Logger.getGlobal().info("No one was killed in frenzy. No more actions, next player");
+                    Supplier<Stream<Player>> beforeFrenzyActivatorPlayers = () -> game.getActivePlayerList().stream().filter(p -> p.getCharacterState().isBeforeFrenzyActivator());
+                    if (game.getCurrentPlayer().equals(beforeFrenzyActivatorPlayers.get().collect(Collectors.toList()).get((int)beforeFrenzyActivatorPlayers.get().count()-1))) {
+                        Logger.getGlobal().info("Terminating the game");
+                        return new EndGameState();
+                    }
+                    return new WaitingForMainActions(); // new player, reset all
+                }
+            } else {
+                Logger.getGlobal().info("More actions left in frenzy, get the next action");
+                return this; // keeps track of the actionCounter for the current player
+            }
+        } else { // not frenzy
+            if (actionCounter >= getCounterLimit(game, player)) { // consumed all actions in normal mode, nextPlayer is delegated to WaitingForReload state
+                Logger.getGlobal().info("Not frenzy. No more actions, go to reload");
+                return new WaitingForReload(); // in normal mode, respawn is after Reload
+            } else { // still an action left
+                Logger.getGlobal().info("Not frenzy. More actions left, get the next action");
+                return this; // keeps track of the action actionCounter
+            }
+        }
+        /*
         if (actionCounter >= getCounterLimit(game, player)) { // no actions left
             game.getCurrentActionUnitsList().clear();
             if (game.getActivePlayerList().stream().anyMatch(p -> p.getCharacterState().isDead())) {
@@ -160,11 +167,14 @@ public class WaitingForMainActions extends ControllerState {
             Logger.getGlobal().info("Still have some actions left");
             return this;
         }
+
+         */
     }
 
     /**
      * The checkPlayerActionAvailability method controls whether the input action that is being processed
      * is an action contained in the permitted action list of the sender player.
+     *
      * @param playerActionList the action that was passed as input from the client.
      * @param game is the game related to the sender of the input.
      * @param player is the sender of the action.
@@ -217,6 +227,7 @@ public class WaitingForMainActions extends ControllerState {
 
     /**
      * Gets the counter's limit depending on the game mode, and precedence on the first player.
+     *
      * @param game the game on which the game mode is evaluated.
      * @param player the player on which the counter limit is evaluated.
      * @return the counter limit of the player.

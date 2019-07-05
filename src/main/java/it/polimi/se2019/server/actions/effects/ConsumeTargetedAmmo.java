@@ -31,7 +31,8 @@ public class ConsumeTargetedAmmo implements Effect {
     }
 
     /**
-     * This method
+     * This method consume the targeted ammo only, it is activated only  when the targeted ammo is present.
+     * so it won't consume a powerUp.
      *
      * @param  game the game on which to perform the effect.
      * @param targets the targets is the input of the current player. Either tiles or players.
