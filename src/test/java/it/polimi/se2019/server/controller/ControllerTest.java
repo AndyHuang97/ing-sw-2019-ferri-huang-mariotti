@@ -221,7 +221,7 @@ public class ControllerTest {
         ControllerState waitingForMainActions = new WaitingForMainActions();
         controller.setControllerStateForGame(game, waitingForMainActions);
 
-        Deck<Weapon> weaponDeck =  DirectDeserializers.deserialzerWeaponDeck();
+        Deck<Weapon> weaponDeck =  DirectDeserializers.deserialzeWeaponDeck();
 
         // add weapon to tileMap[0][0] SpawnTile
 

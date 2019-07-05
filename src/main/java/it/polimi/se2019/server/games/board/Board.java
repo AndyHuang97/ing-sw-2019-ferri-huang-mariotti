@@ -192,6 +192,14 @@ public class Board extends Observable<Response> {
     }
 
     /**
+     * Getter method
+     * @param tileTree
+     */
+    public void setTileTree(Graph<Tile> tileTree) {
+        this.tileTree = tileTree;
+    }
+
+    /**
      * Gets the relative position between two tiles. Diagonal cases are not handled and will throw an exception.
      *
      * @param firstTile starting tile

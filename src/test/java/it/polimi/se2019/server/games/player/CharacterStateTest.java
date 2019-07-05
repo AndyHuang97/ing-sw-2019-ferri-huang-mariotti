@@ -165,7 +165,7 @@ public class CharacterStateTest {
     @Test
     public void testPowerUpAsAmmo() {
         new DirectDeserializers();
-        Deck<PowerUp> powerUpDeck = DirectDeserializers.deserialzerPowerUpDeck();
+        Deck<PowerUp> powerUpDeck = DirectDeserializers.deserialzePowerUpDeck();
         characterState.addPowerUp(powerUpDeck.drawCard());
         characterState.addPowerUp(powerUpDeck.drawCard());
         characterState.addPowerUp(powerUpDeck.drawCard());
