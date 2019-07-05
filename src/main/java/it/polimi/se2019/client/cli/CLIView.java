@@ -200,7 +200,7 @@ public class CLIView extends View {
                                     virtualTileCoords[0] = coords[0];
                                     virtualTileCoords[1] = coords[1];
                                 } catch (Exception ex) {
-                                    logger.info("invalid virtual tile");
+                                    //logger.info("invalid virtual tile");
                                 }
                                 doneActions.add(Constants.MOVE);
                                 getPlayerInput().put(Constants.MOVE, Arrays.asList(selectedMoveTile));
@@ -377,7 +377,7 @@ public class CLIView extends View {
                     break;
             }
         } catch (PlayerNotFoundException ex) {
-            logger.info(ex.getMessage());
+            //logger.info(ex.getMessage());
             sendNOP();
         }
     }

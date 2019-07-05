@@ -123,7 +123,7 @@ public class KillShotTrackTest {
         Assert.assertEquals(2, p5DeathValue.intValue());
     }
     */
-    
+
     @Test
     public void testSetDeathTrack() {
         Map<Integer, EnumMap<PlayerColor, Integer>> expectedDeathTrack = new HashMap<>();
