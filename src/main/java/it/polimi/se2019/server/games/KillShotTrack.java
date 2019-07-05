@@ -117,6 +117,7 @@ public class KillShotTrack implements Serializable {
 
         boolean triggerFrenzy = updateCounter();
         notify(playerDeath);
+        player.getCharacterState().setDeaths(player.getCharacterState().getDeaths()+1);
 
         if (triggerFrenzy) {
             frenzyTriggered = true;

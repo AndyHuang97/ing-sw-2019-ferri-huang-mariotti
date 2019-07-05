@@ -445,6 +445,9 @@ public class GUIController {
                 mmgAdr.setVisible(false);
                 ms.setVisible(false);
             }
+        } else {
+            mmgAdr.setVisible(false);
+            ms.setVisible(false);
         }
     }
 
@@ -955,6 +958,8 @@ public class GUIController {
         Weapon weapon = view.getModel().getGame().getCurrentWeapon();
         if (weapon != null) {
             actionUnitPane.setVisible(true);
+            actionUnitPane.setDisable(false);
+            actionUnitPane.getChildren().forEach(node -> node.setVisible(false));
             IntStream.range(0, weapon.getActionUnitList().size() + weapon.getOptionalEffectList().size())
                     .forEach(i -> {
                         Button b = (Button) actionUnitPane.getChildren().get(i);
@@ -986,14 +991,19 @@ public class GUIController {
     public void setActionUnitButton(Button b, List<ActionUnit> actionUnitList, int i, String weaponID) {
         b.setOnAction(event -> {
             // adds the action unit in the input list
+            actionUnitPane.setDisable(true);
             addInput(SHOOT, weaponID);
-            ((GUIView)view).getGuiController().getIntermediateInput().get(Constants.SHOOT).add(b.getText());
+            getIntermediateInput().get(Constants.SHOOT).add(b.getText());
             addKeyOrderAction(SHOOT);
             if (actionUnitList.get(i).getNumPlayerTargets() > 0) {
                 view.getInputRequested().add(() -> getTarget(SHOOT, actionUnitList.get(i).getNumPlayerTargets()));
             }
             if (actionUnitList.get(i).getNumTileTargets() > 0) {
                 view.getInputRequested().add(() -> getShootTile(SHOOT, actionUnitList.get(i).getNumTileTargets()));
+            }
+            if (actionUnitList.get(i).getNumPlayerTargets() ==  0 && (actionUnitList.get(i).getNumTileTargets() > 0)){
+                view.sendInput();
+                confirmButton.setDisable(false);
             }
             view.askInput();
         });
