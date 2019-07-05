@@ -93,8 +93,8 @@ public class CardDeserializerTest {
     public void testDirectDeserializers() {
         new DirectDeserializers();
         Board board = DirectDeserializers.deserializeBoard("0");
-        Deck<Weapon> weaponDeck = DirectDeserializers.deserialzerWeaponDeck();
-        Deck<PowerUp> powerUpDeck = DirectDeserializers.deserialzerPowerUpDeck();
+        Deck<Weapon> weaponDeck = DirectDeserializers.deserialzeWeaponDeck();
+        Deck<PowerUp> powerUpDeck = DirectDeserializers.deserialzePowerUpDeck();
         Deck<AmmoCrate> ammoCrateDeck = DirectDeserializers.deserializeAmmoCrate();
 
         assertNotNull(board);

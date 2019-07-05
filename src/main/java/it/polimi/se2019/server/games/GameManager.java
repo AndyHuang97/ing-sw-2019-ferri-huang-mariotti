@@ -1,18 +1,31 @@
 package it.polimi.se2019.server.games;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.polimi.se2019.client.util.Constants;
+import it.polimi.se2019.server.actions.ActionUnit;
+import it.polimi.se2019.server.actions.Direction;
+import it.polimi.se2019.server.cards.Card;
+import it.polimi.se2019.server.cards.ammocrate.AmmoCrate;
+import it.polimi.se2019.server.cards.powerup.PowerUp;
+import it.polimi.se2019.server.cards.weapons.Weapon;
 import it.polimi.se2019.server.controller.Controller;
 import it.polimi.se2019.server.controller.ControllerState;
 import it.polimi.se2019.server.controller.WaitingForMainActions;
 import it.polimi.se2019.server.controller.WaitingForRespawn;
+import it.polimi.se2019.server.deserialize.DirectDeserializers;
+import it.polimi.se2019.server.games.board.Board;
+import it.polimi.se2019.server.games.board.Tile;
+import it.polimi.se2019.server.games.player.AmmoColor;
 import it.polimi.se2019.server.games.player.CharacterState;
 import it.polimi.se2019.server.games.player.Player;
 import it.polimi.se2019.server.games.player.PlayerColor;
 import it.polimi.se2019.server.net.CommandHandler;
+import it.polimi.se2019.server.playeractions.PlayerAction;
 import it.polimi.se2019.server.users.UserData;
 import it.polimi.se2019.util.Observer;
 import it.polimi.se2019.util.Response;
+import it.polimi.se2019.util.RuntimeTypeAdapterFactory;
 
 import java.io.*;
 import java.util.*;
@@ -92,12 +105,24 @@ public class GameManager {
 				//Read JSON file
 				List<Game> tmpGameList = new ArrayList<>();
 				try {
-					Gson gson = new Gson();
+					RuntimeTypeAdapterFactory<Targetable> targetableAdapterFactory = RuntimeTypeAdapterFactory.of(Targetable.class, "type")
+							.registerSubtype(Player.class, "Player")
+							.registerSubtype(AmmoColor.class, "AmmoColor")
+							.registerSubtype(Card.class, "Card")
+							.registerSubtype(Tile.class, "Tile")
+                            .registerSubtype(Weapon.class, "Weapon")
+                            .registerSubtype(PowerUp.class, "PowerUp")
+                            .registerSubtype(AmmoCrate.class, "AmmoCrate")
+                            .registerSubtype(Direction.class, "Direction")
+							.registerSubtype(ActionUnit.class, "ActionUnit")
+							.registerSubtype(PlayerAction.class, "PlayerAction");
+					Gson gson = new GsonBuilder().registerTypeAdapterFactory(targetableAdapterFactory).create();
 					tmpGameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
 				} finally {
 					br.close();
 				}
 				// this is to rebuild the games with all the notify etc
+				new DirectDeserializers();
 				tmpGameList.forEach(tmpGame -> {
 					logger.info("Restoring a new game with users: " + String.join(", ", tmpGame.getPlayerList().stream().map(player -> player.getUserData().getNickname()).collect(Collectors.toList())));
 					// first we build the players
@@ -108,14 +133,21 @@ public class GameManager {
 								tmpCharacterState.getDamageBar(), tmpCharacterState.getMarkerBar(), tmpCharacterState.getAmmoBag(),
 								tmpCharacterState.getWeaponBag(), tmpCharacterState.getPowerUpBag(), tmpCharacterState.getTile(),
 								tmpCharacterState.getScore(), false, tmpCharacterState.isFirstSpawn(), tmpCharacterState.getColor());
+						newCharacterState = DirectDeserializers.deserializeCharacterState(newCharacterState, tmpGame.getBoard());
 						Player newPlayer = new Player(tmpPlayer.getId(), false, tmpPlayer.getUserData(), newCharacterState, tmpPlayer.getColor());
 						newPlayerList.add(newPlayer);
 					});
 					// then the kill shot tracker
 					KillShotTrack newKillShotTrack = new KillShotTrack(tmpGame.getKillShotTrack().getDeathTrack(), newPlayerList, tmpGame.getKillShotTrack().getKillCounter());
 					// then the game
+					tmpGame.setBoard(DirectDeserializers.deserializeBoardCrates(tmpGame.getBoard()));
+					tmpGame.getBoard().setTileTree(tmpGame.getBoard().generateGraph());
+					Board board = new Board(tmpGame.getBoard().getId(), tmpGame.getBoard().getTileMap());
+					tmpGame.setPowerUpDeck(DirectDeserializers.deserializePowerUpDeck(tmpGame.getPowerUpDeck()));
+					tmpGame.setWeaponDeck(DirectDeserializers.deserializeWeaponDeck(tmpGame.getWeaponDeck()));
+					tmpGame.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrateDeck(tmpGame.getAmmoCrateDeck()));
 					Game newGame = new Game(tmpGame.getStartDate(), newPlayerList, newPlayerList.stream().filter(player -> player.getId().equals(tmpGame.getCurrentPlayer().getId())).findAny().orElseThrow(() -> new NullPointerException("player not found")),
-							tmpGame.getBoard(), newKillShotTrack, tmpGame.getWeaponDeck(), tmpGame.getPowerUpDeck(), tmpGame.getAmmoCrateDeck());
+							board, newKillShotTrack, tmpGame.getWeaponDeck(), tmpGame.getPowerUpDeck(), tmpGame.getAmmoCrateDeck(), DirectDeserializers.deserializePowerUpList(tmpGame.getUsedPowerUps()));
 					// at the end we register all we need to register
 					newGame.getPlayerList().forEach(newPlayer -> {
 						// register game in the player
@@ -166,13 +198,26 @@ public class GameManager {
 	 *
 	 */
 	private void internalDumpToFile(Game game, boolean deleteGame) {
+        RuntimeTypeAdapterFactory<Targetable> targetableAdapterFactory = RuntimeTypeAdapterFactory.of(Targetable.class, "type")
+                .registerSubtype(Player.class, "Player")
+                .registerSubtype(AmmoColor.class, "AmmoColor")
+                .registerSubtype(Card.class, "Card")
+                .registerSubtype(Tile.class, "Tile")
+                .registerSubtype(Weapon.class, "Weapon")
+                .registerSubtype(PowerUp.class, "PowerUp")
+                .registerSubtype(AmmoCrate.class, "AmmoCrate")
+                .registerSubtype(Direction.class, "Direction")
+                .registerSubtype(ActionUnit.class, "ActionUnit")
+                .registerSubtype(PlayerAction.class, "PlayerAction");
+
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(targetableAdapterFactory).create();
+
 		try {
 			List<Game> tmpGameList = new ArrayList<>();
 			if (GameManager.class.getClassLoader().getResource(dumpName) != null) {
 				BufferedReader br = new BufferedReader(new InputStreamReader(GameManager.class.getClassLoader().getResource(dumpName).openStream()));
 				//Read JSON file
 				try {
-					Gson gson = new Gson();
 					tmpGameList = new ArrayList<>(Arrays.asList(gson.fromJson(br, Game[].class)));
 				} finally {
 					br.close();
@@ -198,7 +243,6 @@ public class GameManager {
 			FileWriter writer = new FileWriter(new File(GameManager.class.getClassLoader().getResource(dumpName).getPath()));
 			// Write file
 			try {
-				Gson gson = new Gson();
 				writer.write(gson.toJson(tmpGameList.toArray()));
 			} finally {
 				writer.close();

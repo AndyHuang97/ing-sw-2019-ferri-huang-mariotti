@@ -465,10 +465,11 @@ public class ControllerStateTest {
         assertEquals(p3.getId(), game.getCurrentPlayer().getId());
         assertEquals(WaitingForRespawn.class, newState.getClass());
 
-        System.out.println("8) No one was killed in frenzy");
+        System.out.println("8) No one was killed in frenzy, no actions left");
         game.setCurrentPlayer(p1);
         game.setFrenzy(true);
-        p1.getCharacterState().setBeforeFrenzyActivator(false); // only one action possible
+        p1.getCharacterState().setBeforeFrenzyActivator(true); // only one action possible
+        p2.getCharacterState().setBeforeFrenzyActivator(true);
         waitingForMainActions = new WaitingForMainActions();
         playerActions.clear();
         p1.getCharacterState().setFirstSpawn(false);
@@ -480,6 +481,7 @@ public class ControllerStateTest {
         action.unpack(targetableList);
         playerActions.add(action);
         p3.getCharacterState().resetDamageBar();
+        ((WaitingForMainActions)waitingForMainActions).updateCounter();
         newState = waitingForMainActions.nextState(playerActions, game, p1);
         assertEquals(p2.getId(), game.getCurrentPlayer().getId());
         assertEquals(WaitingForMainActions.class, newState.getClass());
@@ -1184,7 +1186,7 @@ public class ControllerStateTest {
     }
 
     private PowerUp getPowerUp(String cardName) {
-        Deck<PowerUp> deck = DirectDeserializers.deserialzerPowerUpDeck();
+        Deck<PowerUp> deck = DirectDeserializers.deserialzePowerUpDeck();
         PowerUp card = deck.drawCard();
 
         while(!card.getName().equals(cardName)) {
@@ -1195,7 +1197,7 @@ public class ControllerStateTest {
     }
 
     private Weapon getWeapon(String cardName) {
-        Deck<Weapon> deck = DirectDeserializers.deserialzerWeaponDeck();
+        Deck<Weapon> deck = DirectDeserializers.deserialzeWeaponDeck();
         Weapon card = deck.drawCard();
 
         while(!card.getName().equals(cardName)) {

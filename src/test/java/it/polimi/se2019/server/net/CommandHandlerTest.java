@@ -200,7 +200,7 @@ public class CommandHandlerTest {
 
 
     private PowerUp getPowerUp(String cardName) {
-        Deck<PowerUp> deck = DirectDeserializers.deserialzerPowerUpDeck();
+        Deck<PowerUp> deck = DirectDeserializers.deserialzePowerUpDeck();
         PowerUp card = deck.drawCard();
 
         while(!card.getName().equals(cardName)) {
@@ -211,7 +211,7 @@ public class CommandHandlerTest {
     }
 
     private Weapon getWeapon(String cardName) {
-        Deck<Weapon> deck = DirectDeserializers.deserialzerWeaponDeck();
+        Deck<Weapon> deck = DirectDeserializers.deserialzeWeaponDeck();
         Weapon card = deck.drawCard();
 
         while(!card.getName().equals(cardName)) {

@@ -106,7 +106,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
      * @param powerUpDeck deck containing power up cards used by players to respawn and apply varius effects
      * @param ammoCrateDeck deck containing ammo cards that will spawn in ammo crates
      */
-	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killShotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerUpDeck, Deck<AmmoCrate> ammoCrateDeck) {
+	public Game(Date startDate, List<Player> playerList, Player currentPlayer, Board board, KillShotTrack killShotTrack, Deck<Weapon> weaponDeck, Deck<PowerUp> powerUpDeck, Deck<AmmoCrate> ammoCrateDeck, List<PowerUp> usedPowerUps) {
 		this.startDate = startDate;
 		this.playerList = playerList;
 		this.currentPlayer = currentPlayer;
@@ -115,6 +115,7 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		this.weaponDeck = weaponDeck;
 		this.powerUpDeck = powerUpDeck;
 		this.ammoCrateDeck = ammoCrateDeck;
+		this.usedPowerUps = usedPowerUps;
 		this.currentActionUnitsList = new ArrayList<>();
 		this.currentWeapon = null;
 		this.cumulativeDamageTargetSet = new HashSet<>();
@@ -136,8 +137,8 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
 		new DirectDeserializers();
 		this.setBoard(DirectDeserializers.deserializeBoard(mapIndex));
 		this.setAmmoCrateDeck(DirectDeserializers.deserializeAmmoCrate());
-		this.setWeaponDeck(DirectDeserializers.deserialzerWeaponDeck());
-		this.setPowerUpDeck(DirectDeserializers.deserialzerPowerUpDeck());
+		this.setWeaponDeck(DirectDeserializers.deserialzeWeaponDeck());
+		this.setPowerUpDeck(DirectDeserializers.deserialzePowerUpDeck());
 		this.getWeaponDeck().shuffle();
 		this.getAmmoCrateDeck().shuffle();
 		this.getPowerUpDeck().shuffle();
@@ -729,4 +730,13 @@ public class Game extends Observable<Response> implements it.polimi.se2019.util.
         Response response = new Response(Arrays.asList(weaponStateUpdate));
         notify(response);
     }
+
+	/**
+	 * Getter for usedPowerUps.
+	 *
+	 * @return the usedPowerUps.
+	 */
+	public List<PowerUp> getUsedPowerUps() {
+		return usedPowerUps;
+	}
 }
