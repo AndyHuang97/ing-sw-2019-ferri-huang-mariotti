@@ -31,7 +31,6 @@ import java.util.logging.Logger;
  *
  */
 public class Controller implements Observer<Request> {
-    private static final String MOVE_ACTION_ERROR_MESSAGE = "Move action failed!";
 
     private GameManager gameManager;
     private Map<Game, ControllerState> controllerStateMap = new HashMap<>();
@@ -89,14 +88,6 @@ public class Controller implements Observer<Request> {
             // if any model changes happened, the update will be sent before the selection message.
             ControllerState newControllerState = controllerState.nextState(playerActionList, game, player);
             this.saveGames(game, controllerState, newControllerState);
-
-            // needed to send an error message for the move action failure
-            // because the check method of this player action is implemented elsewhere
-            if (game.needsMoveActionErrorMessage()) {
-                controllerState.addErrorMessage(MOVE_ACTION_ERROR_MESSAGE);
-            }
-
-            game.resetMoveActionFailure();
 
             CommandHandler commandHandler = gameManager.getPlayerCommandHandlerMap().get(game.getCurrentPlayer().getUserData().getNickname());
             controllerState.sendErrorMessages(commandHandler);
