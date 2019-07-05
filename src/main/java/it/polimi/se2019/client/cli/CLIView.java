@@ -16,28 +16,53 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * The cli view extends the view and makes everything possible, its the central part of the cli
+ *
+ * @author FF
+ *
+ */
 public class CLIView extends View {
     private static final Logger logger = Logger.getLogger(CLIView.class.getName());
     CLIUtil utils = new CLIUtil();
 
 
+    /**
+     * The constructor
+     *
+     */
     public CLIView() {
         this.setCliTrueGuiFalse(true);
     }
 
+    /**
+     * Not used
+     *
+     */
     @Override
     public void askInput() {
 
     }
 
+    /**
+     * This is an helper to simplify the send a nop operation
+     *
+     */
     public void sendNOP() {
         getPlayerInput().put(Constants.NOP, new ArrayList<>());
         getPlayerInput().put(Constants.KEY_ORDER, Arrays.asList(Constants.NOP));
         sendInput();
     }
 
-
-
+    /**
+     * This is the core of the cli, it distinguish the messages from the server and provides the adequate response after consulting the user.
+     * In particular it handles everything that requires a user input, like respawning, reloading, shooting, performing an action, using a
+     * powerup, etc.
+     * Its a very complex piece of software and just needs the message to perform the action.
+     *
+     * @param message the message
+     *
+     */
     @Override
     @SuppressWarnings("Duplicates")
     public void showMessage(String message) {
@@ -359,11 +384,21 @@ public class CLIView extends View {
         }
     }
 
+    /**
+     * This reports an error to the console, used if a move fails or somebody is disconnected
+     *
+     * @param error the message
+     *
+     */
     @Override
     public void reportError(String error) {
         utils.println(error);
     }
 
+    /**
+     * This just prints the gameboard, all of it
+     *
+     */
     @Override
     public void showGame() {
         CLIController controller = new CLIController();
@@ -373,6 +408,10 @@ public class CLIView extends View {
         controller.handleCharactersLoading();
     }
 
+    /**
+     * This is used at the start of a game to show the login page and handle the login phase
+     *
+     */
     public void showLogin() {
         utils.printBanner();
         String nickname = utils.askUserInput("Nickname");
@@ -389,5 +428,11 @@ public class CLIView extends View {
         utils.hold();
     }
 
+    /**
+     * This is the getter of the cli utils
+     *
+     * @return the cli utils
+     *
+     */
     public CLIUtil getUtils() { return utils; }
 }
