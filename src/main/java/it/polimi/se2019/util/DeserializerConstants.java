@@ -1,5 +1,11 @@
 package it.polimi.se2019.util;
 
+/**
+ * Various deserializer constants
+ *
+ * @author AH
+ *
+ */
 public class DeserializerConstants {
     public static final String ACTIONS = "actions";
     public static final String ACTIONUNIT = "actionunit";

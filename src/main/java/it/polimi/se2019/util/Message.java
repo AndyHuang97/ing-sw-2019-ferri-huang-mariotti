@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * The interface message
+ *
+ * @author AH
+ *
+ */
 public interface Message {
 
 }
